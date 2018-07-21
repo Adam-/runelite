@@ -31,6 +31,7 @@ import net.runelite.api.Actor;
 import net.runelite.api.Hitsplat;
 import net.runelite.api.NPC;
 import net.runelite.api.NPCComposition;
+import net.runelite.api.NpcDeathAnimation;
 import net.runelite.api.Perspective;
 import net.runelite.api.Player;
 import net.runelite.api.Point;
@@ -189,6 +190,16 @@ public abstract class RSActorMixin implements RSActor
 		AnimationChanged animationChange = new AnimationChanged();
 		animationChange.setActor(this);
 		client.getCallbacks().post(animationChange);
+
+		if (this instanceof RSNPC)
+		{
+			RSNPC n = ((RSNPC) this);
+			int deathAnimation = NpcDeathAnimation.getAnimationId(n.getId());
+			if (deathAnimation != -1 && this.getAnimation() == deathAnimation)
+			{
+				n.setDead(true);
+			}
+		}
 	}
 
 	@FieldHook("graphic")

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, Adam <Adam@sigterm.info>
+ * Copyright (c) 2018, TheStonedTurtle <https://github.com/TheStonedTurtle>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -24,14 +24,14 @@
  */
 package net.runelite.client.events;
 
-import java.util.Collection;
 import lombok.Value;
-import net.runelite.api.NPC;
 import net.runelite.client.game.ItemStack;
+import net.runelite.client.game.LootEventType;
+import java.util.Collection;
 
 @Value
-public class NpcLootReceived
+public class EventLootReceived
 {
-	private final NPC npc;
+	private final LootEventType eventType;
 	private final Collection<ItemStack> items;
 }
