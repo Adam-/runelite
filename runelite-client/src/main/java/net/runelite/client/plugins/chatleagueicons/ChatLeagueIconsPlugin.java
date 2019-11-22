@@ -36,14 +36,15 @@ import net.runelite.api.ClanMember;
 import net.runelite.api.Client;
 import net.runelite.api.Friend;
 import net.runelite.api.GameState;
+import net.runelite.api.IconID;
 import net.runelite.api.IndexedSprite;
 import net.runelite.api.MessageNode;
+import net.runelite.api.Player;
 import net.runelite.api.VarClientStr;
 import net.runelite.api.Varbits;
 import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.ScriptCallbackEvent;
-import net.runelite.api.vars.AccountType;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.chat.ChatMessageManager;
@@ -81,10 +82,28 @@ public class ChatLeagueIconsPlugin extends Plugin
 	@Inject
 	private ChatLeagueIconsConfig config;
 
-	private static final String LEAGUE_ACTIVITY = "Twisted League"; // Needs to be changed each league
+	private static final String LEAGUE_ACTIVITY = "Twisted League"; // CHANGES EACH LEAGUE
 	private static final String SCRIPT_EVENT_SET_CHATBOX_INPUT = "setChatboxInput";
-	private int leagueIconOffset = -1; // Starting index of league icons
-	private int leagueIconIndex = -1; // Currently chosen icon index
+	private int leagueIconOffset = -1; // Index offset for league icons
+	private int leagueIconIndex = -1; // Index of the chosen league icon
+
+	@Override
+	protected void startUp()
+	{
+		if (client.getGameState() == GameState.LOGGED_IN)
+		{
+			setChatboxName(getNameChatbox());
+		}
+	}
+
+	@Override
+	protected void shutDown()
+	{
+		if (client.getGameState() == GameState.LOGGED_IN)
+		{
+			setChatboxName(getNameDefault());
+		}
+	}
 
 	@Provides
 	ChatLeagueIconsConfig getConfig(ConfigManager configManager)
@@ -98,7 +117,7 @@ public class ChatLeagueIconsPlugin extends Plugin
 		if (configChanged.getGroup().equals("chatLeagueIcons"))
 		{
 			setLeagueIconIndex();
-			updatePlayerChatIcon();
+			setChatboxName(getNameChatbox());
 		}
 	}
 
@@ -107,7 +126,7 @@ public class ChatLeagueIconsPlugin extends Plugin
 	{
 		if (gameStateChanged.getGameState() == GameState.LOGGED_IN)
 		{
-			loadLeagueIcon();
+			loadLeagueIcons();
 		}
 	}
 
@@ -116,7 +135,8 @@ public class ChatLeagueIconsPlugin extends Plugin
 	{
 		if (scriptCallbackEvent.getEventName().equals(SCRIPT_EVENT_SET_CHATBOX_INPUT))
 		{
-			updatePlayerChatIcon();
+			// This script event conflicts with KeyRemapping plugin (wasd)
+			setChatboxName(getNameChatbox());
 		}
 	}
 
@@ -128,29 +148,29 @@ public class ChatLeagueIconsPlugin extends Plugin
 			return;
 		}
 
-		String cleanName = getCleanName(chatMessage.getName());
+		String name = getCleanName(chatMessage.getName());
 
 		switch (chatMessage.getType())
 		{
 			case FRIENDSCHAT:
-				if (config.clanChatIcons() && friendlyOnLeagueWorld(cleanName))
+				if (config.clanChatIcons() && isFriendOnLeague(name))
 				{
-					insertLeagueIcon(chatMessage);
+					addLeagueIconToMessage(chatMessage);
 				}
 				break;
 			case PRIVATECHAT:
 			case MODPRIVATECHAT:
 				// Unable to change icon on PMs if they are not a friend or in clan chat
-				if (config.privateMessageIcons() && friendlyOnLeagueWorld(cleanName))
+				if (config.privateMessageIcons() && isFriendOnLeague(name))
 				{
-					insertLeagueIcon(chatMessage);
+					addLeagueIconToMessage(chatMessage);
 				}
 				break;
 			case PUBLICCHAT:
 			case MODCHAT:
-				if (config.publicChatIcons() && playerOnLeagueWorld())
+				if (config.publicChatIcons() && isPlayerOnLeague())
 				{
-					insertLeagueIcon(chatMessage);
+					addLeagueIconToMessage(chatMessage);
 				}
 				break;
 		}
@@ -169,67 +189,85 @@ public class ChatLeagueIconsPlugin extends Plugin
 	 *
 	 * @param chatMessage chat message to edit sender name on
 	 */
-	private void insertLeagueIcon(final ChatMessage chatMessage)
+	private void addLeagueIconToMessage(final ChatMessage chatMessage)
 	{
-		log.debug(chatMessage.toString());
-		String cleanName = getCleanName(chatMessage.getName());
-		String nameWithIcon = getNameWithIcon(leagueIconIndex, cleanName);
+		String name = getCleanName(chatMessage.getName());
 
 		final MessageNode messageNode = chatMessage.getMessageNode();
-		messageNode.setName(nameWithIcon);
+		messageNode.setName(getNameWithIcon(leagueIconIndex, name));
 
-		chatMessageManager.update(messageNode); // no idea what this does, was in emoji plugin
+		chatMessageManager.update(messageNode);
 		client.refreshChat();
 	}
 
 	/**
 	 * Update the player icon in chat widget if playing on League world
 	 */
-	private void updatePlayerChatIcon()
+	private void setChatboxName(String name)
 	{
-		if (playerOnLeagueWorld())
+		Widget chatboxInput = client.getWidget(WidgetInfo.CHATBOX_INPUT);
+		if (chatboxInput != null)
 		{
-			AccountType accountType = client.getAccountType();
-			String name = client.getLocalPlayer().getName();
-
-			if (config.playerChatIcon())
-			{
-				name = getNameWithIcon(leagueIconIndex, name);
-			}
-			else if (accountType.isIronman())
-			{
-				int index = -1;
-				switch (accountType)
-				{
-					case IRONMAN:
-						index = 2;
-						break;
-					case HARDCORE_IRONMAN:
-						index = 10;
-						break;
-					case ULTIMATE_IRONMAN:
-						index = 3;
-						break;
-				}
-				name = getNameWithIcon(index, name);
-			}
-
-			Widget chatboxInput = client.getWidget(WidgetInfo.CHATBOX_INPUT);
-			if (chatboxInput != null)
-			{
-				final boolean isChatboxTransparent = client.isResized() && client.getVar(Varbits.TRANSPARENT_CHATBOX) == 1;
-				final Color textColor = isChatboxTransparent ? JagexColors.CHAT_TYPED_TEXT_TRANSPARENT_BACKGROUND : JagexColors.CHAT_TYPED_TEXT_OPAQUE_BACKGROUND;
-				chatboxInput.setText(name + ": " + ColorUtil.wrapWithColorTag(client.getVar(VarClientStr.CHATBOX_TYPED_TEXT) + "*", textColor));
-			}
+			final boolean isChatboxTransparent = client.isResized() && client.getVar(Varbits.TRANSPARENT_CHATBOX) == 1;
+			final Color textColor = isChatboxTransparent ? JagexColors.CHAT_TYPED_TEXT_TRANSPARENT_BACKGROUND : JagexColors.CHAT_TYPED_TEXT_OPAQUE_BACKGROUND;
+			chatboxInput.setText(name + ": " + ColorUtil.wrapWithColorTag(client.getVar(VarClientStr.CHATBOX_TYPED_TEXT) + "*", textColor));
 		}
 	}
 
 	/**
-	 * Create a player name with icon in front of the name
+	 * Gets the league name, including possible icon, of the local player.
 	 *
-	 * @param iconIndex index of icon to add
-	 * @param name      name of player
-	 * @return String with icon in front of the name
+	 * @return String of icon + name
+	 */
+	private String getNameChatbox()
+	{
+		if (isPlayerOnLeague() && config.playerChatboxIcon())
+		{
+			Player player = client.getLocalPlayer();
+			if (player != null)
+			{
+				return getNameWithIcon(leagueIconIndex, player.getName());
+			}
+		}
+		return getNameDefault();
+	}
+
+	/**
+	 * Gets the default name, including possible icon, of the local player.
+	 *
+	 * @return String of icon + name
+	 */
+	private String getNameDefault()
+	{
+		Player player = client.getLocalPlayer();
+		if (player == null)
+		{
+			return null;
+		}
+		int iconIndex;
+		switch (client.getAccountType())
+		{
+			case IRONMAN:
+				iconIndex = IconID.IRONMAN.getIndex();
+				break;
+			case HARDCORE_IRONMAN:
+				iconIndex = IconID.HARDCORE_IRONMAN.getIndex();
+				break;
+			case ULTIMATE_IRONMAN:
+				iconIndex = IconID.ULTIMATE_IRONMAN.getIndex();
+				break;
+			default:
+				return player.getName();
+		}
+		return getNameWithIcon(iconIndex, player.getName());
+	}
+
+	/**
+	 * Get a name formatted with icon
+	 *
+	 * @param iconIndex index of the icon
+	 * @param name      name of the player
+	 * @return String of icon + name
 	 */
 	private String getNameWithIcon(int iconIndex, String name)
 	{
@@ -243,7 +281,7 @@ public class ChatLeagueIconsPlugin extends Plugin
 	 * @param name name of player to check.
 	 * @return boolean true/false.
 	 */
-	private boolean friendlyOnLeagueWorld(String name)
+	private boolean isFriendOnLeague(String name)
 	{
 		ChatPlayer player = getChatPlayerFromName(name);
 
@@ -261,7 +299,7 @@ public class ChatLeagueIconsPlugin extends Plugin
 	 *
 	 * @return boolean true/false.
 	 */
-	private boolean playerOnLeagueWorld()
+	private boolean isPlayerOnLeague()
 	{
 		int currentWorld = client.getWorld();
 		return isLeagueWorld(currentWorld);
@@ -303,7 +341,7 @@ public class ChatLeagueIconsPlugin extends Plugin
 	/**
 	 * Loads all league icons into the client.
 	 */
-	private void loadLeagueIcon()
+	private void loadLeagueIcons()
 	{
 		final IndexedSprite[] modIcons = client.getModIcons();
 
