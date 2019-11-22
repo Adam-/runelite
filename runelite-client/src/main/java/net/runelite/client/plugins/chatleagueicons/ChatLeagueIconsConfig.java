@@ -44,7 +44,7 @@ public interface ChatLeagueIconsConfig extends Config
 
 	@ConfigItem(
 		keyName = "publicChatIcons",
-		name = "Public Chat Icons",
+		name = "Public Chat",
 		description = "Add league icons to players talking in public chat on league worlds.",
 		position = 2
 	)
@@ -55,8 +55,8 @@ public interface ChatLeagueIconsConfig extends Config
 
 	@ConfigItem(
 		keyName = "privateMessageIcons",
-		name = "Private Message Icons",
-		description = "Add league icons to league players talking in private message.",
+		name = "Private Message",
+		description = "Add league icons to players sending private messages on league worlds.",
 		position = 3
 	)
 	default boolean privateMessageIcons()
@@ -66,8 +66,8 @@ public interface ChatLeagueIconsConfig extends Config
 
 	@ConfigItem(
 		keyName = "clanChatIcons",
-		name = "Clan Chat Icons",
-		description = "Add league icons to league players talking in clan chat.",
+		name = "Clan Chat",
+		description = "Add league icons to players talking in clan chat on league worlds.",
 		position = 4
 	)
 	default boolean clanChatIcons()
@@ -76,12 +76,12 @@ public interface ChatLeagueIconsConfig extends Config
 	}
 
 	@ConfigItem(
-		keyName = "playerChatIcon",
-		name = "Player Chat Icon",
+		keyName = "playerChatboxIcon",
+		name = "Player Chatbox",
 		description = "Add league icons to player in chat.",
 		position = 5
 	)
-	default boolean playerChatIcon()
+	default boolean playerChatboxIcon()
 	{
 		return true;
 	}
