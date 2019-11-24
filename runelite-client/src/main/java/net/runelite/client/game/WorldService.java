@@ -26,18 +26,17 @@ public class WorldService
 	@Nullable
 	private WorldResult worlds;
 
-	//@Getter
-	//private Instant lastLookup = Instant.now();
-
 	@Inject
-	private WorldService(ScheduledExecutorService scheduledExecutorService, WorldClient worldClient) {
+	private WorldService(ScheduledExecutorService scheduledExecutorService, WorldClient worldClient)
+	{
 		this.scheduledExecutorService = scheduledExecutorService;
 		this.worldClient = worldClient;
 
-		scheduledExecutorService.scheduleWithFixedDelay(this::tick, 0, 10, TimeUnit.MINUTES);
+		scheduledExecutorService.scheduleWithFixedDelay(this::tick, 0, WORLD_FETCH_TIMER, TimeUnit.MINUTES);
 	}
 
-	private void tick() {
+	private void tick()
+	{
 		log.debug("Fetching worlds");
 
 		try
@@ -52,7 +51,8 @@ public class WorldService
 		}
 	}
 
-	public void refresh() {
+	public void refresh()
+	{
 		scheduledExecutorService.execute(this::tick);
 	}
 }
