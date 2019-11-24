@@ -96,7 +96,8 @@ public class ChatLeagueIconsPlugin extends Plugin
 	{
 		if (client.getGameState() == GameState.LOGGED_IN)
 		{
-			setChatboxName(getNameDefault());
+			client.refreshChat(); // is this right?
+		//	setChatboxName(getNameDefault());
 		}
 	}
 
