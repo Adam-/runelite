@@ -63,12 +63,13 @@ import net.runelite.http.api.worlds.WorldResult;
 
 @PluginDescriptor(
 	name = "Chat League Icons",
-	description = "Change icon for players playing on league worlds.",
-	tags = {"icons", "chat", "league", "recent"}
+	description = "Change icon for players playing on league worlds."
 )
 @Slf4j
 public class ChatLeagueIconsPlugin extends Plugin
 {
+	private static final String LEAGUE_ACTIVITY = "Twisted League"; // CHANGES EACH LEAGUE
+	private static final String SCRIPT_EVENT_SET_CHATBOX_INPUT = "setChatboxInput";
 
 	@Inject
 	private Client client;
@@ -79,11 +80,6 @@ public class ChatLeagueIconsPlugin extends Plugin
 	@Inject
 	private WorldClient worldClient;
 
-	@Inject
-	private ChatLeagueIconsConfig config;
-
-	private static final String LEAGUE_ACTIVITY = "Twisted League"; // CHANGES EACH LEAGUE
-	private static final String SCRIPT_EVENT_SET_CHATBOX_INPUT = "setChatboxInput";
 	private int leagueIconOffset = -1; // Index offset for league icons
 	private int leagueIconIndex = -1; // Index of the chosen league icon
 
@@ -104,19 +100,19 @@ public class ChatLeagueIconsPlugin extends Plugin
 			setChatboxName(getNameDefault());
 		}
 	}
-
+/*
 	@Provides
 	ChatLeagueIconsConfig getConfig(ConfigManager configManager)
 	{
 		return configManager.getConfig(ChatLeagueIconsConfig.class);
-	}
+	}*/
 
 	@Subscribe
 	public void onConfigChanged(ConfigChanged configChanged)
 	{
 		if (configChanged.getGroup().equals("chatLeagueIcons"))
 		{
-			setLeagueIconIndex();
+			//setLeagueIconIndex();
 			setChatboxName(getNameChatbox());
 		}
 	}
@@ -148,27 +144,22 @@ public class ChatLeagueIconsPlugin extends Plugin
 			return;
 		}
 
-		String name = getCleanName(chatMessage.getName());
+		String name = Text.removeTags(chatMessage.getName());
 
 		switch (chatMessage.getType())
 		{
-			case FRIENDSCHAT:
-				if (config.clanChatIcons() && isFriendOnLeague(name))
-				{
-					addLeagueIconToMessage(chatMessage);
-				}
-				break;
 			case PRIVATECHAT:
 			case MODPRIVATECHAT:
 				// Unable to change icon on PMs if they are not a friend or in clan chat
-				if (config.privateMessageIcons() && isFriendOnLeague(name))
+			case FRIENDSCHAT:
+				if (isFriendOnLeague(name))
 				{
 					addLeagueIconToMessage(chatMessage);
 				}
 				break;
 			case PUBLICCHAT:
 			case MODCHAT:
-				if (config.publicChatIcons() && isPlayerOnLeague())
+				if (isPlayerOnLeague())
 				{
 					addLeagueIconToMessage(chatMessage);
 				}
@@ -179,10 +170,10 @@ public class ChatLeagueIconsPlugin extends Plugin
 	/**
 	 * Set the league icon index of chosen icon.
 	 */
-	private void setLeagueIconIndex()
+/*	private void setLeagueIconIndex()
 	{
 		leagueIconIndex = leagueIconOffset + config.leagueIcon().ordinal();
-	}
+	}*/
 
 	/**
 	 * Adds the League Icon in front of player names chatting from a league world.
@@ -191,7 +182,7 @@ public class ChatLeagueIconsPlugin extends Plugin
 	 */
 	private void addLeagueIconToMessage(final ChatMessage chatMessage)
 	{
-		String name = getCleanName(chatMessage.getName());
+		String name = Text.removeTags(chatMessage.getName());
 
 		final MessageNode messageNode = chatMessage.getMessageNode();
 		messageNode.setName(getNameWithIcon(leagueIconIndex, name));
@@ -350,27 +341,15 @@ public class ChatLeagueIconsPlugin extends Plugin
 			return;
 		}
 
+		BufferedImage image = ImageUtil.getResourceStreamFromClass(getClass(), "league_icon.png");
+		IndexedSprite indexedSprite = ImageUtil.getImageIndexedSprite(image, client);
+
 		leagueIconOffset = modIcons.length;
-		final LeagueIcon[] leagueIcons = LeagueIcon.values();
-		final IndexedSprite[] newModIcons = Arrays.copyOf(modIcons, modIcons.length + leagueIcons.length);
 
-		for (int i = 0; i < leagueIcons.length; i++)
-		{
-			final LeagueIcon leagueIcon = leagueIcons[i];
+		//final LeagueIcon[] leagueIcons = LeagueIcon.values();
+		final IndexedSprite[] newModIcons = Arrays.copyOf(modIcons, modIcons.length + 1);
+		newModIcons[newModIcons.length - 1] = indexedSprite;
 
-			try
-			{
-				final BufferedImage image = leagueIcon.loadImage();
-				final IndexedSprite sprite = ImageUtil.getImageIndexedSprite(image, client);
-				newModIcons[leagueIconOffset + i] = sprite;
-			}
-			catch (Exception ex)
-			{
-				log.warn("Failed to load the sprite for league icon " + leagueIcon, ex);
-			}
-		}
-
-		setLeagueIconIndex();
 		client.setModIcons(newModIcons);
 	}
 
@@ -380,10 +359,10 @@ public class ChatLeagueIconsPlugin extends Plugin
 	 * @param name name to clean.
 	 * @return the name without tags.
 	 */
-	private String getCleanName(String name)
-	{
-		return Text.removeTags(name);
-	}
+//	private String getCleanName(String name)
+//	{
+//		return Text.removeTags(name);
+//	}
 
 	/**
 	 * Gets a ChatPlayer object from a clean name by searching clan and friends list.
