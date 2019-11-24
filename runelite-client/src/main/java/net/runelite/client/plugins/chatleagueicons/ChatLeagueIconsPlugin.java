@@ -80,7 +80,7 @@ public class ChatLeagueIconsPlugin extends Plugin
 	@Inject
 	private WorldService worldService;
 
-	private int leagueIconOffset = -1; // Index offset for league icons
+	private int leagueIconOffset = -1; // offset for league icons
 
 	@Override
 	protected void startUp()
@@ -106,7 +106,7 @@ public class ChatLeagueIconsPlugin extends Plugin
 		if (configChanged.getGroup().equals("chatLeagueIcons"))
 		{
 			//setLeagueIconIndex();
-			setChatboxName(getNameChatbox());
+			//setChatboxName(getNameChatbox());
 		}
 	}
 
@@ -143,7 +143,7 @@ public class ChatLeagueIconsPlugin extends Plugin
 		{
 			case PRIVATECHAT:
 			case MODPRIVATECHAT:
-				// Unable to change icon on PMs if they are not a friend or in clan chat
+				// Note this is unable to change icon on PMs if they are not a friend or in clan chat
 			case FRIENDSCHAT:
 				if (isFriendOnLeague(name))
 				{
@@ -161,19 +161,11 @@ public class ChatLeagueIconsPlugin extends Plugin
 	}
 
 	/**
-	 * Set the league icon index of chosen icon.
-	 */
-/*	private void setLeagueIconIndex()
-	{
-		leagueIconIndex = leagueIconOffset + config.leagueIcon().ordinal();
-	}*/
-
-	/**
 	 * Adds the League Icon in front of player names chatting from a league world.
 	 *
 	 * @param chatMessage chat message to edit sender name on
 	 */
-	private void addLeagueIconToMessage(final ChatMessage chatMessage)
+	private void addLeagueIconToMessage(ChatMessage chatMessage)
 	{
 		String name = Text.removeTags(chatMessage.getName());
 
