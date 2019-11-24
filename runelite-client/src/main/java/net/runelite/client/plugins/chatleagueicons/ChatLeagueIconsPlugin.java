@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2019, hsamoht <https://github.com/hsamoht>
+ * Copyright (c) 2019, Adam <Adam@sigterm.info>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -24,21 +25,21 @@
  */
 package net.runelite.client.plugins.chatleagueicons;
 
-import com.google.inject.Provides;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.Arrays;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.ChatPlayer;
 import net.runelite.api.ClanMember;
+import net.runelite.api.ClanMemberManager;
 import net.runelite.api.Client;
 import net.runelite.api.Friend;
 import net.runelite.api.GameState;
 import net.runelite.api.IconID;
 import net.runelite.api.IndexedSprite;
 import net.runelite.api.MessageNode;
+import net.runelite.api.NameableContainer;
 import net.runelite.api.Player;
 import net.runelite.api.VarClientStr;
 import net.runelite.api.Varbits;
@@ -48,9 +49,9 @@ import net.runelite.api.events.ScriptCallbackEvent;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.chat.ChatMessageManager;
-import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
+import net.runelite.client.game.WorldService;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.JagexColors;
@@ -58,8 +59,8 @@ import net.runelite.client.util.ColorUtil;
 import net.runelite.client.util.ImageUtil;
 import net.runelite.client.util.Text;
 import net.runelite.http.api.worlds.World;
-import net.runelite.http.api.worlds.WorldClient;
 import net.runelite.http.api.worlds.WorldResult;
+import net.runelite.http.api.worlds.WorldType;
 
 @PluginDescriptor(
 	name = "Chat League Icons",
@@ -68,7 +69,6 @@ import net.runelite.http.api.worlds.WorldResult;
 @Slf4j
 public class ChatLeagueIconsPlugin extends Plugin
 {
-	private static final String LEAGUE_ACTIVITY = "Twisted League"; // CHANGES EACH LEAGUE
 	private static final String SCRIPT_EVENT_SET_CHATBOX_INPUT = "setChatboxInput";
 
 	@Inject
@@ -78,10 +78,9 @@ public class ChatLeagueIconsPlugin extends Plugin
 	private ChatMessageManager chatMessageManager;
 
 	@Inject
-	private WorldClient worldClient;
+	private WorldService worldService;
 
 	private int leagueIconOffset = -1; // Index offset for league icons
-	private int leagueIconIndex = -1; // Index of the chosen league icon
 
 	@Override
 	protected void startUp()
@@ -100,12 +99,6 @@ public class ChatLeagueIconsPlugin extends Plugin
 			setChatboxName(getNameDefault());
 		}
 	}
-/*
-	@Provides
-	ChatLeagueIconsConfig getConfig(ConfigManager configManager)
-	{
-		return configManager.getConfig(ChatLeagueIconsConfig.class);
-	}*/
 
 	@Subscribe
 	public void onConfigChanged(ConfigChanged configChanged)
@@ -185,7 +178,7 @@ public class ChatLeagueIconsPlugin extends Plugin
 		String name = Text.removeTags(chatMessage.getName());
 
 		final MessageNode messageNode = chatMessage.getMessageNode();
-		messageNode.setName(getNameWithIcon(leagueIconIndex, name));
+		messageNode.setName(getNameWithIcon(leagueIconOffset, name));
 
 		chatMessageManager.update(messageNode);
 		client.refreshChat();
@@ -212,12 +205,12 @@ public class ChatLeagueIconsPlugin extends Plugin
 	 */
 	private String getNameChatbox()
 	{
-		if (isPlayerOnLeague() && config.playerChatboxIcon())
+		if (isPlayerOnLeague())
 		{
 			Player player = client.getLocalPlayer();
 			if (player != null)
 			{
-				return getNameWithIcon(leagueIconIndex, player.getName());
+				return getNameWithIcon(leagueIconOffset, player.getName());
 			}
 		}
 		return getNameDefault();
@@ -235,6 +228,7 @@ public class ChatLeagueIconsPlugin extends Plugin
 		{
 			return null;
 		}
+
 		int iconIndex;
 		switch (client.getAccountType())
 		{
@@ -250,6 +244,7 @@ public class ChatLeagueIconsPlugin extends Plugin
 			default:
 				return player.getName();
 		}
+
 		return getNameWithIcon(iconIndex, player.getName());
 	}
 
@@ -260,7 +255,7 @@ public class ChatLeagueIconsPlugin extends Plugin
 	 * @param name      name of the player
 	 * @return String of icon + name
 	 */
-	private String getNameWithIcon(int iconIndex, String name)
+	private static String getNameWithIcon(int iconIndex, String name)
 	{
 		String icon = "<img=" + iconIndex + ">";
 		return icon + name;
@@ -304,29 +299,15 @@ public class ChatLeagueIconsPlugin extends Plugin
 	 */
 	private boolean isLeagueWorld(int worldNumber)
 	{
-		try
+		WorldResult worlds = worldService.getWorlds();
+		if (worlds == null)
 		{
-			final WorldResult worldResult = worldClient.lookupWorlds();
-
-			if (worldResult == null)
-			{
-				log.warn("Failed to lookup worlds.");
-				return false;
-			}
-
-			final World world = worldResult.findWorld(worldNumber);
-
-			if (world != null)
-			{
-				String activity = world.getActivity();
-				return activity.equals(LEAGUE_ACTIVITY);
-			}
+			return false;
 		}
-		catch (IOException e)
-		{
-			log.warn("Error looking up world {}. Error: {}", worldNumber, e);
-		}
-		return false;
+
+		World world = worlds.findWorld(worldNumber);
+		return world != null && world.getTypes().contains(WorldType.LEAGUE);
+
 	}
 
 	/**
@@ -354,17 +335,6 @@ public class ChatLeagueIconsPlugin extends Plugin
 	}
 
 	/**
-	 * Cleans up a username by removing possible tags. Effectively removing any previous icon.
-	 *
-	 * @param name name to clean.
-	 * @return the name without tags.
-	 */
-//	private String getCleanName(String name)
-//	{
-//		return Text.removeTags(name);
-//	}
-
-	/**
 	 * Gets a ChatPlayer object from a clean name by searching clan and friends list.
 	 *
 	 * @param name name of player to find.
@@ -374,32 +344,18 @@ public class ChatLeagueIconsPlugin extends Plugin
 	{
 		// Search clan members first, because if a friend is in the clan chat but their private
 		// chat is 'off', then we won't know the world
-		ClanMember[] clanMembers = client.getClanMembers();
-
-		if (clanMembers != null)
+		ClanMemberManager clanMemberManager = client.getClanMemberManager();
+		if (clanMemberManager != null)
 		{
-			for (ClanMember clanMember : clanMembers)
+
+			ClanMember clanMember = clanMemberManager.findByName(name);
+			if (clanMember != null)
 			{
-				if (clanMember != null && clanMember.getUsername().equals(name))
-				{
-					return clanMember;
-				}
+				return clanMember;
 			}
 		}
 
-		Friend[] friends = client.getFriends();
-
-		if (friends != null)
-		{
-			for (Friend friend : friends)
-			{
-				if (friend != null && friend.getName().equals(name))
-				{
-					return friend;
-				}
-			}
-		}
-
-		return null;
+		NameableContainer<Friend> friendContainer = client.getFriendContainer();
+		return friendContainer.findByName(name);
 	}
 }
