@@ -25,7 +25,6 @@
  */
 package net.runelite.client.plugins.chatleagueicons;
 
-import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import javax.inject.Inject;
@@ -41,21 +40,17 @@ import net.runelite.api.IndexedSprite;
 import net.runelite.api.MessageNode;
 import net.runelite.api.NameableContainer;
 import net.runelite.api.Player;
-import net.runelite.api.VarClientStr;
-import net.runelite.api.Varbits;
 import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.ScriptCallbackEvent;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetInfo;
+import net.runelite.client.callback.ClientThread;
 import net.runelite.client.chat.ChatMessageManager;
 import net.runelite.client.eventbus.Subscribe;
-import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.game.WorldService;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
-import net.runelite.client.ui.JagexColors;
-import net.runelite.client.util.ColorUtil;
 import net.runelite.client.util.ImageUtil;
 import net.runelite.client.util.Text;
 import net.runelite.http.api.worlds.World;
@@ -80,35 +75,33 @@ public class ChatLeagueIconsPlugin extends Plugin
 	@Inject
 	private WorldService worldService;
 
-	private int leagueIconOffset = -1; // offset for league icons
+	@Inject
+	private ClientThread clientThread;
+
+	private int leagueIconOffset = -1; // offset for league icon
 
 	@Override
 	protected void startUp()
 	{
-		if (client.getGameState() == GameState.LOGGED_IN)
+		clientThread.invoke(() ->
 		{
-			setChatboxName(getNameChatbox());
-		}
+			if (client.getGameState() == GameState.LOGGED_IN)
+			{
+				setChatboxName(getNameChatbox());
+			}
+		});
 	}
 
 	@Override
 	protected void shutDown()
 	{
-		if (client.getGameState() == GameState.LOGGED_IN)
+		clientThread.invoke(() ->
 		{
-			client.refreshChat(); // is this right?
-		//	setChatboxName(getNameDefault());
-		}
-	}
-
-	@Subscribe
-	public void onConfigChanged(ConfigChanged configChanged)
-	{
-		if (configChanged.getGroup().equals("chatLeagueIcons"))
-		{
-			//setLeagueIconIndex();
-			//setChatboxName(getNameChatbox());
-		}
+			if (client.getGameState() == GameState.LOGGED_IN)
+			{
+				setChatboxName(getNameDefault()); // client.refreshChat() didn't reset to default icon
+			}
+		});
 	}
 
 	@Subscribe
@@ -116,7 +109,7 @@ public class ChatLeagueIconsPlugin extends Plugin
 	{
 		if (gameStateChanged.getGameState() == GameState.LOGGED_IN)
 		{
-			loadLeagueIcons();
+			loadLeagueIcon();
 		}
 	}
 
@@ -125,7 +118,6 @@ public class ChatLeagueIconsPlugin extends Plugin
 	{
 		if (scriptCallbackEvent.getEventName().equals(SCRIPT_EVENT_SET_CHATBOX_INPUT))
 		{
-			// This script event conflicts with KeyRemapping plugin (wasd)
 			setChatboxName(getNameChatbox());
 		}
 	}
@@ -185,9 +177,16 @@ public class ChatLeagueIconsPlugin extends Plugin
 		Widget chatboxInput = client.getWidget(WidgetInfo.CHATBOX_INPUT);
 		if (chatboxInput != null)
 		{
-			final boolean isChatboxTransparent = client.isResized() && client.getVar(Varbits.TRANSPARENT_CHATBOX) == 1;
-			final Color textColor = isChatboxTransparent ? JagexColors.CHAT_TYPED_TEXT_TRANSPARENT_BACKGROUND : JagexColors.CHAT_TYPED_TEXT_OPAQUE_BACKGROUND;
-			chatboxInput.setText(name + ": " + ColorUtil.wrapWithColorTag(client.getVar(VarClientStr.CHATBOX_TYPED_TEXT) + "*", textColor));
+			setChatboxWidgetInput(chatboxInput, name);
+		}
+	}
+
+	private void setChatboxWidgetInput(Widget widget, String input) {
+		String text = widget.getText();
+		int idx = text.indexOf(':');
+		if (idx != -1) {
+			String newText = input + text.substring(idx);
+			widget.setText(newText);
 		}
 	}
 
@@ -273,6 +272,8 @@ public class ChatLeagueIconsPlugin extends Plugin
 		return isLeagueWorld(friendlyWorld);
 	}
 
+	// TODO: Cache the value of isPlayerOnLeague to avoid checking world on every public message.
+	//       Player world only changes on world change / login / logout.
 	/**
 	 * Checks if the player is currently on a league world.
 	 *
@@ -300,13 +301,12 @@ public class ChatLeagueIconsPlugin extends Plugin
 
 		World world = worlds.findWorld(worldNumber);
 		return world != null && world.getTypes().contains(WorldType.LEAGUE);
-
 	}
 
 	/**
 	 * Loads all league icons into the client.
 	 */
-	private void loadLeagueIcons()
+	private void loadLeagueIcon()
 	{
 		final IndexedSprite[] modIcons = client.getModIcons();
 
@@ -320,7 +320,6 @@ public class ChatLeagueIconsPlugin extends Plugin
 
 		leagueIconOffset = modIcons.length;
 
-		//final LeagueIcon[] leagueIcons = LeagueIcon.values();
 		final IndexedSprite[] newModIcons = Arrays.copyOf(modIcons, modIcons.length + 1);
 		newModIcons[newModIcons.length - 1] = indexedSprite;
 
