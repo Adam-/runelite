@@ -53,6 +53,7 @@ public class OSXUtil
 	{
 		Application app = Application.getApplication();
 		app.requestUserAttention(true);
+		log.debug("Requested focus on macOS");
 	}
 
 	/**
@@ -64,7 +65,7 @@ public class OSXUtil
 		{
 			Application app = Application.getApplication();
 			app.requestForeground(true);
-			log.debug("Requested focus on macOS");
+			log.debug("Forced focus on macOS");
 		}
 	}
 }

@@ -660,20 +660,17 @@ public class ClientUI
 		switch (OSType.getOSType())
 		{
 			case MacOS:
-				// On OSX Component::requestFocus has no visible effect, so we use our OSX-specific
-				// requestUserAttention()
 				OSXUtil.requestUserAttention();
 				break;
 			default:
 				frame.requestFocus();
+				break;
 		}
-
+		frame.requestFocus();
 		giveClientFocus();
 	}
 
-	/**
-	 * Attempt to forcibly bring the client frame to front
-	 */
+	/*** Attempt to forcibly bring the client frame to front*/
 	public void forceFocus()
 	{
 		switch (OSType.getOSType())
