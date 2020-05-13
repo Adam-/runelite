@@ -664,9 +664,9 @@ public class ClientUI
 				break;
 			default:
 				frame.requestFocus();
-				break;
+				
 		}
-		frame.requestFocus();
+
 		giveClientFocus();
 	}
 
