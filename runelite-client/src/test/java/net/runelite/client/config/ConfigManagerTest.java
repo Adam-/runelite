@@ -125,10 +125,6 @@ public class ConfigManagerTest
 	public void testResetNullDefaultConfig()
 	{
 		TestConfig conf = manager.getConfig(TestConfig.class);
-		ConfigDescriptor descriptor = manager.getConfigDescriptor(conf);
-		conf.nullDefaultKey("new value");
-
-		manager.unsetConfiguration(descriptor.getGroup().value(), "nullDefaultKey");
 		manager.setDefaultConfiguration(conf, false);
 		Assert.assertNull(conf.nullDefaultKey());
 	}
