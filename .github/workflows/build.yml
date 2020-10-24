@@ -33,5 +33,3 @@ jobs:
 
       - name: Build
         run: ./ci/build.sh
-        env:
-          JAVA_TOOL_OPTIONS: -Dhttps.protocols=TLSv1.2
