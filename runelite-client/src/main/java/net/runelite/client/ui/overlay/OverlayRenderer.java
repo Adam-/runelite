@@ -246,11 +246,14 @@ public class OverlayRenderer extends MouseAdapter implements KeyListener
 			}
 			else
 			{
-				final Point location = overlay.getBounds().getLocation();
-				final Dimension dimension = overlay.getBounds().getSize();
+				final Rectangle bounds = overlay.getBounds();
+				final Point location = bounds.getLocation();
+				final Dimension dimension = bounds.getSize();
+
+				final Point preferredLocation = overlay.getPreferredLocation();
 
 				// If the final position is not modified, layout it
-				if (overlayPosition != OverlayPosition.DETACHED && (overlay.getPreferredLocation() == null || overlay.getPreferredPosition() != null))
+				if (overlayPosition != OverlayPosition.DETACHED && (preferredLocation == null || overlay.getPreferredPosition() != null))
 				{
 					final Rectangle snapCorner = snapCorners.forPosition(overlayPosition);
 					final Point translation = OverlayUtil.transformPosition(overlayPosition, dimension);
@@ -260,21 +263,28 @@ public class OverlayRenderer extends MouseAdapter implements KeyListener
 				}
 				else
 				{
-					final Point preferredLocation = overlay.getPreferredLocation();
-
 					if (preferredLocation != null)
 					{
 						location.setLocation(preferredLocation);
 					}
 
-					final Dimension realDimensions = client.getRealDimensions();
-					location.x = Ints.constrainToRange(location.x, 0, Math.max(0, realDimensions.width - dimension.width));
-					location.y = Ints.constrainToRange(location.y, 0, Math.max(0, realDimensions.height - dimension.height));
+					// Bound the overlay to ensure it is on screen/within parent bounds
+					Rectangle parentBounds = overlay.getParentBounds();
+					if (parentBounds == null || parentBounds.isEmpty())
+					{
+						// If no bounds are set, use the full client bounds
+						Dimension dim = client.getRealDimensions();
+						parentBounds = new Rectangle(0, 0, dim.width, dim.height);
+					}
+					location.x = Ints.constrainToRange(location.x, parentBounds.x,
+						Math.max(parentBounds.x, parentBounds.width - dimension.width));
+					location.y = Ints.constrainToRange(location.y, parentBounds.y,
+						Math.max(parentBounds.y, parentBounds.height - dimension.height));
 				}
 
 				if (overlay.getPreferredSize() != null)
 				{
-					overlay.getBounds().setSize(overlay.getPreferredSize());
+					bounds.setSize(overlay.getPreferredSize());
 				}
 
 				safeRender(client, overlay, layer, graphics, location);
@@ -286,8 +296,6 @@ public class OverlayRenderer extends MouseAdapter implements KeyListener
 				graphics.setPaint(paint);
 				graphics.setRenderingHints(renderingHints);
 				graphics.setBackground(background);
-
-				final Rectangle bounds = overlay.getBounds();
 
 				if (!bounds.isEmpty())
 				{
@@ -572,12 +580,26 @@ public class OverlayRenderer extends MouseAdapter implements KeyListener
 		}
 		else if (inOverlayDraggingMode)
 		{
-			final Dimension realDimension = client.getRealDimensions();
-			p.translate(-overlayOffset.x, -overlayOffset.y);
-			p.x = Ints.constrainToRange(p.x, 0, Math.max(0, realDimension.width - currentManagedOverlay.getBounds().width));
-			p.y = Ints.constrainToRange(p.y, 0, Math.max(0, realDimension.height - currentManagedOverlay.getBounds().height));
+			Point overlayPosition = new Point(p);
+			overlayPosition.translate(-overlayOffset.x, -overlayOffset.y); // adjust by mouse offset to get overlay position
+
+			// Get the parent bounds for drag
+			Rectangle parentBounds = currentManagedOverlay.getParentBounds();
+			if (parentBounds == null || parentBounds.isEmpty())
+			{
+				// If no bounds are set, use the full client bounds
+				Dimension dim = client.getRealDimensions();
+				parentBounds = new Rectangle(0, 0, dim.width, dim.height);
+			}
+			final Rectangle overlayBounds = currentManagedOverlay.getBounds();
+
+			// Constrain overlay position to be within the parent bounds
+			overlayPosition.x = Ints.constrainToRange(overlayPosition.x, parentBounds.x,
+				Math.max(parentBounds.x, parentBounds.width - overlayBounds.width));
+			overlayPosition.y = Ints.constrainToRange(overlayPosition.y, parentBounds.y,
+				Math.max(parentBounds.y, parentBounds.height - overlayBounds.height));
 			currentManagedOverlay.setPreferredPosition(null);
-			currentManagedOverlay.setPreferredLocation(p);
+			currentManagedOverlay.setPreferredLocation(overlayPosition);
 		}
 		else
 		{

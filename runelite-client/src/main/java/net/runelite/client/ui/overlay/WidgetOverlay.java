@@ -89,31 +89,9 @@ public class WidgetOverlay extends Overlay
 	}
 
 	@Override
-	public Rectangle getBounds()
-	{
-		final Rectangle bounds = super.getBounds();
-		final Rectangle parent = getParentBounds(client.getWidget(widgetInfo));
-
-		if (parent.isEmpty())
-		{
-			return bounds;
-		}
-
-		int x = bounds.x;
-		int y = bounds.y;
-		x = Math.max(parent.x, x);
-		y = Math.max(parent.y, y);
-		x = Math.min((int)parent.getMaxX() - bounds.width, x);
-		y = Math.min((int)parent.getMaxY() - bounds.height, y);
-		bounds.setLocation(x, y);
-		return bounds;
-	}
-
-	@Override
 	public Dimension render(Graphics2D graphics)
 	{
 		final Widget widget = client.getWidget(widgetInfo);
-		final Rectangle bounds = super.getBounds();
 		final Rectangle parent = getParentBounds(widget);
 
 		if (parent.isEmpty())
@@ -121,13 +99,9 @@ public class WidgetOverlay extends Overlay
 			return null;
 		}
 
-		int x = bounds.x;
-		int y = bounds.y;
-		x = Math.max(parent.x, x);
-		y = Math.max(parent.y, y);
-		x = Math.min((int)parent.getMaxX() - bounds.width, x);
-		y = Math.min((int)parent.getMaxY() - bounds.height, y);
-		bounds.setLocation(x, y);
+		// The overlay renderer already has caused the bounds to be computed for this frame
+		// by calling getBounds(), so we can just reuse the already compured bounds
+		final Rectangle bounds = super.getBounds();
 		widget.setOriginalX(0);
 		widget.setOriginalY(0);
 		widget.setRelativeX(bounds.x - parent.x);
@@ -137,11 +111,6 @@ public class WidgetOverlay extends Overlay
 
 	private Rectangle getParentBounds(final Widget widget)
 	{
-		if (!client.isClientThread())
-		{
-			return parentBounds;
-		}
-
 		if (widget == null || widget.isHidden())
 		{
 			parentBounds.setBounds(new Rectangle());
@@ -157,11 +126,25 @@ public class WidgetOverlay extends Overlay
 		}
 		else
 		{
-			bounds = new Rectangle(parent.getCanvasLocation().getX(), parent.getCanvasLocation().getY(), parent.getWidth(), parent.getHeight());
+			bounds = parent.getBounds();
 		}
 
 		parentBounds.setBounds(bounds);
 		return bounds;
+	}
+
+	@Override
+	public Rectangle getParentBounds()
+	{
+		if (!client.isClientThread())
+		{
+			// During overlay drag, getBounds() is called on the EDT, so we just
+			// cache and reuse the last known parent bounds.
+			return parentBounds;
+		}
+
+		final Widget widget = client.getWidget(widgetInfo);
+		return getParentBounds(widget);
 	}
 
 	private static class XpTrackerWidgetOverlay extends WidgetOverlay
