@@ -352,6 +352,9 @@ public class OverlayRenderer extends MouseAdapter implements KeyListener
 		final Point mousePoint = mouseEvent.getPoint();
 		mousePosition.setLocation(mousePoint);
 
+		// See if we've clicked on an overlay
+		currentManagedOverlay = findMangedOverlay(mousePoint);
+
 		if (currentManagedOverlay == null)
 		{
 			return mouseEvent;
@@ -397,26 +400,7 @@ public class OverlayRenderer extends MouseAdapter implements KeyListener
 
 		if (!inOverlayResizingMode && !inOverlayDraggingMode)
 		{
-			currentManagedOverlay = null;
-
-			synchronized (overlayManager)
-			{
-				for (Overlay overlay : overlayManager.getOverlays())
-				{
-					if (overlay.getPosition() == OverlayPosition.DYNAMIC || overlay.getPosition() == OverlayPosition.TOOLTIP)
-					{
-						// never allow moving dynamic or tooltip overlays
-						continue;
-					}
-
-					final Rectangle bounds = overlay.getBounds();
-					if (bounds.contains(mousePoint))
-					{
-						currentManagedOverlay = overlay;
-						break;
-					}
-				}
-			}
+			currentManagedOverlay = findMangedOverlay(mousePoint);
 		}
 
 		if (currentManagedOverlay == null || !currentManagedOverlay.isResizable())
@@ -461,6 +445,33 @@ public class OverlayRenderer extends MouseAdapter implements KeyListener
 		}
 
 		return mouseEvent;
+	}
+
+	/**
+	 * Find an overlay to manage which is under the given mouse point
+	 * @param mousePoint
+	 * @return
+	 */
+	private Overlay findMangedOverlay(Point mousePoint)
+	{
+		synchronized (overlayManager)
+		{
+			for (Overlay overlay : overlayManager.getOverlays())
+			{
+				if (overlay.getPosition() == OverlayPosition.DYNAMIC || overlay.getPosition() == OverlayPosition.TOOLTIP)
+				{
+					// never allow moving dynamic or tooltip overlays
+					continue;
+				}
+
+				final Rectangle bounds = overlay.getBounds();
+				if (bounds.contains(mousePoint))
+				{
+					return overlay;
+				}
+			}
+		}
+		return null;
 	}
 
 	@Override
