@@ -250,8 +250,10 @@ public class OverlayRenderer extends MouseAdapter implements KeyListener
 				final Point location = bounds.getLocation();
 				final Dimension dimension = bounds.getSize();
 
+				final Point preferredLocation = overlay.getPreferredLocation();
+
 				// If the final position is not modified, layout it
-				if (overlayPosition != OverlayPosition.DETACHED && (overlay.getPreferredLocation() == null || overlay.getPreferredPosition() != null))
+				if (overlayPosition != OverlayPosition.DETACHED && (preferredLocation == null || overlay.getPreferredPosition() != null))
 				{
 					final Rectangle snapCorner = snapCorners.forPosition(overlayPosition);
 					final Point translation = OverlayUtil.transformPosition(overlayPosition, dimension);
@@ -261,21 +263,28 @@ public class OverlayRenderer extends MouseAdapter implements KeyListener
 				}
 				else
 				{
-					final Point preferredLocation = overlay.getPreferredLocation();
-
 					if (preferredLocation != null)
 					{
 						location.setLocation(preferredLocation);
 					}
 
-					final Dimension realDimensions = client.getRealDimensions();
-					location.x = Ints.constrainToRange(location.x, 0, Math.max(0, realDimensions.width - dimension.width));
-					location.y = Ints.constrainToRange(location.y, 0, Math.max(0, realDimensions.height - dimension.height));
+					// Bound the overlay to ensure it is on screen/within parent bounds
+					Rectangle parentBounds = overlay.getParentBounds();
+					if (parentBounds == null || parentBounds.isEmpty())
+					{
+						// If no bounds are set, use the full client bounds
+						Dimension dim = client.getRealDimensions();
+						parentBounds = new Rectangle(0, 0, dim.width, dim.height);
+					}
+					location.x = Ints.constrainToRange(location.x, parentBounds.x,
+						Math.max(parentBounds.x, parentBounds.width - dimension.width));
+					location.y = Ints.constrainToRange(location.y, parentBounds.y,
+						Math.max(parentBounds.y, parentBounds.height - dimension.height));
 				}
 
 				if (overlay.getPreferredSize() != null)
 				{
-					overlay.getBounds().setSize(overlay.getPreferredSize());
+					bounds.setSize(overlay.getPreferredSize());
 				}
 
 				safeRender(client, overlay, layer, graphics, location);
