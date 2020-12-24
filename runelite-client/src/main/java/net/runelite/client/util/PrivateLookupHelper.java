@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Abex
+ * Copyright (c) 2020 Abex
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -22,34 +22,18 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package net.runelite.client.externalplugins;
+package net.runelite.client.util;
 
 import java.lang.invoke.MethodHandles;
-import java.net.URL;
-import java.net.URLClassLoader;
-import lombok.Getter;
-import lombok.Setter;
-import net.runelite.client.util.ReflectUtil;
 
-class ExternalPluginClassLoader extends URLClassLoader implements ReflectUtil.PrivateLookupableClassLoader
+/**
+ * @see ReflectUtil
+ */
+public class PrivateLookupHelper
 {
-	@Getter
-	private final ExternalPluginManifest manifest;
-
-	@Getter
-	@Setter
-	private MethodHandles.Lookup lookup;
-
-	ExternalPluginClassLoader(ExternalPluginManifest manifest, URL[] urls)
+	static
 	{
-		super(urls, ExternalPluginClassLoader.class.getClassLoader());
-		this.manifest = manifest;
-		ReflectUtil.installLookupHelper(this);
-	}
-
-	@Override
-	public Class<?> defineClass0(String name, byte[] b, int off, int len) throws ClassFormatError
-	{
-		return super.defineClass(name, b, off, len);
+		ReflectUtil.PrivateLookupableClassLoader pcl = (ReflectUtil.PrivateLookupableClassLoader) PrivateLookupHelper.class.getClassLoader();
+		pcl.setLookup(MethodHandles.lookup());
 	}
 }
