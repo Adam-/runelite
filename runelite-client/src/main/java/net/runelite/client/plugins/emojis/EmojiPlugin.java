@@ -145,9 +145,7 @@ public class EmojiPlugin extends Plugin
 			return;
 		}
 
-		messageNode.setRuneLiteFormatMessage(updatedMessage);
-		chatMessageManager.update(messageNode);
-		client.refreshChat();
+		messageNode.setValue(updatedMessage);
 	}
 
 	@Subscribe
