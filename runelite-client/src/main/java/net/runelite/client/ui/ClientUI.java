@@ -128,6 +128,7 @@ public class ClientUI
 	private boolean withTitleBar;
 	private BufferedImage sidebarOpenIcon;
 	private BufferedImage sidebarClosedIcon;
+	@Getter
 	private ContainableFrame frame;
 	private JPanel navContainer;
 	private PluginPanel pluginPanel;

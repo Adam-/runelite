@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
+import javax.swing.SwingUtilities;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -57,6 +58,9 @@ import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.game.chatbox.ChatboxPanelManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.ui.ClientUI;
+import net.runelite.client.ui.components.colorpicker.ColorPickerManager;
+import net.runelite.client.ui.components.colorpicker.RuneliteColorPicker;
 import net.runelite.client.ui.overlay.OverlayManager;
 
 @Slf4j
@@ -71,6 +75,7 @@ public class GroundMarkerPlugin extends Plugin
 	private static final String MARK = "Mark tile";
 	private static final String UNMARK = "Unmark tile";
 	private static final String LABEL = "Label tile";
+	private static final String COLOR = "Color tile";
 	private static final String WALK_HERE = "Walk here";
 	private static final String REGION_PREFIX = "region_";
 
@@ -106,6 +111,12 @@ public class GroundMarkerPlugin extends Plugin
 
 	@Inject
 	private Gson gson;
+
+	@Inject
+	private ColorPickerManager colorPickerManager;
+
+	@Inject
+	private ClientUI clientUI;
 
 	void savePoints(int regionId, Collection<GroundMarkerPoint> points)
 	{
@@ -236,7 +247,7 @@ public class GroundMarkerPlugin extends Plugin
 			final boolean exists = getPoints(regionId).contains(point);
 
 			MenuEntry[] menuEntries = client.getMenuEntries();
-			menuEntries = Arrays.copyOf(menuEntries, menuEntries.length + (exists ? 2 : 1));
+			menuEntries = Arrays.copyOf(menuEntries, menuEntries.length + (exists ? 3 : 1));
 
 			MenuEntry mark = menuEntries[menuEntries.length - 1] = new MenuEntry();
 			mark.setOption(exists ? UNMARK : MARK);
@@ -249,6 +260,11 @@ public class GroundMarkerPlugin extends Plugin
 				label.setOption(LABEL);
 				label.setTarget(event.getTarget());
 				label.setType(MenuAction.RUNELITE.getId());
+
+				MenuEntry color = menuEntries[menuEntries.length - 3] = new MenuEntry();
+				color.setOption(COLOR);
+				color.setTarget(event.getTarget());
+				color.setType(MenuAction.RUNELITE.getId());
 			}
 
 			client.setMenuEntries(menuEntries);
@@ -277,6 +293,10 @@ public class GroundMarkerPlugin extends Plugin
 		else if (option.equals(LABEL))
 		{
 			labelTile(target);
+		}
+		else if (option.equals(COLOR))
+		{
+			colorTile(target);
 		}
 	}
 
@@ -338,5 +358,40 @@ public class GroundMarkerPlugin extends Plugin
 				loadPoints();
 			})
 			.build();
+	}
+
+	private void colorTile(Tile tile) {
+		LocalPoint localPoint = tile.getLocalLocation();
+		WorldPoint worldPoint = WorldPoint.fromLocalInstance(client, localPoint);
+		final int regionId = worldPoint.getRegionID();
+
+		GroundMarkerPoint searchPoint = new GroundMarkerPoint(regionId, worldPoint.getRegionX(), worldPoint.getRegionY(), client.getPlane(), null, null);
+		Collection<GroundMarkerPoint> points = getPoints(regionId);
+		GroundMarkerPoint existing = points.stream()
+			.filter(p -> p.equals(searchPoint))
+			.findFirst().orElse(null);
+		if (existing == null)
+		{
+			return;
+		}
+
+		SwingUtilities.invokeLater(() -> {
+			RuneliteColorPicker colorPicker = colorPickerManager.create(
+				clientUI.getFrame(),
+				existing.getColor(),
+				"Tile color",
+				false);
+			colorPicker.setOnClose(c -> {
+				System.out.println("SET!");
+
+				GroundMarkerPoint newPoint = new GroundMarkerPoint(regionId, worldPoint.getRegionX(), worldPoint.getRegionY(), client.getPlane(), c, existing.getLabel());
+				points.remove(searchPoint);
+				points.add(newPoint);
+				savePoints(regionId, points);
+
+				loadPoints();
+			});
+			colorPicker.setVisible(true);
+		});
 	}
 }
