@@ -299,14 +299,11 @@ class XpInfoBox extends JPanel
 				tooltipLabel == XpProgressBarLabel.PERCENTAGE ? "of goal" : "till goal lvl"));
 
 			progressBar.setDimmed(skillPaused);
-
-			progressBar.repaint();
 		}
 		else if (!paused && skillPaused)
 		{
 			// React to the skill state now being paused
 			progressBar.setDimmed(true);
-			progressBar.repaint();
 			paused = true;
 			pauseSkill.setText("Unpause");
 		}
@@ -314,7 +311,6 @@ class XpInfoBox extends JPanel
 		{
 			// React to the skill being unpaused (without update)
 			progressBar.setDimmed(false);
-			progressBar.repaint();
 			paused = false;
 			pauseSkill.setText("Pause");
 		}
