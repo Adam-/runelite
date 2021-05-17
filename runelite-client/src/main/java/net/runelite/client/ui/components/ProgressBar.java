@@ -44,11 +44,7 @@ public class ProgressBar extends DimmableJPanel
 {
 	@Setter
 	private int maximumValue;
-
-	@Setter
 	private int value;
-
-	@Setter
 	private List<Integer> positions = Collections.emptyList();
 
 	private final JLabel leftLabel = new JShadowedLabel();
@@ -156,5 +152,17 @@ public class ProgressBar extends DimmableJPanel
 		}
 
 		return (value * 100) / maximumValue;
+	}
+
+	public void setValue(int value)
+	{
+		this.value = value;
+		repaint();
+	}
+
+	public void setPositions(List<Integer> positions)
+	{
+		this.positions = positions;
+		repaint();
 	}
 }
