@@ -96,6 +96,8 @@ import net.runelite.client.util.Text;
 public class FriendsChatPlugin extends Plugin
 {
 	private static final int MAX_CHATS = 10;
+	private static final String RECENT_TITLE = "Recent FCs";
+	private static final String NOT_IN_CHANNEL = "<col=808080>Not in channel</col>";
 	private static final int MESSAGE_DELAY = 10;
 
 	@Inject
@@ -556,9 +558,19 @@ public class FriendsChatPlugin extends Plugin
 	@Subscribe
 	public void onScriptPostFired(ScriptPostFired event)
 	{
-		if (event.getScriptId() == ScriptID.FRIENDS_CHAT_CHANNEL_REBUILD && config.showIgnores())
+		if (event.getScriptId() == ScriptID.FRIENDS_CHAT_CHANNEL_REBUILD)
 		{
-			colorIgnoredPlayers(config.showIgnoresColor());
+			if (config.showIgnores())
+			{
+				colorIgnoredPlayers(config.showIgnoresColor());
+			}
+
+			FriendsChatManager friendsChatManager = client.getFriendsChatManager();
+			Widget chatTitle = client.getWidget(WidgetInfo.FRIENDS_CHAT_TITLE);
+			if (friendsChatManager != null && friendsChatManager.getCount() > 0 && chatTitle != null)
+			{
+				chatTitle.setText(chatTitle.getText() + " (" + friendsChatManager.getCount() + "/100)");
+			}
 		}
 	}
 
@@ -592,26 +604,29 @@ public class FriendsChatPlugin extends Plugin
 	private void resetChats()
 	{
 		Widget chatList = client.getWidget(WidgetInfo.FRIENDS_CHAT_LIST);
-
-		if (chatList == null)
-		{
-			return;
-		}
-
 		FriendsChatManager friendsChatManager = client.getFriendsChatManager();
-		if (friendsChatManager == null || friendsChatManager.getCount() == 0)
+		if (chatList != null && (friendsChatManager == null || friendsChatManager.getCount() == 0))
 		{
 			chatList.setChildren(null);
+		}
+
+		Widget owner = client.getWidget(WidgetInfo.FRIENDS_CHAT_OWNER);
+		if (owner != null)
+		{
+			owner.setText(NOT_IN_CHANNEL);
 		}
 	}
 
 	private void loadFriendsChats()
 	{
+		Widget chatOwner = client.getWidget(WidgetInfo.FRIENDS_CHAT_OWNER);
 		Widget chatList = client.getWidget(WidgetInfo.FRIENDS_CHAT_LIST);
-		if (chatList == null)
+		if (chatList == null || chatOwner == null)
 		{
 			return;
 		}
+
+		chatOwner.setText(RECENT_TITLE);
 
 		int y = 2;
 		chatList.setChildren(null);
