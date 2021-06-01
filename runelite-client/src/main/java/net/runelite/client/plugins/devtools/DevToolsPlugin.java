@@ -448,6 +448,37 @@ public class DevToolsPlugin extends Plugin
 					.build());
 				break;
 			}
+			case "poly": {
+				Player player = client.getLocalPlayer();
+
+//				player.getPlayerComposition().getEquipmentIds()[KitType.JAW.getIndex()] = 63 + 256;
+//				player.getPlayerComposition().getEquipmentIds()[KitType.HEAD.getIndex()] = ItemID.MYTHICAL_MAX_HOOD + 512;
+
+//				player.getPlayerComposition().getEquipmentIds()[KitType.HEAD.getIndex()] = ItemID.MAX_HOOD + 512;
+//				player.getPlayerComposition().getEquipmentIds()[KitType.TORSO.getIndex()] = ItemID.BANDOS_CHESTPLATE + 512;
+//				player.getPlayerComposition().getEquipmentIds()[KitType.LEGS.getIndex()] = ItemID.DRAGONSTONE_PLATELEGS + 512;
+//				player.getPlayerComposition().getEquipmentIds()[KitType.BOOTS.getIndex()] = ItemID.PEGASIAN_BOOTS + 512;
+//				player.getPlayerComposition().getEquipmentIds()[KitType.AMULET.getIndex()] = ItemID.XERICS_TALISMAN + 512;
+//				player.getPlayerComposition().getEquipmentIds()[KitType.CAPE.getIndex()] = ItemID.SKELETON_MONKEY + 512;
+//				player.getPlayerComposition().getEquipmentIds()[KitType.ARMS.getIndex()] = 0;
+//				player.getPlayerComposition().getEquipmentIds()[KitType.WEAPON.getIndex()] = ItemID.GREGGS_EASTDOOR + 512;
+
+				player.getPlayerComposition().getEquipmentIds()[0] = 13793;
+				player.getPlayerComposition().getEquipmentIds()[1] = 25377;
+				player.getPlayerComposition().getEquipmentIds()[2] = 13905;
+				player.getPlayerComposition().getEquipmentIds()[3] = 26116;
+				player.getPlayerComposition().getEquipmentIds()[4] = 12344;
+				player.getPlayerComposition().getEquipmentIds()[5] = 0;
+				player.getPlayerComposition().getEquipmentIds()[6] = 0;
+				player.getPlayerComposition().getEquipmentIds()[7] = 24552;
+				player.getPlayerComposition().getEquipmentIds()[8] = 0;
+				player.getPlayerComposition().getEquipmentIds()[9] = 290;
+				player.getPlayerComposition().getEquipmentIds()[10] = 13749;
+				player.getPlayerComposition().getEquipmentIds()[11] = 368;
+
+				player.getPlayerComposition().setHash();
+				break;
+			}
 		}
 	}
 
