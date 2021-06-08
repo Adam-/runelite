@@ -281,15 +281,18 @@ public class RuneLite
 		{
 			if (runtimeConfig != null && !Strings.isNullOrEmpty(runtimeConfig.getClientLoadErrorMessage()))
 			{
-				FatalErrorDialog fatalErrorDialog = new FatalErrorDialog(runtimeConfig.getClientLoadErrorMessage());
-				if (runtimeConfig.getClientLoadErrorButtons() != null)
+				SwingUtilities.invokeLater(() ->
 				{
-					for (RuntimeConfig.ErrorButton errorButton : runtimeConfig.getClientLoadErrorButtons())
+					FatalErrorDialog fatalErrorDialog = new FatalErrorDialog(runtimeConfig.getClientLoadErrorMessage());
+					if (runtimeConfig.getClientLoadErrorButtons() != null)
 					{
-						fatalErrorDialog.addButton(errorButton.getText(), () -> LinkBrowser.browse(errorButton.getUrl()));
+						for (RuntimeConfig.ErrorButton errorButton : runtimeConfig.getClientLoadErrorButtons())
+						{
+							fatalErrorDialog.addButton(errorButton.getText(), () -> LinkBrowser.browse(errorButton.getUrl()));
+						}
 					}
-				}
-				SwingUtilities.invokeLater(fatalErrorDialog::open);
+					fatalErrorDialog.open();
+				});
 			}
 			else
 			{
