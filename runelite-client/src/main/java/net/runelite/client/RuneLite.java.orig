@@ -131,12 +131,6 @@ public class RuneLite
 	@Nullable
 	private Client client;
 
-	@Inject
-	private Provider<ModelOutlineRenderer> modelOutlineRenderer;
-
-	@Inject
-	private Scheduler scheduler;
-
 	public static void main(String[] args) throws Exception
 	{
 		Locale.setDefault(Locale.ENGLISH);

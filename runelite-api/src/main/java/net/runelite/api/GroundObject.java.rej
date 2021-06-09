@@ -1,0 +1,9 @@
+--- runelite-api/src/main/java/net/runelite/api/GroundObject.java
++++ runelite-api/src/main/java/net/runelite/api/GroundObject.java
+@@ -30,4 +30,6 @@ package net.runelite.api;
+ public interface GroundObject extends TileObject
+ {
+ 	Renderable getRenderable();
++
++	Model getModel();
+ }

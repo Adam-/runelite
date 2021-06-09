@@ -1,0 +1,16 @@
+--- runelite-client/src/main/java/net/runelite/client/plugins/roguesden/RoguesDenOverlay.java
++++ runelite-client/src/main/java/net/runelite/client/plugins/roguesden/RoguesDenOverlay.java
+@@ -68,12 +71,7 @@ public class RoguesDenOverlay extends Overlay
+ 		{
+ 			if (tile.getPlane() == client.getPlane() && obstacle.getLocalLocation().distanceTo(playerLocation) < MAX_DISTANCE)
+ 			{
+-				Polygon p = tile.getGameObjects()[0].getConvexHull();
+-				if (p != null)
+-				{
+-					graphics.setColor(Color.CYAN);
+-					graphics.drawPolygon(p);
+-				}
++				modelOutliner.drawOutline(tile.getGameObjects()[0], 1, Color.CYAN);
+ 			}
+ 		});
+ 

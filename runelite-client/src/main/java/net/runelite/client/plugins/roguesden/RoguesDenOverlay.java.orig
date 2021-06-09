@@ -32,7 +32,6 @@ import java.awt.Shape;
 import javax.inject.Inject;
 import net.runelite.api.Client;
 import net.runelite.api.coords.LocalPoint;
-import net.runelite.client.graphics.ModelOutlineRenderer;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
@@ -43,16 +42,14 @@ public class RoguesDenOverlay extends Overlay
 
 	private final Client client;
 	private final RoguesDenPlugin plugin;
-	private final ModelOutlineRenderer modelOutliner;
 
 	@Inject
-	public RoguesDenOverlay(Client client, RoguesDenPlugin plugin, ModelOutlineRenderer modelOutliner)
+	public RoguesDenOverlay(Client client, RoguesDenPlugin plugin)
 	{
 		setPosition(OverlayPosition.DYNAMIC);
 		setLayer(OverlayLayer.ABOVE_SCENE);
 		this.client = client;
 		this.plugin = plugin;
-		this.modelOutliner = modelOutliner;
 	}
 
 	@Override

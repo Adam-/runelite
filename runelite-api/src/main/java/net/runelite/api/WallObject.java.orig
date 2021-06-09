@@ -25,65 +25,47 @@
 package net.runelite.api;
 
 import java.awt.Shape;
-import net.runelite.api.coords.Angle;
 
 /**
- * Represents a game object.
- * <p>
- * Most object in the RuneScape world are considered as game objects. Things
- * such as trees, anvils, boxes, etc are all game objects.
+ * Represents one or two walls on a tile
  */
-public interface GameObject extends TileObject
+public interface WallObject extends TileObject
 {
 	/**
-	 * Get the size of this object, in tiles, on the x axis
-	 *
-	 * @return
+	 * A bitfield with the orientation of a wall
+	 * 1 = East
+	 * 2 = North
+	 * 4 = West
+	 * 8 = South
 	 */
-	int sizeX();
+	int getOrientationA();
 
 	/**
-	 * Get the size of this object, in tiles, on the y axis
-	 *
-	 * @return
+	 * A bitfield containing the orientation of the second wall on this tile,
+	 * or 0 if there is no second wall.
+	 * @see #getOrientationA
 	 */
-	int sizeY();
+	int getOrientationB();
 
 	/**
-	 * Gets the minimum x and y scene coordinate pair for this game object.
-	 *
-	 * @return the minimum scene coordinate
+	 * A bitfield containing various flags:
+	 * <pre>{@code
+	 * object type id = bits & 0x20
+	 * orientation (0-3) = bits >>> 6 & 3
+	 * supports items = bits >>> 8 & 1
+	 * }</pre>
 	 */
-	Point getSceneMinLocation();
+	int getConfig();
 
 	/**
-	 * Gets the maximum x and y scene coordinate pair for this game object.
-	 * <p>
-	 * This value differs from {@link #getSceneMinLocation()} when the size
-	 * of the object is more than 1 tile.
-	 *
-	 * @return the maximum scene coordinate
-	 */
-	Point getSceneMaxLocation();
-
-	/**
-	 * Gets the convex hull of the object's model.
+	 * Gets the convex hull of the objects model.
 	 *
 	 * @return the convex hull
 	 * @see net.runelite.api.model.Jarvis
 	 */
 	Shape getConvexHull();
+	Shape getConvexHull2();
 
-	/**
-	 * Gets the orientation of the object.
-	 *
-	 * @return the orientation
-	 */
-	Angle getOrientation();
-
-	Renderable getRenderable();
-
-//	int getRsOrientation();
-//
-//	Model getModel();
+	Renderable getRenderable1();
+	Renderable getRenderable2();
 }

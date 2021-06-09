@@ -1,0 +1,52 @@
+--- runelite-client/src/main/java/net/runelite/client/plugins/devtools/DevToolsOverlay.java
++++ runelite-client/src/main/java/net/runelite/client/plugins/devtools/DevToolsOverlay.java
+@@ -101,13 +103,14 @@ class DevToolsOverlay extends Overlay
+ 	private int itemIndex = -1;
+ 
+ 	@Inject
+-	private DevToolsOverlay(Client client, DevToolsPlugin plugin, TooltipManager toolTipManager)
++	private DevToolsOverlay(Client client, DevToolsPlugin plugin, TooltipManager toolTipManager, ModelOutlineRenderer modelOutliner)
+ 	{
+ 		setPosition(OverlayPosition.DYNAMIC);
+ 		setLayer(OverlayLayer.ABOVE_MAP);
+ 		this.client = client;
+ 		this.plugin = plugin;
+ 		this.toolTipManager = toolTipManager;
++		this.modelOutliner = modelOutliner;
+ 	}
+ 
+ 	@Override
+@@ -298,13 +301,7 @@ class DevToolsOverlay extends Overlay
+ 						OverlayUtil.renderTileOverlay(graphics, gameObject, "ID: " + gameObject.getId(), GREEN);
+ 					}
+ 
+-					// Draw a polygon around the convex hull
+-					// of the model vertices
+-					Polygon p = gameObject.getConvexHull();
+-					if (p != null)
+-					{
+-						graphics.drawPolygon(p);
+-					}
++					modelOutliner.drawOutline(gameObject, 1, Color.WHITE);
+ 				}
+ 			}
+ 		}
+@@ -344,17 +341,7 @@ class DevToolsOverlay extends Overlay
+ 				OverlayUtil.renderTileOverlay(graphics, decorObject, "ID: " + decorObject.getId(), DEEP_PURPLE);
+ 			}
+ 
+-			Polygon p = decorObject.getConvexHull();
+-			if (p != null)
+-			{
+-				graphics.drawPolygon(p);
+-			}
+-
+-			p = decorObject.getConvexHull2();
+-			if (p != null)
+-			{
+-				graphics.drawPolygon(p);
+-			}
++			modelOutliner.drawOutline(decorObject, 1, Color.WHITE);
+ 		}
+ 	}
+ 

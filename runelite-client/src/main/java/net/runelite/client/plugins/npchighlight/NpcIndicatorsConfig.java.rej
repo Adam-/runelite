@@ -1,0 +1,11 @@
+--- runelite-client/src/main/java/net/runelite/client/plugins/npchighlight/NpcIndicatorsConfig.java
++++ runelite-client/src/main/java/net/runelite/client/plugins/npchighlight/NpcIndicatorsConfig.java
+@@ -40,7 +40,7 @@ public interface NpcIndicatorsConfig extends Config
+ 	)
+ 	default RenderStyle renderStyle()
+ 	{
+-		return RenderStyle.HULL;
++		return RenderStyle.THIN_OUTLINE;
+ 	}
+ 
+ 	@ConfigItem(
