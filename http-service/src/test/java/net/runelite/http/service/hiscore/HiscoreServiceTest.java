@@ -99,7 +99,8 @@ public class HiscoreServiceTest
 			+ "10170,184\n"
 			+ "8064,202\n"
 			+ "6936,2\n"
-			+ "2335,9\n"
+			+ "2335,9\n" // Nightmare
+			+ "2336,10\n" // Phosanis Nightmare
 			+ "-1,-1\n"
 			+ "-1,-1\n"
 			+ "19779,22\n"
