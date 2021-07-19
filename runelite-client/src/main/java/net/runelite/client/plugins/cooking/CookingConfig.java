@@ -34,6 +34,17 @@ import net.runelite.client.config.Units;
 public interface CookingConfig extends Config
 {
 	@ConfigItem(
+		position = 0,
+		keyName = "showCookingStats",
+		name = "Show session stats",
+		description = "Configures whether to display cooking session stats"
+	)
+	default boolean showCookingStats()
+	{
+		return true;
+	}
+
+	@ConfigItem(
 		position = 1,
 		keyName = "statTimeout",
 		name = "Reset stats",
