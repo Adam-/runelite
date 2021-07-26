@@ -60,15 +60,8 @@ class InteractHighlightOverlay extends Overlay
 	@Override
 	public Dimension render(Graphics2D graphics)
 	{
-		if (config.showHover())
-		{
-			renderMouseover();
-		}
-		if (config.showInteract())
-		{
-			renderTarget();
-		}
-
+		renderMouseover();
+		renderTarget();
 		return null;
 	}
 
@@ -95,7 +88,7 @@ class InteractHighlightOverlay extends Overlay
 				int y = top.getParam1();
 				int id = top.getIdentifier();
 				TileObject tileObject = plugin.findTileObject(x, y, id);
-				if (tileObject != null && (tileObject != plugin.getInteractedObject() || !config.showInteract()))
+				if (tileObject != null && config.objectShowHover() && (tileObject != plugin.getInteractedObject() || !config.objectShowInteract()))
 				{
 					modelOutlineRenderer.drawOutline(tileObject, config.borderWidth(), config.objectHoverHighlightColor(), config.outlineFeather());
 				}
@@ -109,7 +102,7 @@ class InteractHighlightOverlay extends Overlay
 			{
 				int id = top.getIdentifier();
 				NPC npc = plugin.findNpc(id);
-				if (npc != null && (npc != plugin.getInteractedNpc() || !config.showInteract()))
+				if (npc != null && config.npcShowHover() && (npc != plugin.getInteractedNpc() || !config.npcShowInteract()))
 				{
 					modelOutlineRenderer.drawOutline(npc, config.borderWidth(), config.npcHoverHighlightColor(), config.outlineFeather());
 				}
@@ -121,13 +114,13 @@ class InteractHighlightOverlay extends Overlay
 	private void renderTarget()
 	{
 		TileObject interactedObject = plugin.getInteractedObject();
-		if (interactedObject != null)
+		if (interactedObject != null && config.objectShowInteract())
 		{
 			modelOutlineRenderer.drawOutline(interactedObject, config.borderWidth(), config.objectInteractHighlightColor(), config.outlineFeather());
 		}
 
 		NPC npc = plugin.getInteractedNpc();
-		if (npc != null)
+		if (npc != null && config.npcShowInteract())
 		{
 			modelOutlineRenderer.drawOutline(npc, config.borderWidth(), config.npcInteractHighlightColor(), config.outlineFeather());
 		}

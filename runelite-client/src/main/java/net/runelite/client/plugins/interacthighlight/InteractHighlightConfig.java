@@ -29,29 +29,46 @@ import net.runelite.client.config.Alpha;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
+import net.runelite.client.config.ConfigSection;
 import net.runelite.client.config.Range;
 
 @ConfigGroup("interacthighlight")
 public interface InteractHighlightConfig extends Config
 {
-	@ConfigItem(
-		keyName = "showHover",
-		name = "Show on hover",
-		description = "Outline npcs and objects when hovered",
+	@ConfigSection(
+		name = "NPCs",
+		description = "Settings for NPC highlight",
+		position = 0
+	)
+	String npcSection = "npcSection";
+
+	@ConfigSection(
+		name = "Objects",
+		description = "Settings for object highlight",
 		position = 1
 	)
-	default boolean showHover()
+	String objectSection = "objectSection";
+
+	@ConfigItem(
+		keyName = "npcShowHover",
+		name = "Show on hover",
+		description = "Outline NPCs when hovered",
+		position = 1,
+		section = npcSection
+	)
+	default boolean npcShowHover()
 	{
 		return true;
 	}
 
 	@ConfigItem(
-		keyName = "showInteract",
+		keyName = "npcShowInteract",
 		name = "Show on interact",
-		description = "Outline npcs and objects when interacted",
-		position = 2
+		description = "Outline NPCs when interacted",
+		position = 2,
+		section = npcSection
 	)
-	default boolean showInteract()
+	default boolean npcShowInteract()
 	{
 		return true;
 	}
@@ -61,7 +78,8 @@ public interface InteractHighlightConfig extends Config
 		keyName = "npcHoverHighlightColor",
 		name = "NPC hover",
 		description = "The color of the hover outline for npcs",
-		position = 3
+		position = 3,
+		section = npcSection
 	)
 	default Color npcHoverHighlightColor()
 	{
@@ -70,10 +88,48 @@ public interface InteractHighlightConfig extends Config
 
 	@Alpha
 	@ConfigItem(
+		keyName = "npcInteractHighlightColor",
+		name = "NPC interact",
+		description = "The color of the target outline for npcs",
+		position = 5,
+		section = npcSection
+	)
+	default Color npcInteractHighlightColor()
+	{
+		return new Color(0x90BD092B, true);
+	}
+
+	@ConfigItem(
+		keyName = "objectShowHover",
+		name = "Show on hover",
+		description = "Outline objects when hovered",
+		position = 1,
+		section = objectSection
+	)
+	default boolean objectShowHover()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "objectShowInteract",
+		name = "Show on interact",
+		description = "Outline objects when interacted",
+		position = 2,
+		section = objectSection
+	)
+	default boolean objectShowInteract()
+	{
+		return true;
+	}
+
+	@Alpha
+	@ConfigItem(
 		keyName = "objectHoverHighlightColor",
 		name = "Object hover",
 		description = "The color of the hover outline for objects",
-		position = 4
+		position = 4,
+		section = objectSection
 	)
 	default Color objectHoverHighlightColor()
 	{
@@ -82,22 +138,11 @@ public interface InteractHighlightConfig extends Config
 
 	@Alpha
 	@ConfigItem(
-		keyName = "npcInteractHighlightColor",
-		name = "NPC interact",
-		description = "The color of the target outline for npcs",
-		position = 5
-	)
-	default Color npcInteractHighlightColor()
-	{
-		return new Color(0x90BD092B, true);
-	}
-
-	@Alpha
-	@ConfigItem(
 		keyName = "objectInteractHighlightColor",
 		name = "Object interact",
 		description = "The color of the target outline for objects",
-		position = 6
+		position = 6,
+		section = objectSection
 	)
 	default Color objectInteractHighlightColor()
 	{
