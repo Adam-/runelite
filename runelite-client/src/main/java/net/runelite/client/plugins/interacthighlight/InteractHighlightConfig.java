@@ -89,7 +89,7 @@ public interface InteractHighlightConfig extends Config
 	)
 	default Color npcInteractHighlightColor()
 	{
-		return new Color(0x90FFFF00, true);
+		return new Color(0x90BD092B, true);
 	}
 
 	@Alpha
@@ -101,7 +101,7 @@ public interface InteractHighlightConfig extends Config
 	)
 	default Color objectInteractHighlightColor()
 	{
-		return new Color(0x9000FFFF, true);
+		return new Color(0x90BD092B, true);
 	}
 
 	@ConfigItem(
