@@ -68,6 +68,7 @@ public class InteractHighlightPlugin extends Plugin
 	private TileObject interactedObject;
 	@Getter(AccessLevel.PACKAGE)
 	private NPC interactedNpc;
+	private int clickTick;
 
 	@Provides
 	InteractHighlightConfig provideConfig(ConfigManager configManager)
@@ -108,7 +109,7 @@ public class InteractHighlightPlugin extends Plugin
 	@Subscribe
 	public void onGameTick(GameTick gameTick)
 	{
-		if (client.getLocalDestinationLocation() == null)
+		if (client.getLocalDestinationLocation() == null && client.getTickCount() > clickTick)
 		{
 			// when the destination is reached, clear the interacting object
 			interactedObject = null;
@@ -132,6 +133,7 @@ public class InteractHighlightPlugin extends Plugin
 				int id = menuOptionClicked.getId();
 				interactedObject = findTileObject(x, y, id);
 				interactedNpc = null;
+				clickTick = client.getTickCount();
 				break;
 			}
 			case NPC_FIRST_OPTION:
@@ -143,6 +145,7 @@ public class InteractHighlightPlugin extends Plugin
 				int id = menuOptionClicked.getId();
 				interactedObject = null;
 				interactedNpc = findNpc(id);
+				clickTick = client.getTickCount();
 				break;
 			}
 			// Any menu click which clears an interaction
