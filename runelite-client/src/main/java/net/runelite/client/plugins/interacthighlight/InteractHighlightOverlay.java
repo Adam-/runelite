@@ -24,8 +24,7 @@
  */
 package net.runelite.client.plugins.interacthighlight;
 
-import java.awt.Dimension;
-import java.awt.Graphics2D;
+import java.awt.*;
 import javax.inject.Inject;
 import net.runelite.api.Client;
 import net.runelite.api.MenuAction;
@@ -104,7 +103,8 @@ class InteractHighlightOverlay extends Overlay
 				NPC npc = plugin.findNpc(id);
 				if (npc != null && config.npcShowHover() && (npc != plugin.getInteractedNpc() || !config.npcShowInteract()))
 				{
-					modelOutlineRenderer.drawOutline(npc, config.borderWidth(), config.npcHoverHighlightColor(), config.outlineFeather());
+					Color highlightColor = menuAction == MenuAction.NPC_SECOND_OPTION ? config.npcAttackHighlightColor() : config.npcHoverHighlightColor();
+					modelOutlineRenderer.drawOutline(npc, config.borderWidth(), highlightColor, config.outlineFeather());
 				}
 				break;
 			}
