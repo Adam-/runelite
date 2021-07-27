@@ -95,6 +95,7 @@ class InteractHighlightOverlay extends Overlay
 				}
 				break;
 			}
+			case SPELL_CAST_ON_NPC:
 			case NPC_FIRST_OPTION:
 			case NPC_SECOND_OPTION:
 			case NPC_THIRD_OPTION:
@@ -105,7 +106,8 @@ class InteractHighlightOverlay extends Overlay
 				NPC npc = plugin.findNpc(id);
 				if (npc != null && config.npcShowHover() && (npc != plugin.getInteractedNpc() || !config.npcShowInteract()))
 				{
-					Color highlightColor = menuAction == MenuAction.NPC_SECOND_OPTION ? config.npcAttackHighlightColor() : config.npcHoverHighlightColor();
+					Color highlightColor = menuAction == MenuAction.NPC_SECOND_OPTION || menuAction == MenuAction.SPELL_CAST_ON_NPC
+						? config.npcAttackHighlightColor() : config.npcHoverHighlightColor();
 					modelOutlineRenderer.drawOutline(npc, config.borderWidth(), highlightColor, config.outlineFeather());
 				}
 				break;
