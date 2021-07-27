@@ -34,8 +34,8 @@ uniform float textureLightMode;
 
 in vec4 Color;
 noperspective centroid in float fHsl;
-flat in int textureId;
-in vec2 fUv;
+//flat in int textureId;
+in vec4 fUv;
 in float fogAmount;
 
 out vec4 FragColor;
@@ -46,10 +46,11 @@ out vec4 FragColor;
 void main() {
   vec4 c;
 
+  int textureId = int(fUv.x);
   if (textureId > 0) {
     int textureIdx = textureId - 1;
 
-    vec2 animatedUv = fUv + textureOffsets[textureIdx];
+    vec2 animatedUv = fUv.yz + textureOffsets[textureIdx];
 
     vec4 textureColor = texture(textures, vec3(animatedUv, float(textureIdx)));
     vec4 textureColorBrightness = pow(textureColor, vec4(brightness, brightness, brightness, 1.0f));
