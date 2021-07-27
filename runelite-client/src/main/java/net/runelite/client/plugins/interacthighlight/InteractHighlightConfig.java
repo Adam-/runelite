@@ -88,6 +88,19 @@ public interface InteractHighlightConfig extends Config
 
 	@Alpha
 	@ConfigItem(
+			keyName = "npcAttackHighlightColor",
+			name = "NPC attack hover",
+			description = "The color of the attack hover outline for npcs",
+			position = 4,
+			section = npcSection
+	)
+	default Color npcAttackHighlightColor()
+	{
+		return new Color(0x90FF0000, true);
+	}
+
+	@Alpha
+	@ConfigItem(
 		keyName = "npcInteractHighlightColor",
 		name = "NPC interact",
 		description = "The color of the target outline for npcs",
