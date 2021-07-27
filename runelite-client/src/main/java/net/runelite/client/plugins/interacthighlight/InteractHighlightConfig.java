@@ -77,7 +77,7 @@ public interface InteractHighlightConfig extends Config
 	@ConfigItem(
 		keyName = "npcHoverHighlightColor",
 		name = "NPC hover",
-		description = "The color of the hover outline for npcs",
+		description = "The color of the hover outline for NPCs",
 		position = 3,
 		section = npcSection
 	)
@@ -88,11 +88,11 @@ public interface InteractHighlightConfig extends Config
 
 	@Alpha
 	@ConfigItem(
-			keyName = "npcAttackHighlightColor",
-			name = "NPC attack hover",
-			description = "The color of the attack hover outline for npcs",
-			position = 4,
-			section = npcSection
+		keyName = "npcAttackHighlightColor",
+		name = "NPC attack hover",
+		description = "The color of the attack hover outline for NPCs",
+		position = 4,
+		section = npcSection
 	)
 	default Color npcAttackHighlightColor()
 	{
@@ -103,7 +103,7 @@ public interface InteractHighlightConfig extends Config
 	@ConfigItem(
 		keyName = "npcInteractHighlightColor",
 		name = "NPC interact",
-		description = "The color of the target outline for npcs",
+		description = "The color of the target outline for NPCs",
 		position = 5,
 		section = npcSection
 	)
