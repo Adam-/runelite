@@ -41,7 +41,6 @@ import net.runelite.api.WallObject;
 import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.MenuOptionClicked;
-import net.runelite.api.events.NpcDespawned;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
@@ -66,8 +65,6 @@ public class InteractHighlightPlugin extends Plugin
 
 	@Getter(AccessLevel.PACKAGE)
 	private TileObject interactedObject;
-	@Getter(AccessLevel.PACKAGE)
-	private NPC interactedNpc;
 	private int clickTick;
 
 	@Provides
@@ -98,22 +95,12 @@ public class InteractHighlightPlugin extends Plugin
 	}
 
 	@Subscribe
-	public void onNpcDespawned(NpcDespawned npcDespawned)
-	{
-		if (npcDespawned.getNpc() == interactedNpc)
-		{
-			interactedNpc = null;
-		}
-	}
-
-	@Subscribe
 	public void onGameTick(GameTick gameTick)
 	{
 		if (client.getLocalDestinationLocation() == null && client.getTickCount() > clickTick)
 		{
 			// when the destination is reached, clear the interacting object
 			interactedObject = null;
-			interactedNpc = null;
 		}
 	}
 
@@ -122,6 +109,8 @@ public class InteractHighlightPlugin extends Plugin
 	{
 		switch (menuOptionClicked.getMenuAction())
 		{
+			case ITEM_USE_ON_GAME_OBJECT:
+			case SPELL_CAST_ON_GAME_OBJECT:
 			case GAME_OBJECT_FIRST_OPTION:
 			case GAME_OBJECT_SECOND_OPTION:
 			case GAME_OBJECT_THIRD_OPTION:
@@ -132,29 +121,21 @@ public class InteractHighlightPlugin extends Plugin
 				int y = menuOptionClicked.getWidgetId();
 				int id = menuOptionClicked.getId();
 				interactedObject = findTileObject(x, y, id);
-				interactedNpc = null;
 				clickTick = client.getTickCount();
 				break;
 			}
+			case ITEM_USE_ON_NPC:
+			case SPELL_CAST_ON_NPC:
 			case NPC_FIRST_OPTION:
 			case NPC_SECOND_OPTION:
 			case NPC_THIRD_OPTION:
 			case NPC_FOURTH_OPTION:
 			case NPC_FIFTH_OPTION:
-			{
-				int id = menuOptionClicked.getId();
-				interactedObject = null;
-				interactedNpc = findNpc(id);
-				clickTick = client.getTickCount();
-				break;
-			}
 			// Any menu click which clears an interaction
 			case WALK:
 			case ITEM_USE:
-			case ITEM_USE_ON_GAME_OBJECT:
 			case ITEM_USE_ON_GROUND_ITEM:
 			case ITEM_USE_ON_PLAYER:
-			case ITEM_USE_ON_NPC:
 			case ITEM_FIRST_OPTION:
 			case ITEM_SECOND_OPTION:
 			case ITEM_THIRD_OPTION:
@@ -166,7 +147,6 @@ public class InteractHighlightPlugin extends Plugin
 			case GROUND_ITEM_FOURTH_OPTION:
 			case GROUND_ITEM_FIFTH_OPTION:
 				interactedObject = null;
-				interactedNpc = null;
 		}
 	}
 

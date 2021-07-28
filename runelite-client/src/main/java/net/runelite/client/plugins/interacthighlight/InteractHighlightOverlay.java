@@ -33,6 +33,7 @@ import net.runelite.api.MenuAction;
 import net.runelite.api.MenuEntry;
 import net.runelite.api.NPC;
 import net.runelite.api.TileObject;
+import net.runelite.api.Actor;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
@@ -79,6 +80,8 @@ class InteractHighlightOverlay extends Overlay
 
 		switch (menuAction)
 		{
+			case ITEM_USE_ON_GAME_OBJECT:
+			case SPELL_CAST_ON_GAME_OBJECT:
 			case GAME_OBJECT_FIRST_OPTION:
 			case GAME_OBJECT_SECOND_OPTION:
 			case GAME_OBJECT_THIRD_OPTION:
@@ -95,6 +98,7 @@ class InteractHighlightOverlay extends Overlay
 				}
 				break;
 			}
+			case ITEM_USE_ON_NPC:
 			case SPELL_CAST_ON_NPC:
 			case NPC_FIRST_OPTION:
 			case NPC_SECOND_OPTION:
@@ -104,10 +108,10 @@ class InteractHighlightOverlay extends Overlay
 			{
 				int id = top.getIdentifier();
 				NPC npc = plugin.findNpc(id);
-				if (npc != null && config.npcShowHover() && (npc != plugin.getInteractedNpc() || !config.npcShowInteract()))
+				if (npc != null && config.npcShowHover() && (npc != client.getLocalPlayer().getInteracting() || !config.npcShowInteract()))
 				{
 					Color highlightColor = menuAction == MenuAction.NPC_SECOND_OPTION || menuAction == MenuAction.SPELL_CAST_ON_NPC
-						? config.npcAttackHighlightColor() : config.npcHoverHighlightColor();
+							? config.npcAttackHighlightColor() : config.npcHoverHighlightColor();
 					modelOutlineRenderer.drawOutline(npc, config.borderWidth(), highlightColor, config.outlineFeather());
 				}
 				break;
@@ -123,10 +127,10 @@ class InteractHighlightOverlay extends Overlay
 			modelOutlineRenderer.drawOutline(interactedObject, config.borderWidth(), config.objectInteractHighlightColor(), config.outlineFeather());
 		}
 
-		NPC npc = plugin.getInteractedNpc();
-		if (npc != null && config.npcShowInteract())
+		Actor interactedActor = client.getLocalPlayer().getInteracting();
+		if (interactedActor instanceof NPC && config.npcShowInteract())
 		{
-			modelOutlineRenderer.drawOutline(npc, config.borderWidth(), config.npcInteractHighlightColor(), config.outlineFeather());
+			modelOutlineRenderer.drawOutline((NPC) interactedActor, config.borderWidth(), config.npcInteractHighlightColor(), config.outlineFeather());
 		}
 	}
 }
