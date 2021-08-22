@@ -55,9 +55,10 @@ public class NpcMinimapOverlay extends Overlay
 	@Override
 	public Dimension render(Graphics2D graphics)
 	{
-		for (NPC npc : plugin.getHighlightedNpcs())
+		for (HighlightedNpc highlightedNpc : plugin.getHighlightedNpcs().values())
 		{
-			renderNpcOverlay(graphics, npc, Text.removeTags(npc.getName()), config.highlightColor());
+			NPC npc = highlightedNpc.getNpc();
+			renderNpcOverlay(graphics, npc, Text.removeTags(npc.getName()), highlightedNpc.getHighlightColor());
 		}
 
 		return null;
