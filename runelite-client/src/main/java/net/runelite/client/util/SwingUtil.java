@@ -50,7 +50,6 @@ import javax.swing.JButton;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.LookAndFeel;
-import javax.swing.Popup;
 import javax.swing.PopupFactory;
 import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
@@ -120,14 +119,15 @@ public class SwingUtil
 				//
 				// Now that Aqua has been uninitialized due to us applying our own LAF, replace the popup factory with
 				// one that always uses heavyweight popups.
-				PopupFactory.setSharedInstance(new PopupFactory()
-				{
-					@Override
-					public Popup getPopup(Component owner, Component contents, int x, int y) throws IllegalArgumentException
-					{
-						return super.getPopup(owner, contents, x, y, true);
-					}
-				});
+				PopupFactory.setSharedInstance(new net.runelite.client.util.MacOSPopupFactory());
+//				PopupFactory.setSharedInstance(new PopupFactory()
+//				{
+//					@Override
+//					public Popup getPopup(Component owner, Component contents, int x, int y) throws IllegalArgumentException
+//					{
+//						return super.getPopup(owner, contents, x, y, true);
+//					}
+//				});
 			}
 		}
 		catch (UnsupportedLookAndFeelException ex)
