@@ -1619,16 +1619,9 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 				model.calculateExtreme(orientation);
 				client.checkClickbox(model, orientation, pitchSin, pitchCos, yawSin, yawCos, x, y, z, hash);
 
-				boolean hasUv = model.getFaceTextures() != null;
-
-				int faces = Math.min(MAX_TRIANGLE, model.getTrianglesCount());
-				vertexBuffer.ensureCapacity(12 * faces);
-				uvBuffer.ensureCapacity(12 * faces);
-				int len = 0;
-				for (int i = 0; i < faces; ++i)
-				{
-					len += sceneUploader.pushFace(model, i, false, vertexBuffer, uvBuffer, 0, 0, 0, 0);
-				}
+				final int len = sceneUploader.pushModel(model, vertexBuffer, uvBuffer);
+				final int faces = len / 3;
+				final boolean hasUv = model.getFaceTextures() != null;
 
 				GpuIntBuffer b = bufferForTriangles(faces);
 
@@ -1636,7 +1629,7 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 				IntBuffer buffer = b.getBuffer();
 				buffer.put(tempOffset);
 				buffer.put(hasUv ? tempUvOffset : -1);
-				buffer.put(len / 3);
+				buffer.put(faces);
 				buffer.put(targetBufferOffset);
 				buffer.put((model.getRadius() << 12) | orientation);
 				buffer.put(x + client.getCameraX2()).put(y + client.getCameraY2()).put(z + client.getCameraZ2());
