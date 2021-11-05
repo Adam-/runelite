@@ -39,7 +39,7 @@ class HotkeyButton extends JButton
 	@Getter
 	private Keybind value;
 
-	public HotkeyButton(Keybind value, boolean modifierless)
+	HotkeyButton(Keybind value, boolean modifierless, boolean requireModifiers)
 	{
 		setFont(FontManager.getDefaultFont().deriveFont(12.f));
 		setValue(value);
@@ -62,7 +62,7 @@ class HotkeyButton extends JButton
 				{
 					setValue(new ModifierlessKeybind(e));
 				}
-				else
+				else if (!requireModifiers || e.getModifiersEx() != 0)
 				{
 					setValue(new Keybind(e));
 				}

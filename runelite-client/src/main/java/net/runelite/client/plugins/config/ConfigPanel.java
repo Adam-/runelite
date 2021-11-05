@@ -539,7 +539,8 @@ class ConfigPanel extends PluginPanel
 					cid.getItem().keyName(),
 					(Class<? extends Keybind>) cid.getType());
 
-				HotkeyButton button = new HotkeyButton(startingValue, cid.getType() == ModifierlessKeybind.class);
+				HotkeyButton button = new HotkeyButton(startingValue, cid.getType() == ModifierlessKeybind.class,
+					cid.getItem().requireModifiers());
 
 				button.addFocusListener(new FocusAdapter()
 				{

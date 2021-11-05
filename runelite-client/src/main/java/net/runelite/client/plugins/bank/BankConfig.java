@@ -127,7 +127,8 @@ public interface BankConfig extends Config
 		keyName = "searchKeybind",
 		name = "Search Shortcut",
 		description = "Keyboard shortcut for initiating a bank search",
-		position = 9
+		position = 9,
+		requireModifiers = true
 	)
 	default Keybind searchKeybind()
 	{
