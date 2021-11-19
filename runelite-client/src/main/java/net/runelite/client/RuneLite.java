@@ -425,9 +425,10 @@ public class RuneLite
 				}
 			};
 
-			SSLContext sc = SSLContext.getInstance("SSL");
+			SSLContext sc = SSLContext.getInstance("TLS");
 			sc.init(null, new TrustManager[]{trustManager}, new SecureRandom());
 			okHttpClientBuilder.sslSocketFactory(sc.getSocketFactory(), trustManager);
+			okHttpClientBuilder.hostnameVerifier((hostname, session) -> true);
 		}
 		catch (NoSuchAlgorithmException | KeyManagementException ex)
 		{
