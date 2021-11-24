@@ -174,21 +174,40 @@ public class ChatMessageManager
 			messageNode.setSender(ColorUtil.wrapWithColorTag(sender, senderColor));
 		}
 
+		final ChatColor chatColor = findChatColor(chatMessageType, isChatboxTransparent);
+		if (chatColor != null)
+		{
+			// gim chat messages start with |. the color must be inserted after the |, otherwise
+			// rebuildchatbox will not recognize it as a gim message.
+			String message = messageNode.getValue();
+			boolean gim = false;
+			if (chatMessageType == ChatMessageType.CLAN_CHAT && message.startsWith("|"))
+			{
+				message = message.substring(1);
+				gim = true;
+			}
+			// Replace </col> tags in the message with the new color so embedded </col> won't reset the color
+			final Color color = chatColor.getColor();
+			message = ColorUtil.wrapWithColorTag(message.replace(ColorUtil.CLOSING_COLOR_TAG, ColorUtil.colorTag(color)), color);
+			if (gim)
+			{
+				message = "|" + message;
+			}
+			messageNode.setValue(message);
+		}
+	}
+
+	private ChatColor findChatColor(ChatMessageType chatMessageType, boolean isChatboxTransparent)
+	{
 		final Collection<ChatColor> chatColors = colorCache.get(chatMessageType);
 		for (ChatColor chatColor : chatColors)
 		{
-			if (chatColor.isTransparent() != isChatboxTransparent || chatColor.getType() != ChatColorType.NORMAL || chatColor.isDefault())
+			if (chatColor.isTransparent() == isChatboxTransparent && chatColor.getType() == ChatColorType.NORMAL && !chatColor.isDefault())
 			{
-				continue;
+				return chatColor;
 			}
-
-			// Replace </col> tags in the message with the new color so embedded </col> won't reset the color
-			final Color color = chatColor.getColor();
-			messageNode.setValue(ColorUtil.wrapWithColorTag(
-				messageNode.getValue().replace(ColorUtil.CLOSING_COLOR_TAG, ColorUtil.colorTag(color)),
-				color));
-			break;
 		}
+		return null;
 	}
 
 	@Subscribe
