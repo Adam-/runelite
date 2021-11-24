@@ -205,6 +205,24 @@ LABEL131:
    invoke                 3739
    sstore                 14
 LABEL197:
+   ; setup colors
+   sload                  4 ; ^chattype_publicchat, ^chattype_modchat
+   sload                  5 ; ^chattype_privatechat, ^chattype_modprivatechat, ^chattype_loginlogoutnotification, ^chattype_privatechatout
+   sload                  6 ; ^chattype_autotyper, ^chattype_modautotyper
+   sload                  8 ; ^clan_chat - clantype_clan
+   sload                  7 ; ^chattype_friendschat
+   sload                  11 ; ^guest_clan_chat
+   sload                  12 ; ^clan_chat - clantype_gim
+   sconst                 "setupChatboxColors"
+   runelite_callback
+   sstore                 12
+   sstore                 11
+   sstore                 7
+   sstore                 8
+   sstore                 6
+   sstore                 5
+   sstore                 4
+
    iload                  3
    sconst                 "col"
    invoke                 3739

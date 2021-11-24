@@ -121,6 +121,7 @@ public class ChatMessageManager
 		Color usernameColor = null;
 		Color senderColor = null;
 
+		// username recoloring
 		switch (chatMessageType)
 		{
 			// username recoloring for MODPRIVATECHAT, PRIVATECHAT and PRIVATECHATOUT
@@ -174,20 +175,32 @@ public class ChatMessageManager
 			messageNode.setSender(ColorUtil.wrapWithColorTag(sender, senderColor));
 		}
 
-		final Collection<ChatColor> chatColors = colorCache.get(chatMessageType);
-		for (ChatColor chatColor : chatColors)
+		// message recoloring
+		switch (chatMessageType)
 		{
-			if (chatColor.isTransparent() != isChatboxTransparent || chatColor.getType() != ChatColorType.NORMAL || chatColor.isDefault())
-			{
-				continue;
-			}
-
-			// Replace </col> tags in the message with the new color so embedded </col> won't reset the color
-			final Color color = chatColor.getColor();
-			messageNode.setValue(ColorUtil.wrapWithColorTag(
-				messageNode.getValue().replace(ColorUtil.CLOSING_COLOR_TAG, ColorUtil.colorTag(color)),
-				color));
-			break;
+			case PUBLICCHAT:
+			case MODCHAT:
+			case PRIVATECHAT:
+			case MODPRIVATECHAT:
+			case LOGINLOGOUTNOTIFICATION:
+			case PRIVATECHATOUT:
+			case AUTOTYPER:
+			case MODAUTOTYPER:
+			case CLAN_CHAT:
+			case FRIENDSCHAT:
+			case CLAN_GUEST_CHAT:
+				// these are recolored by the setupChatboxColors script event instead.
+				break;
+			default:
+				final ChatColor chatColor = getChatColor(chatMessageType, isChatboxTransparent);
+				if (chatColor != null)
+				{
+					// Replace </col> tags in the message with the new color so embedded </col> won't reset the color
+					final Color color = chatColor.getColor();
+					messageNode.setValue(ColorUtil.wrapWithColorTag(
+						messageNode.getValue().replace(ColorUtil.CLOSING_COLOR_TAG, ColorUtil.colorTag(color)),
+						color));
+				}
 		}
 	}
 
@@ -205,6 +218,9 @@ public class ChatMessageManager
 			case "privChatUsername":
 				wrap = true;
 				break;
+			case "setupChatboxColors":
+				setupChatboxColors();
+				return;
 			default:
 				return;
 		}
@@ -229,6 +245,62 @@ public class ChatMessageManager
 			fromToUsername = ColorUtil.colorTag(usernameColor);
 		}
 		stringStack[stringStackSize - 1] = fromToUsername;
+	}
+
+	private void setupChatboxColors()
+	{
+		boolean isChatboxTransparent = client.isResized() && client.getVar(Varbits.TRANSPARENT_CHATBOX) == 1;
+		final ChatColor publicChat = getChatColor(ChatMessageType.PUBLICCHAT, isChatboxTransparent);
+		final ChatColor privateChat = getChatColor(ChatMessageType.PRIVATECHAT, isChatboxTransparent);
+		final ChatColor autoTyper = getChatColor(ChatMessageType.AUTOTYPER, isChatboxTransparent);
+		final ChatColor clanChat = getChatColor(ChatMessageType.CLAN_CHAT, isChatboxTransparent);
+		final ChatColor friendsChat = getChatColor(ChatMessageType.FRIENDSCHAT, isChatboxTransparent);
+		final ChatColor guestClanChat = getChatColor(ChatMessageType.CLAN_GUEST_CHAT, isChatboxTransparent);
+
+		final String[] stringStack = client.getStringStack();
+		final int size = client.getStringStackSize();
+
+		if (clanChat != null)
+		{
+			stringStack[size - 1] = ColorUtil.colorTag(clanChat.getColor()); // gim clan chat - we use the clan chat color setting
+		}
+		if (guestClanChat != null)
+		{
+			stringStack[size - 2] = ColorUtil.colorTag(guestClanChat.getColor());
+		}
+		if (friendsChat != null)
+		{
+			stringStack[size - 3] = ColorUtil.colorTag(friendsChat.getColor());
+		}
+		if (clanChat != null)
+		{
+			stringStack[size - 4] = ColorUtil.colorTag(clanChat.getColor());
+		}
+		if (autoTyper != null)
+		{
+			stringStack[size - 5] = ColorUtil.colorTag(autoTyper.getColor());
+		}
+		if (privateChat != null)
+		{
+			stringStack[size - 6] = ColorUtil.colorTag(privateChat.getColor());
+		}
+		if (publicChat != null)
+		{
+			stringStack[size - 7] = ColorUtil.colorTag(publicChat.getColor());
+		}
+	}
+
+	private ChatColor getChatColor(ChatMessageType chatMessageType, boolean isChatboxTransparent)
+	{
+		final Collection<ChatColor> chatColors = colorCache.get(chatMessageType);
+		for (ChatColor chatColor : chatColors)
+		{
+			if (chatColor.isTransparent() == isChatboxTransparent && chatColor.getType() == ChatColorType.NORMAL && !chatColor.isDefault())
+			{
+				return chatColor;
+			}
+		}
+		return null;
 	}
 
 	private static Color getDefaultColor(ChatMessageType type, boolean transparent)
