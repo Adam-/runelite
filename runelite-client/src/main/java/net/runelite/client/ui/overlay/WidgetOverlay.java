@@ -34,8 +34,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
 import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
@@ -100,8 +98,6 @@ public class WidgetOverlay extends Overlay
 	protected final Client client;
 	protected final ChatMessageManager chatMessageManager;
 
-	@Setter
-	@Accessors(fluent = true)
 	private WidgetInfo widgetInfo;
 	private final Rectangle parentBounds = new Rectangle();
 	private boolean revalidate;
@@ -255,7 +251,7 @@ public class WidgetOverlay extends Overlay
 		if (overlayMenuEntry.getMenuAction() == MenuAction.RUNELITE_OVERLAY
 			&& overlayMenuClicked.getOverlay() == this)
 		{
-			String option = overlayMenuClicked.getEntry().getOption();
+			String option = overlayMenuEntry.getOption();
 			if (option.equals("Hide"))
 			{
 				log.debug("Hiding component {}", widgetInfo);
