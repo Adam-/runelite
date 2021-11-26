@@ -38,7 +38,6 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
-import java.util.Collection;
 import java.util.Locale;
 import javax.annotation.Nullable;
 import javax.inject.Provider;
@@ -325,15 +324,7 @@ public class RuneLite
 		if (!isOutdated)
 		{
 			// Add core overlays
-			Collection<WidgetOverlay> overlays = WidgetOverlay.createOverlays(overlayManager, client);
-			for (WidgetOverlay widgetOverlay : overlays)
-			{
-				overlayManager.add(widgetOverlay);
-				if (widgetOverlay.isHideable())
-				{
-					eventBus.register(widgetOverlay);
-				}
-			}
+			WidgetOverlay.createOverlays(injector).forEach(overlayManager::add);
 			overlayManager.add(worldMapOverlay.get());
 			eventBus.register(worldMapOverlay.get());
 			overlayManager.add(tooltipOverlay.get());

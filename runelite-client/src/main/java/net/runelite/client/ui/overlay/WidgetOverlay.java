@@ -24,6 +24,9 @@
  */
 package net.runelite.client.ui.overlay;
 
+import com.google.inject.Inject;
+import com.google.inject.Injector;
+import com.google.inject.Provider;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -31,6 +34,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
 import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.KeyCode;
@@ -39,56 +44,61 @@ import static net.runelite.api.MenuAction.RUNELITE_OVERLAY;
 import net.runelite.api.Varbits;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetInfo;
+import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.OverlayMenuClicked;
 
 @Slf4j
 public class WidgetOverlay extends Overlay
 {
-	public static Collection<WidgetOverlay> createOverlays(final OverlayManager overlayManager, final Client client)
+	public static Collection<WidgetOverlay> createOverlays(Injector injector)
 	{
+		Provider<WidgetOverlay> p = injector.getProvider(WidgetOverlay.class);
 		return Arrays.asList(
-			new WidgetOverlay(client, WidgetInfo.RESIZABLE_MINIMAP_WIDGET, OverlayPosition.CANVAS_TOP_RIGHT),
-			new WidgetOverlay(client, WidgetInfo.RESIZABLE_MINIMAP_STONES_WIDGET, OverlayPosition.CANVAS_TOP_RIGHT),
+			p.get().init(WidgetInfo.RESIZABLE_MINIMAP_WIDGET, OverlayPosition.CANVAS_TOP_RIGHT),
+			p.get().init(WidgetInfo.RESIZABLE_MINIMAP_STONES_WIDGET, OverlayPosition.CANVAS_TOP_RIGHT),
 			// The client forces the oxygen bar below the xp tracker, so set its priority lower
-			new WidgetOverlay(client, WidgetInfo.FOSSIL_ISLAND_OXYGENBAR, OverlayPosition.TOP_CENTER, OverlayPriority.HIGH),
-			new XpTrackerWidgetOverlay(overlayManager, client, WidgetInfo.EXPERIENCE_TRACKER_WIDGET, OverlayPosition.TOP_RIGHT),
-			new WidgetOverlay(client, WidgetInfo.RAIDS_POINTS_INFOBOX, OverlayPosition.TOP_LEFT),
-			new WidgetOverlay(client, WidgetInfo.TOB_PARTY_INTERFACE, OverlayPosition.TOP_LEFT),
-			new WidgetOverlay(client, WidgetInfo.TOB_PARTY_STATS, OverlayPosition.TOP_LEFT),
-			new WidgetOverlay(client, WidgetInfo.GWD_KC, OverlayPosition.TOP_LEFT).makeHideable("God Wars Essence"),
-			new WidgetOverlay(client, WidgetInfo.TITHE_FARM, OverlayPosition.TOP_RIGHT),
-			new WidgetOverlay(client, WidgetInfo.PEST_CONTROL_BOAT_INFO, OverlayPosition.TOP_LEFT),
-			new WidgetOverlay(client, WidgetInfo.PEST_CONTROL_KNIGHT_INFO_CONTAINER, OverlayPosition.TOP_LEFT),
-			new WidgetOverlay(client, WidgetInfo.PEST_CONTROL_ACTIVITY_SHIELD_INFO_CONTAINER, OverlayPosition.TOP_RIGHT),
-			new WidgetOverlay(client, WidgetInfo.ZEAH_MESS_HALL_COOKING_DISPLAY, OverlayPosition.TOP_LEFT),
-			new WidgetOverlay(client, WidgetInfo.PVP_KILLDEATH_COUNTER, OverlayPosition.TOP_LEFT),
-			new WidgetOverlay(client, WidgetInfo.SKOTIZO_CONTAINER, OverlayPosition.TOP_LEFT),
-			new WidgetOverlay(client, WidgetInfo.KOUREND_FAVOUR_OVERLAY, OverlayPosition.TOP_CENTER),
-			new WidgetOverlay(client, WidgetInfo.PYRAMID_PLUNDER_DATA, OverlayPosition.TOP_CENTER),
-			new WidgetOverlay(client, WidgetInfo.LMS_INFO, OverlayPosition.TOP_RIGHT),
-			new WidgetOverlay(client, WidgetInfo.LMS_KDA, OverlayPosition.TOP_RIGHT),
-			new WidgetOverlay(client, WidgetInfo.GAUNTLET_TIMER_CONTAINER, OverlayPosition.TOP_LEFT),
-			new WidgetOverlay(client, WidgetInfo.HALLOWED_SEPULCHRE_TIMER_CONTAINER, OverlayPosition.TOP_LEFT),
+			p.get().init(WidgetInfo.FOSSIL_ISLAND_OXYGENBAR, OverlayPosition.TOP_CENTER, OverlayPriority.HIGH),
+			injector.getInstance(XpTrackerWidgetOverlay.class).init(WidgetInfo.EXPERIENCE_TRACKER_WIDGET, OverlayPosition.TOP_RIGHT),
+			p.get().init(WidgetInfo.RAIDS_POINTS_INFOBOX, OverlayPosition.TOP_LEFT),
+			p.get().init(WidgetInfo.TOB_PARTY_INTERFACE, OverlayPosition.TOP_LEFT),
+			p.get().init(WidgetInfo.TOB_PARTY_STATS, OverlayPosition.TOP_LEFT),
+			p.get().init(WidgetInfo.GWD_KC, OverlayPosition.TOP_LEFT).makeHideable("God Wars Essence"),
+			p.get().init(WidgetInfo.TITHE_FARM, OverlayPosition.TOP_RIGHT),
+			p.get().init(WidgetInfo.PEST_CONTROL_BOAT_INFO, OverlayPosition.TOP_LEFT),
+			p.get().init(WidgetInfo.PEST_CONTROL_KNIGHT_INFO_CONTAINER, OverlayPosition.TOP_LEFT),
+			p.get().init(WidgetInfo.PEST_CONTROL_ACTIVITY_SHIELD_INFO_CONTAINER, OverlayPosition.TOP_RIGHT),
+			p.get().init(WidgetInfo.ZEAH_MESS_HALL_COOKING_DISPLAY, OverlayPosition.TOP_LEFT),
+			p.get().init(WidgetInfo.PVP_KILLDEATH_COUNTER, OverlayPosition.TOP_LEFT),
+			p.get().init(WidgetInfo.SKOTIZO_CONTAINER, OverlayPosition.TOP_LEFT),
+			p.get().init(WidgetInfo.KOUREND_FAVOUR_OVERLAY, OverlayPosition.TOP_CENTER),
+			p.get().init(WidgetInfo.PYRAMID_PLUNDER_DATA, OverlayPosition.TOP_CENTER),
+			p.get().init(WidgetInfo.LMS_INFO, OverlayPosition.TOP_RIGHT),
+			p.get().init(WidgetInfo.LMS_KDA, OverlayPosition.TOP_RIGHT),
+			p.get().init(WidgetInfo.GAUNTLET_TIMER_CONTAINER, OverlayPosition.TOP_LEFT),
+			p.get().init(WidgetInfo.HALLOWED_SEPULCHRE_TIMER_CONTAINER, OverlayPosition.TOP_LEFT),
 			// The client forces the health overlay bar below the xp tracker, so set its priority lower
-			new WidgetOverlay(client, WidgetInfo.HEALTH_OVERLAY_BAR, OverlayPosition.TOP_CENTER, OverlayPriority.HIGH),
-			new WidgetOverlay(client, WidgetInfo.TOB_HEALTH_BAR, OverlayPosition.TOP_CENTER),
-			new WidgetOverlay(client, WidgetInfo.NIGHTMARE_PILLAR_HEALTH, OverlayPosition.TOP_LEFT),
-			new WidgetOverlay(client, WidgetInfo.VOLCANIC_MINE_VENTS_INFOBOX_GROUP, OverlayPosition.BOTTOM_RIGHT),
-			new WidgetOverlay(client, WidgetInfo.VOLCANIC_MINE_STABILITY_INFOBOX_GROUP, OverlayPosition.BOTTOM_LEFT),
-			new WidgetOverlay(client, WidgetInfo.MULTICOMBAT_FIXED, OverlayPosition.BOTTOM_RIGHT),
-			new WidgetOverlay(client, WidgetInfo.MULTICOMBAT_RESIZEABLE_MODERN, OverlayPosition.CANVAS_TOP_RIGHT),
-			new WidgetOverlay(client, WidgetInfo.MULTICOMBAT_RESIZEABLE_CLASSIC, OverlayPosition.CANVAS_TOP_RIGHT),
-			new WidgetOverlay(client, WidgetInfo.TEMPOROSS_STATUS_INDICATOR, OverlayPosition.TOP_LEFT),
-			new WidgetOverlay(client, WidgetInfo.BA_HEAL_TEAMMATES, OverlayPosition.BOTTOM_LEFT),
-			new WidgetOverlay(client, WidgetInfo.BA_TEAM, OverlayPosition.TOP_RIGHT),
-			new WidgetOverlay(client, WidgetInfo.PVP_WILDERNESS_SKULL_CONTAINER, OverlayPosition.DETACHED)
+			p.get().init(WidgetInfo.HEALTH_OVERLAY_BAR, OverlayPosition.TOP_CENTER, OverlayPriority.HIGH),
+			p.get().init(WidgetInfo.TOB_HEALTH_BAR, OverlayPosition.TOP_CENTER),
+			p.get().init(WidgetInfo.NIGHTMARE_PILLAR_HEALTH, OverlayPosition.TOP_LEFT),
+			p.get().init(WidgetInfo.VOLCANIC_MINE_VENTS_INFOBOX_GROUP, OverlayPosition.BOTTOM_RIGHT),
+			p.get().init(WidgetInfo.VOLCANIC_MINE_STABILITY_INFOBOX_GROUP, OverlayPosition.BOTTOM_LEFT),
+			p.get().init(WidgetInfo.MULTICOMBAT_FIXED, OverlayPosition.BOTTOM_RIGHT),
+			p.get().init(WidgetInfo.MULTICOMBAT_RESIZEABLE_MODERN, OverlayPosition.CANVAS_TOP_RIGHT),
+			p.get().init(WidgetInfo.MULTICOMBAT_RESIZEABLE_CLASSIC, OverlayPosition.CANVAS_TOP_RIGHT),
+			p.get().init(WidgetInfo.TEMPOROSS_STATUS_INDICATOR, OverlayPosition.TOP_LEFT),
+			p.get().init(WidgetInfo.BA_HEAL_TEAMMATES, OverlayPosition.BOTTOM_LEFT),
+			p.get().init(WidgetInfo.BA_TEAM, OverlayPosition.TOP_RIGHT),
+			p.get().init(WidgetInfo.PVP_WILDERNESS_SKULL_CONTAINER, OverlayPosition.DETACHED)
 				.makeHideable("Wilderness Indicator")
 		);
 	}
 
 	protected final Client client;
-	private final WidgetInfo widgetInfo;
+
+	@Setter
+	@Accessors(fluent = true)
+	private WidgetInfo widgetInfo;
 	private final Rectangle parentBounds = new Rectangle();
 	private boolean revalidate;
 
@@ -97,20 +107,27 @@ public class WidgetOverlay extends Overlay
 	private boolean hideable;
 	private boolean hidden;
 
-	private WidgetOverlay(final Client client, final WidgetInfo widgetInfo, final OverlayPosition overlayPosition)
-	{
-		this(client, widgetInfo, overlayPosition, OverlayPriority.HIGHEST);
-	}
-
-	private WidgetOverlay(final Client client, final WidgetInfo widgetInfo, final OverlayPosition overlayPosition, final OverlayPriority overlayPriority)
+	@Inject
+	private WidgetOverlay(Client client, EventBus eventBus)
 	{
 		this.client = client;
+		eventBus.register(this);
+	}
+
+	protected WidgetOverlay init(final WidgetInfo widgetInfo, final OverlayPosition overlayPosition)
+	{
+		return init(widgetInfo, overlayPosition, OverlayPriority.HIGHEST);
+	}
+
+	protected WidgetOverlay init(final WidgetInfo widgetInfo, final OverlayPosition overlayPosition, final OverlayPriority overlayPriority)
+	{
 		this.widgetInfo = widgetInfo;
 		setPriority(overlayPriority);
 		setLayer(OverlayLayer.UNDER_WIDGETS);
 		setPosition(overlayPosition);
 		// It's almost possible to drawAfterInterface(widgetInfo.getGroupId()) here, but that fires
 		// *after* the native components are drawn, which is too late.
+		return this;
 	}
 
 	@Override
@@ -257,9 +274,10 @@ public class WidgetOverlay extends Overlay
 	{
 		private final OverlayManager overlayManager;
 
-		private XpTrackerWidgetOverlay(OverlayManager overlayManager, Client client, WidgetInfo widgetInfo, OverlayPosition overlayPosition)
+		@Inject
+		private XpTrackerWidgetOverlay(OverlayManager overlayManager, Client client, EventBus eventBus)
 		{
-			super(client, widgetInfo, overlayPosition);
+			super(client, eventBus);
 			this.overlayManager = overlayManager;
 		}
 
