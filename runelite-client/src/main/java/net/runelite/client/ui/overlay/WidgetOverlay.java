@@ -37,6 +37,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
+import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
 import net.runelite.api.KeyCode;
 import net.runelite.api.MenuAction;
@@ -44,6 +45,8 @@ import static net.runelite.api.MenuAction.RUNELITE_OVERLAY;
 import net.runelite.api.Varbits;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetInfo;
+import net.runelite.client.chat.ChatMessageManager;
+import net.runelite.client.chat.QueuedMessage;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.OverlayMenuClicked;
@@ -95,6 +98,7 @@ public class WidgetOverlay extends Overlay
 	}
 
 	protected final Client client;
+	protected final ChatMessageManager chatMessageManager;
 
 	@Setter
 	@Accessors(fluent = true)
@@ -108,9 +112,10 @@ public class WidgetOverlay extends Overlay
 	private boolean hidden;
 
 	@Inject
-	private WidgetOverlay(Client client, EventBus eventBus)
+	private WidgetOverlay(Client client, EventBus eventBus, ChatMessageManager chatMessageManager)
 	{
 		this.client = client;
+		this.chatMessageManager = chatMessageManager;
 		eventBus.register(this);
 	}
 
@@ -258,6 +263,12 @@ public class WidgetOverlay extends Overlay
 				// Switch menu entry to show
 				getMenuEntries().clear();
 				getMenuEntries().add(new OverlayMenuEntry(RUNELITE_OVERLAY, "Show", name));
+
+				chatMessageManager.queue(QueuedMessage.builder()
+					.type(ChatMessageType.CONSOLE)
+					.runeLiteFormattedMessage("You've hidden the " + name + " overlay. It will remain hidden until " +
+						"you unhide it by holding shift and selecting \"Show\".")
+					.build());
 			}
 			else if (option.equals("Show"))
 			{
@@ -275,9 +286,10 @@ public class WidgetOverlay extends Overlay
 		private final OverlayManager overlayManager;
 
 		@Inject
-		private XpTrackerWidgetOverlay(OverlayManager overlayManager, Client client, EventBus eventBus)
+		private XpTrackerWidgetOverlay(OverlayManager overlayManager, Client client, EventBus eventBus,
+			ChatMessageManager chatMessageManager)
 		{
-			super(client, eventBus);
+			super(client, eventBus, chatMessageManager);
 			this.overlayManager = overlayManager;
 		}
 
