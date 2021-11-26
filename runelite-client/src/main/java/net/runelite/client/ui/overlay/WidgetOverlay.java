@@ -231,7 +231,6 @@ public class WidgetOverlay extends Overlay
 	{
 		OverlayMenuEntry overlayMenuEntry = overlayMenuClicked.getEntry();
 		if (overlayMenuEntry.getMenuAction() == MenuAction.RUNELITE_OVERLAY
-//			&& overlayMenuClicked.getEntry().getOption().equals("Hide")
 			&& overlayMenuClicked.getOverlay() == this)
 		{
 			String option = overlayMenuClicked.getEntry().getOption();
