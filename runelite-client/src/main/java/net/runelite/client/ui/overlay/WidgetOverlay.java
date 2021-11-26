@@ -30,11 +30,17 @@ import java.awt.Rectangle;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
+import net.runelite.api.KeyCode;
+import net.runelite.api.MenuAction;
+import static net.runelite.api.MenuAction.RUNELITE_OVERLAY;
 import net.runelite.api.Varbits;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetInfo;
+import net.runelite.client.eventbus.Subscribe;
+import net.runelite.client.events.OverlayMenuClicked;
 
 @Slf4j
 public class WidgetOverlay extends Overlay
@@ -50,7 +56,7 @@ public class WidgetOverlay extends Overlay
 			new WidgetOverlay(client, WidgetInfo.RAIDS_POINTS_INFOBOX, OverlayPosition.TOP_LEFT),
 			new WidgetOverlay(client, WidgetInfo.TOB_PARTY_INTERFACE, OverlayPosition.TOP_LEFT),
 			new WidgetOverlay(client, WidgetInfo.TOB_PARTY_STATS, OverlayPosition.TOP_LEFT),
-			new WidgetOverlay(client, WidgetInfo.GWD_KC, OverlayPosition.TOP_LEFT),
+			new WidgetOverlay(client, WidgetInfo.GWD_KC, OverlayPosition.TOP_LEFT).makeHideable("God Wars Essence"),
 			new WidgetOverlay(client, WidgetInfo.TITHE_FARM, OverlayPosition.TOP_RIGHT),
 			new WidgetOverlay(client, WidgetInfo.PEST_CONTROL_BOAT_INFO, OverlayPosition.TOP_LEFT),
 			new WidgetOverlay(client, WidgetInfo.PEST_CONTROL_KNIGHT_INFO_CONTAINER, OverlayPosition.TOP_LEFT),
@@ -77,6 +83,7 @@ public class WidgetOverlay extends Overlay
 			new WidgetOverlay(client, WidgetInfo.BA_HEAL_TEAMMATES, OverlayPosition.BOTTOM_LEFT),
 			new WidgetOverlay(client, WidgetInfo.BA_TEAM, OverlayPosition.TOP_RIGHT),
 			new WidgetOverlay(client, WidgetInfo.PVP_WILDERNESS_SKULL_CONTAINER, OverlayPosition.DETACHED)
+				.makeHideable("Wilderness Indicator")
 		);
 	}
 
@@ -84,6 +91,11 @@ public class WidgetOverlay extends Overlay
 	private final WidgetInfo widgetInfo;
 	private final Rectangle parentBounds = new Rectangle();
 	private boolean revalidate;
+
+	private String name;
+	@Getter
+	private boolean hideable;
+	private boolean hidden;
 
 	private WidgetOverlay(final Client client, final WidgetInfo widgetInfo, final OverlayPosition overlayPosition)
 	{
@@ -107,18 +119,45 @@ public class WidgetOverlay extends Overlay
 		return Objects.toString(widgetInfo);
 	}
 
+	private WidgetOverlay makeHideable(String name)
+	{
+		this.name = name;
+		hideable = true;
+		getMenuEntries().add(new OverlayMenuEntry(RUNELITE_OVERLAY, "Hide", name));
+		return this;
+	}
+
 	@Override
 	public Dimension render(Graphics2D graphics)
 	{
 		final Widget widget = client.getWidget(widgetInfo);
-		final Rectangle parent = getParentBounds(widget);
-
-		if (parent.isEmpty())
+		if (widget == null)
 		{
 			return null;
 		}
 
-		assert widget != null;
+		if (widget.isHidden())
+		{
+			if (!hidden || !client.isKeyPressed(KeyCode.KC_SHIFT))
+			{
+				return null;
+			}
+			widget.setHidden(false);
+		}
+		else
+		{
+			if (hidden && !client.isKeyPressed(KeyCode.KC_SHIFT))
+			{
+				widget.setHidden(true);
+				return null;
+			}
+		}
+
+		final Rectangle parent = getParentBounds(widget);
+		if (parent.isEmpty())
+		{
+			return null;
+		}
 
 		final Rectangle bounds = getBounds();
 		// OverlayRenderer sets the overlay bounds to where it would like the overlay to render at prior to calling
@@ -158,16 +197,9 @@ public class WidgetOverlay extends Overlay
 		}
 
 		final Widget parent = widget.getParent();
-		final Rectangle bounds;
-
-		if (parent == null)
-		{
-			bounds = new Rectangle(client.getRealDimensions());
-		}
-		else
-		{
-			bounds = parent.getBounds();
-		}
+		final Rectangle bounds = parent == null
+			? new Rectangle(client.getRealDimensions())
+			: parent.getBounds();
 
 		parentBounds.setBounds(bounds);
 		return bounds;
@@ -192,6 +224,34 @@ public class WidgetOverlay extends Overlay
 	{
 		// Revalidate must be called on the client thread, so defer til next frame
 		revalidate = true;
+	}
+
+	@Subscribe
+	public void onOverlayMenuClicked(OverlayMenuClicked overlayMenuClicked)
+	{
+		OverlayMenuEntry overlayMenuEntry = overlayMenuClicked.getEntry();
+		if (overlayMenuEntry.getMenuAction() == MenuAction.RUNELITE_OVERLAY
+//			&& overlayMenuClicked.getEntry().getOption().equals("Hide")
+			&& overlayMenuClicked.getOverlay() == this)
+		{
+			String option = overlayMenuClicked.getEntry().getOption();
+			if (option.equals("Hide"))
+			{
+				log.debug("Hiding component {}", widgetInfo);
+				hidden = true;
+				// Switch menu entry to show
+				getMenuEntries().clear();
+				getMenuEntries().add(new OverlayMenuEntry(RUNELITE_OVERLAY, "Show", name));
+			}
+			else if (option.equals("Show"))
+			{
+				log.debug("Showing component {}", widgetInfo);
+				hidden = false;
+				// Switch menu entry to hide
+				getMenuEntries().clear();
+				getMenuEntries().add(new OverlayMenuEntry(RUNELITE_OVERLAY, "Hide", name));
+			}
+		}
 	}
 
 	private static class XpTrackerWidgetOverlay extends WidgetOverlay
