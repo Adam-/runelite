@@ -35,18 +35,23 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class OSXUtil
 {
+	static
+	{
+		// Set the default quit action to close all windows. This allows ctrl-q to
+		// call our window close handler to shutdown the client cleanly instead of
+		// exiting.
+		System.setProperty("apple.eawt.quitStrategy", "CLOSE_ALL_WINDOWS");
+	}
+
 	/**
 	 * Enables the osx native fullscreen if running on a mac.
 	 *
 	 * @param gui The gui to enable the fullscreen on.
 	 */
-	public static void tryEnableFullscreen(JFrame gui)
+	public static void enableFullSCreen(JFrame gui)
 	{
-		if (OSType.getOSType() == OSType.MacOS)
-		{
-			FullScreenUtilities.setWindowCanFullScreen(gui, true);
-			log.debug("Enabled fullscreen on macOS");
-		}
+		FullScreenUtilities.setWindowCanFullScreen(gui, true);
+		log.debug("Enabled fullscreen on macOS");
 	}
 
 	/**

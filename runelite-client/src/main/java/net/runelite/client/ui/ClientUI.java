@@ -322,8 +322,11 @@ public class ClientUI
 			// Create main window
 			frame = new ContainableFrame();
 
-			// Try to enable fullscreen on OSX
-			OSXUtil.tryEnableFullscreen(frame);
+			// Enable fullscreen on OSX
+			if (OSType.getOSType() == OSType.MacOS)
+			{
+				OSXUtil.enableFullSCreen(frame);
+			}
 
 			frame.setTitle(title);
 			frame.setIconImage(ICON);
