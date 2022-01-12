@@ -421,8 +421,8 @@ LABEL369:
    sload                  2 ; message timestamp
    sconst                 "chatMessageBuilding"
    runelite_callback
-   pop_int                   ; splitpmbox
    pop_int                  ; uid
+   pop_int                  ; splitpmbox
    sstore                 2 ; message timestamp
    sstore                 0 ; message
    sstore                 1 ; message name

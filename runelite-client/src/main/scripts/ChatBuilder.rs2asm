@@ -448,8 +448,8 @@ LABEL406:
    sload                  21 ; message timestamp
    sconst                 "chatMessageBuilding"
    runelite_callback
-   pop_int                   ; splitpmbox
    pop_int                   ; pop uid
+   pop_int                   ; splitpmbox
    sstore                 21 ; message timestamp
    sstore                 18 ; message
    sstore                 16 ; message name
