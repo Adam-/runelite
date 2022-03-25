@@ -75,7 +75,6 @@ import net.runelite.api.widgets.WidgetInfo;
 import static net.runelite.client.RuneLite.SCREENSHOT_DIR;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
-import net.runelite.client.events.PlayerLootReceived;
 import net.runelite.client.game.SpriteManager;
 import net.runelite.client.input.KeyManager;
 import net.runelite.client.plugins.Plugin;
@@ -305,30 +304,26 @@ public class ScreenshotPlugin extends Plugin
 		Actor actor = actorDeath.getActor();
 		if (actor instanceof Player)
 		{
+			Player local = client.getLocalPlayer();
 			Player player = (Player) actor;
-			if (player == client.getLocalPlayer() && config.screenshotPlayerDeath())
+			if (player == local && config.screenshotPlayerDeath())
 			{
 				takeScreenshot("Death", SD_DEATHS);
 			}
-			else if (player != client.getLocalPlayer()
+			else if (player != local
 				&& player.getCanvasTilePoly() != null
 				&& (((player.isFriendsChatMember() || player.isFriend()) && config.screenshotFriendDeath())
 					|| (player.isClanMember() && config.screenshotClanDeath())))
 			{
 				takeScreenshot("Death " + player.getName(), SD_DEATHS);
 			}
-		}
-	}
 
-	@Subscribe
-	public void onPlayerLootReceived(final PlayerLootReceived playerLootReceived)
-	{
-		if (config.screenshotKills())
-		{
-			final Player player = playerLootReceived.getPlayer();
-			final String name = player.getName();
-			String fileName = "Kill " + name;
-			takeScreenshot(fileName, SD_PVP_KILLS);
+			if (local.getInteracting() == player && config.screenshotKills() && player.getCanvasTilePoly() != null)
+			{
+				final String name = player.getName();
+				String fileName = "Kill " + name;
+				takeScreenshot(fileName, SD_PVP_KILLS);
+			}
 		}
 	}
 
@@ -804,6 +799,8 @@ public class ScreenshotPlugin extends Plugin
 			log.info("Login screenshot prevented");
 			return;
 		}
+
+		log.debug("Taking screenshot \"{}\" subdir \"{}\"", fileName, subDir);
 
 		Consumer<Image> imageCallback = (img) ->
 		{
