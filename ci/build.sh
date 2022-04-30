@@ -22,7 +22,7 @@ if [ -f "${ITEST_LAST}" ] ; then
   ./tests.py HEAD `cat ${ITEST_LAST}`
   echo Wrote out tests
   cat tests.txt
-  ITEST_ARG="-Dsurefire.includesFile=tests.txt"
+  ITEST_ARG="-Dsurefire.includesFile=../tests.txt"
 fi
 
 mvn verify --settings ci/settings.xml -Dglslang.path="${GLSLANG_DIR}/bin/glslangValidator" $ITEST_ARG

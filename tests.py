@@ -44,7 +44,6 @@ def find_tests(module):
     return tests
 
 modified = find_modified_modules()
-modified.add('cache')
 print("Modified modules:", modified)
 
 setup_deps()
