@@ -18,7 +18,10 @@ fi
 
 ITEST_LAST="${CACHEDIR}/itest.txt"
 if [ -f "${ITEST_LAST}" ] ; then
+  echo Found last rev file contents `cat ${ITEST_LAST}`
   ./tests.py HEAD `cat ${ITEST_LAST}`
+  echo Wrote out tests
+  cat tests.txt
   ITEST_ARG="-Dsurefire.includesFile=tests.txt"
 fi
 
