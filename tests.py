@@ -55,8 +55,12 @@ for module in modified:
 print("Testable modules", testable_modules)
 #print(modified)
 
+numtests = 0
 with open('tests.txt', 'w') as f:
     for module in testable_modules:
         f.write('# tests for ' + module + '\n')
         for test in find_tests(module):
             f.write(test + '\n')
+            numtests = numtests + 1
+
+print("Wrote", numtests, "tests")
