@@ -4,6 +4,9 @@ import sys
 import os
 import subprocess
 
+if len(sys.argv) < 3:
+    sys.exit(-1)
+
 from_commit = sys.argv[1]
 to_commit = sys.argv[2]
 
@@ -37,18 +40,14 @@ def setup_deps():
     add_edges("cache-updater", "cache-client")
 
 def find_modified_modules():
-    modifiedFiles = subprocess.check_output(['git', 'diff', from_commit, to_commit, '--name-only']).decode("utf-8")
+    try:
+        modifiedFiles = subprocess.check_output(['git', 'diff', from_commit, to_commit, '--name-only']).decode("utf-8")
+    except:
+        sys.exit(-1)
     modifiedDirs = [x.split('/')[0] for x in modifiedFiles.split('\n')]
     modifiedDirs = filter(lambda d: len(d) > 0, modifiedDirs)
     modifiedDirs = set(modifiedDirs)
     return modifiedDirs
-
-def find_tests(module):
-    tests = []
-    for root, dirs, files in os.walk(module + '/src/test/java'):
-        for file in files:
-            tests.append(os.path.join(root, file).replace(module + '/src/test/java/', ''))
-    return tests
 
 modified = find_modified_modules()
 print("Modified modules:", modified)

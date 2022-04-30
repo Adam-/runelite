@@ -16,10 +16,11 @@ if [ ! -f "${GLSLANG_ARCHIVE}" ] || [ ! -d "${GLSLANG_DIR}" ] || ! echo "${GLSLA
   unzip -o -q "${GLSLANG_ARCHIVE}" -d "${GLSLANG_DIR}"
 fi
 
-ITEST_LAST="${CACHEDIR}/itest.txt"
-if [ -f "${ITEST_LAST}" ] ; then
+ITESTDIR="$HOME/.cache/itest"
+mkdir -p "${ITESTDIR}"
+ITEST_LAST="${ITESTDIR}/itest.txt"
+if [ ./tests.py HEAD `cat ${ITEST_LAST}` ] ; then
   echo Found last rev file contents `cat ${ITEST_LAST}`
-  ./tests.py HEAD `cat ${ITEST_LAST}`
   echo Wrote out test args
   cat testargs.txt
   ITEST_ARG=`cat testargs.txt`
