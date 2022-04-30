@@ -20,10 +20,8 @@ ITESTDIR="$HOME/.cache/itest"
 mkdir -p "${ITESTDIR}"
 ITEST_LAST="${ITESTDIR}/itest.txt"
 ITEST_LAST_REV=`cat ${ITEST_LAST}`
-if ./tests.py HEAD $ITEST_LAST_REV ; then
-  echo Found last rev file contents `cat ${ITEST_LAST}`
-  echo Wrote out test args
-  cat testargs.txt
+if ./ci/itest.py HEAD $ITEST_LAST_REV ; then
+  echo Using incremental test from last rev $ITEST_LAST_REV
   ITEST_ARG=`cat testargs.txt`
 fi
 

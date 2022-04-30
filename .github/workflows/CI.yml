@@ -10,6 +10,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
+          # this has to be enough for itest to diff from the last successful run
           fetch-depth: 10
 
       - name: Cache
@@ -22,7 +23,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-cache-
 
-      - name: Cache
+      - name: Incremental Test Cache
         uses: actions/cache@v2
         with:
           path: |
