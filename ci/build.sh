@@ -19,7 +19,8 @@ fi
 ITESTDIR="$HOME/.cache/itest"
 mkdir -p "${ITESTDIR}"
 ITEST_LAST="${ITESTDIR}/itest.txt"
-if [ ./tests.py HEAD `cat ${ITEST_LAST}` ] ; then
+ITEST_LAST_REV=`cat ${ITEST_LAST}`
+if ./tests.py HEAD $ITEST_LAST_REV ; then
   echo Found last rev file contents `cat ${ITEST_LAST}`
   echo Wrote out test args
   cat testargs.txt
