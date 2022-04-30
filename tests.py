@@ -7,6 +7,13 @@ import subprocess
 from_commit = sys.argv[1]
 to_commit = sys.argv[2]
 
+modules = {
+        "cache-client": "surefire.skip.cacheclient",
+        "cache": "surefire.skip.cache",
+        "runelite-api": "surefire.skip.api",
+        "runelite-client": "surefire.skip.client"
+}
+
 deps = {}
 
 def add_edges(from_dep, *to):
@@ -52,14 +59,7 @@ for module in modified:
     testable_modules = testable_modules.union(find_deps(module))
 
 print("Testable modules", testable_modules)
-#print(modified)
 
-numtests = 0
-with open('tests.txt', 'w') as f:
-    for module in testable_modules:
-        f.write('# tests for ' + module + '\n')
-        for test in find_tests(module):
-            f.write(test + '\n')
-            numtests = numtests + 1
-
-print("Wrote", numtests, "tests")
+with open("testargs.txt", "w") as f:
+    for module in modules:
+        f.write("-D" + modules[module] + "=" + ("false" if module in testable_modules else "true") + " ")

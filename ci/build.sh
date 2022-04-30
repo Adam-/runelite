@@ -20,9 +20,9 @@ ITEST_LAST="${CACHEDIR}/itest.txt"
 if [ -f "${ITEST_LAST}" ] ; then
   echo Found last rev file contents `cat ${ITEST_LAST}`
   ./tests.py HEAD `cat ${ITEST_LAST}`
-  echo Wrote out tests
-  cat tests.txt
-  ITEST_ARG="-Dsurefire.includesFile=../tests.txt"
+  echo Wrote out test args
+  cat testargs.txt
+  ITEST_ARG=`cat testargs.txt`
 fi
 
 mvn verify --settings ci/settings.xml -Dglslang.path="${GLSLANG_DIR}/bin/glslangValidator" $ITEST_ARG
