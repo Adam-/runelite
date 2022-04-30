@@ -23,3 +23,6 @@ if [ -f "${ITEST_LAST}" ] ; then
 fi
 
 mvn verify --settings ci/settings.xml -Dglslang.path="${GLSLANG_DIR}/bin/glslangValidator" $ITEST_ARG
+
+echo Successful run, saving revision
+git rev-parse HEAD > $ITEST_LAST
