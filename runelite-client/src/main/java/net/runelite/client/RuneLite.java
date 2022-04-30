@@ -24,6 +24,7 @@
  */
 package net.runelite.client;
 
+
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import com.google.common.annotations.VisibleForTesting;
