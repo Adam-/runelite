@@ -50,6 +50,7 @@ import java.util.Locale;
 import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.swing.SwingUtilities;
 import lombok.AccessLevel;
@@ -75,6 +76,7 @@ import net.runelite.api.events.GrandExchangeSearched;
 import net.runelite.api.events.MenuEntryAdded;
 import net.runelite.api.events.ScriptCallbackEvent;
 import net.runelite.api.events.ScriptPostFired;
+import net.runelite.api.events.ScriptPreFired;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetID;
 import net.runelite.api.widgets.WidgetInfo;
@@ -337,11 +339,60 @@ public class GrandExchangePlugin extends Plugin
 		}
 	}
 
+	// from script 5733
+	@Nullable
+	private GrandExchangeOffer getSinkOffer(int slot)
+	{
+		VarPlayer vid, vprice;
+		switch (slot)
+		{
+			case 0:
+				vid = VarPlayer.GE_SINK_SLOT0_ITEM;
+				vprice = VarPlayer.GE_SINK_SLOT0_PRICE;
+				break;
+			case 1:
+				vid = VarPlayer.GE_SINK_SLOT1_ITEM;
+				vprice = VarPlayer.GE_SINK_SLOT1_PRICE;
+				break;
+			case 2:
+				vid = VarPlayer.GE_SINK_SLOT2_ITEM;
+				vprice = VarPlayer.GE_SINK_SLOT2_PRICE;
+				break;
+			case 3:
+				vid = VarPlayer.GE_SINK_SLOT3_ITEM;
+				vprice = VarPlayer.GE_SINK_SLOT3_PRICE;
+				break;
+			case 4:
+				vid = VarPlayer.GE_SINK_SLOT4_ITEM;
+				vprice = VarPlayer.GE_SINK_SLOT4_PRICE;
+				break;
+			case 5:
+				vid = VarPlayer.GE_SINK_SLOT5_ITEM;
+				vprice = VarPlayer.GE_SINK_SLOT5_PRICE;
+				break;
+			case 6:
+				vid = VarPlayer.GE_SINK_SLOT6_ITEM;
+				vprice = VarPlayer.GE_SINK_SLOT6_PRICE;
+				break;
+			case 7:
+				vid = VarPlayer.GE_SINK_SLOT7_ITEM;
+				vprice = VarPlayer.GE_SINK_SLOT7_PRICE;
+				break;
+			default:
+				throw new IllegalArgumentException();
+		}
+
+		int id = client.getVar(vid);
+		int price = client.getVar(vprice);
+
+		return id == -1 ? null : new SinkGrandExchangeOffer(id, Math.max(0, price));
+	}
+
 	@Subscribe
 	public void onGrandExchangeOfferChanged(GrandExchangeOfferChanged offerEvent)
 	{
 		final int slot = offerEvent.getSlot();
-		final GrandExchangeOffer offer = offerEvent.getOffer();
+		GrandExchangeOffer offer = offerEvent.getOffer();
 
 		if (offer.getState() == GrandExchangeOfferState.EMPTY && client.getGameState() != GameState.LOGGED_IN)
 		{
@@ -350,8 +401,22 @@ public class GrandExchangePlugin extends Plugin
 			return;
 		}
 
-		log.debug("GE offer updated: state: {}, slot: {}, item: {}, qty: {}, lastLoginTick: {}",
-			offer.getState(), slot, offer.getItemId(), offer.getQuantitySold(), lastLoginTick);
+		if (offer.getState() == GrandExchangeOfferState.EMPTY)
+		{
+			GrandExchangeOffer sinkOffer = getSinkOffer(slot);
+			if (sinkOffer != null)
+			{
+				offer = sinkOffer;
+			}
+		}
+
+		updateOffer(slot, offer, false);
+	}
+
+	private void updateOffer(int slot, GrandExchangeOffer offer, boolean script)
+	{
+		log.debug("GE offer updated: state: {}, slot: {}, item: {}, qty: {}, lastLoginTick: {}, script: {}",
+			offer.getState(), slot, offer.getItemId(), offer.getQuantitySold(), lastLoginTick, script);
 
 		ItemComposition offerItem = itemManager.getItemComposition(offer.getItemId());
 		boolean shouldStack = offerItem.isStackable() || offer.getTotalQuantity() > 1;
@@ -374,6 +439,8 @@ public class GrandExchangePlugin extends Plugin
 		{
 			return;
 		}
+
+		assert !(offer instanceof SinkGrandExchangeOffer); // always SOLD
 
 		SavedOffer savedOffer = getOffer(slot);
 		boolean login = client.getTickCount() <= lastLoginTick + GE_LOGIN_BURST_WINDOW;
@@ -565,6 +632,34 @@ public class GrandExchangePlugin extends Plugin
 		if (!focusChanged.isFocused())
 		{
 			setHotKeyPressed(false);
+		}
+	}
+
+	@Subscribe
+	public void onScriptPreFired(ScriptPreFired event)
+	{
+		if (event.getScriptId() == ScriptID.GE_OFFERS_INDEX_DRAWSLOT)
+		{
+			int slot = (int) event.getScriptEvent().getArguments()[10]; // 9th argument
+			if (slot < 0 || slot >= GE_SLOTS)
+			{
+				log.error("Invalid GE slot {}", slot);
+				return;
+			}
+
+			GrandExchangeOffer[] grandExchangeOffers = client.getGrandExchangeOffers();
+			GrandExchangeOffer offer = grandExchangeOffers[slot];
+			if (offer.getState() == GrandExchangeOfferState.EMPTY)
+			{
+				GrandExchangeOffer sinkOffer = getSinkOffer(slot);
+				// This might go from sink offer -> no offer, in which case we want to still record that
+				// (and there will be no GrandExchangeOfferChanged event)
+				if (sinkOffer != null)
+				{
+					offer = sinkOffer;
+				}
+			}
+			updateOffer(slot, offer, true);
 		}
 	}
 

@@ -218,6 +218,12 @@ public final class ScriptID
 	public static final int GE_ITEM_SEARCH = 752;
 
 	/**
+	 * Draws a offer slot in the main GE interface
+	 */
+	@ScriptArguments(integer = 28)
+	public static final int GE_OFFERS_INDEX_DRAWSLOT = 797;
+
+	/**
 	 * On load listener for building the quest list interface
 	 */
 	@ScriptArguments(integer = 8)
