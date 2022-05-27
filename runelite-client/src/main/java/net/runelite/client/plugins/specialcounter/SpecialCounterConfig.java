@@ -25,6 +25,7 @@
  */
 package net.runelite.client.plugins.specialcounter;
 
+import java.awt.Color;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
@@ -52,6 +53,17 @@ public interface SpecialCounterConfig extends Config
 	default boolean specDrops()
 	{
 		return true;
+	}
+
+	@ConfigItem(
+		position = 2,
+		keyName = "specDropColor",
+		name = "Spec Drop Color",
+		description = "Text color for spec drops"
+	)
+	default Color specDropColor()
+	{
+		return Color.WHITE;
 	}
 
 	@ConfigItem(
