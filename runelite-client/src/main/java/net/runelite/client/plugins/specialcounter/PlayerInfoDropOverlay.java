@@ -127,4 +127,4 @@ public class PlayerInfoDropOverlay extends Overlay
 		g.setColor(ColorUtil.colorWithAlpha(color, colorAlpha));
 		g.drawString(text, point.getX(), point.getY());
 	}
-} 
+}
