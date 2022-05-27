@@ -29,6 +29,7 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.Iterator;
+import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.runelite.api.Client;
@@ -59,24 +60,34 @@ public class PlayerInfoDropOverlay extends Overlay
 	@Override
 	public Dimension render(Graphics2D graphics)
 	{
-		Iterator<PlayerInfoDrop> iterator = plugin.getPlayerInfoDrops().iterator();
+		final List<PlayerInfoDrop> infoDrops = plugin.getPlayerInfoDrops();
+		if (infoDrops.isEmpty())
+		{
+			return null;
+		}
 
-		while (iterator.hasNext())
+		final int cycle = client.getGameCycle();
+		for (Iterator<PlayerInfoDrop> iterator = infoDrops.iterator(); iterator.hasNext();)
 		{
 			PlayerInfoDrop infoDrop = iterator.next();
-			int cycle = client.getGameCycle();
 
-			if (cycle < infoDrop.getStartCycle() || cycle > infoDrop.getEndCycle())
+			if (cycle < infoDrop.getStartCycle())
+			{
+				continue;
+			}
+
+			if (cycle > infoDrop.getEndCycle())
 			{
 				iterator.remove();
 				continue;
 			}
-			Player player = client.getCachedPlayers()[infoDrop.getPlayerIdx()];
 
+			Player player = client.getCachedPlayers()[infoDrop.getPlayerIdx()];
 			if (player == null)
 			{
 				continue;
 			}
+
 			int elapsed = cycle - infoDrop.getStartCycle();
 			int percent = elapsed * 100 / (infoDrop.getEndCycle() - infoDrop.getStartCycle());
 			int extraHeight = infoDrop.getExtraHeight() * percent / 100;
@@ -84,19 +95,14 @@ public class PlayerInfoDropOverlay extends Overlay
 
 			graphics.setFont(infoDrop.getFont());
 			Point textLocation = player.getCanvasTextLocation(graphics, text, player.getLogicalHeight() + extraHeight);
-
 			if (textLocation == null)
 			{
 				continue;
 			}
+
 			int alpha = 255 - (255 * percent / 100);
 			BufferedImage image = infoDrop.getImage();
-
-			if (image == null)
-			{
-				drawText(graphics, textLocation, text, infoDrop.getColor(), alpha);
-			}
-			else
+			if (image != null)
 			{
 				int textHeight = graphics.getFontMetrics().getHeight() - graphics.getFontMetrics().getMaxDescent();
 				int textMargin = image.getWidth() / 2;
@@ -107,13 +113,14 @@ public class PlayerInfoDropOverlay extends Overlay
 				textLocation = new Point(textLocation.getX() + textMargin, textLocation.getY());
 
 				OverlayUtil.renderImageLocation(graphics, imageLocation, ImageUtil.alphaOffset(image, alpha - 255));
-				drawText(graphics, textLocation, text, infoDrop.getColor(), alpha);
 			}
+
+			drawText(graphics, textLocation, text, infoDrop.getColor(), alpha);
 		}
 		return null;
 	}
 
-	private void drawText(Graphics2D g, Point point, String text, Color color, int colorAlpha)
+	private static void drawText(Graphics2D g, Point point, String text, Color color, int colorAlpha)
 	{
 		g.setColor(ColorUtil.colorWithAlpha(Color.BLACK, colorAlpha));
 		g.drawString(text, point.getX() + 1, point.getY() + 1);
