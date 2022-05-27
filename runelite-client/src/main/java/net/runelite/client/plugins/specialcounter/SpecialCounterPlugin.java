@@ -27,7 +27,6 @@ package net.runelite.client.plugins.specialcounter;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Provides;
 import java.awt.image.BufferedImage;
-import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -65,7 +64,6 @@ import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.ui.overlay.infobox.InfoBoxManager;
-import net.runelite.client.util.AsyncBufferedImage;
 import net.runelite.client.util.ImageUtil;
 import net.runelite.client.ws.PartyService;
 import net.runelite.client.ws.WSClient;
@@ -287,24 +285,17 @@ public class SpecialCounterPlugin extends Plugin
 		if (wasSpec && specialWeapon != null && hitsplat.getAmount() > 0)
 		{
 			int hit = getHit(specialWeapon, hitsplat);
+			int localPlayerId = client.getLocalPlayer().getId();
 
 			updateCounter(specialWeapon, null, hit);
 
 			if (!party.getMembers().isEmpty())
 			{
-				final SpecialCounterUpdate specialCounterUpdate = new SpecialCounterUpdate(interactingId, specialWeapon, hit);
+				final SpecialCounterUpdate specialCounterUpdate = new SpecialCounterUpdate(interactingId, specialWeapon, hit, client.getWorld(), localPlayerId);
 				specialCounterUpdate.setMemberId(party.getLocalMember().getMemberId());
 				wsClient.send(specialCounterUpdate);
 			}
-
-			int cycle = client.getGameCycle();
-			BufferedImage image = ImageUtil.resizeImage(itemManager.getImage(specialWeapon.getItemID()[0]), 24, 24);
-
-			PlayerInfoDrop playerInfoDrop = PlayerInfoDrop.builder(cycle, cycle + 100, client.getLocalPlayer().getId(), Integer.toString(hit))
-				.extraHeight(300)
-				.image(image)
-				.build();
-			playerInfoDrops.add(playerInfoDrop);
+			playerInfoDrops.add(createSpecInfoDrop(specialWeapon, hit, localPlayerId));
 		}
 	}
 
@@ -362,6 +353,11 @@ public class SpecialCounterPlugin extends Plugin
 			if (interactedNpcIds.contains(event.getNpcId()))
 			{
 				updateCounter(event.getWeapon(), name, event.getHit());
+			}
+
+			if (event.getWorld() == client.getWorld())
+			{
+				playerInfoDrops.add(createSpecInfoDrop(event.getWeapon(), event.getHit(), event.getPlayerId()));
 			}
 		});
 	}
@@ -452,5 +448,16 @@ public class SpecialCounterPlugin extends Plugin
 	private int getHit(SpecialWeapon specialWeapon, Hitsplat hitsplat)
 	{
 		return specialWeapon.isDamage() ? hitsplat.getAmount() : 1;
+	}
+
+	private PlayerInfoDrop createSpecInfoDrop(SpecialWeapon weapon, int hit, int playerId)
+	{
+		int cycle = client.getGameCycle();
+		BufferedImage image = ImageUtil.resizeImage(itemManager.getImage(weapon.getItemID()[0]), 24, 24);
+
+		return PlayerInfoDrop.builder(cycle, cycle + 100, playerId, Integer.toString(hit))
+			.extraHeight(300)
+			.image(image)
+			.build();
 	}
 }
