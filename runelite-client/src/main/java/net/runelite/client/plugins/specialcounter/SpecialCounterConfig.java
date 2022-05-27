@@ -47,7 +47,7 @@ public interface SpecialCounterConfig extends Config
 		position = 1,
 		keyName = "specDrops",
 		name = "Spec Drops",
-		description = "Drops an overlay over the player when a special attack hits"
+		description = "Draws an overlay over the player when a special attack hits"
 	)
 	default boolean specDrops()
 	{
