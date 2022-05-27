@@ -26,11 +26,17 @@ package net.runelite.client.plugins.specialcounter;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Provides;
+import java.awt.image.BufferedImage;
+import java.nio.Buffer;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.inject.Inject;
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Actor;
 import net.runelite.api.Client;
@@ -57,7 +63,10 @@ import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.game.ItemManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.ui.overlay.infobox.InfoBoxManager;
+import net.runelite.client.util.AsyncBufferedImage;
+import net.runelite.client.util.ImageUtil;
 import net.runelite.client.ws.PartyService;
 import net.runelite.client.ws.WSClient;
 
@@ -95,6 +104,9 @@ public class SpecialCounterPlugin extends Plugin
 	private final Set<Integer> interactedNpcIds = new HashSet<>();
 	private final SpecialCounter[] specialCounter = new SpecialCounter[SpecialWeapon.values().length];
 
+	@Getter(AccessLevel.PACKAGE)
+	private final List<PlayerInfoDrop> playerInfoDrops = new ArrayList<>();
+
 	@Inject
 	private Client client;
 
@@ -119,6 +131,12 @@ public class SpecialCounterPlugin extends Plugin
 	@Inject
 	private SpecialCounterConfig config;
 
+	@Inject
+	private OverlayManager overlayManager;
+
+	@Inject
+	private PlayerInfoDropOverlay playerInfoDropOverlay;
+
 	@Provides
 	SpecialCounterConfig getConfig(ConfigManager configManager)
 	{
@@ -128,6 +146,7 @@ public class SpecialCounterPlugin extends Plugin
 	@Override
 	protected void startUp()
 	{
+		overlayManager.add(playerInfoDropOverlay);
 		wsClient.registerMessage(SpecialCounterUpdate.class);
 		currentWorld = -1;
 		specialPercentage = -1;
@@ -140,6 +159,7 @@ public class SpecialCounterPlugin extends Plugin
 	protected void shutDown()
 	{
 		removeCounters();
+		overlayManager.remove(playerInfoDropOverlay);
 		wsClient.unregisterMessage(SpecialCounterUpdate.class);
 	}
 	
@@ -276,6 +296,15 @@ public class SpecialCounterPlugin extends Plugin
 				specialCounterUpdate.setMemberId(party.getLocalMember().getMemberId());
 				wsClient.send(specialCounterUpdate);
 			}
+
+			int cycle = client.getGameCycle();
+			BufferedImage image = ImageUtil.resizeImage(itemManager.getImage(specialWeapon.getItemID()[0]), 24, 24);
+
+			PlayerInfoDrop playerInfoDrop = PlayerInfoDrop.builder(cycle, cycle + 100, client.getLocalPlayer().getId(), Integer.toString(hit))
+				.extraHeight(300)
+				.image(image)
+				.build();
+			playerInfoDrops.add(playerInfoDrop);
 		}
 	}
 
