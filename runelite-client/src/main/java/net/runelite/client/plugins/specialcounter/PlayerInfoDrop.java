@@ -43,7 +43,7 @@ public class PlayerInfoDrop
 	private final int endCycle;
 	private final int playerIdx;
 	private final String text;
-	private final int extraHeight;
+	private final int endHeight;
 	private final Font font;
 	private final Color color;
 	private final BufferedImage image;
@@ -62,7 +62,7 @@ public class PlayerInfoDrop
 		private final int endCycle;
 		private final int playerIdx;
 		private final String text;
-		private int extraHeight = 200;
+		private int endHeight = 200;
 		private Font font = FontManager.getRunescapeBoldFont();
 		private Color color = Color.WHITE;
 		private BufferedImage image;
@@ -77,7 +77,7 @@ public class PlayerInfoDrop
 			{
 				throw new IllegalArgumentException("playerIdx must be between 0-2047");
 			}
-			return new PlayerInfoDrop(startCycle, endCycle, playerIdx, text, extraHeight, font, color, image);
+			return new PlayerInfoDrop(startCycle, endCycle, playerIdx, text, endHeight, font, color, image);
 		}
 	}
 }

@@ -456,7 +456,7 @@ public class SpecialCounterPlugin extends Plugin
 		BufferedImage image = ImageUtil.resizeImage(itemManager.getImage(weapon.getItemID()[0]), 24, 24);
 
 		return PlayerInfoDrop.builder(cycle, cycle + 100, playerId, Integer.toString(hit))
-			.extraHeight(300)
+			.endHeight(300)
 			.image(image)
 			.build();
 	}

@@ -90,11 +90,11 @@ public class PlayerInfoDropOverlay extends Overlay
 
 			int elapsed = cycle - infoDrop.getStartCycle();
 			int percent = elapsed * 100 / (infoDrop.getEndCycle() - infoDrop.getStartCycle());
-			int extraHeight = infoDrop.getExtraHeight() * percent / 100;
+			int currentHeight = infoDrop.getEndHeight() * percent / 100;
 			String text = infoDrop.getText();
 
 			graphics.setFont(infoDrop.getFont());
-			Point textLocation = player.getCanvasTextLocation(graphics, text, player.getLogicalHeight() + extraHeight);
+			Point textLocation = player.getCanvasTextLocation(graphics, text, player.getLogicalHeight() + currentHeight);
 			if (textLocation == null)
 			{
 				continue;
