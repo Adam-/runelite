@@ -296,6 +296,7 @@ public class SpecialCounterPlugin extends Plugin
 				specialCounterUpdate.setMemberId(party.getLocalMember().getMemberId());
 				wsClient.send(specialCounterUpdate);
 			}
+
 			playerInfoDrops.add(createSpecInfoDrop(specialWeapon, hit, localPlayerId));
 		}
 	}

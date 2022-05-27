@@ -46,12 +46,14 @@ import net.runelite.client.util.ImageUtil;
 public class PlayerInfoDropOverlay extends Overlay
 {
 	private final SpecialCounterPlugin plugin;
+	private final SpecialCounterConfig config;
 	private final Client client;
 
 	@Inject
-	private PlayerInfoDropOverlay(SpecialCounterPlugin plugin, Client client)
+	private PlayerInfoDropOverlay(SpecialCounterPlugin plugin, SpecialCounterConfig config, Client client)
 	{
 		this.plugin = plugin;
+		this.config = config;
 		this.client = client;
 		setPosition(OverlayPosition.DYNAMIC);
 		setPriority(OverlayPriority.MED);
@@ -79,6 +81,11 @@ public class PlayerInfoDropOverlay extends Overlay
 			if (cycle > infoDrop.getEndCycle())
 			{
 				iterator.remove();
+				continue;
+			}
+
+			if (!config.specDrops())
+			{
 				continue;
 			}
 
