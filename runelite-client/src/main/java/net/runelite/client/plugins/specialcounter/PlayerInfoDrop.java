@@ -31,6 +31,8 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 import net.runelite.client.ui.FontManager;
 
 @Data
@@ -52,6 +54,8 @@ public class PlayerInfoDrop
 	}
 
 	@RequiredArgsConstructor
+	@Accessors(fluent = true)
+	@Setter
 	public static class Builder
 	{
 		private final int startCycle;
@@ -62,30 +66,6 @@ public class PlayerInfoDrop
 		private Font font = FontManager.getRunescapeBoldFont();
 		private Color color = Color.WHITE;
 		private BufferedImage image;
-
-		public Builder extraHeight(int extraHeight)
-		{
-			this.extraHeight = extraHeight;
-			return this;
-		}
-
-		public Builder font(Font font)
-		{
-			this.font = font;
-			return this;
-		}
-
-		public Builder color(Color color)
-		{
-			this.color = color;
-			return this;
-		}
-
-		public Builder image(BufferedImage image)
-		{
-			this.image = image;
-			return this;
-		}
 
 		public PlayerInfoDrop build()
 		{
