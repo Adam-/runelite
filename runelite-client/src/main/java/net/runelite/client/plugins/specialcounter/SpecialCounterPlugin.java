@@ -49,6 +49,7 @@ import net.runelite.api.NPC;
 import net.runelite.api.NpcID;
 import net.runelite.api.VarPlayer;
 import net.runelite.api.coords.WorldPoint;
+import net.runelite.api.events.CommandExecuted;
 import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.HitsplatApplied;
@@ -362,6 +363,15 @@ public class SpecialCounterPlugin extends Plugin
 		});
 	}
 
+	@Subscribe
+	public void onCommandExecuted(CommandExecuted commandExecuted)
+	{
+		if (commandExecuted.getCommand().equals("spec"))
+		{
+			playerInfoDrops.add(createSpecInfoDrop(SpecialWeapon.BANDOS_GODSWORD, 42, client.getLocalPlayer().getId()));
+		}
+	}
+
 	private SpecialWeapon usedSpecialWeapon()
 	{
 		ItemContainer equipment = client.getItemContainer(InventoryID.EQUIPMENT);
@@ -456,7 +466,8 @@ public class SpecialCounterPlugin extends Plugin
 		BufferedImage image = ImageUtil.resizeImage(itemManager.getImage(weapon.getItemID()[0]), 24, 24);
 
 		return PlayerInfoDrop.builder(cycle, cycle + 100, playerId, Integer.toString(hit))
-			.endHeight(300)
+			.startHeightOffset(100)
+			.endHeightOffset(400)
 			.image(image)
 			.build();
 	}
