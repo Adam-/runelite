@@ -486,6 +486,9 @@
 					</rulesets>
 					<linkXRef>false</linkXRef>
 					<analysisCache>true</analysisCache>
+					<excludes>
+						<exclude>**/RuntimeTypeAdapterFactory.java</exclude>
+					</excludes>
 				</configuration>
 				<executions>
 					<execution>
