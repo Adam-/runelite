@@ -24,12 +24,11 @@
  */
 package net.runelite.client.events;
 
-import java.util.UUID;
 import lombok.Value;
 
 @Value
 public class PartyChanged
 {
 	private final String passphrase;
-	private final UUID partyId;
+	private final Long partyId;
 }

@@ -26,10 +26,4 @@ package net.runelite.client.party.messages;
 
 public class WebsocketMessage
 {
-	protected boolean _party;
-
-	public boolean isParty()
-	{
-		return _party;
-	}
 }

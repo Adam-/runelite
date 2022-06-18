@@ -24,13 +24,10 @@
  */
 package net.runelite.client.party.messages;
 
-import java.util.UUID;
-import lombok.EqualsAndHashCode;
 import lombok.Value;
 
 @Value
-@EqualsAndHashCode(callSuper = true)
-public class UserPart extends WebsocketMessage
+public class UserPart// extends WebsocketMessage
 {
-	private final UUID memberId;
+	long memberId;
 }
