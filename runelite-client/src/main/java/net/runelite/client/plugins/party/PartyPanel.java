@@ -215,10 +215,11 @@ class PartyPanel extends PluginPanel
 
 	void addMember(PartyData partyData)
 	{
-		if (!memberBoxes.containsKey(partyData.getMember().getMemberId()))
+		if (!memberBoxes.containsKey(partyData.getMemberId()))
 		{
-			PartyMemberBox partyMemberBox = new PartyMemberBox(config, memberBoxPanel, partyData);
-			memberBoxes.put(partyData.getMember().getMemberId(), partyMemberBox);
+			PartyMemberBox partyMemberBox = new PartyMemberBox(config, memberBoxPanel, partyData,
+				() -> party.getMemberById(partyData.getMemberId()));
+			memberBoxes.put(partyData.getMemberId(), partyMemberBox);
 			memberBoxPanel.add(partyMemberBox);
 			memberBoxPanel.revalidate();
 		}

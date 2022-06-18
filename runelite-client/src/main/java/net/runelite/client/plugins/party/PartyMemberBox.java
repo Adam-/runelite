@@ -28,8 +28,8 @@ package net.runelite.client.plugins.party;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.util.function.Supplier;
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -38,14 +38,13 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import lombok.AccessLevel;
 import lombok.Getter;
+import net.runelite.client.party.PartyMember;
 import net.runelite.client.plugins.party.data.PartyData;
 import net.runelite.client.ui.ColorScheme;
 import net.runelite.client.ui.DynamicGridLayout;
 import net.runelite.client.ui.FontManager;
 import net.runelite.client.ui.components.MouseDragEventForwarder;
 import net.runelite.client.ui.components.ProgressBar;
-import net.runelite.client.util.ImageUtil;
-import net.runelite.client.party.PartyMember;
 
 class PartyMemberBox extends JPanel
 {
@@ -56,6 +55,7 @@ class PartyMemberBox extends JPanel
 
 	@Getter(AccessLevel.PACKAGE)
 	private final PartyData memberPartyData;
+	private final Supplier<PartyMember> partyMemberSupplier;
 
 	private final ProgressBar hpBar = new ProgressBar();
 	private final ProgressBar prayerBar = new ProgressBar();
@@ -67,10 +67,12 @@ class PartyMemberBox extends JPanel
 
 	private boolean avatarSet;
 
-	PartyMemberBox(final PartyConfig config, final JComponent panel, final PartyData memberPartyData)
+	PartyMemberBox(final PartyConfig config, final JComponent panel, final PartyData memberPartyData,
+				   final Supplier<PartyMember> partyMemberSupplier)
 	{
 		this.config = config;
 		this.memberPartyData = memberPartyData;
+		this.partyMemberSupplier = partyMemberSupplier;
 
 		setLayout(new BorderLayout());
 		setBorder(new EmptyBorder(5, 0, 0, 0));
@@ -137,17 +139,18 @@ class PartyMemberBox extends JPanel
 
 	void update()
 	{
-		final PartyMember member = memberPartyData.getMember();
-
-		// Avatar
-		if (!avatarSet && member.getAvatar() != null)
-		{
-			ImageIcon icon = new ImageIcon(ImageUtil.resizeImage(member.getAvatar(), 32, 32));
-			icon.getImage().flush();
-			avatar.setIcon(icon);
-
-			avatarSet = true;
-		}
+		final PartyMember member = partyMemberSupplier.get();
+//		final PartyMember member = memberPartyData.getMember();
+//
+//		// Avatar
+//		if (!avatarSet && member.getAvatar() != null)
+//		{
+//			ImageIcon icon = new ImageIcon(ImageUtil.resizeImage(member.getAvatar(), 32, 32));
+//			icon.getImage().flush();
+//			avatar.setIcon(icon);
+//
+//			avatarSet = true;
+//		}
 
 		// Update progress bars
 		hpBar.setValue(memberPartyData.getHitpoints());

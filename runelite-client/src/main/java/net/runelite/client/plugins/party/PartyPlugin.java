@@ -346,28 +346,29 @@ public class PartyPlugin extends Plugin
 	public void onCharacterNameUpdate(final CharacterNameUpdate event)
 	{
 		final PartyData partyData = getPartyData(event.getMemberId());
-
 		if (partyData == null)
 		{
 			return;
 		}
 
-		final String name = Text.removeTags(Text.toJagexName(event.getCharacterName()));
-		final PartyMember member = partyData.getMember();
-
-		if (!name.isEmpty())
+		final PartyMember member = party.getMemberById(event.getMemberId());
+		if (member != null)
 		{
-			member.setDisplayName(name);
-			member.setLoggedIn(true);
-			partyData.setColor(ColorUtil.fromObject(name));
-		}
-		else
-		{
-			member.setLoggedIn(false);
-			partyData.setColor(Color.WHITE);
+			final String name = Text.removeTags(Text.toJagexName(event.getCharacterName()));
+			if (!name.isEmpty())
+			{
+				member.setDisplayName(name);
+				member.setLoggedIn(true);
+				partyData.setColor(ColorUtil.fromObject(name));
+			}
+			else
+			{
+				member.setLoggedIn(false);
+				partyData.setColor(Color.WHITE);
+			}
 		}
 
-		SwingUtilities.invokeLater(() -> panel.updateMember(member.getMemberId()));
+		SwingUtilities.invokeLater(() -> panel.updateMember(event.getMemberId()));
 	}
 
 	@Subscribe
@@ -391,7 +392,7 @@ public class PartyPlugin extends Plugin
 			partyData.setMaxPrayer(event.getMax());
 		}
 
-		SwingUtilities.invokeLater(() -> panel.updateMember(partyData.getMember().getMemberId()));
+		SwingUtilities.invokeLater(() -> panel.updateMember(partyData.getMemberId()));
 	}
 
 	@Subscribe
@@ -539,7 +540,7 @@ public class PartyPlugin extends Plugin
 				worldMapManager.add(worldMapPoint);
 			}
 
-			PartyData partyData = new PartyData(memberById, worldMapPoint);
+			PartyData partyData = new PartyData(uuid, worldMapPoint);
 
 			SwingUtilities.invokeLater(() -> panel.addMember(partyData));
 			return partyData;
