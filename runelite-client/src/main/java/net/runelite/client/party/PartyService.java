@@ -74,7 +74,7 @@ public class PartyService
 
 	@Getter
 	private long partyId; // secret party id
-	private long memberId = new Random().nextLong() & Long.MAX_VALUE;
+	private long memberId = randomMemberId();
 	@Getter
 	private String partyPassphrase;
 
@@ -153,6 +153,7 @@ public class PartyService
 		if (wsClient.sessionExists())
 		{
 			wsClient.part();
+			memberId = randomMemberId(); // use a different member id between parties
 		}
 
 		long id = passphrase != null ? passphraseToId(passphrase) : 0;
@@ -326,5 +327,9 @@ public class PartyService
 		return Hashing.sha256().hashBytes(
 			passphrase.getBytes(StandardCharsets.UTF_8)
 		).asLong() & Long.MAX_VALUE;
+	}
+
+	private static long randomMemberId() {
+		return new Random().nextLong() & Long.MAX_VALUE;
 	}
 }
