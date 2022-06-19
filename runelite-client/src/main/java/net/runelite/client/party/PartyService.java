@@ -52,8 +52,8 @@ import net.runelite.client.events.PartyChanged;
 import net.runelite.client.events.PartyMemberAvatar;
 import net.runelite.client.party.messages.PartyChatMessage;
 import net.runelite.client.party.messages.PartyMessage;
-import net.runelite.client.party.messages.UserJoin;
-import net.runelite.client.party.messages.UserPart;
+import net.runelite.client.party.events.UserJoin;
+import net.runelite.client.party.events.UserPart;
 import net.runelite.client.party.messages.UserSync;
 import static net.runelite.client.util.Text.JAGEX_PRINTABLE_CHAR_MATCHER;
 
