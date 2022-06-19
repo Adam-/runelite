@@ -275,19 +275,6 @@ public class PartyService
 		return null;
 	}
 
-//	public PartyMember getMemberByName(final String name)
-//	{
-//		for (PartyMember member : members)
-//		{
-//			if (name.equals(member.getName()))
-//			{
-//				return member;
-//			}
-//		}
-//
-//		return null;
-//	}
-
 	public List<PartyMember> getMembers()
 	{
 		return Collections.unmodifiableList(members);
@@ -309,16 +296,6 @@ public class PartyService
 		}
 	}
 
-//	private static String cleanUsername(String username)
-//	{
-//		String s = Text.removeTags(JAGEX_PRINTABLE_CHAR_MATCHER.retainFrom(username));
-//		if (s.length() >= MAX_USERNAME_LEN)
-//		{
-//			s = s.substring(0, MAX_USERNAME_LEN);
-//		}
-//		return s;
-//	}
-
 	private static long passphraseToId(String passphrase)
 	{
 		return Hashing.sha256().hashBytes(
@@ -326,7 +303,8 @@ public class PartyService
 		).asLong() & Long.MAX_VALUE;
 	}
 
-	private static long randomMemberId() {
+	private static long randomMemberId()
+	{
 		return new Random().nextLong() & Long.MAX_VALUE;
 	}
 }

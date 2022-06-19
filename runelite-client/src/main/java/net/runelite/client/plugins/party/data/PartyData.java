@@ -38,7 +38,6 @@ import net.runelite.client.ui.overlay.worldmap.WorldMapPoint;
 public class PartyData
 {
 	private final long memberId;
-//	private final PartyMember member;
 	private final WorldMapPoint worldMapPoint;
 	private final PanelComponent panel = new PanelComponent();
 	private Color color = Color.WHITE;

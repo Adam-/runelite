@@ -35,18 +35,13 @@ import net.runelite.client.party.messages.WebsocketMessage;
 import net.runelite.client.util.RuntimeTypeAdapterFactory;
 import net.runelite.http.api.RuneLiteAPI;
 
-public class WebsocketGsonFactory
+class WebsocketGsonFactory
 {
 	private static final Collection<Class<? extends WebsocketMessage>> MESSAGES;
 
 	static
 	{
 		final List<Class<? extends WebsocketMessage>> messages = new ArrayList<>();
-//		messages.add(Handshake.class);
-//		messages.add(Join.class);
-//		messages.add(Part.class);
-//		messages.add(UserJoin.class);
-//		messages.add(UserPart.class);
 		messages.add(UserSync.class);
 		messages.add(PartyChatMessage.class);
 		MESSAGES = messages;
