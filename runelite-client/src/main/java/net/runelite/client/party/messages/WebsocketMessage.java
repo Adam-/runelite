@@ -24,6 +24,6 @@
  */
 package net.runelite.client.party.messages;
 
-public class WebsocketMessage
+public abstract class WebsocketMessage
 {
 }

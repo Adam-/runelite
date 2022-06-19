@@ -3,7 +3,7 @@
 
 package net.runelite.client.party;
 
-public final class Party {
+/* public */ final class Party {
   private Party() {}
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistryLite registry) {
