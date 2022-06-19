@@ -215,7 +215,6 @@ public class WSClient extends WebSocketListener implements AutoCloseable
 
 		switch (s2c.getMsgCase())
 		{
-
 			case JOIN:
 				Party.UserJoin join = s2c.getJoin();
 				UserJoin userJoin = new UserJoin(join.getPartyId(), join.getMemberId());
@@ -242,15 +241,10 @@ public class WSClient extends WebSocketListener implements AutoCloseable
 					return;
 				}
 
-				if (message instanceof PartyMemberMessage) {
-					((PartyMemberMessage) message).setMemberId( data.getMemberId());
+				if (message instanceof PartyMemberMessage)
+				{
+					((PartyMemberMessage) message).setMemberId(data.getMemberId());
 				}
-//
-//		if (message.isParty() && !(message instanceof PartyMessage))
-//		{
-//			// spoofed message?
-//			return;
-//		}
 
 				log.debug("Got: {}", message);
 				eventBus.post(message);

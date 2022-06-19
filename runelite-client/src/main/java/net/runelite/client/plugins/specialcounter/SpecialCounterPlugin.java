@@ -301,7 +301,6 @@ public class SpecialCounterPlugin extends Plugin
 			if (!party.getMembers().isEmpty())
 			{
 				final SpecialCounterUpdate specialCounterUpdate = new SpecialCounterUpdate(interactingId, specialWeapon, hit, client.getWorld(), localPlayerId);
-				specialCounterUpdate.setMemberId(party.getLocalMember().getMemberId());
 				party.send(specialCounterUpdate);
 			}
 

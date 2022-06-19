@@ -261,7 +261,6 @@ public class PartyPlugin extends Plugin
 
 		event.consume();
 		final TilePing tilePing = new TilePing(selectedSceneTile.getWorldLocation());
-		tilePing.setMemberId(party.getLocalMember().getMemberId());
 		party.send(tilePing);
 	}
 
@@ -321,7 +320,6 @@ public class PartyPlugin extends Plugin
 		lastLocation = location;
 
 		final LocationUpdate locationUpdate = new LocationUpdate(location);
-		locationUpdate.setMemberId(localMember.getMemberId());
 		party.send(locationUpdate);
 	}
 
@@ -337,7 +335,6 @@ public class PartyPlugin extends Plugin
 		{
 			// Request sync
 			final UserSync userSync = new UserSync();
-			userSync.setMemberId(party.getLocalMember().getMemberId());
 			party.send(userSync);
 		}
 	}
@@ -438,21 +435,18 @@ public class PartyPlugin extends Plugin
 			if (forceSend || currentHealth != lastHp)
 			{
 				final SkillUpdate update = new SkillUpdate(Skill.HITPOINTS, currentHealth, realHealth);
-				update.setMemberId(localMember.getMemberId());
 				party.send(update);
 			}
 
 			if (forceSend || currentPrayer != lastPray)
 			{
 				final SkillUpdate update = new SkillUpdate(Skill.PRAYER, currentPrayer, realPrayer);
-				update.setMemberId(localMember.getMemberId());
 				party.send(update);
 			}
 
 			if (forceSend || !characterName.equals(lastCharacterName))
 			{
 				final CharacterNameUpdate update = new CharacterNameUpdate(characterName);
-				update.setMemberId(localMember.getMemberId());
 				party.send(update);
 			}
 		}

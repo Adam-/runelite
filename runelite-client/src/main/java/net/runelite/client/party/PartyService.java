@@ -62,8 +62,6 @@ import static net.runelite.client.util.Text.JAGEX_PRINTABLE_CHAR_MATCHER;
 public class PartyService
 {
 	private static final int MAX_MESSAGE_LEN = 150;
-	private static final int MAX_USERNAME_LEN = 32; // same as Discord
-//	private static final String USERNAME = "rluser-" + new Random().nextInt(Integer.MAX_VALUE);
 	private static final String ALPHABET = "bcdfghjklmnpqrstvwxyz";
 
 	private final Client client;
@@ -144,7 +142,7 @@ public class PartyService
 		}
 
 		String partyPassphrase = sb.toString();
-		log.debug("Generated party passpharse {}", partyPassphrase);
+		log.debug("Generated party passphrase {}", partyPassphrase);
 		return partyPassphrase;
 	}
 
@@ -218,7 +216,6 @@ public class PartyService
 		if (localMember != null && localMember == partyMember)
 		{
 			final UserSync userSync = new UserSync();
-//			userSync.setMemberId(message.getMemberId());
 			wsClient.send(userSync);
 		}
 	}

@@ -31,7 +31,6 @@ import lombok.Data;
 public class PartyMember
 {
 	private final long memberId;
-//	private final String name;
 	private String displayName = "<unknown>";
 	private boolean loggedIn;
 	private BufferedImage avatar;
