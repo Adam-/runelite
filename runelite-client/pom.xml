@@ -339,19 +339,6 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<executions>
 					<execution>
-						<id>default-compile</id>
-						<phase>compile</phase>
-						<goals>
-							<goal>compile</goal>
-						</goals>
-						<configuration>
-							<compileSourceRoots>
-								<compileSourceRoot>${project.basedir}/src/main/java</compileSourceRoot>
-								<compileSourceRoot>${project.basedir}/src/main/generated</compileSourceRoot>
-							</compileSourceRoots>
-						</configuration>
-					</execution>
-					<execution>
 						<id>compile-java11</id>
 						<goals>
 							<goal>compile</goal>
