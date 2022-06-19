@@ -90,73 +90,73 @@ public final class Party {
       memberId_ = 0L;
     }
 
-    public static Party.Join parseFrom(
+    public static net.runelite.client.party.Party.Join parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data);
     }
-    public static Party.Join parseFrom(
+    public static net.runelite.client.party.Party.Join parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data, extensionRegistry);
     }
-    public static Party.Join parseFrom(
+    public static net.runelite.client.party.Party.Join parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data);
     }
-    public static Party.Join parseFrom(
+    public static net.runelite.client.party.Party.Join parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data, extensionRegistry);
     }
-    public static Party.Join parseFrom(byte[] data)
+    public static net.runelite.client.party.Party.Join parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data);
     }
-    public static Party.Join parseFrom(
+    public static net.runelite.client.party.Party.Join parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data, extensionRegistry);
     }
-    public static Party.Join parseFrom(java.io.InputStream input)
+    public static net.runelite.client.party.Party.Join parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, input);
     }
-    public static Party.Join parseFrom(
+    public static net.runelite.client.party.Party.Join parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, input, extensionRegistry);
     }
-    public static Party.Join parseDelimitedFrom(java.io.InputStream input)
+    public static net.runelite.client.party.Party.Join parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return parseDelimitedFrom(DEFAULT_INSTANCE, input);
     }
-    public static Party.Join parseDelimitedFrom(
+    public static net.runelite.client.party.Party.Join parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
     }
-    public static Party.Join parseFrom(
+    public static net.runelite.client.party.Party.Join parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, input);
     }
-    public static Party.Join parseFrom(
+    public static net.runelite.client.party.Party.Join parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -167,7 +167,7 @@ public final class Party {
     public static Builder newBuilder() {
       return (Builder) DEFAULT_INSTANCE.createBuilder();
     }
-    public static Builder newBuilder(Party.Join prototype) {
+    public static Builder newBuilder(net.runelite.client.party.Party.Join prototype) {
       return (Builder) DEFAULT_INSTANCE.createBuilder(prototype);
     }
 
@@ -180,9 +180,9 @@ public final class Party {
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageLite.Builder<
-          Party.Join, Builder> implements
+          net.runelite.client.party.Party.Join, Builder> implements
         // @@protoc_insertion_point(builder_implements:party.Join)
-        Party.JoinOrBuilder {
+        net.runelite.client.party.Party.JoinOrBuilder {
       // Construct using net.runelite.client.party.Party.Join.newBuilder()
       private Builder() {
         super(DEFAULT_INSTANCE);
@@ -254,7 +254,7 @@ public final class Party {
         java.lang.Object arg0, java.lang.Object arg1) {
       switch (method) {
         case NEW_MUTABLE_INSTANCE: {
-          return new Party.Join();
+          return new net.runelite.client.party.Party.Join();
         }
         case NEW_BUILDER: {
           return new Builder();
@@ -274,13 +274,13 @@ public final class Party {
           return DEFAULT_INSTANCE;
         }
         case GET_PARSER: {
-          com.google.protobuf.Parser<Party.Join> parser = PARSER;
+          com.google.protobuf.Parser<net.runelite.client.party.Party.Join> parser = PARSER;
           if (parser == null) {
-            synchronized (Party.Join.class) {
+            synchronized (net.runelite.client.party.Party.Join.class) {
               parser = PARSER;
               if (parser == null) {
                 parser =
-                    new DefaultInstanceBasedParser<Party.Join>(
+                    new DefaultInstanceBasedParser<net.runelite.client.party.Party.Join>(
                         DEFAULT_INSTANCE);
                 PARSER = parser;
               }
@@ -300,7 +300,7 @@ public final class Party {
 
 
     // @@protoc_insertion_point(class_scope:party.Join)
-    private static final Party.Join DEFAULT_INSTANCE;
+    private static final net.runelite.client.party.Party.Join DEFAULT_INSTANCE;
     static {
       Join defaultInstance = new Join();
       // New instances are implicitly immutable so no need to make
@@ -310,7 +310,7 @@ public final class Party {
         Join.class, defaultInstance);
     }
 
-    public static Party.Join getDefaultInstance() {
+    public static net.runelite.client.party.Party.Join getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
@@ -335,73 +335,73 @@ public final class Party {
       PartOrBuilder {
     private Part() {
     }
-    public static Party.Part parseFrom(
+    public static net.runelite.client.party.Party.Part parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data);
     }
-    public static Party.Part parseFrom(
+    public static net.runelite.client.party.Party.Part parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data, extensionRegistry);
     }
-    public static Party.Part parseFrom(
+    public static net.runelite.client.party.Party.Part parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data);
     }
-    public static Party.Part parseFrom(
+    public static net.runelite.client.party.Party.Part parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data, extensionRegistry);
     }
-    public static Party.Part parseFrom(byte[] data)
+    public static net.runelite.client.party.Party.Part parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data);
     }
-    public static Party.Part parseFrom(
+    public static net.runelite.client.party.Party.Part parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data, extensionRegistry);
     }
-    public static Party.Part parseFrom(java.io.InputStream input)
+    public static net.runelite.client.party.Party.Part parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, input);
     }
-    public static Party.Part parseFrom(
+    public static net.runelite.client.party.Party.Part parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, input, extensionRegistry);
     }
-    public static Party.Part parseDelimitedFrom(java.io.InputStream input)
+    public static net.runelite.client.party.Party.Part parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return parseDelimitedFrom(DEFAULT_INSTANCE, input);
     }
-    public static Party.Part parseDelimitedFrom(
+    public static net.runelite.client.party.Party.Part parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
     }
-    public static Party.Part parseFrom(
+    public static net.runelite.client.party.Party.Part parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, input);
     }
-    public static Party.Part parseFrom(
+    public static net.runelite.client.party.Party.Part parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -412,7 +412,7 @@ public final class Party {
     public static Builder newBuilder() {
       return (Builder) DEFAULT_INSTANCE.createBuilder();
     }
-    public static Builder newBuilder(Party.Part prototype) {
+    public static Builder newBuilder(net.runelite.client.party.Party.Part prototype) {
       return (Builder) DEFAULT_INSTANCE.createBuilder(prototype);
     }
 
@@ -421,9 +421,9 @@ public final class Party {
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageLite.Builder<
-          Party.Part, Builder> implements
+          net.runelite.client.party.Party.Part, Builder> implements
         // @@protoc_insertion_point(builder_implements:party.Part)
-        Party.PartOrBuilder {
+        net.runelite.client.party.Party.PartOrBuilder {
       // Construct using net.runelite.client.party.Party.Part.newBuilder()
       private Builder() {
         super(DEFAULT_INSTANCE);
@@ -439,7 +439,7 @@ public final class Party {
         java.lang.Object arg0, java.lang.Object arg1) {
       switch (method) {
         case NEW_MUTABLE_INSTANCE: {
-          return new Party.Part();
+          return new net.runelite.client.party.Party.Part();
         }
         case NEW_BUILDER: {
           return new Builder();
@@ -454,13 +454,13 @@ public final class Party {
           return DEFAULT_INSTANCE;
         }
         case GET_PARSER: {
-          com.google.protobuf.Parser<Party.Part> parser = PARSER;
+          com.google.protobuf.Parser<net.runelite.client.party.Party.Part> parser = PARSER;
           if (parser == null) {
-            synchronized (Party.Part.class) {
+            synchronized (net.runelite.client.party.Party.Part.class) {
               parser = PARSER;
               if (parser == null) {
                 parser =
-                    new DefaultInstanceBasedParser<Party.Part>(
+                    new DefaultInstanceBasedParser<net.runelite.client.party.Party.Part>(
                         DEFAULT_INSTANCE);
                 PARSER = parser;
               }
@@ -480,7 +480,7 @@ public final class Party {
 
 
     // @@protoc_insertion_point(class_scope:party.Part)
-    private static final Party.Part DEFAULT_INSTANCE;
+    private static final net.runelite.client.party.Party.Part DEFAULT_INSTANCE;
     static {
       Part defaultInstance = new Part();
       // New instances are implicitly immutable so no need to make
@@ -490,7 +490,7 @@ public final class Party {
         Part.class, defaultInstance);
     }
 
-    public static Party.Part getDefaultInstance() {
+    public static net.runelite.client.party.Party.Part getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
@@ -549,73 +549,73 @@ public final class Party {
       data_ = getDefaultInstance().getData();
     }
 
-    public static Party.Data parseFrom(
+    public static net.runelite.client.party.Party.Data parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data);
     }
-    public static Party.Data parseFrom(
+    public static net.runelite.client.party.Party.Data parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data, extensionRegistry);
     }
-    public static Party.Data parseFrom(
+    public static net.runelite.client.party.Party.Data parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data);
     }
-    public static Party.Data parseFrom(
+    public static net.runelite.client.party.Party.Data parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data, extensionRegistry);
     }
-    public static Party.Data parseFrom(byte[] data)
+    public static net.runelite.client.party.Party.Data parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data);
     }
-    public static Party.Data parseFrom(
+    public static net.runelite.client.party.Party.Data parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data, extensionRegistry);
     }
-    public static Party.Data parseFrom(java.io.InputStream input)
+    public static net.runelite.client.party.Party.Data parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, input);
     }
-    public static Party.Data parseFrom(
+    public static net.runelite.client.party.Party.Data parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, input, extensionRegistry);
     }
-    public static Party.Data parseDelimitedFrom(java.io.InputStream input)
+    public static net.runelite.client.party.Party.Data parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return parseDelimitedFrom(DEFAULT_INSTANCE, input);
     }
-    public static Party.Data parseDelimitedFrom(
+    public static net.runelite.client.party.Party.Data parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
     }
-    public static Party.Data parseFrom(
+    public static net.runelite.client.party.Party.Data parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, input);
     }
-    public static Party.Data parseFrom(
+    public static net.runelite.client.party.Party.Data parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -626,7 +626,7 @@ public final class Party {
     public static Builder newBuilder() {
       return (Builder) DEFAULT_INSTANCE.createBuilder();
     }
-    public static Builder newBuilder(Party.Data prototype) {
+    public static Builder newBuilder(net.runelite.client.party.Party.Data prototype) {
       return (Builder) DEFAULT_INSTANCE.createBuilder(prototype);
     }
 
@@ -635,9 +635,9 @@ public final class Party {
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageLite.Builder<
-          Party.Data, Builder> implements
+          net.runelite.client.party.Party.Data, Builder> implements
         // @@protoc_insertion_point(builder_implements:party.Data)
-        Party.DataOrBuilder {
+        net.runelite.client.party.Party.DataOrBuilder {
       // Construct using net.runelite.client.party.Party.Data.newBuilder()
       private Builder() {
         super(DEFAULT_INSTANCE);
@@ -681,7 +681,7 @@ public final class Party {
         java.lang.Object arg0, java.lang.Object arg1) {
       switch (method) {
         case NEW_MUTABLE_INSTANCE: {
-          return new Party.Data();
+          return new net.runelite.client.party.Party.Data();
         }
         case NEW_BUILDER: {
           return new Builder();
@@ -699,13 +699,13 @@ public final class Party {
           return DEFAULT_INSTANCE;
         }
         case GET_PARSER: {
-          com.google.protobuf.Parser<Party.Data> parser = PARSER;
+          com.google.protobuf.Parser<net.runelite.client.party.Party.Data> parser = PARSER;
           if (parser == null) {
-            synchronized (Party.Data.class) {
+            synchronized (net.runelite.client.party.Party.Data.class) {
               parser = PARSER;
               if (parser == null) {
                 parser =
-                    new DefaultInstanceBasedParser<Party.Data>(
+                    new DefaultInstanceBasedParser<net.runelite.client.party.Party.Data>(
                         DEFAULT_INSTANCE);
                 PARSER = parser;
               }
@@ -725,7 +725,7 @@ public final class Party {
 
 
     // @@protoc_insertion_point(class_scope:party.Data)
-    private static final Party.Data DEFAULT_INSTANCE;
+    private static final net.runelite.client.party.Party.Data DEFAULT_INSTANCE;
     static {
       Data defaultInstance = new Data();
       // New instances are implicitly immutable so no need to make
@@ -735,7 +735,7 @@ public final class Party {
         Data.class, defaultInstance);
     }
 
-    public static Party.Data getDefaultInstance() {
+    public static net.runelite.client.party.Party.Data getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
@@ -759,7 +759,7 @@ public final class Party {
      * <code>.party.Join join = 1;</code>
      * @return The join.
      */
-    Party.Join getJoin();
+    net.runelite.client.party.Party.Join getJoin();
 
     /**
      * <code>.party.Part part = 2;</code>
@@ -770,7 +770,7 @@ public final class Party {
      * <code>.party.Part part = 2;</code>
      * @return The part.
      */
-    Party.Part getPart();
+    net.runelite.client.party.Party.Part getPart();
 
     /**
      * <code>.party.Data data = 3;</code>
@@ -781,9 +781,9 @@ public final class Party {
      * <code>.party.Data data = 3;</code>
      * @return The data.
      */
-    Party.Data getData();
+    net.runelite.client.party.Party.Data getData();
 
-    public Party.C2S.MsgCase getMsgCase();
+    public net.runelite.client.party.Party.C2S.MsgCase getMsgCase();
   }
   /**
    * Protobuf type {@code party.C2S}
@@ -852,16 +852,16 @@ public final class Party {
      * <code>.party.Join join = 1;</code>
      */
     @java.lang.Override
-    public Party.Join getJoin() {
+    public net.runelite.client.party.Party.Join getJoin() {
       if (msgCase_ == 1) {
-         return (Party.Join) msg_;
+         return (net.runelite.client.party.Party.Join) msg_;
       }
-      return Party.Join.getDefaultInstance();
+      return net.runelite.client.party.Party.Join.getDefaultInstance();
     }
     /**
      * <code>.party.Join join = 1;</code>
      */
-    private void setJoin(Party.Join value) {
+    private void setJoin(net.runelite.client.party.Party.Join value) {
       value.getClass();
   msg_ = value;
       msgCase_ = 1;
@@ -869,11 +869,11 @@ public final class Party {
     /**
      * <code>.party.Join join = 1;</code>
      */
-    private void mergeJoin(Party.Join value) {
+    private void mergeJoin(net.runelite.client.party.Party.Join value) {
       value.getClass();
   if (msgCase_ == 1 &&
-          msg_ != Party.Join.getDefaultInstance()) {
-        msg_ = Party.Join.newBuilder((Party.Join) msg_)
+          msg_ != net.runelite.client.party.Party.Join.getDefaultInstance()) {
+        msg_ = net.runelite.client.party.Party.Join.newBuilder((net.runelite.client.party.Party.Join) msg_)
             .mergeFrom(value).buildPartial();
       } else {
         msg_ = value;
@@ -902,16 +902,16 @@ public final class Party {
      * <code>.party.Part part = 2;</code>
      */
     @java.lang.Override
-    public Party.Part getPart() {
+    public net.runelite.client.party.Party.Part getPart() {
       if (msgCase_ == 2) {
-         return (Party.Part) msg_;
+         return (net.runelite.client.party.Party.Part) msg_;
       }
-      return Party.Part.getDefaultInstance();
+      return net.runelite.client.party.Party.Part.getDefaultInstance();
     }
     /**
      * <code>.party.Part part = 2;</code>
      */
-    private void setPart(Party.Part value) {
+    private void setPart(net.runelite.client.party.Party.Part value) {
       value.getClass();
   msg_ = value;
       msgCase_ = 2;
@@ -919,11 +919,11 @@ public final class Party {
     /**
      * <code>.party.Part part = 2;</code>
      */
-    private void mergePart(Party.Part value) {
+    private void mergePart(net.runelite.client.party.Party.Part value) {
       value.getClass();
   if (msgCase_ == 2 &&
-          msg_ != Party.Part.getDefaultInstance()) {
-        msg_ = Party.Part.newBuilder((Party.Part) msg_)
+          msg_ != net.runelite.client.party.Party.Part.getDefaultInstance()) {
+        msg_ = net.runelite.client.party.Party.Part.newBuilder((net.runelite.client.party.Party.Part) msg_)
             .mergeFrom(value).buildPartial();
       } else {
         msg_ = value;
@@ -952,16 +952,16 @@ public final class Party {
      * <code>.party.Data data = 3;</code>
      */
     @java.lang.Override
-    public Party.Data getData() {
+    public net.runelite.client.party.Party.Data getData() {
       if (msgCase_ == 3) {
-         return (Party.Data) msg_;
+         return (net.runelite.client.party.Party.Data) msg_;
       }
-      return Party.Data.getDefaultInstance();
+      return net.runelite.client.party.Party.Data.getDefaultInstance();
     }
     /**
      * <code>.party.Data data = 3;</code>
      */
-    private void setData(Party.Data value) {
+    private void setData(net.runelite.client.party.Party.Data value) {
       value.getClass();
   msg_ = value;
       msgCase_ = 3;
@@ -969,11 +969,11 @@ public final class Party {
     /**
      * <code>.party.Data data = 3;</code>
      */
-    private void mergeData(Party.Data value) {
+    private void mergeData(net.runelite.client.party.Party.Data value) {
       value.getClass();
   if (msgCase_ == 3 &&
-          msg_ != Party.Data.getDefaultInstance()) {
-        msg_ = Party.Data.newBuilder((Party.Data) msg_)
+          msg_ != net.runelite.client.party.Party.Data.getDefaultInstance()) {
+        msg_ = net.runelite.client.party.Party.Data.newBuilder((net.runelite.client.party.Party.Data) msg_)
             .mergeFrom(value).buildPartial();
       } else {
         msg_ = value;
@@ -990,73 +990,73 @@ public final class Party {
       }
     }
 
-    public static Party.C2S parseFrom(
+    public static net.runelite.client.party.Party.C2S parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data);
     }
-    public static Party.C2S parseFrom(
+    public static net.runelite.client.party.Party.C2S parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data, extensionRegistry);
     }
-    public static Party.C2S parseFrom(
+    public static net.runelite.client.party.Party.C2S parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data);
     }
-    public static Party.C2S parseFrom(
+    public static net.runelite.client.party.Party.C2S parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data, extensionRegistry);
     }
-    public static Party.C2S parseFrom(byte[] data)
+    public static net.runelite.client.party.Party.C2S parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data);
     }
-    public static Party.C2S parseFrom(
+    public static net.runelite.client.party.Party.C2S parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data, extensionRegistry);
     }
-    public static Party.C2S parseFrom(java.io.InputStream input)
+    public static net.runelite.client.party.Party.C2S parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, input);
     }
-    public static Party.C2S parseFrom(
+    public static net.runelite.client.party.Party.C2S parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, input, extensionRegistry);
     }
-    public static Party.C2S parseDelimitedFrom(java.io.InputStream input)
+    public static net.runelite.client.party.Party.C2S parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return parseDelimitedFrom(DEFAULT_INSTANCE, input);
     }
-    public static Party.C2S parseDelimitedFrom(
+    public static net.runelite.client.party.Party.C2S parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
     }
-    public static Party.C2S parseFrom(
+    public static net.runelite.client.party.Party.C2S parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, input);
     }
-    public static Party.C2S parseFrom(
+    public static net.runelite.client.party.Party.C2S parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -1067,7 +1067,7 @@ public final class Party {
     public static Builder newBuilder() {
       return (Builder) DEFAULT_INSTANCE.createBuilder();
     }
-    public static Builder newBuilder(Party.C2S prototype) {
+    public static Builder newBuilder(net.runelite.client.party.Party.C2S prototype) {
       return (Builder) DEFAULT_INSTANCE.createBuilder(prototype);
     }
 
@@ -1076,9 +1076,9 @@ public final class Party {
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageLite.Builder<
-          Party.C2S, Builder> implements
+          net.runelite.client.party.Party.C2S, Builder> implements
         // @@protoc_insertion_point(builder_implements:party.C2S)
-        Party.C2SOrBuilder {
+        net.runelite.client.party.Party.C2SOrBuilder {
       // Construct using net.runelite.client.party.Party.C2S.newBuilder()
       private Builder() {
         super(DEFAULT_INSTANCE);
@@ -1108,13 +1108,13 @@ public final class Party {
        * <code>.party.Join join = 1;</code>
        */
       @java.lang.Override
-      public Party.Join getJoin() {
+      public net.runelite.client.party.Party.Join getJoin() {
         return instance.getJoin();
       }
       /**
        * <code>.party.Join join = 1;</code>
        */
-      public Builder setJoin(Party.Join value) {
+      public Builder setJoin(net.runelite.client.party.Party.Join value) {
         copyOnWrite();
         instance.setJoin(value);
         return this;
@@ -1123,7 +1123,7 @@ public final class Party {
        * <code>.party.Join join = 1;</code>
        */
       public Builder setJoin(
-          Party.Join.Builder builderForValue) {
+          net.runelite.client.party.Party.Join.Builder builderForValue) {
         copyOnWrite();
         instance.setJoin(builderForValue.build());
         return this;
@@ -1131,7 +1131,7 @@ public final class Party {
       /**
        * <code>.party.Join join = 1;</code>
        */
-      public Builder mergeJoin(Party.Join value) {
+      public Builder mergeJoin(net.runelite.client.party.Party.Join value) {
         copyOnWrite();
         instance.mergeJoin(value);
         return this;
@@ -1156,13 +1156,13 @@ public final class Party {
        * <code>.party.Part part = 2;</code>
        */
       @java.lang.Override
-      public Party.Part getPart() {
+      public net.runelite.client.party.Party.Part getPart() {
         return instance.getPart();
       }
       /**
        * <code>.party.Part part = 2;</code>
        */
-      public Builder setPart(Party.Part value) {
+      public Builder setPart(net.runelite.client.party.Party.Part value) {
         copyOnWrite();
         instance.setPart(value);
         return this;
@@ -1171,7 +1171,7 @@ public final class Party {
        * <code>.party.Part part = 2;</code>
        */
       public Builder setPart(
-          Party.Part.Builder builderForValue) {
+          net.runelite.client.party.Party.Part.Builder builderForValue) {
         copyOnWrite();
         instance.setPart(builderForValue.build());
         return this;
@@ -1179,7 +1179,7 @@ public final class Party {
       /**
        * <code>.party.Part part = 2;</code>
        */
-      public Builder mergePart(Party.Part value) {
+      public Builder mergePart(net.runelite.client.party.Party.Part value) {
         copyOnWrite();
         instance.mergePart(value);
         return this;
@@ -1204,13 +1204,13 @@ public final class Party {
        * <code>.party.Data data = 3;</code>
        */
       @java.lang.Override
-      public Party.Data getData() {
+      public net.runelite.client.party.Party.Data getData() {
         return instance.getData();
       }
       /**
        * <code>.party.Data data = 3;</code>
        */
-      public Builder setData(Party.Data value) {
+      public Builder setData(net.runelite.client.party.Party.Data value) {
         copyOnWrite();
         instance.setData(value);
         return this;
@@ -1219,7 +1219,7 @@ public final class Party {
        * <code>.party.Data data = 3;</code>
        */
       public Builder setData(
-          Party.Data.Builder builderForValue) {
+          net.runelite.client.party.Party.Data.Builder builderForValue) {
         copyOnWrite();
         instance.setData(builderForValue.build());
         return this;
@@ -1227,7 +1227,7 @@ public final class Party {
       /**
        * <code>.party.Data data = 3;</code>
        */
-      public Builder mergeData(Party.Data value) {
+      public Builder mergeData(net.runelite.client.party.Party.Data value) {
         copyOnWrite();
         instance.mergeData(value);
         return this;
@@ -1250,7 +1250,7 @@ public final class Party {
         java.lang.Object arg0, java.lang.Object arg1) {
       switch (method) {
         case NEW_MUTABLE_INSTANCE: {
-          return new Party.C2S();
+          return new net.runelite.client.party.Party.C2S();
         }
         case NEW_BUILDER: {
           return new Builder();
@@ -1259,9 +1259,9 @@ public final class Party {
             java.lang.Object[] objects = new java.lang.Object[] {
               "msg_",
               "msgCase_",
-              Party.Join.class,
-              Party.Part.class,
-              Party.Data.class,
+              net.runelite.client.party.Party.Join.class,
+              net.runelite.client.party.Party.Part.class,
+              net.runelite.client.party.Party.Data.class,
             };
             java.lang.String info =
                 "\u0000\u0003\u0001\u0000\u0001\u0003\u0003\u0000\u0000\u0000\u0001<\u0000\u0002<" +
@@ -1273,13 +1273,13 @@ public final class Party {
           return DEFAULT_INSTANCE;
         }
         case GET_PARSER: {
-          com.google.protobuf.Parser<Party.C2S> parser = PARSER;
+          com.google.protobuf.Parser<net.runelite.client.party.Party.C2S> parser = PARSER;
           if (parser == null) {
-            synchronized (Party.C2S.class) {
+            synchronized (net.runelite.client.party.Party.C2S.class) {
               parser = PARSER;
               if (parser == null) {
                 parser =
-                    new DefaultInstanceBasedParser<Party.C2S>(
+                    new DefaultInstanceBasedParser<net.runelite.client.party.Party.C2S>(
                         DEFAULT_INSTANCE);
                 PARSER = parser;
               }
@@ -1299,7 +1299,7 @@ public final class Party {
 
 
     // @@protoc_insertion_point(class_scope:party.C2S)
-    private static final Party.C2S DEFAULT_INSTANCE;
+    private static final net.runelite.client.party.Party.C2S DEFAULT_INSTANCE;
     static {
       C2S defaultInstance = new C2S();
       // New instances are implicitly immutable so no need to make
@@ -1309,7 +1309,7 @@ public final class Party {
         C2S.class, defaultInstance);
     }
 
-    public static Party.C2S getDefaultInstance() {
+    public static net.runelite.client.party.Party.C2S getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
@@ -1402,73 +1402,73 @@ public final class Party {
       memberId_ = 0L;
     }
 
-    public static Party.UserJoin parseFrom(
+    public static net.runelite.client.party.Party.UserJoin parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data);
     }
-    public static Party.UserJoin parseFrom(
+    public static net.runelite.client.party.Party.UserJoin parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data, extensionRegistry);
     }
-    public static Party.UserJoin parseFrom(
+    public static net.runelite.client.party.Party.UserJoin parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data);
     }
-    public static Party.UserJoin parseFrom(
+    public static net.runelite.client.party.Party.UserJoin parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data, extensionRegistry);
     }
-    public static Party.UserJoin parseFrom(byte[] data)
+    public static net.runelite.client.party.Party.UserJoin parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data);
     }
-    public static Party.UserJoin parseFrom(
+    public static net.runelite.client.party.Party.UserJoin parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data, extensionRegistry);
     }
-    public static Party.UserJoin parseFrom(java.io.InputStream input)
+    public static net.runelite.client.party.Party.UserJoin parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, input);
     }
-    public static Party.UserJoin parseFrom(
+    public static net.runelite.client.party.Party.UserJoin parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, input, extensionRegistry);
     }
-    public static Party.UserJoin parseDelimitedFrom(java.io.InputStream input)
+    public static net.runelite.client.party.Party.UserJoin parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return parseDelimitedFrom(DEFAULT_INSTANCE, input);
     }
-    public static Party.UserJoin parseDelimitedFrom(
+    public static net.runelite.client.party.Party.UserJoin parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
     }
-    public static Party.UserJoin parseFrom(
+    public static net.runelite.client.party.Party.UserJoin parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, input);
     }
-    public static Party.UserJoin parseFrom(
+    public static net.runelite.client.party.Party.UserJoin parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -1479,7 +1479,7 @@ public final class Party {
     public static Builder newBuilder() {
       return (Builder) DEFAULT_INSTANCE.createBuilder();
     }
-    public static Builder newBuilder(Party.UserJoin prototype) {
+    public static Builder newBuilder(net.runelite.client.party.Party.UserJoin prototype) {
       return (Builder) DEFAULT_INSTANCE.createBuilder(prototype);
     }
 
@@ -1492,9 +1492,9 @@ public final class Party {
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageLite.Builder<
-          Party.UserJoin, Builder> implements
+          net.runelite.client.party.Party.UserJoin, Builder> implements
         // @@protoc_insertion_point(builder_implements:party.UserJoin)
-        Party.UserJoinOrBuilder {
+        net.runelite.client.party.Party.UserJoinOrBuilder {
       // Construct using net.runelite.client.party.Party.UserJoin.newBuilder()
       private Builder() {
         super(DEFAULT_INSTANCE);
@@ -1566,7 +1566,7 @@ public final class Party {
         java.lang.Object arg0, java.lang.Object arg1) {
       switch (method) {
         case NEW_MUTABLE_INSTANCE: {
-          return new Party.UserJoin();
+          return new net.runelite.client.party.Party.UserJoin();
         }
         case NEW_BUILDER: {
           return new Builder();
@@ -1586,13 +1586,13 @@ public final class Party {
           return DEFAULT_INSTANCE;
         }
         case GET_PARSER: {
-          com.google.protobuf.Parser<Party.UserJoin> parser = PARSER;
+          com.google.protobuf.Parser<net.runelite.client.party.Party.UserJoin> parser = PARSER;
           if (parser == null) {
-            synchronized (Party.UserJoin.class) {
+            synchronized (net.runelite.client.party.Party.UserJoin.class) {
               parser = PARSER;
               if (parser == null) {
                 parser =
-                    new DefaultInstanceBasedParser<Party.UserJoin>(
+                    new DefaultInstanceBasedParser<net.runelite.client.party.Party.UserJoin>(
                         DEFAULT_INSTANCE);
                 PARSER = parser;
               }
@@ -1612,7 +1612,7 @@ public final class Party {
 
 
     // @@protoc_insertion_point(class_scope:party.UserJoin)
-    private static final Party.UserJoin DEFAULT_INSTANCE;
+    private static final net.runelite.client.party.Party.UserJoin DEFAULT_INSTANCE;
     static {
       UserJoin defaultInstance = new UserJoin();
       // New instances are implicitly immutable so no need to make
@@ -1622,7 +1622,7 @@ public final class Party {
         UserJoin.class, defaultInstance);
     }
 
-    public static Party.UserJoin getDefaultInstance() {
+    public static net.runelite.client.party.Party.UserJoin getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
@@ -1711,73 +1711,73 @@ public final class Party {
       memberId_ = 0L;
     }
 
-    public static Party.UserPart parseFrom(
+    public static net.runelite.client.party.Party.UserPart parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data);
     }
-    public static Party.UserPart parseFrom(
+    public static net.runelite.client.party.Party.UserPart parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data, extensionRegistry);
     }
-    public static Party.UserPart parseFrom(
+    public static net.runelite.client.party.Party.UserPart parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data);
     }
-    public static Party.UserPart parseFrom(
+    public static net.runelite.client.party.Party.UserPart parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data, extensionRegistry);
     }
-    public static Party.UserPart parseFrom(byte[] data)
+    public static net.runelite.client.party.Party.UserPart parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data);
     }
-    public static Party.UserPart parseFrom(
+    public static net.runelite.client.party.Party.UserPart parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data, extensionRegistry);
     }
-    public static Party.UserPart parseFrom(java.io.InputStream input)
+    public static net.runelite.client.party.Party.UserPart parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, input);
     }
-    public static Party.UserPart parseFrom(
+    public static net.runelite.client.party.Party.UserPart parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, input, extensionRegistry);
     }
-    public static Party.UserPart parseDelimitedFrom(java.io.InputStream input)
+    public static net.runelite.client.party.Party.UserPart parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return parseDelimitedFrom(DEFAULT_INSTANCE, input);
     }
-    public static Party.UserPart parseDelimitedFrom(
+    public static net.runelite.client.party.Party.UserPart parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
     }
-    public static Party.UserPart parseFrom(
+    public static net.runelite.client.party.Party.UserPart parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, input);
     }
-    public static Party.UserPart parseFrom(
+    public static net.runelite.client.party.Party.UserPart parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -1788,7 +1788,7 @@ public final class Party {
     public static Builder newBuilder() {
       return (Builder) DEFAULT_INSTANCE.createBuilder();
     }
-    public static Builder newBuilder(Party.UserPart prototype) {
+    public static Builder newBuilder(net.runelite.client.party.Party.UserPart prototype) {
       return (Builder) DEFAULT_INSTANCE.createBuilder(prototype);
     }
 
@@ -1797,9 +1797,9 @@ public final class Party {
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageLite.Builder<
-          Party.UserPart, Builder> implements
+          net.runelite.client.party.Party.UserPart, Builder> implements
         // @@protoc_insertion_point(builder_implements:party.UserPart)
-        Party.UserPartOrBuilder {
+        net.runelite.client.party.Party.UserPartOrBuilder {
       // Construct using net.runelite.client.party.Party.UserPart.newBuilder()
       private Builder() {
         super(DEFAULT_INSTANCE);
@@ -1871,7 +1871,7 @@ public final class Party {
         java.lang.Object arg0, java.lang.Object arg1) {
       switch (method) {
         case NEW_MUTABLE_INSTANCE: {
-          return new Party.UserPart();
+          return new net.runelite.client.party.Party.UserPart();
         }
         case NEW_BUILDER: {
           return new Builder();
@@ -1891,13 +1891,13 @@ public final class Party {
           return DEFAULT_INSTANCE;
         }
         case GET_PARSER: {
-          com.google.protobuf.Parser<Party.UserPart> parser = PARSER;
+          com.google.protobuf.Parser<net.runelite.client.party.Party.UserPart> parser = PARSER;
           if (parser == null) {
-            synchronized (Party.UserPart.class) {
+            synchronized (net.runelite.client.party.Party.UserPart.class) {
               parser = PARSER;
               if (parser == null) {
                 parser =
-                    new DefaultInstanceBasedParser<Party.UserPart>(
+                    new DefaultInstanceBasedParser<net.runelite.client.party.Party.UserPart>(
                         DEFAULT_INSTANCE);
                 PARSER = parser;
               }
@@ -1917,7 +1917,7 @@ public final class Party {
 
 
     // @@protoc_insertion_point(class_scope:party.UserPart)
-    private static final Party.UserPart DEFAULT_INSTANCE;
+    private static final net.runelite.client.party.Party.UserPart DEFAULT_INSTANCE;
     static {
       UserPart defaultInstance = new UserPart();
       // New instances are implicitly immutable so no need to make
@@ -1927,7 +1927,7 @@ public final class Party {
         UserPart.class, defaultInstance);
     }
 
-    public static Party.UserPart getDefaultInstance() {
+    public static net.runelite.client.party.Party.UserPart getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
@@ -2050,73 +2050,73 @@ public final class Party {
       data_ = getDefaultInstance().getData();
     }
 
-    public static Party.PartyData parseFrom(
+    public static net.runelite.client.party.Party.PartyData parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data);
     }
-    public static Party.PartyData parseFrom(
+    public static net.runelite.client.party.Party.PartyData parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data, extensionRegistry);
     }
-    public static Party.PartyData parseFrom(
+    public static net.runelite.client.party.Party.PartyData parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data);
     }
-    public static Party.PartyData parseFrom(
+    public static net.runelite.client.party.Party.PartyData parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data, extensionRegistry);
     }
-    public static Party.PartyData parseFrom(byte[] data)
+    public static net.runelite.client.party.Party.PartyData parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data);
     }
-    public static Party.PartyData parseFrom(
+    public static net.runelite.client.party.Party.PartyData parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data, extensionRegistry);
     }
-    public static Party.PartyData parseFrom(java.io.InputStream input)
+    public static net.runelite.client.party.Party.PartyData parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, input);
     }
-    public static Party.PartyData parseFrom(
+    public static net.runelite.client.party.Party.PartyData parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, input, extensionRegistry);
     }
-    public static Party.PartyData parseDelimitedFrom(java.io.InputStream input)
+    public static net.runelite.client.party.Party.PartyData parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return parseDelimitedFrom(DEFAULT_INSTANCE, input);
     }
-    public static Party.PartyData parseDelimitedFrom(
+    public static net.runelite.client.party.Party.PartyData parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
     }
-    public static Party.PartyData parseFrom(
+    public static net.runelite.client.party.Party.PartyData parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, input);
     }
-    public static Party.PartyData parseFrom(
+    public static net.runelite.client.party.Party.PartyData parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -2127,7 +2127,7 @@ public final class Party {
     public static Builder newBuilder() {
       return (Builder) DEFAULT_INSTANCE.createBuilder();
     }
-    public static Builder newBuilder(Party.PartyData prototype) {
+    public static Builder newBuilder(net.runelite.client.party.Party.PartyData prototype) {
       return (Builder) DEFAULT_INSTANCE.createBuilder(prototype);
     }
 
@@ -2136,9 +2136,9 @@ public final class Party {
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageLite.Builder<
-          Party.PartyData, Builder> implements
+          net.runelite.client.party.Party.PartyData, Builder> implements
         // @@protoc_insertion_point(builder_implements:party.PartyData)
-        Party.PartyDataOrBuilder {
+        net.runelite.client.party.Party.PartyDataOrBuilder {
       // Construct using net.runelite.client.party.Party.PartyData.newBuilder()
       private Builder() {
         super(DEFAULT_INSTANCE);
@@ -2238,7 +2238,7 @@ public final class Party {
         java.lang.Object arg0, java.lang.Object arg1) {
       switch (method) {
         case NEW_MUTABLE_INSTANCE: {
-          return new Party.PartyData();
+          return new net.runelite.client.party.Party.PartyData();
         }
         case NEW_BUILDER: {
           return new Builder();
@@ -2259,13 +2259,13 @@ public final class Party {
           return DEFAULT_INSTANCE;
         }
         case GET_PARSER: {
-          com.google.protobuf.Parser<Party.PartyData> parser = PARSER;
+          com.google.protobuf.Parser<net.runelite.client.party.Party.PartyData> parser = PARSER;
           if (parser == null) {
-            synchronized (Party.PartyData.class) {
+            synchronized (net.runelite.client.party.Party.PartyData.class) {
               parser = PARSER;
               if (parser == null) {
                 parser =
-                    new DefaultInstanceBasedParser<Party.PartyData>(
+                    new DefaultInstanceBasedParser<net.runelite.client.party.Party.PartyData>(
                         DEFAULT_INSTANCE);
                 PARSER = parser;
               }
@@ -2285,7 +2285,7 @@ public final class Party {
 
 
     // @@protoc_insertion_point(class_scope:party.PartyData)
-    private static final Party.PartyData DEFAULT_INSTANCE;
+    private static final net.runelite.client.party.Party.PartyData DEFAULT_INSTANCE;
     static {
       PartyData defaultInstance = new PartyData();
       // New instances are implicitly immutable so no need to make
@@ -2295,7 +2295,7 @@ public final class Party {
         PartyData.class, defaultInstance);
     }
 
-    public static Party.PartyData getDefaultInstance() {
+    public static net.runelite.client.party.Party.PartyData getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
@@ -2319,7 +2319,7 @@ public final class Party {
      * <code>.party.UserJoin join = 1;</code>
      * @return The join.
      */
-    Party.UserJoin getJoin();
+    net.runelite.client.party.Party.UserJoin getJoin();
 
     /**
      * <code>.party.UserPart part = 2;</code>
@@ -2330,7 +2330,7 @@ public final class Party {
      * <code>.party.UserPart part = 2;</code>
      * @return The part.
      */
-    Party.UserPart getPart();
+    net.runelite.client.party.Party.UserPart getPart();
 
     /**
      * <code>.party.PartyData data = 3;</code>
@@ -2341,9 +2341,9 @@ public final class Party {
      * <code>.party.PartyData data = 3;</code>
      * @return The data.
      */
-    Party.PartyData getData();
+    net.runelite.client.party.Party.PartyData getData();
 
-    public Party.S2C.MsgCase getMsgCase();
+    public net.runelite.client.party.Party.S2C.MsgCase getMsgCase();
   }
   /**
    * Protobuf type {@code party.S2C}
@@ -2412,16 +2412,16 @@ public final class Party {
      * <code>.party.UserJoin join = 1;</code>
      */
     @java.lang.Override
-    public Party.UserJoin getJoin() {
+    public net.runelite.client.party.Party.UserJoin getJoin() {
       if (msgCase_ == 1) {
-         return (Party.UserJoin) msg_;
+         return (net.runelite.client.party.Party.UserJoin) msg_;
       }
-      return Party.UserJoin.getDefaultInstance();
+      return net.runelite.client.party.Party.UserJoin.getDefaultInstance();
     }
     /**
      * <code>.party.UserJoin join = 1;</code>
      */
-    private void setJoin(Party.UserJoin value) {
+    private void setJoin(net.runelite.client.party.Party.UserJoin value) {
       value.getClass();
   msg_ = value;
       msgCase_ = 1;
@@ -2429,11 +2429,11 @@ public final class Party {
     /**
      * <code>.party.UserJoin join = 1;</code>
      */
-    private void mergeJoin(Party.UserJoin value) {
+    private void mergeJoin(net.runelite.client.party.Party.UserJoin value) {
       value.getClass();
   if (msgCase_ == 1 &&
-          msg_ != Party.UserJoin.getDefaultInstance()) {
-        msg_ = Party.UserJoin.newBuilder((Party.UserJoin) msg_)
+          msg_ != net.runelite.client.party.Party.UserJoin.getDefaultInstance()) {
+        msg_ = net.runelite.client.party.Party.UserJoin.newBuilder((net.runelite.client.party.Party.UserJoin) msg_)
             .mergeFrom(value).buildPartial();
       } else {
         msg_ = value;
@@ -2462,16 +2462,16 @@ public final class Party {
      * <code>.party.UserPart part = 2;</code>
      */
     @java.lang.Override
-    public Party.UserPart getPart() {
+    public net.runelite.client.party.Party.UserPart getPart() {
       if (msgCase_ == 2) {
-         return (Party.UserPart) msg_;
+         return (net.runelite.client.party.Party.UserPart) msg_;
       }
-      return Party.UserPart.getDefaultInstance();
+      return net.runelite.client.party.Party.UserPart.getDefaultInstance();
     }
     /**
      * <code>.party.UserPart part = 2;</code>
      */
-    private void setPart(Party.UserPart value) {
+    private void setPart(net.runelite.client.party.Party.UserPart value) {
       value.getClass();
   msg_ = value;
       msgCase_ = 2;
@@ -2479,11 +2479,11 @@ public final class Party {
     /**
      * <code>.party.UserPart part = 2;</code>
      */
-    private void mergePart(Party.UserPart value) {
+    private void mergePart(net.runelite.client.party.Party.UserPart value) {
       value.getClass();
   if (msgCase_ == 2 &&
-          msg_ != Party.UserPart.getDefaultInstance()) {
-        msg_ = Party.UserPart.newBuilder((Party.UserPart) msg_)
+          msg_ != net.runelite.client.party.Party.UserPart.getDefaultInstance()) {
+        msg_ = net.runelite.client.party.Party.UserPart.newBuilder((net.runelite.client.party.Party.UserPart) msg_)
             .mergeFrom(value).buildPartial();
       } else {
         msg_ = value;
@@ -2512,16 +2512,16 @@ public final class Party {
      * <code>.party.PartyData data = 3;</code>
      */
     @java.lang.Override
-    public Party.PartyData getData() {
+    public net.runelite.client.party.Party.PartyData getData() {
       if (msgCase_ == 3) {
-         return (Party.PartyData) msg_;
+         return (net.runelite.client.party.Party.PartyData) msg_;
       }
-      return Party.PartyData.getDefaultInstance();
+      return net.runelite.client.party.Party.PartyData.getDefaultInstance();
     }
     /**
      * <code>.party.PartyData data = 3;</code>
      */
-    private void setData(Party.PartyData value) {
+    private void setData(net.runelite.client.party.Party.PartyData value) {
       value.getClass();
   msg_ = value;
       msgCase_ = 3;
@@ -2529,11 +2529,11 @@ public final class Party {
     /**
      * <code>.party.PartyData data = 3;</code>
      */
-    private void mergeData(Party.PartyData value) {
+    private void mergeData(net.runelite.client.party.Party.PartyData value) {
       value.getClass();
   if (msgCase_ == 3 &&
-          msg_ != Party.PartyData.getDefaultInstance()) {
-        msg_ = Party.PartyData.newBuilder((Party.PartyData) msg_)
+          msg_ != net.runelite.client.party.Party.PartyData.getDefaultInstance()) {
+        msg_ = net.runelite.client.party.Party.PartyData.newBuilder((net.runelite.client.party.Party.PartyData) msg_)
             .mergeFrom(value).buildPartial();
       } else {
         msg_ = value;
@@ -2550,73 +2550,73 @@ public final class Party {
       }
     }
 
-    public static Party.S2C parseFrom(
+    public static net.runelite.client.party.Party.S2C parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data);
     }
-    public static Party.S2C parseFrom(
+    public static net.runelite.client.party.Party.S2C parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data, extensionRegistry);
     }
-    public static Party.S2C parseFrom(
+    public static net.runelite.client.party.Party.S2C parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data);
     }
-    public static Party.S2C parseFrom(
+    public static net.runelite.client.party.Party.S2C parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data, extensionRegistry);
     }
-    public static Party.S2C parseFrom(byte[] data)
+    public static net.runelite.client.party.Party.S2C parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data);
     }
-    public static Party.S2C parseFrom(
+    public static net.runelite.client.party.Party.S2C parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, data, extensionRegistry);
     }
-    public static Party.S2C parseFrom(java.io.InputStream input)
+    public static net.runelite.client.party.Party.S2C parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, input);
     }
-    public static Party.S2C parseFrom(
+    public static net.runelite.client.party.Party.S2C parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, input, extensionRegistry);
     }
-    public static Party.S2C parseDelimitedFrom(java.io.InputStream input)
+    public static net.runelite.client.party.Party.S2C parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return parseDelimitedFrom(DEFAULT_INSTANCE, input);
     }
-    public static Party.S2C parseDelimitedFrom(
+    public static net.runelite.client.party.Party.S2C parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
     }
-    public static Party.S2C parseFrom(
+    public static net.runelite.client.party.Party.S2C parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageLite.parseFrom(
           DEFAULT_INSTANCE, input);
     }
-    public static Party.S2C parseFrom(
+    public static net.runelite.client.party.Party.S2C parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -2627,7 +2627,7 @@ public final class Party {
     public static Builder newBuilder() {
       return (Builder) DEFAULT_INSTANCE.createBuilder();
     }
-    public static Builder newBuilder(Party.S2C prototype) {
+    public static Builder newBuilder(net.runelite.client.party.Party.S2C prototype) {
       return (Builder) DEFAULT_INSTANCE.createBuilder(prototype);
     }
 
@@ -2636,9 +2636,9 @@ public final class Party {
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageLite.Builder<
-          Party.S2C, Builder> implements
+          net.runelite.client.party.Party.S2C, Builder> implements
         // @@protoc_insertion_point(builder_implements:party.S2C)
-        Party.S2COrBuilder {
+        net.runelite.client.party.Party.S2COrBuilder {
       // Construct using net.runelite.client.party.Party.S2C.newBuilder()
       private Builder() {
         super(DEFAULT_INSTANCE);
@@ -2668,13 +2668,13 @@ public final class Party {
        * <code>.party.UserJoin join = 1;</code>
        */
       @java.lang.Override
-      public Party.UserJoin getJoin() {
+      public net.runelite.client.party.Party.UserJoin getJoin() {
         return instance.getJoin();
       }
       /**
        * <code>.party.UserJoin join = 1;</code>
        */
-      public Builder setJoin(Party.UserJoin value) {
+      public Builder setJoin(net.runelite.client.party.Party.UserJoin value) {
         copyOnWrite();
         instance.setJoin(value);
         return this;
@@ -2683,7 +2683,7 @@ public final class Party {
        * <code>.party.UserJoin join = 1;</code>
        */
       public Builder setJoin(
-          Party.UserJoin.Builder builderForValue) {
+          net.runelite.client.party.Party.UserJoin.Builder builderForValue) {
         copyOnWrite();
         instance.setJoin(builderForValue.build());
         return this;
@@ -2691,7 +2691,7 @@ public final class Party {
       /**
        * <code>.party.UserJoin join = 1;</code>
        */
-      public Builder mergeJoin(Party.UserJoin value) {
+      public Builder mergeJoin(net.runelite.client.party.Party.UserJoin value) {
         copyOnWrite();
         instance.mergeJoin(value);
         return this;
@@ -2716,13 +2716,13 @@ public final class Party {
        * <code>.party.UserPart part = 2;</code>
        */
       @java.lang.Override
-      public Party.UserPart getPart() {
+      public net.runelite.client.party.Party.UserPart getPart() {
         return instance.getPart();
       }
       /**
        * <code>.party.UserPart part = 2;</code>
        */
-      public Builder setPart(Party.UserPart value) {
+      public Builder setPart(net.runelite.client.party.Party.UserPart value) {
         copyOnWrite();
         instance.setPart(value);
         return this;
@@ -2731,7 +2731,7 @@ public final class Party {
        * <code>.party.UserPart part = 2;</code>
        */
       public Builder setPart(
-          Party.UserPart.Builder builderForValue) {
+          net.runelite.client.party.Party.UserPart.Builder builderForValue) {
         copyOnWrite();
         instance.setPart(builderForValue.build());
         return this;
@@ -2739,7 +2739,7 @@ public final class Party {
       /**
        * <code>.party.UserPart part = 2;</code>
        */
-      public Builder mergePart(Party.UserPart value) {
+      public Builder mergePart(net.runelite.client.party.Party.UserPart value) {
         copyOnWrite();
         instance.mergePart(value);
         return this;
@@ -2764,13 +2764,13 @@ public final class Party {
        * <code>.party.PartyData data = 3;</code>
        */
       @java.lang.Override
-      public Party.PartyData getData() {
+      public net.runelite.client.party.Party.PartyData getData() {
         return instance.getData();
       }
       /**
        * <code>.party.PartyData data = 3;</code>
        */
-      public Builder setData(Party.PartyData value) {
+      public Builder setData(net.runelite.client.party.Party.PartyData value) {
         copyOnWrite();
         instance.setData(value);
         return this;
@@ -2779,7 +2779,7 @@ public final class Party {
        * <code>.party.PartyData data = 3;</code>
        */
       public Builder setData(
-          Party.PartyData.Builder builderForValue) {
+          net.runelite.client.party.Party.PartyData.Builder builderForValue) {
         copyOnWrite();
         instance.setData(builderForValue.build());
         return this;
@@ -2787,7 +2787,7 @@ public final class Party {
       /**
        * <code>.party.PartyData data = 3;</code>
        */
-      public Builder mergeData(Party.PartyData value) {
+      public Builder mergeData(net.runelite.client.party.Party.PartyData value) {
         copyOnWrite();
         instance.mergeData(value);
         return this;
@@ -2810,7 +2810,7 @@ public final class Party {
         java.lang.Object arg0, java.lang.Object arg1) {
       switch (method) {
         case NEW_MUTABLE_INSTANCE: {
-          return new Party.S2C();
+          return new net.runelite.client.party.Party.S2C();
         }
         case NEW_BUILDER: {
           return new Builder();
@@ -2819,9 +2819,9 @@ public final class Party {
             java.lang.Object[] objects = new java.lang.Object[] {
               "msg_",
               "msgCase_",
-              Party.UserJoin.class,
-              Party.UserPart.class,
-              Party.PartyData.class,
+              net.runelite.client.party.Party.UserJoin.class,
+              net.runelite.client.party.Party.UserPart.class,
+              net.runelite.client.party.Party.PartyData.class,
             };
             java.lang.String info =
                 "\u0000\u0003\u0001\u0000\u0001\u0003\u0003\u0000\u0000\u0000\u0001<\u0000\u0002<" +
@@ -2833,13 +2833,13 @@ public final class Party {
           return DEFAULT_INSTANCE;
         }
         case GET_PARSER: {
-          com.google.protobuf.Parser<Party.S2C> parser = PARSER;
+          com.google.protobuf.Parser<net.runelite.client.party.Party.S2C> parser = PARSER;
           if (parser == null) {
-            synchronized (Party.S2C.class) {
+            synchronized (net.runelite.client.party.Party.S2C.class) {
               parser = PARSER;
               if (parser == null) {
                 parser =
-                    new DefaultInstanceBasedParser<Party.S2C>(
+                    new DefaultInstanceBasedParser<net.runelite.client.party.Party.S2C>(
                         DEFAULT_INSTANCE);
                 PARSER = parser;
               }
@@ -2859,7 +2859,7 @@ public final class Party {
 
 
     // @@protoc_insertion_point(class_scope:party.S2C)
-    private static final Party.S2C DEFAULT_INSTANCE;
+    private static final net.runelite.client.party.Party.S2C DEFAULT_INSTANCE;
     static {
       S2C defaultInstance = new S2C();
       // New instances are implicitly immutable so no need to make
@@ -2869,7 +2869,7 @@ public final class Party {
         S2C.class, defaultInstance);
     }
 
-    public static Party.S2C getDefaultInstance() {
+    public static net.runelite.client.party.Party.S2C getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
