@@ -7,5 +7,5 @@ import lombok.Setter;
 @Setter
 public abstract class PartyMemberMessage extends PartyMessage
 {
-	private long memberId;
+	private transient long memberId;
 }

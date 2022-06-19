@@ -215,6 +215,7 @@ public class PartyService
 		// Send info to other clients that this user successfully finished joining party
 		if (localMember != null && localMember == partyMember)
 		{
+			log.debug("Requesting sync");
 			final UserSync userSync = new UserSync();
 			wsClient.send(userSync);
 		}

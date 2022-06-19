@@ -70,7 +70,7 @@ class PartyMemberBox extends JPanel
 	private boolean avatarSet;
 
 	PartyMemberBox(final PartyConfig config, final JComponent panel, final PartyData memberPartyData,
-				   final PartyService partyService)
+		final PartyService partyService)
 	{
 		this.config = config;
 		this.memberPartyData = memberPartyData;
