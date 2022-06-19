@@ -44,7 +44,6 @@ import net.runelite.client.party.messages.PartyMemberMessage;
 import net.runelite.client.party.messages.UserJoin;
 import net.runelite.client.party.messages.UserPart;
 import net.runelite.client.party.messages.WebsocketMessage;
-import net.runelite.party.Party;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
