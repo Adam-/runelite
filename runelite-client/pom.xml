@@ -493,6 +493,7 @@
 					<analysisCache>true</analysisCache>
 					<excludes>
 						<exclude>**/RuntimeTypeAdapterFactory.java</exclude>
+						<exclude>net/runelite/client/party/Party.java</exclude>
 					</excludes>
 				</configuration>
 				<executions>
