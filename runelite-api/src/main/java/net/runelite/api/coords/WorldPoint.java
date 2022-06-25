@@ -31,6 +31,7 @@ import java.util.Collections;
 import java.util.List;
 import lombok.Value;
 import net.runelite.api.Client;
+import net.runelite.api.Constants;
 import static net.runelite.api.Constants.CHUNK_SIZE;
 import static net.runelite.api.Constants.REGION_SIZE;
 import net.runelite.api.Perspective;
@@ -181,7 +182,7 @@ public class WorldPoint
 	 *
 	 * @param client the client
 	 * @param localPoint the local coordinate
-	 * @param plane the plane for the returned point, if it is not an instance
+	 * @param plane the scene plane the localPoint is on
 	 * @return the tile coordinate containing the local point
 	 */
 	public static WorldPoint fromLocalInstance(Client client, LocalPoint localPoint, int plane)
@@ -196,9 +197,12 @@ public class WorldPoint
 			int chunkX = sceneX / CHUNK_SIZE;
 			int chunkY = sceneY / CHUNK_SIZE;
 
+			final byte[][][] tileSettings = client.getTileSettings();
+			final int bridgeOffset = ((tileSettings[1][sceneX][sceneY] & Constants.TILE_FLAG_BRIDGE) >> 1);
+
 			// get the template chunk for the chunk
 			int[][][] instanceTemplateChunks = client.getInstanceTemplateChunks();
-			int templateChunk = instanceTemplateChunks[plane][chunkX][chunkY];
+			int templateChunk = instanceTemplateChunks[plane + bridgeOffset][chunkX][chunkY];
 
 			int rotation = templateChunk >> 1 & 0x3;
 			int templateChunkY = (templateChunk >> 3 & 0x7FF) * CHUNK_SIZE;
@@ -210,7 +214,7 @@ public class WorldPoint
 			int y = templateChunkY + (sceneY & (CHUNK_SIZE - 1));
 
 			// create and rotate point back to 0, to match with template
-			return rotate(new WorldPoint(x, y, templateChunkPlane), 4 - rotation);
+			return rotate(new WorldPoint(x, y, templateChunkPlane - bridgeOffset), 4 - rotation);
 		}
 		else
 		{
