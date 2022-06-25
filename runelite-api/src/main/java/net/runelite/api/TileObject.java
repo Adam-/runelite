@@ -60,6 +60,8 @@ public interface TileObject
 
 	/**
 	 * Gets the plane of the tile that the object is on.
+	 * This method is the plane *after* the bridge offset has been applied, and so is in range
+	 * -1 to 3
 	 */
 	int getPlane();
 

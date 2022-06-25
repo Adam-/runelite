@@ -112,6 +112,8 @@ public interface Tile
 
 	/**
 	 * Gets the plane that this tile is on.
+	 * This method is the plane *after* the bridge offset has been applied, and so is in range
+	 * -1 to 3
 	 *
 	 * @return the plane
 	 */

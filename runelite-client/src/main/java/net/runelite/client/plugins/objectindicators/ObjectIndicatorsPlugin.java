@@ -131,7 +131,7 @@ public class ObjectIndicatorsPlugin extends Plugin
 	@Subscribe
 	public void onWallObjectSpawned(WallObjectSpawned event)
 	{
-		checkObjectPoints(event.getWallObject());
+		checkObjectPoints(event.getTile(), event.getWallObject());
 	}
 
 	@Subscribe
@@ -141,7 +141,7 @@ public class ObjectIndicatorsPlugin extends Plugin
 		WallObject wallObject = event.getWallObject();
 
 		objects.removeIf(o -> o.getTileObject() == previous);
-		checkObjectPoints(wallObject);
+		checkObjectPoints(event.getTile(), wallObject);
 	}
 
 	@Subscribe
@@ -153,13 +153,13 @@ public class ObjectIndicatorsPlugin extends Plugin
 	@Subscribe
 	public void onGameObjectSpawned(GameObjectSpawned event)
 	{
-		checkObjectPoints(event.getGameObject());
+		checkObjectPoints(event.getTile(), event.getGameObject());
 	}
 
 	@Subscribe
 	public void onDecorativeObjectSpawned(DecorativeObjectSpawned event)
 	{
-		checkObjectPoints(event.getDecorativeObject());
+		checkObjectPoints(event.getTile(), event.getDecorativeObject());
 	}
 
 	@Subscribe
@@ -177,7 +177,7 @@ public class ObjectIndicatorsPlugin extends Plugin
 	@Subscribe
 	public void onGroundObjectSpawned(GroundObjectSpawned event)
 	{
-		checkObjectPoints(event.getGroundObject());
+		checkObjectPoints(event.getTile(), event.getGroundObject());
 	}
 
 	@Subscribe
@@ -264,12 +264,12 @@ public class ObjectIndicatorsPlugin extends Plugin
 			return;
 		}
 
-		markObject(objectDefinition, name, object);
+		markObject(objectDefinition, name, tile, object);
 	}
 
-	private void checkObjectPoints(TileObject object)
+	private void checkObjectPoints(Tile tile, TileObject object)
 	{
-		final WorldPoint worldPoint = WorldPoint.fromLocalInstance(client, object.getLocalLocation(), object.getPlane());
+		final WorldPoint worldPoint = WorldPoint.fromLocalInstance(client, object.getLocalLocation(), tile.getRenderLevel());
 		final Set<ObjectPoint> objectPoints = points.get(worldPoint.getRegionID());
 
 		if (objectPoints == null)
@@ -378,11 +378,12 @@ public class ObjectIndicatorsPlugin extends Plugin
 	 *
 	 * @param objectComposition transformed composition of object based on vars
 	 * @param name name of objectComposition
+	 * @param tile the tile the object is on
 	 * @param object tile object, for multilocs object.getId() is the base id
 	 */
-	private void markObject(ObjectComposition objectComposition, String name, final TileObject object)
+	private void markObject(ObjectComposition objectComposition, String name, final Tile tile, final TileObject object)
 	{
-		final WorldPoint worldPoint = WorldPoint.fromLocalInstance(client, object.getLocalLocation());
+		final WorldPoint worldPoint = WorldPoint.fromLocalInstance(client, object.getLocalLocation(), tile.getRenderLevel());
 		final int regionId = worldPoint.getRegionID();
 		final Color color = config.markerColor();
 		final ObjectPoint point = new ObjectPoint(
