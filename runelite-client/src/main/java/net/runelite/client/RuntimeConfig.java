@@ -48,6 +48,8 @@ public class RuntimeConfig
 	private Set<Integer> forceDeadAnimations;
 	private Set<Integer> nonAttackNpcs;
 
+	private Map<String, String> clueRemap;
+
 	public boolean showOutageMessage()
 	{
 		if (Strings.isNullOrEmpty(getOutageMessage()))

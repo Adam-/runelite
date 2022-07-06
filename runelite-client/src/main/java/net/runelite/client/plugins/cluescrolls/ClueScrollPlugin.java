@@ -91,6 +91,7 @@ import net.runelite.api.events.WidgetLoaded;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetID;
 import net.runelite.api.widgets.WidgetInfo;
+import net.runelite.client.RuntimeConfig;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
@@ -200,6 +201,10 @@ public class ClueScrollPlugin extends Plugin
 
 	@Inject
 	private TagManager tagManager;
+
+	@Inject
+	@Nullable
+	private RuntimeConfig runtimeConfig;
 
 	@Inject
 	@Named("developerMode")
@@ -678,8 +683,15 @@ public class ClueScrollPlugin extends Plugin
 
 		if (clueScrollText != null)
 		{
-			ClueScroll clueScroll = findClueScroll(clueScrollText.getText());
-			updateClue(clueScroll);
+			ClueScroll clueScroll = findClueScrollRemapped(clueScrollText.getText());
+			if (clueScroll != null)
+			{
+				updateClue(clueScroll);
+			}
+			else
+			{
+				resetClue(true);
+			}
 		}
 	}
 
@@ -708,7 +720,7 @@ public class ClueScrollPlugin extends Plugin
 			}
 			else
 			{
-				ClueScroll clueScroll = findClueScroll(text);
+				ClueScroll clueScroll = findClueScrollRemapped(text);
 				log.debug("Found clue scroll for '{}': {}", text, clueScroll);
 				updateClue(clueScroll);
 			}
@@ -771,6 +783,28 @@ public class ClueScrollPlugin extends Plugin
 		{
 			client.clearHintArrow();
 		}
+	}
+
+	private ClueScroll findClueScrollRemapped(String rawText)
+	{
+		ClueScroll c = findClueScroll(rawText);
+		if (c == null)
+		{
+			log.info("Unknown clue text: {}", rawText);
+		}
+
+		if (c != null || runtimeConfig == null || runtimeConfig.getClueRemap() == null)
+		{
+			return c;
+		}
+
+		String text = runtimeConfig.getClueRemap().get(rawText);
+		if (text != null)
+		{
+			return findClueScroll(text);
+		}
+
+		return null;
 	}
 
 	private ClueScroll findClueScroll(String rawText)
@@ -859,9 +893,6 @@ public class ClueScrollPlugin extends Plugin
 			return threeStepCrypticClue;
 		}
 
-		// We have unknown clue, reset
-		log.warn("Encountered unhandled clue text: {}", rawText);
-		resetClue(true);
 		return null;
 	}
 
