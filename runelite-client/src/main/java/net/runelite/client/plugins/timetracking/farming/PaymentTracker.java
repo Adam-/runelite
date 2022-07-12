@@ -92,7 +92,6 @@ public class PaymentTracker
 
 	public void setProtectedState(FarmingPatch fp, boolean state)
 	{
-		log.debug("Storing protected state [{}] for patch [{}]", state, fp);
 		if (!state)
 		{
 			configManager.unsetRSProfileConfiguration(TimeTrackingConfig.CONFIG_GROUP, configKey(fp));
