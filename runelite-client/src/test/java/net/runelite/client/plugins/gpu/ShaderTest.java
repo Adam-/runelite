@@ -72,7 +72,6 @@ public class ShaderTest
 		Shader[] shaders = {
 			GpuPlugin.PROGRAM,
 			GpuPlugin.COMPUTE_PROGRAM,
-			GpuPlugin.SMALL_COMPUTE_PROGRAM,
 			GpuPlugin.UNORDERED_COMPUTE_PROGRAM,
 			GpuPlugin.UI_PROGRAM,
 		};
