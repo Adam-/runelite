@@ -58,6 +58,13 @@ public class ShaderTest
 				{
 					return GpuPlugin.WINDOWS_VERSION_HEADER;
 				}
+				if ("thread_config".equals(key))
+				{
+					int threadCount = 512;
+					int facesPerThread = 1;
+					return "#define THREAD_COUNT " + threadCount + "\n" +
+						"#define FACES_PER_THREAD " + facesPerThread + "\n";
+				}
 				return null;
 			}),
 		};
