@@ -84,7 +84,7 @@ import org.lwjgl.system.Configuration;
 	description = "Utilizes the GPU",
 	enabledByDefault = false,
 	tags = {"fog", "draw distance"},
-	loadInSafeMode = false
+	disabledMask = {"gpu"}
 )
 @Slf4j
 public class GpuPlugin extends Plugin implements DrawCallbacks

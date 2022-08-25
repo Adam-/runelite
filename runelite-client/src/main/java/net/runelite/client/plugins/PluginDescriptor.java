@@ -80,4 +80,10 @@ public @interface PluginDescriptor
 	boolean loadWhenOutdated() default false;
 
 	boolean loadInSafeMode() default true;
+
+	/**
+	 * Plugin becomes automatically disabled if any of these disabled flags are set
+	 * @return
+	 */
+	String[] disabledMask() default {};
 }

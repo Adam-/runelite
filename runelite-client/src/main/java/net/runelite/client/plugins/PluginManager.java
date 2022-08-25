@@ -92,6 +92,7 @@ public class PluginManager
 
 	private final boolean developerMode;
 	private final boolean safeMode;
+	private final List<String> disable;
 	private final EventBus eventBus;
 	private final Scheduler scheduler;
 	private final ConfigManager configManager;
@@ -107,6 +108,7 @@ public class PluginManager
 	PluginManager(
 		@Named("developerMode") final boolean developerMode,
 		@Named("safeMode") final boolean safeMode,
+		@Named("disable") final List<String> disable,
 		final EventBus eventBus,
 		final Scheduler scheduler,
 		final ConfigManager configManager,
@@ -114,6 +116,7 @@ public class PluginManager
 	{
 		this.developerMode = developerMode;
 		this.safeMode = safeMode;
+		this.disable = disable;
 		this.eventBus = eventBus;
 		this.scheduler = scheduler;
 		this.configManager = configManager;
@@ -353,8 +356,19 @@ public class PluginManager
 
 			if (safeMode && !pluginDescriptor.loadInSafeMode())
 			{
-				log.debug("Disabling {} due to safe mode", clazz);
+				log.info("Disabling {} due to safe mode", clazz);
 				// also disable the plugin from autostarting later
+				configManager.unsetConfiguration(RuneLiteConfig.GROUP_NAME,
+					(Strings.isNullOrEmpty(pluginDescriptor.configName()) ? clazz.getSimpleName() : pluginDescriptor.configName()).toLowerCase());
+				continue;
+			}
+
+			Optional<String> mask = Arrays.stream(pluginDescriptor.disabledMask())
+				.filter(disable::contains)
+				.findAny();
+			if (mask.isPresent())
+			{
+				log.info("Disabling {} due to disable mask {}", clazz, mask.get());
 				configManager.unsetConfiguration(RuneLiteConfig.GROUP_NAME,
 					(Strings.isNullOrEmpty(pluginDescriptor.configName()) ? clazz.getSimpleName() : pluginDescriptor.configName()).toLowerCase());
 				continue;

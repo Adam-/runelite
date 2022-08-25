@@ -43,6 +43,7 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -157,7 +158,9 @@ public class RuneLite
 		final OptionParser parser = new OptionParser(false);
 		parser.accepts("developer-mode", "Enable developer tools");
 		parser.accepts("debug", "Show extra debugging output");
-		parser.accepts("safe-mode", "Disables external plugins and the GPU plugin");
+		parser.accepts("safe-mode", "Disables external plugins and resets the client position");
+		parser.accepts("disable", "Disable a feature. Currently accepts: gpu, plugin-hub")
+			.withRequiredArg();
 		parser.accepts("insecure-skip-tls-verification", "Disables TLS verification");
 		parser.accepts("jav_config", "jav_config url")
 			.withRequiredArg()
@@ -259,6 +262,7 @@ public class RuneLite
 				runtimeConfigLoader,
 				developerMode,
 				options.has("safe-mode"),
+				(List<String>) options.valuesOf("disable"),
 				options.valueOf(sessionfile),
 				options.valueOf(configfile)));
 

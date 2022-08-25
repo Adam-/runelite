@@ -41,6 +41,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Method;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -94,7 +95,8 @@ public class PluginManagerTest
 			.thenThrow(new RuntimeException("in plugin manager test"));
 
 		Injector injector = Guice.createInjector(Modules
-			.override(new RuneLiteModule(okHttpClient, () -> null, () -> mock(RuntimeConfig.class), true, false,
+			.override(new RuneLiteModule(okHttpClient, () -> null, () -> mock(RuntimeConfig.class), true,
+				false, Collections.emptyList(),
 				RuneLite.DEFAULT_SESSION_FILE,
 				RuneLite.DEFAULT_CONFIG_FILE))
 			.with(BoundFieldModule.of(this)));
@@ -125,7 +127,7 @@ public class PluginManagerTest
 	@Test
 	public void testLoadPlugins() throws Exception
 	{
-		PluginManager pluginManager = new PluginManager(false, false, null, null, null, null);
+		PluginManager pluginManager = new PluginManager(false, false, Collections.emptyList(), null, null, null, null);
 		pluginManager.setOutdated(true);
 		pluginManager.loadCorePlugins();
 		Collection<Plugin> plugins = pluginManager.getPlugins();
@@ -136,7 +138,7 @@ public class PluginManagerTest
 			.count();
 		assertEquals(expected, plugins.size());
 
-		pluginManager = new PluginManager(false, false, null, null, null, null);
+		pluginManager = new PluginManager(false, false, Collections.emptyList(), null, null, null, null);
 		pluginManager.loadCorePlugins();
 		plugins = pluginManager.getPlugins();
 
@@ -155,7 +157,7 @@ public class PluginManagerTest
 	@Test
 	public void dumpGraph() throws Exception
 	{
-		PluginManager pluginManager = new PluginManager(true, false, null, null, null, null);
+		PluginManager pluginManager = new PluginManager(true, false, Collections.emptyList(), null, null, null, null);
 		pluginManager.loadCorePlugins();
 
 		Injector graphvizInjector = Guice.createInjector(new GraphvizModule());

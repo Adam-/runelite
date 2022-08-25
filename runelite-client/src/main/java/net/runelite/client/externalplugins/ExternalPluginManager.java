@@ -81,16 +81,14 @@ public class ExternalPluginManager
 	private static final String PLUGIN_LIST_KEY = "externalPlugins";
 	private static Class<? extends Plugin>[] builtinExternals = null;
 
-	@Inject
-	@Named("safeMode")
-	private boolean safeMode;
-
 	private final ConfigManager configManager;
 	private final ExternalPluginClient externalPluginClient;
 	private final ScheduledExecutorService executor;
 	private final PluginManager pluginManager;
 	private final EventBus eventBus;
 	private final OkHttpClient okHttpClient;
+	private final boolean safeMode;
+	private final List<String> disable;
 
 	@Inject
 	private ExternalPluginManager(
@@ -99,7 +97,9 @@ public class ExternalPluginManager
 		ScheduledExecutorService executor,
 		PluginManager pluginManager,
 		EventBus eventBus,
-		OkHttpClient okHttpClient
+		OkHttpClient okHttpClient,
+		@Named("safeMode") boolean safeMode,
+		@Named("disable") List<String> disable
 	)
 	{
 		this.configManager = configManager;
@@ -108,6 +108,8 @@ public class ExternalPluginManager
 		this.pluginManager = pluginManager;
 		this.eventBus = eventBus;
 		this.okHttpClient = okHttpClient;
+		this.safeMode = safeMode;
+		this.disable = disable;
 
 		executor.scheduleWithFixedDelay(() -> externalPluginClient.submitPlugins(getInstalledExternalPlugins()),
 			new Random().nextInt(60), 180, TimeUnit.MINUTES);
@@ -141,6 +143,12 @@ public class ExternalPluginManager
 		if (safeMode)
 		{
 			log.debug("External plugins are disabled in safe mode!");
+			return;
+		}
+
+		if (disable.contains("plugin-hub"))
+		{
+			log.info("External plugins are disabled");
 			return;
 		}
 
