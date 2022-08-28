@@ -95,6 +95,7 @@ import net.runelite.client.events.ClientShutdown;
 import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.events.RuneScapeProfileChanged;
 import net.runelite.client.util.ColorUtil;
+import net.runelite.client.util.ReflectUtil;
 import net.runelite.http.api.config.ConfigPatch;
 
 @Singleton
@@ -686,6 +687,11 @@ public class ConfigManager
 				.result())
 			.collect(Collectors.toList());
 
+		for (Method method : inter.getMethods())
+		{
+			ReflectUtil.uncacheAnnotations(method);
+		}
+
 		return new ConfigDescriptor(group, sections, items);
 	}
 
@@ -763,6 +769,11 @@ public class ConfigManager
 			log.debug("Setting default configuration value for {}.{} to {}", group.value(), item.keyName(), defaultValue);
 
 			setConfiguration(group.value(), item.keyName(), valueString);
+		}
+
+		for (Method method : clazz.getDeclaredMethods())
+		{
+			ReflectUtil.uncacheAnnotations(method);
 		}
 	}
 

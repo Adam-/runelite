@@ -262,6 +262,11 @@ public class PluginManager
 			loaded++;
 			SplashScreen.stage(.80, 1, null, "Starting plugins", loaded, scannedPlugins.size(), false);
 		}
+
+		for (Plugin plugin : plugins)
+		{
+			ReflectUtil.uncacheInjectorAnnotations(plugin.injector);
+		}
 	}
 
 	public void loadCorePlugins() throws IOException, PluginInstantiationException
@@ -614,6 +619,7 @@ public class PluginManager
 		for (Method method : plugin.getClass().getMethods())
 		{
 			Schedule schedule = method.getAnnotation(Schedule.class);
+			ReflectUtil.uncacheAnnotations(method);
 
 			if (schedule == null)
 			{

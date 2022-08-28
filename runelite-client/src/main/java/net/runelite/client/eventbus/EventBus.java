@@ -108,6 +108,7 @@ public class EventBus
 			for (final Method method : clazz.getDeclaredMethods())
 			{
 				final Subscribe sub = method.getAnnotation(Subscribe.class);
+				ReflectUtil.uncacheAnnotations(method);
 
 				if (sub == null)
 				{

@@ -106,10 +106,12 @@ class ConfigInvocationHandler implements InvocationHandler
 				{
 					Object defaultValue = callDefaultMethod(proxy, method, null);
 					cache.put(method, defaultValue == null ? NULL : defaultValue);
+					ReflectUtil.uncacheAnnotations(method);
 					return defaultValue;
 				}
 
 				cache.put(method, NULL);
+				ReflectUtil.uncacheAnnotations(method);
 				return null;
 			}
 
@@ -118,6 +120,7 @@ class ConfigInvocationHandler implements InvocationHandler
 			{
 				Object objectValue = manager.stringToObject(value, method.getGenericReturnType());
 				cache.put(method, objectValue == null ? NULL : objectValue);
+				ReflectUtil.uncacheAnnotations(method);
 				return objectValue;
 			}
 			catch (Exception e)
