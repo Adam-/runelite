@@ -147,7 +147,7 @@ public class ReflectUtil
 			Class<?> type = key.getTypeLiteral().getRawType();
 			for (Class<?> c = type; c != null; c = c.getSuperclass())
 			{
-				for (final Method method : c.getDeclaredMethods())
+				for (Method method : c.getDeclaredMethods())
 				{
 					uncacheAnnotations(method);
 				}
