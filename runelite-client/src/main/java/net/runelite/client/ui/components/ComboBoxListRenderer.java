@@ -39,6 +39,7 @@ import net.runelite.client.util.Text;
  * was very hard to see in the dark gray background, this makes the selected
  * item white and adds some padding to the elements for more readable list.
  */
+@Deprecated
 public final class ComboBoxListRenderer<T> extends JLabel implements ListCellRenderer<T>
 {
 

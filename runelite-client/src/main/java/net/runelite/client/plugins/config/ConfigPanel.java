@@ -63,7 +63,6 @@ import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
-import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SpinnerModel;
@@ -99,7 +98,6 @@ import net.runelite.client.ui.DynamicGridLayout;
 import net.runelite.client.ui.FontManager;
 import net.runelite.client.ui.PluginPanel;
 import net.runelite.client.ui.components.ColorJButton;
-import net.runelite.client.ui.components.ComboBoxListRenderer;
 import net.runelite.client.ui.components.colorpicker.ColorPickerManager;
 import net.runelite.client.ui.components.colorpicker.RuneliteColorPicker;
 import net.runelite.client.util.ColorUtil;
@@ -141,8 +139,6 @@ class ConfigPanel extends PluginPanel
 	private final PluginManager pluginManager;
 	private final ExternalPluginManager externalPluginManager;
 	private final ColorPickerManager colorPickerManager;
-
-	private final ListCellRenderer<Enum<?>> listCellRenderer = new ComboBoxListRenderer<>();
 
 	private final FixedWidthPanel mainPanel;
 	private final JLabel title;
@@ -600,13 +596,7 @@ class ConfigPanel extends PluginPanel
 		Class<? extends Enum> type = (Class<? extends Enum>) cid.getType();
 
 		JComboBox<Enum<?>> box = new JComboBox<Enum<?>>(type.getEnumConstants()); // NOPMD: UseDiamondOperator
-		// set renderer prior to calling box.getPreferredSize(), since it will invoke the renderer
-		// to build components for each combobox element in order to compute the display size of the
-		// combobox
-		box.setRenderer(listCellRenderer);
-		box.setPreferredSize(new Dimension(box.getPreferredSize().width, 25));
-		box.setForeground(Color.WHITE);
-		box.setFocusable(false);
+		box.setPreferredSize(new Dimension(box.getPreferredSize().width, 22));
 
 		try
 		{
@@ -658,7 +648,6 @@ class ConfigPanel extends PluginPanel
 			cid.getItem().keyName(), parameterizedType);
 
 		JList<Enum<?>> list = new JList<Enum<?>>(type.getEnumConstants()); // NOPMD: UseDiamondOperator
-		list.setCellRenderer(listCellRenderer);
 		list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		list.setLayoutOrientation(JList.VERTICAL);
 		list.setSelectedIndices(
