@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021, Adam <Adam@sigterm.info>
+ * Copyright (c) 2022 Abex
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -22,21 +22,20 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package net.runelite.client.util;
+package net.runelite.client.ui.laf;
 
-import java.awt.Component;
-import javax.swing.Popup;
-import javax.swing.PopupFactory;
+import com.formdev.flatlaf.ui.FlatScrollBarUI;
+import javax.swing.JComponent;
+import javax.swing.JScrollBar;
+import javax.swing.plaf.ComponentUI;
 
-/**
- * Popup factory for Java 11 which forces heavyweight popups. Lightweight popups do not render correctly
- * over AWT canvases on OSX.
- */
-public class MacOSPopupFactory extends PopupFactory
+public class RuneLiteScrollBarUI extends FlatScrollBarUI
 {
-	@Override
-	protected Popup getPopup(Component owner, Component contents, int x, int y, boolean isHeavyWeightPopup) throws IllegalArgumentException
+	public static ComponentUI createUI(JComponent c)
 	{
-		return super.getPopup(owner, contents, x, y, true);
+		JScrollBar bar = (JScrollBar) c;
+		// by default 1 click = 1 px, which is unusably slow
+		bar.setUnitIncrement(16);
+		return new RuneLiteScrollBarUI();
 	}
 }

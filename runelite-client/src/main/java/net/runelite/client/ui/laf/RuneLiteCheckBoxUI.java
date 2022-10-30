@@ -1,6 +1,5 @@
 /*
- * Copyright (c) 2018, Tomas Slusny <slusnucky@gmail.com>
- * Copyright (c) 2018, Psikoi <https://github.com/psikoi>
+ * Copyright (c) 2022 Abex
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -23,14 +22,39 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package net.runelite.client.ui.skin;
+package net.runelite.client.ui.laf;
 
-import org.pushingpixels.substance.api.SubstanceLookAndFeel;
+import com.formdev.flatlaf.ui.FlatCheckBoxUI;
+import com.formdev.flatlaf.ui.FlatUIUtils;
+import javax.swing.AbstractButton;
+import javax.swing.JComponent;
+import javax.swing.LookAndFeel;
+import javax.swing.plaf.ComponentUI;
+import lombok.extern.slf4j.Slf4j;
 
-public class SubstanceRuneLiteLookAndFeel extends SubstanceLookAndFeel
+@Slf4j
+public class RuneLiteCheckBoxUI extends FlatCheckBoxUI
 {
-	public SubstanceRuneLiteLookAndFeel()
+	public static ComponentUI createUI(JComponent c)
 	{
-		super(new ObsidianSkin());
+		return FlatUIUtils.canUseSharedUI(c)
+			? FlatUIUtils.createSharedUI(RuneLiteCheckBoxUI.class, () -> new RuneLiteCheckBoxUI(true))
+			: new RuneLiteCheckBoxUI(false);
+	}
+
+	protected RuneLiteCheckBoxUI(boolean shared)
+	{
+		super(shared);
+	}
+
+	@Override
+	public void installDefaults(AbstractButton b)
+	{
+		super.installDefaults(b);
+
+		// Substance incorrectly used the background property as the background color of
+		// the check icon. We use this all over instead of just configuring it in the L&F
+		// for some reason, so there is a lot of code that expects this to not look ugly
+		LookAndFeel.installProperty(b, "contentAreaFilled", false);
 	}
 }
