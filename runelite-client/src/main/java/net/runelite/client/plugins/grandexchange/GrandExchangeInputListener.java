@@ -26,26 +26,27 @@ package net.runelite.client.plugins.grandexchange;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.util.Collection;
 import javax.inject.Inject;
 import javax.swing.SwingUtilities;
+import lombok.RequiredArgsConstructor;
 import net.runelite.api.Client;
 import net.runelite.api.MenuEntry;
+import net.runelite.api.widgets.Widget;
+import net.runelite.client.callback.ClientThread;
+import net.runelite.client.game.ItemManager;
+import net.runelite.client.game.ItemMapping;
 import net.runelite.client.input.KeyListener;
 import net.runelite.client.input.MouseAdapter;
 import static net.runelite.client.plugins.grandexchange.GrandExchangePlugin.SEARCH_GRAND_EXCHANGE;
-import net.runelite.client.util.Text;
 
+@RequiredArgsConstructor(onConstructor = @__(@Inject))
 public class GrandExchangeInputListener extends MouseAdapter implements KeyListener
 {
 	private final Client client;
 	private final GrandExchangePlugin plugin;
-
-	@Inject
-	private GrandExchangeInputListener(Client client, GrandExchangePlugin plugin)
-	{
-		this.client = client;
-		this.plugin = plugin;
-	}
+	private final ClientThread clientThread;
+	private final ItemManager itemManager;
 
 	@Override
 	public MouseEvent mouseClicked(MouseEvent e)
@@ -58,7 +59,15 @@ public class GrandExchangeInputListener extends MouseAdapter implements KeyListe
 			{
 				if (menuEntry.getOption().equals(SEARCH_GRAND_EXCHANGE))
 				{
-					search(Text.removeTags(menuEntry.getTarget()));
+					final int widgetIndex = menuEntry.getParam0();
+					final int widgetId = menuEntry.getParam1();
+					final Widget widget = getWidget(widgetId, widgetIndex);
+					if (widget == null)
+					{
+						break;
+					}
+
+					clientThread.invoke(() -> search(widget.getItemId()));
 					e.consume();
 					break;
 				}
@@ -66,6 +75,37 @@ public class GrandExchangeInputListener extends MouseAdapter implements KeyListe
 		}
 
 		return super.mouseClicked(e);
+	}
+
+	private Widget getWidget(int wid, int index)
+	{
+		Widget w = client.getWidget(wid);
+		if (index != -1 && w == null)
+		{
+			w = w.getChild(index);
+		}
+		return w;
+	}
+
+	private void search(int itemId)
+	{
+		if (itemId == -1)
+		{
+			return;
+		}
+
+		itemId = itemManager.canonicalize(itemId);
+
+		// Try to replace an untradeable item id with a tradeable component
+		final Collection<ItemMapping> mappedItems = ItemMapping.map(itemId);
+		if (mappedItems != null)
+		{
+			final ItemMapping firstMappedItem = mappedItems.iterator().next();
+			itemId = firstMappedItem.getTradeableItem();
+		}
+
+		String itemName = itemManager.getItemComposition(itemId).getMembersName();
+		search(itemName);
 	}
 
 	private void search(final String itemName)
