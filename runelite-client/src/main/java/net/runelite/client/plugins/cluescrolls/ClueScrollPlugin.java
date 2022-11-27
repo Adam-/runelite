@@ -40,6 +40,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -59,6 +60,7 @@ import net.runelite.api.ItemComposition;
 import net.runelite.api.ItemContainer;
 import net.runelite.api.ItemID;
 import static net.runelite.api.MenuAction.RUNELITE_OVERLAY;
+import net.runelite.api.MenuEntry;
 import net.runelite.api.NPC;
 import net.runelite.api.ObjectComposition;
 import net.runelite.api.Point;
@@ -93,7 +95,6 @@ import net.runelite.client.callback.ClientThread;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
-import net.runelite.client.events.OverlayMenuClicked;
 import net.runelite.client.game.ItemManager;
 import net.runelite.client.game.chatbox.ChatboxPanelManager;
 import net.runelite.client.plugins.Plugin;
@@ -310,54 +311,6 @@ public class ClueScrollPlugin extends Plugin
 				activeSTASHClue = null;
 			}
 			clickedSTASHClue = null;
-		}
-	}
-
-	@Subscribe
-	public void onOverlayMenuClicked(OverlayMenuClicked overlayMenuClicked)
-	{
-		OverlayMenuEntry overlayMenuEntry = overlayMenuClicked.getEntry();
-		if (overlayMenuEntry.getMenuAction() == RUNELITE_OVERLAY
-			&& overlayMenuClicked.getOverlay() == clueScrollOverlay)
-		{
-			String option = overlayMenuClicked.getEntry().getOption();
-			if (option.equals("Reset"))
-			{
-				resetClue(true);
-			}
-			else if (option.startsWith("Set note"))
-			{
-				int[] keys = clue.getConfigKeys();
-				int idx;
-				switch (option)
-				{
-					default:
-					case "Set note":
-					case "Set note 1":
-						idx = 0;
-						break;
-					case "Set note 2":
-						idx = 1;
-						break;
-					case "Set note 3":
-						idx = 2;
-						break;
-				}
-				chatboxPanelManager.openTextInput("Enter note")
-					.value(MoreObjects.firstNonNull(getClueNote(keys[idx]), ""))
-					.onDone(s ->
-					{
-						if (Strings.isNullOrEmpty(s))
-						{
-							unsetClueNote(keys[idx]);
-						}
-						else
-						{
-							setClueNote(keys[idx], s);
-						}
-					})
-					.build();
-			}
 		}
 	}
 
@@ -774,7 +727,7 @@ public class ClueScrollPlugin extends Plugin
 		return mapArrow;
 	}
 
-	private void resetClue(boolean withItemId)
+	void resetClue(boolean withItemId)
 	{
 		if (clue instanceof LocationsClueScroll)
 		{
@@ -1274,15 +1227,34 @@ public class ClueScrollPlugin extends Plugin
 
 			if (keys.length == 1)
 			{
-				menuEntries.add(setNote);
+				clueScrollOverlay.addMenuEntry(RUNELITE_OVERLAY, "Set note", "Clue Scroll overlay", setNoteConsumer(keys[0]));
 			}
+			// 3 step cryptic clues
 			else if (keys.length == 3)
 			{
-				menuEntries.add(setNote1);
-				menuEntries.add(setNote2);
-				menuEntries.add(setNote3);
+				clueScrollOverlay.addMenuEntry(RUNELITE_OVERLAY, "Set note 1", "Clue Scroll overlay", setNoteConsumer(keys[0]));
+				clueScrollOverlay.addMenuEntry(RUNELITE_OVERLAY, "Set note 2", "Clue Scroll overlay", setNoteConsumer(keys[1]));
+				clueScrollOverlay.addMenuEntry(RUNELITE_OVERLAY, "Set note 3", "Clue Scroll overlay", setNoteConsumer(keys[2]));
 			}
 		}
+	}
+
+	private Consumer<MenuEntry> setNoteConsumer(int key)
+	{
+		return e -> chatboxPanelManager.openTextInput("Enter note")
+			.value(MoreObjects.firstNonNull(getClueNote(key), ""))
+			.onDone(s ->
+			{
+				if (Strings.isNullOrEmpty(s))
+				{
+					unsetClueNote(key);
+				}
+				else
+				{
+					setClueNote(key, s);
+				}
+			})
+			.build();
 	}
 
 	void setClueNote(int key, String note)
