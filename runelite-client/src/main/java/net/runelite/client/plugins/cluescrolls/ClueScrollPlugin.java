@@ -58,7 +58,7 @@ import net.runelite.api.Item;
 import net.runelite.api.ItemComposition;
 import net.runelite.api.ItemContainer;
 import net.runelite.api.ItemID;
-import net.runelite.api.MenuAction;
+import static net.runelite.api.MenuAction.RUNELITE_OVERLAY;
 import net.runelite.api.NPC;
 import net.runelite.api.ObjectComposition;
 import net.runelite.api.Point;
@@ -95,6 +95,7 @@ import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.events.OverlayMenuClicked;
 import net.runelite.client.game.ItemManager;
+import net.runelite.client.game.chatbox.ChatboxPanelManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDependency;
 import net.runelite.client.plugins.PluginDescriptor;
@@ -149,6 +150,7 @@ public class ClueScrollPlugin extends Plugin
 	private static final int[] RUNEPOUCH_RUNE_VARBITS = {
 		Varbits.RUNE_POUCH_RUNE1, Varbits.RUNE_POUCH_RUNE2, Varbits.RUNE_POUCH_RUNE3, Varbits.RUNE_POUCH_RUNE4
 	};
+	private static final String CLUE_NOTE_KEY_PREFIX = "note_";
 
 	@Getter
 	private ClueScroll clue;
@@ -174,6 +176,12 @@ public class ClueScrollPlugin extends Plugin
 
 	@Inject
 	private ClientThread clientThread;
+
+	@Inject
+	private ConfigManager configManager;
+
+	@Inject
+	private ChatboxPanelManager chatboxPanelManager;
 
 	@Inject
 	private ItemManager itemManager;
@@ -310,11 +318,47 @@ public class ClueScrollPlugin extends Plugin
 	public void onOverlayMenuClicked(OverlayMenuClicked overlayMenuClicked)
 	{
 		OverlayMenuEntry overlayMenuEntry = overlayMenuClicked.getEntry();
-		if (overlayMenuEntry.getMenuAction() == MenuAction.RUNELITE_OVERLAY
-			&& overlayMenuClicked.getEntry().getOption().equals("Reset")
+		if (overlayMenuEntry.getMenuAction() == RUNELITE_OVERLAY
 			&& overlayMenuClicked.getOverlay() == clueScrollOverlay)
 		{
-			resetClue(true);
+			String option = overlayMenuClicked.getEntry().getOption();
+			if (option.equals("Reset"))
+			{
+				resetClue(true);
+			}
+			else if (option.startsWith("Set note"))
+			{
+				int[] keys = clue.getConfigKeys();
+				int idx;
+				switch (option)
+				{
+					default:
+					case "Set note":
+					case "Set note 1":
+						idx = 0;
+						break;
+					case "Set note 2":
+						idx = 1;
+						break;
+					case "Set note 3":
+						idx = 2;
+						break;
+				}
+				chatboxPanelManager.openTextInput("Enter note")
+					.value(MoreObjects.firstNonNull(getClueNote(keys[idx]), ""))
+					.onDone(s ->
+					{
+						if (Strings.isNullOrEmpty(s))
+						{
+							unsetClueNote(keys[idx]);
+						}
+						else
+						{
+							setClueNote(keys[idx], s);
+						}
+					})
+					.build();
+			}
 		}
 	}
 
@@ -533,7 +577,7 @@ public class ClueScrollPlugin extends Plugin
 	@Subscribe
 	public void onConfigChanged(ConfigChanged event)
 	{
-		if (event.getGroup().equals("cluescroll") && !config.displayHintArrows())
+		if (event.getGroup().equals(ClueScrollConfig.GROUP) && !config.displayHintArrows())
 		{
 			client.clearHintArrow();
 		}
@@ -753,6 +797,8 @@ public class ClueScrollPlugin extends Plugin
 		{
 			client.clearHintArrow();
 		}
+
+		updateOverlayMenuEntries();
 	}
 
 	private ClueScroll findClueScroll(String rawText)
@@ -1089,6 +1135,8 @@ public class ClueScrollPlugin extends Plugin
 		// If we have a clue, save that knowledge
 		// so the clue window doesn't have to be open.
 		this.clue = clue;
+
+		updateOverlayMenuEntries();
 	}
 
 	void highlightWidget(Graphics2D graphics, Widget toHighlight, Widget container, Rectangle padding, String text)
@@ -1211,5 +1259,54 @@ public class ClueScrollPlugin extends Plugin
 		}
 
 		return false;
+	}
+
+	private void updateOverlayMenuEntries()
+	{
+		OverlayMenuEntry setNote = new OverlayMenuEntry(RUNELITE_OVERLAY, "Set note", "Clue Scroll overlay");
+		OverlayMenuEntry setNote1 = new OverlayMenuEntry(RUNELITE_OVERLAY, "Set note 1", "Clue Scroll overlay");
+		OverlayMenuEntry setNote2 = new OverlayMenuEntry(RUNELITE_OVERLAY, "Set note 2", "Clue Scroll overlay");
+		OverlayMenuEntry setNote3 = new OverlayMenuEntry(RUNELITE_OVERLAY, "Set note 3", "Clue Scroll overlay");
+
+		List<OverlayMenuEntry> menuEntries = clueScrollOverlay.getMenuEntries();
+		menuEntries.remove(setNote);
+		menuEntries.remove(setNote1);
+		menuEntries.remove(setNote2);
+		menuEntries.remove(setNote3);
+
+		if (clue != null)
+		{
+			int[] keys = clue.getConfigKeys();
+			if (keys == null)
+			{
+				return;
+			}
+
+			if (keys.length == 1)
+			{
+				menuEntries.add(setNote);
+			}
+			else if (keys.length == 3)
+			{
+				menuEntries.add(setNote1);
+				menuEntries.add(setNote2);
+				menuEntries.add(setNote3);
+			}
+		}
+	}
+
+	void setClueNote(int key, String note)
+	{
+		configManager.setConfiguration(ClueScrollConfig.GROUP, CLUE_NOTE_KEY_PREFIX + key, note);
+	}
+
+	void unsetClueNote(int key)
+	{
+		configManager.unsetConfiguration(ClueScrollConfig.GROUP, CLUE_NOTE_KEY_PREFIX + key);
+	}
+
+	public String getClueNote(int key)
+	{
+		return configManager.getConfiguration(ClueScrollConfig.GROUP, CLUE_NOTE_KEY_PREFIX + key, String.class);
 	}
 }
