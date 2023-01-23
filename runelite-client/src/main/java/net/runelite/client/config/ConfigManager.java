@@ -66,6 +66,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
@@ -97,6 +98,7 @@ import net.runelite.client.events.ConfigSync;
 import net.runelite.client.events.RuneScapeProfileChanged;
 import net.runelite.client.util.ColorUtil;
 import net.runelite.http.api.config.ConfigPatch;
+import org.jetbrains.annotations.NotNull;
 
 @Singleton
 @Slf4j
@@ -116,14 +118,14 @@ public class ConfigManager
 	private static final int KEY_SPLITTER_PROFILE = 1;
 	private static final int KEY_SPLITTER_KEY = 2;
 
-	private final File settingsFileInput;
+//	private final File settingsFileInput;
 	private final EventBus eventBus;
 	private final Gson gson;
 	@Nonnull
 	private final ConfigClient configClient;
+	private final ProfileManager profileManager;
 
 	private AccountSession session;
-	private File propertiesFile;
 
 	@Nullable
 	private final Client client;
@@ -131,7 +133,8 @@ public class ConfigManager
 	private final ConfigInvocationHandler handler = new ConfigInvocationHandler(this);
 	private final Map<String, String> pendingChanges = new HashMap<>();
 
-	private Properties properties = new Properties();
+	private ConfigData configProfile;
+	private ConfigData rsProfileConfigProfile;
 
 	// null => we need to make a new profile
 	@Nullable
@@ -144,16 +147,39 @@ public class ConfigManager
 		EventBus eventBus,
 		@Nullable Client client,
 		Gson gson,
-		ConfigClient configClient)
+		@NotNull ConfigClient configClient,
+		ProfileManager profileManager
+	)
 	{
-		this.settingsFileInput = config;
+//		this.settingsFileInput = config;
 		this.eventBus = eventBus;
 		this.client = client;
-		this.propertiesFile = getPropertiesFile();
 		this.gson = gson;
 		this.configClient = configClient;
+		this.profileManager = profileManager;
 
 		scheduledExecutorService.scheduleWithFixedDelay(this::sendConfig, 30, 5 * 60, TimeUnit.SECONDS);
+
+		setupProfiles();
+	}
+
+	private void setupProfiles()
+	{
+		List<ConfigProfile> profiles = profileManager.listProfiles();
+		ConfigProfile profile, rsProfile;
+
+		profile = profiles.stream()
+			.filter(p -> !p.getName().startsWith("$"))
+			.findFirst()
+			.orElseGet(() -> profileManager.createProfile("default"));
+
+		rsProfile = profiles.stream()
+			.filter(p -> p.getName().equals("$rsprofile"))
+			.findFirst()
+			.orElseGet(() -> profileManager.createProfile("$rsprofile"));
+
+		configProfile = new ConfigData(profile);
+		rsProfileConfigProfile = new ConfigData(rsProfile);
 	}
 
 	public String getRSProfileKey()
@@ -164,7 +190,7 @@ public class ConfigManager
 	public final void switchSession(AccountSession session)
 	{
 		// Ensure existing config is saved
-		sendConfig();
+//		sendConfig();
 
 		if (session == null)
 		{
@@ -177,29 +203,29 @@ public class ConfigManager
 			configClient.setUuid(session.getUuid());
 		}
 
-		this.propertiesFile = getPropertiesFile();
-
-		load(); // load profile specific config
+//		this.propertiesFile = getPropertiesFile();
+//
+//		load(); // load profile specific config
 	}
 
-	private File getLocalPropertiesFile()
-	{
-		return settingsFileInput;
-	}
-
-	private File getPropertiesFile()
-	{
-		// Sessions that aren't logged in have no username
-		if (session == null || session.getUsername() == null)
-		{
-			return getLocalPropertiesFile();
-		}
-		else
-		{
-			File profileDir = new File(RuneLite.PROFILES_DIR, session.getUsername().toLowerCase());
-			return new File(profileDir, RuneLite.DEFAULT_CONFIG_FILE.getName());
-		}
-	}
+//	private File getLocalPropertiesFile()
+//	{
+//		return settingsFileInput;
+//	}
+//
+//	private File getPropertiesFile()
+//	{
+//		// Sessions that aren't logged in have no username
+//		if (session == null || session.getUsername() == null)
+//		{
+//			return getLocalPropertiesFile();
+//		}
+//		else
+//		{
+//			File profileDir = new File(RuneLite.PROFILES_DIR, session.getUsername().toLowerCase());
+//			return new File(profileDir, RuneLite.DEFAULT_CONFIG_FILE.getName());
+//		}
+//	}
 
 	public void load()
 	{
@@ -365,35 +391,35 @@ public class ConfigManager
 		log.debug("Loading in config from disk");
 		swapProperties(newProperties, false);
 	}
-
-	private void saveToFile(final File propertiesFile) throws IOException
-	{
-		File parent = propertiesFile.getParentFile();
-
-		parent.mkdirs();
-
-		File tempFile = File.createTempFile("runelite", null, parent);
-
-		try (FileOutputStream out = new FileOutputStream(tempFile);
-			FileChannel channel = out.getChannel();
-			OutputStreamWriter writer = new OutputStreamWriter(out, StandardCharsets.UTF_8))
-		{
-			channel.lock();
-			properties.store(writer, "RuneLite configuration");
-			channel.force(true);
-			// FileChannel.close() frees the lock
-		}
-
-		try
-		{
-			Files.move(tempFile.toPath(), propertiesFile.toPath(), StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
-		}
-		catch (AtomicMoveNotSupportedException ex)
-		{
-			log.debug("atomic move not supported", ex);
-			Files.move(tempFile.toPath(), propertiesFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-		}
-	}
+//
+//	private void saveToFile(final File propertiesFile) throws IOException
+//	{
+//		File parent = propertiesFile.getParentFile();
+//
+//		parent.mkdirs();
+//
+//		File tempFile = File.createTempFile("runelite", null, parent);
+//
+//		try (FileOutputStream out = new FileOutputStream(tempFile);
+//			FileChannel channel = out.getChannel();
+//			OutputStreamWriter writer = new OutputStreamWriter(out, StandardCharsets.UTF_8))
+//		{
+//			channel.lock();
+//			properties.store(writer, "RuneLite configuration");
+//			channel.force(true);
+//			// FileChannel.close() frees the lock
+//		}
+//
+//		try
+//		{
+//			Files.move(tempFile.toPath(), propertiesFile.toPath(), StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
+//		}
+//		catch (AtomicMoveNotSupportedException ex)
+//		{
+//			log.debug("atomic move not supported", ex);
+//			Files.move(tempFile.toPath(), propertiesFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+//		}
+//	}
 
 	public <T extends Config> T getConfig(Class<T> clazz)
 	{
@@ -412,7 +438,7 @@ public class ConfigManager
 
 	public synchronized List<String> getConfigurationKeys(String prefix)
 	{
-		return properties.keySet().stream()
+		return configProfile.keySet().stream()
 			.map(String.class::cast)
 			.filter(k -> k.startsWith(prefix))
 			.collect(Collectors.toList());
@@ -428,7 +454,7 @@ public class ConfigManager
 		assert profile.startsWith(RSPROFILE_GROUP);
 
 		String prefix = group + "." + profile + "." + keyPrefix;
-		return properties.keySet().stream()
+		return rsProfileConfigProfile.keySet().stream()
 			.map(String.class::cast)
 			.filter(k -> k.startsWith(prefix))
 			.map(k -> splitKey(k)[KEY_SPLITTER_KEY])
@@ -465,7 +491,10 @@ public class ConfigManager
 
 	public String getConfiguration(String groupName, String profile, String key)
 	{
-		return properties.getProperty(getWholeKey(groupName, profile, key));
+		if (profile != null) {
+			rsProfileConfigProfile.getProperty(getWholeKey(groupName, profile, key));
+		}
+//		return properties.getProperty(getWholeKey(groupName, profile, key));
 	}
 
 	public <T> T getConfiguration(String groupName, String key, Type clazz)
