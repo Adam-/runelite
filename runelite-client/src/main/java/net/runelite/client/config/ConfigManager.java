@@ -492,9 +492,10 @@ public class ConfigManager
 	public String getConfiguration(String groupName, String profile, String key)
 	{
 		if (profile != null) {
-			rsProfileConfigProfile.getProperty(getWholeKey(groupName, profile, key));
+			return rsProfileConfigProfile.getProperty(getWholeKey(groupName, profile, key));
+		} else {
+			return configProfile.getProperty(getWholeKey(groupName, profile, key));
 		}
-//		return properties.getProperty(getWholeKey(groupName, profile, key));
 	}
 
 	public <T> T getConfiguration(String groupName, String key, Type clazz)
