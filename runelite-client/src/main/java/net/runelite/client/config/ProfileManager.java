@@ -82,11 +82,18 @@ public class ProfileManager
 
 	public void clone(ConfigProfile from, ConfigProfile to) throws IOException
 	{
+		// neither are internal profiles
+		assert !from.getName().startsWith("$");
+		assert !to.getName().startsWith("$");
+
+		// this doesn't work if either from or to are active profiles -
+		// either from might have pending changes or to will have an
+		// associated ConfigData that isn't reloaded
+
 		File fromFile = profileConfigFile(from);
 		File toFile = profileConfigFile(to);
 
-		ConfigData fromData = new ConfigData(fromFile);
-		ConfigData toData = new ConfigData(toFile);
+		log.debug("Cloning profile {} -> {}", from, to);
 
 		// backup target properties
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
@@ -97,6 +104,9 @@ public class ProfileManager
 		} catch (IOException ex) {
 			throw new IOException("backup failed", ex);
 		}
+
+		// copy source properties to target
+		Files.copy(fromFile.toPath(), toFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 	}
 
 	private void loadEditSave(Consumer<List<ConfigProfile>> c)
