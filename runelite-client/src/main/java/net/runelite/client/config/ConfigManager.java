@@ -424,15 +424,18 @@ public class ConfigManager
 		return t;
 	}
 
-	public synchronized List<String> getConfigurationKeys(String prefix)
+	public List<String> getConfigurationKeys(String prefix)
 	{
-		return configProfile.keySet().stream()
-			.map(String.class::cast)
-			.filter(k -> k.startsWith(prefix))
-			.collect(Collectors.toList());
+		synchronized (configProfile)
+		{
+			return configProfile.keySet().stream()
+				.map(String.class::cast)
+				.filter(k -> k.startsWith(prefix))
+				.collect(Collectors.toList());
+		}
 	}
 
-	public synchronized List<String> getRSProfileConfigurationKeys(String group, String profile, String keyPrefix)
+	public List<String> getRSProfileConfigurationKeys(String group, String profile, String keyPrefix)
 	{
 		if (profile == null)
 		{
@@ -442,11 +445,14 @@ public class ConfigManager
 		assert profile.startsWith(RSPROFILE_GROUP);
 
 		String prefix = group + "." + profile + "." + keyPrefix;
-		return rsProfileConfigProfile.keySet().stream()
-			.map(String.class::cast)
-			.filter(k -> k.startsWith(prefix))
-			.map(k -> splitKey(k)[KEY_SPLITTER_KEY])
-			.collect(Collectors.toList());
+		synchronized (configProfile)
+		{
+			return rsProfileConfigProfile.keySet().stream()
+				.map(String.class::cast)
+				.filter(k -> k.startsWith(prefix))
+				.map(k -> splitKey(k)[KEY_SPLITTER_KEY])
+				.collect(Collectors.toList());
+		}
 	}
 
 	public static String getWholeKey(String groupName, String profile, String key)
@@ -534,13 +540,16 @@ public class ConfigManager
 		assert !key.startsWith(RSPROFILE_GROUP + ".");
 		String wholeKey = getWholeKey(groupName, profile, key);
 		String oldValue;
-		synchronized (this)
+		if (profile != null)
 		{
-			if (profile != null)
+			synchronized (rsProfileConfigProfile)
 			{
 				oldValue = (String) rsProfileConfigProfile.setProperty(wholeKey, value);
 			}
-			else
+		}
+		else
+		{
+			synchronized (configProfile)
 			{
 				oldValue = (String) configProfile.setProperty(wholeKey, value);
 			}
@@ -622,13 +631,16 @@ public class ConfigManager
 		assert !key.startsWith(RSPROFILE_GROUP + ".");
 		String wholeKey = getWholeKey(groupName, profile, key);
 		String oldValue;
-		synchronized (this)
+		if (profile != null)
 		{
-			if (profile != null)
+			synchronized (rsProfileConfigProfile)
 			{
 				oldValue = (String) rsProfileConfigProfile.unset(wholeKey);
 			}
-			else
+		}
+		else
+		{
+			synchronized (configProfile)
 			{
 				oldValue = (String) configProfile.unset(wholeKey);
 			}
@@ -977,7 +989,7 @@ public class ConfigManager
 
 	private void saveConfiguration(ConfigData configProfile) {
 		Map<String,String> patch;
-		synchronized (this) {
+		synchronized (configProfile) {
 			patch = configProfile.swapChanges();
 		}
 
@@ -1024,7 +1036,7 @@ public class ConfigManager
 	{
 		String prefix = RSPROFILE_GROUP + "." + RSPROFILE_GROUP + ".";
 		Set<String> profileKeys = new HashSet<>();
-		synchronized (this)
+		synchronized (rsProfileConfigProfile)
 		{
 			for (Object oKey : rsProfileConfigProfile.keySet())
 			{
