@@ -60,7 +60,7 @@ public class ProfileManager
 		}
 		catch (IOException e)
 		{
-			log.warn("unable to read profiles");
+			log.warn("unable to read profiles", e);
 			return Collections.emptyList();
 		}
 	}
@@ -71,13 +71,19 @@ public class ProfileManager
 		profile.setName(name);
 		profile.setSync(false);
 		loadEditSave(c -> c.add(profile));
-		log.debug("Created profile {}", name);
+		log.debug("Created profile {}", profile);
 		return profile;
 	}
 
 	public void removeProfile(ConfigProfile profile)
 	{
-		loadEditSave(c -> c.removeIf(p -> p.getId() == profile.getId()));
+		loadEditSave(c ->
+		{
+			if (c.removeIf(p -> p.getId() == profile.getId()))
+			{
+				log.debug("Removed profile {}", profile);
+			}
+		});
 	}
 
 	public void clone(ConfigProfile from, ConfigProfile to) throws IOException
@@ -101,7 +107,9 @@ public class ProfileManager
 		try
 		{
 			Files.copy(toFile.toPath(), backupFile.toPath());
-		} catch (IOException ex) {
+		}
+		catch (IOException ex)
+		{
 			throw new IOException("backup failed", ex);
 		}
 
