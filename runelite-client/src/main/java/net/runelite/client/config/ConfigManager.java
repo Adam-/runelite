@@ -79,6 +79,7 @@ import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
+import jdk.internal.org.jline.reader.ConfigurationPath;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
@@ -969,6 +970,7 @@ public class ConfigManager
 		eventBus.post(new ConfigSync());
 
 		CompletableFuture<Void> future = null;
+
 //		synchronized (pendingChanges)
 //		{
 //			if (pendingChanges.isEmpty())
@@ -998,19 +1000,63 @@ public class ConfigManager
 //			pendingChanges.clear();
 //		}
 
+//		try
+//		{
+//			// XXX this needs to be synchronized but also i dont want to hold the lock when flushign to disk
+//			configProfile.patch();
+//			rsProfileConfigProfile.patch();
+////			saveToFile(propertiesFile);
+//		}
+//		catch (IOException ex)
+//		{
+//			log.error("unable to save configuration file", ex);
+//		}
+
+		saveConfiguration(configProfile);
+		saveConfiguration(rsProfileConfigProfile);
+
+		return future;
+	}
+
+	private void saveConfiguration(ConfigData configProfile) {
+		Map<String,String> patch;
+		synchronized (this) {
+			patch = configProfile.swapChanges();
+		}
+
+//		buildConfigPatch(patch);
+
 		try
 		{
-			// XXX this needs to be synchronized but also i dont want to hold the lock when flushign to disk
-			configProfile.patch();
-			rsProfileConfigProfile.patch();
-//			saveToFile(propertiesFile);
+			configProfile.patch(patch);
 		}
 		catch (IOException ex)
 		{
 			log.error("unable to save configuration file", ex);
 		}
+	}
 
-		return future;
+	private static ConfigPatch buildConfigPatch(Map<String, String> patchChanges)
+	{
+		if (patchChanges.isEmpty())
+		{
+			return null;
+		}
+
+		ConfigPatch patch = new ConfigPatch();
+		for (Map.Entry<String, String> entry : patchChanges.entrySet())
+		{
+			final String key = entry.getKey(), value = entry.getValue();
+			if (value == null)
+			{
+				patch.getUnset().add(key);
+			}
+			else
+			{
+				patch.getEdit().put(key, value);
+			}
+		}
+		return patch;
 	}
 
 	public List<RuneScapeProfile> getRSProfiles()

@@ -11,12 +11,12 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
-import net.runelite.http.api.config.ConfigPatch;
 
 @Slf4j
 class ConfigData
@@ -25,7 +25,7 @@ class ConfigData
 	private final File configPath;
 
 	private Properties properties = new Properties();
-	private final Map<String, String> patchChanges = new HashMap<>();
+	private Map<String, String> patchChanges = new HashMap<>();
 
 	ConfigData(ConfigProfile configProfile)
 	{
@@ -52,7 +52,17 @@ class ConfigData
 		return properties.keySet();
 	}
 
-	void patch() throws IOException {
+	Map<String, String> swapChanges() {
+		if (patchChanges.isEmpty()) {
+			return Collections.emptyMap();
+		}
+
+		Map<String, String> p = patchChanges;
+		patchChanges = new HashMap<>();
+		return p;
+	}
+
+	void patch(Map<String, String> patch) throws IOException {
 		// load + patch + store instead of just flushing the in-memory properties to disk so that
 		// multiple clients editing one config data (such as rs profile config) get their data merged
 		// correctly
@@ -69,14 +79,13 @@ class ConfigData
 		}
 
 		// apply patches
-		for (Map.Entry<String, String> entry : patchChanges.entrySet()) {
+		for (Map.Entry<String, String> entry : patch.entrySet()) {
 			if (entry.getValue() == null) {
 				tempProps.remove(entry.getKey());
 			} else {
 				tempProps.put(entry.getKey(), entry.getValue());
 			}
 		}
-		patchChanges.clear();
 
 		File tempFile = File.createTempFile("runelite_config", null, configPath.getParentFile());
 		try (FileOutputStream out = new FileOutputStream(tempFile);
@@ -103,24 +112,24 @@ class ConfigData
 		}
 	}
 
-	ConfigPatch buildConfigPatch() {
-		if (patchChanges.isEmpty()) {
-			return null;
-		}
-
-		ConfigPatch patch = new ConfigPatch();
-		for (Map.Entry<String, String> entry : patchChanges.entrySet())
-		{
-			final String key = entry.getKey(), value = entry.getValue();
-			if (value == null)
-			{
-				patch.getUnset().add(key);
-			}
-			else
-			{
-				patch.getEdit().put(key, value);
-			}
-		}
-		return patch;
-	}
+//	ConfigPatch buildConfigPatch(Map<String, String> patch) {
+//		if (patchChanges.isEmpty()) {
+//			return null;
+//		}
+//
+//		ConfigPatch patch = new ConfigPatch();
+//		for (Map.Entry<String, String> entry : patchChanges.entrySet())
+//		{
+//			final String key = entry.getKey(), value = entry.getValue();
+//			if (value == null)
+//			{
+//				patch.getUnset().add(key);
+//			}
+//			else
+//			{
+//				patch.getEdit().put(key, value);
+//			}
+//		}
+//		return patch;
+//	}
 }
