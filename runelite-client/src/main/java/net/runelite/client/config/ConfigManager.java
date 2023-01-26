@@ -165,8 +165,21 @@ public class ConfigManager
 			.findFirst()
 			.orElseGet(() -> profileManager.createProfile("$rsprofile"));
 
+		log.info("Using default profile: {}", profile.getName());
+
 		configProfile = new ConfigData(ProfileManager.profileConfigFile(profile));
 		rsProfileConfigProfile = new ConfigData(ProfileManager.profileConfigFile(rsProfile));
+	}
+
+	public void switchProfile(ConfigProfile profile)
+	{
+		// Ensure existing config is saved
+		sendConfig();
+
+		log.info("Switching profile to: {}", profile.getName());
+
+		configProfile = new ConfigData(ProfileManager.profileConfigFile(profile));
+		handler.invalidate();
 	}
 
 	public String getRSProfileKey()
