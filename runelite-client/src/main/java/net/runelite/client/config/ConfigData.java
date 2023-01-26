@@ -16,23 +16,37 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 class ConfigData
 {
-	private final ConfigProfile configProfile;
+	//private final ConfigProfile configProfile;
 	private final File configPath;
 
 	private Properties properties = new Properties();
 	private Map<String, String> patchChanges = new HashMap<>();
 
-	ConfigData(ConfigProfile configProfile)
+	@SneakyThrows //XXX
+	ConfigData(File configPath)
 	{
-		this.configProfile = configProfile;
-		this.configPath = ProfileManager.profileConfigFile(configProfile);
-//		properties.lo
+	//	this.configProfile = configProfile;
+//		this.configPath = ProfileManager.profileConfigFile(configProfile);
+		this.configPath = configPath;
+//
+		try (FileInputStream fin = new FileInputStream(configPath)) {
+properties.load(fin);
+		}
 	}
+
+//	void load(File file) throws IOException
+//	{
+//		try (FileInputStream fin = new FileInputStream(file))
+//		{
+//			properties.load(fin);
+//		}
+//	}
 
 	String getProperty(String key) {
 		return properties.getProperty(key);
@@ -131,5 +145,16 @@ class ConfigData
 //			}
 //		}
 //		return patch;
+//	}
+
+//	synchronized void copyFrom(ConfigData data) {
+////		synchronized (data)
+////		{
+////			properties.clear();
+////			properties.putAll(data.properties);
+////		}
+//
+//		// needs to flush to disk ..
+////		patch(properties);
 //	}
 }

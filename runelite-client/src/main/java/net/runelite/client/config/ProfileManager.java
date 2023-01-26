@@ -14,8 +14,11 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.function.Consumer;
 import javax.inject.Inject;
@@ -34,7 +37,8 @@ public class ProfileManager
 
 	private final Gson gson;
 
-	static {
+	static
+	{
 		PROFILES_DIR.mkdirs();
 	}
 
@@ -63,12 +67,36 @@ public class ProfileManager
 
 	public ConfigProfile createProfile(String name)
 	{
-		ConfigProfile profile = new ConfigProfile(System.currentTimeMillis());
+		ConfigProfile profile = new ConfigProfile(System.nanoTime());
 		profile.setName(name);
 		profile.setSync(false);
 		loadEditSave(c -> c.add(profile));
 		log.debug("Created profile {}", name);
 		return profile;
+	}
+
+	public void removeProfile(ConfigProfile profile)
+	{
+		loadEditSave(c -> c.removeIf(p -> p.getId() == profile.getId()));
+	}
+
+	public void clone(ConfigProfile from, ConfigProfile to) throws IOException
+	{
+		File fromFile = profileConfigFile(from);
+		File toFile = profileConfigFile(to);
+
+		ConfigData fromData = new ConfigData(fromFile);
+		ConfigData toData = new ConfigData(toFile);
+
+		// backup target properties
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+		File backupFile = new File(toFile.getParentFile(), toFile.getName() + "." + dateFormat.format(new Date()));
+		try
+		{
+			Files.copy(toFile.toPath(), backupFile.toPath());
+		} catch (IOException ex) {
+			throw new IOException("backup failed", ex);
+		}
 	}
 
 	private void loadEditSave(Consumer<List<ConfigProfile>> c)
@@ -125,7 +153,8 @@ public class ProfileManager
 		}
 	}
 
-	public static File profileConfigFile(ConfigProfile profile) {
+	public static File profileConfigFile(ConfigProfile profile)
+	{
 		return new File(PROFILES_DIR, profile.getName() + ".properties");
 	}
 }

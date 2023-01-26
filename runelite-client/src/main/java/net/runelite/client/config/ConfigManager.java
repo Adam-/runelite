@@ -43,8 +43,6 @@ import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Arrays;
@@ -67,6 +65,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 import lombok.NonNull;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.Player;
@@ -99,7 +98,7 @@ public class ConfigManager
 	private static final String RSPROFILE_LOGIN_SALT = "loginSalt";
 	private static final String RSPROFILE_ACCOUNT_HASH = "accountHash";
 
-	private static final DateFormat TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+//	private static final DateFormat TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
 
 	private static final int KEY_SPLITTER_GROUP = 0;
 	private static final int KEY_SPLITTER_PROFILE = 1;
@@ -150,6 +149,7 @@ public class ConfigManager
 		setupProfiles();
 	}
 
+	@SneakyThrows
 	private void setupProfiles()
 	{
 		List<ConfigProfile> profiles = profileManager.listProfiles();
@@ -165,8 +165,8 @@ public class ConfigManager
 			.findFirst()
 			.orElseGet(() -> profileManager.createProfile("$rsprofile"));
 
-		configProfile = new ConfigData(profile);
-		rsProfileConfigProfile = new ConfigData(rsProfile);
+		configProfile = new ConfigData(ProfileManager.profileConfigFile(profile));
+		rsProfileConfigProfile = new ConfigData(ProfileManager.profileConfigFile(rsProfile));
 	}
 
 	public String getRSProfileKey()
