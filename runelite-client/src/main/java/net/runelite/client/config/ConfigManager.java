@@ -955,6 +955,11 @@ public class ConfigManager
 		if (commandExecuted.getCommand().equals("save")) {
 			sendConfig();
 		}
+		else if (commandExecuted.getCommand().equals("create")) {
+			String name = commandExecuted.getArguments()[0];
+	//		ConfigProfile profile = profileManager.createProfile(name);
+//			loadDefaultPluginConfiguration(null);
+		}
 	}
 
 	@Nullable
@@ -963,47 +968,6 @@ public class ConfigManager
 		eventBus.post(new ConfigSync());
 
 		CompletableFuture<Void> future = null;
-
-//		synchronized (pendingChanges)
-//		{
-//			if (pendingChanges.isEmpty())
-//			{
-//				return null;
-//			}
-//
-//			if (session != null)
-//			{
-//				ConfigPatch patch = new ConfigPatch();
-//				for (Map.Entry<String, String> entry : pendingChanges.entrySet())
-//				{
-//					final String key = entry.getKey(), value = entry.getValue();
-//					if (value == null)
-//					{
-//						patch.getUnset().add(key);
-//					}
-//					else
-//					{
-//						patch.getEdit().put(key, value);
-//					}
-//				}
-//
-//				future = configClient.patch(patch);
-//			}
-//
-//			pendingChanges.clear();
-//		}
-
-//		try
-//		{
-//			// XXX this needs to be synchronized but also i dont want to hold the lock when flushign to disk
-//			configProfile.patch();
-//			rsProfileConfigProfile.patch();
-////			saveToFile(propertiesFile);
-//		}
-//		catch (IOException ex)
-//		{
-//			log.error("unable to save configuration file", ex);
-//		}
 
 		saveConfiguration(configProfile);
 		saveConfiguration(rsProfileConfigProfile);
@@ -1015,6 +979,10 @@ public class ConfigManager
 		Map<String,String> patch;
 		synchronized (this) {
 			patch = configProfile.swapChanges();
+		}
+
+		if (patch.isEmpty()) {
+			return;
 		}
 
 //		buildConfigPatch(patch);
