@@ -70,7 +70,7 @@ class ConfigData
 		try (FileInputStream in = new FileInputStream(configPath);
 			 FileChannel channel = in.getChannel())
 		{
-			channel.lock(); // avoid file being clobbered while we load it
+			channel.lock(0L, Long.MAX_VALUE, true); // avoid file being clobbered while we load it
 			tempProps.load(in);
 		}
 		catch (FileNotFoundException e)

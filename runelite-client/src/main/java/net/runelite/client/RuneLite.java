@@ -252,8 +252,6 @@ public class RuneLite
 				}
 			}
 
-			PROFILES_DIR.mkdirs();
-
 			log.info("RuneLite {} (launcher version {}) starting up, args: {}",
 				RuneLiteProperties.getVersion(), MoreObjects.firstNonNull(RuneLiteProperties.getLauncherVersion(), "unknown"),
 				args.length == 0 ? "none" : String.join(" ", args));

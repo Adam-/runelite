@@ -35,22 +35,13 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
-import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.AtomicMoveNotSupportedException;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.security.SecureRandom;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -59,15 +50,11 @@ import java.time.Instant;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
@@ -79,17 +66,16 @@ import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
-import jdk.internal.org.jline.reader.ConfigurationPath;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.Player;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.AccountHashChanged;
+import net.runelite.api.events.CommandExecuted;
 import net.runelite.api.events.PlayerChanged;
 import net.runelite.api.events.UsernameChanged;
 import net.runelite.api.events.WorldChanged;
-import net.runelite.client.RuneLite;
 import net.runelite.client.account.AccountSession;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
@@ -232,7 +218,7 @@ public class ConfigManager
 	{
 //		if (session == null)
 //		{
-			loadFromFile();
+		//	loadFromFile();
 //			return;
 //		}
 //
@@ -274,77 +260,77 @@ public class ConfigManager
 //		}
 	}
 
-	private void swapProperties(Properties newProperties, boolean saveToServer)
-	{
-		Set<Object> allKeys = new HashSet<>(newProperties.keySet());
+//	private void swapProperties(Properties newProperties, boolean saveToServer)
+//	{
+//		Set<Object> allKeys = new HashSet<>(newProperties.keySet());
+//
+//		Properties oldProperties;
+//		synchronized (this)
+//		{
+//			handler.invalidate();
+//			oldProperties = properties;
+//			this.properties = newProperties;
+//		}
+//
+//		updateRSProfile();
+//
+//		allKeys.addAll(oldProperties.keySet());
+//
+//		for (Object wholeKey : allKeys)
+//		{
+//			String[] split = splitKey((String) wholeKey);
+//			if (split == null)
+//			{
+//				continue;
+//			}
+//
+//			String groupName = split[KEY_SPLITTER_GROUP];
+//			String profile = split[KEY_SPLITTER_PROFILE];
+//			String key = split[KEY_SPLITTER_KEY];
+//			String oldValue = (String) oldProperties.get(wholeKey);
+//			String newValue = (String) newProperties.get(wholeKey);
+//
+//			if (Objects.equals(oldValue, newValue))
+//			{
+//				continue;
+//			}
+//
+//			log.debug("Loading configuration value {}: {}", wholeKey, newValue);
+//
+//			ConfigChanged configChanged = new ConfigChanged();
+//			configChanged.setGroup(groupName);
+//			configChanged.setProfile(profile);
+//			configChanged.setKey(key);
+//			configChanged.setOldValue(oldValue);
+//			configChanged.setNewValue(newValue);
+//			eventBus.post(configChanged);
+//
+//			if (saveToServer)
+//			{
+//				synchronized (pendingChanges)
+//				{
+//					pendingChanges.put((String) wholeKey, newValue);
+//				}
+//			}
+//		}
+//	}
 
-		Properties oldProperties;
-		synchronized (this)
-		{
-			handler.invalidate();
-			oldProperties = properties;
-			this.properties = newProperties;
-		}
-
-		updateRSProfile();
-
-		allKeys.addAll(oldProperties.keySet());
-
-		for (Object wholeKey : allKeys)
-		{
-			String[] split = splitKey((String) wholeKey);
-			if (split == null)
-			{
-				continue;
-			}
-
-			String groupName = split[KEY_SPLITTER_GROUP];
-			String profile = split[KEY_SPLITTER_PROFILE];
-			String key = split[KEY_SPLITTER_KEY];
-			String oldValue = (String) oldProperties.get(wholeKey);
-			String newValue = (String) newProperties.get(wholeKey);
-
-			if (Objects.equals(oldValue, newValue))
-			{
-				continue;
-			}
-
-			log.debug("Loading configuration value {}: {}", wholeKey, newValue);
-
-			ConfigChanged configChanged = new ConfigChanged();
-			configChanged.setGroup(groupName);
-			configChanged.setProfile(profile);
-			configChanged.setKey(key);
-			configChanged.setOldValue(oldValue);
-			configChanged.setNewValue(newValue);
-			eventBus.post(configChanged);
-
-			if (saveToServer)
-			{
-				synchronized (pendingChanges)
-				{
-					pendingChanges.put((String) wholeKey, newValue);
-				}
-			}
-		}
-	}
-
-	private void syncPropertiesFromFile(File propertiesFile)
-	{
-		final Properties properties = new Properties();
-		try (FileInputStream in = new FileInputStream(propertiesFile))
-		{
-			properties.load(new InputStreamReader(in, StandardCharsets.UTF_8));
-		}
-		catch (Exception e)
-		{
-			log.warn("Malformed properties, skipping update");
-			return;
-		}
-
-		log.debug("Syncing properties from {}", propertiesFile);
-		swapProperties(properties, true);
-	}
+//	private void syncPropertiesFromFile(File propertiesFile)
+//	{
+//		final Properties properties = new Properties();
+//		try (FileInputStream in = new FileInputStream(propertiesFile))
+//		{
+//			properties.load(new InputStreamReader(in, StandardCharsets.UTF_8));
+//		}
+//		catch (Exception e)
+//		{
+//			log.warn("Malformed properties, skipping update");
+//			return;
+//		}
+//
+//		log.debug("Syncing properties from {}", propertiesFile);
+//		swapProperties(properties, true);
+//	}
 
 	public Future<Void> importLocal()
 	{
@@ -374,25 +360,25 @@ public class ConfigManager
 //		return sendConfig();
 	}
 
-	private synchronized void loadFromFile()
-	{
-		Properties newProperties = new Properties();
-		try (FileInputStream in = new FileInputStream(propertiesFile))
-		{
-			newProperties.load(new InputStreamReader(in, StandardCharsets.UTF_8));
-		}
-		catch (FileNotFoundException ex)
-		{
-			log.debug("Unable to load settings - no such file");
-		}
-		catch (IllegalArgumentException | IOException ex)
-		{
-			log.warn("Unable to load settings", ex);
-		}
-
-		log.debug("Loading in config from disk");
-		swapProperties(newProperties, false);
-	}
+//	private synchronized void loadFromFile()
+//	{
+//		Properties newProperties = new Properties();
+//		try (FileInputStream in = new FileInputStream(propertiesFile))
+//		{
+//			newProperties.load(new InputStreamReader(in, StandardCharsets.UTF_8));
+//		}
+//		catch (FileNotFoundException ex)
+//		{
+//			log.debug("Unable to load settings - no such file");
+//		}
+//		catch (IllegalArgumentException | IOException ex)
+//		{
+//			log.warn("Unable to load settings", ex);
+//		}
+//
+//		log.debug("Loading in config from disk");
+//		swapProperties(newProperties, false);
+//	}
 //
 //	private void saveToFile(final File propertiesFile) throws IOException
 //	{
@@ -961,6 +947,13 @@ public class ConfigManager
 		if (f != null)
 		{
 			e.waitFor(f);
+		}
+	}
+
+	@Subscribe
+	public void onCommandExecuted(CommandExecuted commandExecuted) {
+		if (commandExecuted.getCommand().equals("save")) {
+			sendConfig();
 		}
 	}
 

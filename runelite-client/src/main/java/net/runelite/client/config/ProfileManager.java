@@ -34,13 +34,17 @@ public class ProfileManager
 
 	private final Gson gson;
 
+	static {
+		PROFILES_DIR.mkdirs();
+	}
+
 	public List<ConfigProfile> listProfiles()
 	{
 		try (FileInputStream in = new FileInputStream(PROFILES);
 			 FileChannel channel = in.getChannel()
 		)
 		{
-			channel.lock();
+			channel.lock(0L, Long.MAX_VALUE, true);
 			return gson.fromJson(new InputStreamReader(in),
 				new TypeToken<List<ConfigProfile>>()
 				{
@@ -74,7 +78,7 @@ public class ProfileManager
 			 FileChannel channel = in.getChannel()
 		)
 		{
-			channel.lock();
+			channel.lock(0L, Long.MAX_VALUE, true);
 			profiles = gson.fromJson(new InputStreamReader(in),
 				new TypeToken<List<ConfigProfile>>()
 				{
@@ -91,7 +95,6 @@ public class ProfileManager
 		}
 
 		c.accept(profiles);
-
 
 		try
 		{
