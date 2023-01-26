@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
+import net.runelite.http.api.config.ConfigPatch;
 
 @Slf4j
 class ConfigData
@@ -23,27 +24,28 @@ class ConfigData
 	private final ConfigProfile configProfile;
 	private final File configPath;
 
-	private Properties properties;
+	private Properties properties = new Properties();
 	private final Map<String, String> patchChanges = new HashMap<>();
 
 	ConfigData(ConfigProfile configProfile)
 	{
 		this.configProfile = configProfile;
 		this.configPath = ProfileManager.profileConfigFile(configProfile);
+//		properties.lo
 	}
 
 	String getProperty(String key) {
 		return properties.getProperty(key);
 	}
 
-	void setProperty(String key, String value) {
-		properties.setProperty(key, value);
+	Object setProperty(String key, String value) {
 		patchChanges.put(key, value);
+		return properties.setProperty(key, value);
 	}
 
-	void unset(String key) {
-		properties.remove(key);
+	Object unset(String key) {
 		patchChanges.remove(key);
+		return properties.remove(key);
 	}
 
 	Set<Object> keySet() {
@@ -99,5 +101,26 @@ class ConfigData
 			log.debug("atomic move not supported", ex);
 			Files.move(tempFile.toPath(), configPath.toPath(), StandardCopyOption.REPLACE_EXISTING);
 		}
+	}
+
+	ConfigPatch buildConfigPatch() {
+		if (patchChanges.isEmpty()) {
+			return null;
+		}
+
+		ConfigPatch patch = new ConfigPatch();
+		for (Map.Entry<String, String> entry : patchChanges.entrySet())
+		{
+			final String key = entry.getKey(), value = entry.getValue();
+			if (value == null)
+			{
+				patch.getUnset().add(key);
+			}
+			else
+			{
+				patch.getEdit().put(key, value);
+			}
+		}
+		return patch;
 	}
 }

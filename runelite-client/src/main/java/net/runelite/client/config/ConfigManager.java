@@ -131,7 +131,7 @@ public class ConfigManager
 	private final Client client;
 
 	private final ConfigInvocationHandler handler = new ConfigInvocationHandler(this);
-	private final Map<String, String> pendingChanges = new HashMap<>();
+//	private final Map<String, String> pendingChanges = new HashMap<>();
 
 	private ConfigData configProfile;
 	private ConfigData rsProfileConfigProfile;
@@ -229,48 +229,48 @@ public class ConfigManager
 
 	public void load()
 	{
-		if (session == null)
-		{
+//		if (session == null)
+//		{
 			loadFromFile();
-			return;
-		}
-
-		Map<String, String> configuration;
-
-		try
-		{
-			configuration = configClient.get();
-		}
-		catch (IOException ex)
-		{
-			log.debug("Unable to load configuration from client, using saved configuration from disk", ex);
-			loadFromFile();
-			return;
-		}
-
-		if (configuration == null || configuration.isEmpty())
-		{
-			log.debug("No configuration from client, using saved configuration on disk");
-			loadFromFile();
-			return;
-		}
-
-		Properties newProperties = new Properties();
-		newProperties.putAll(configuration);
-
-		log.debug("Loading in config from server");
-		swapProperties(newProperties, false);
-
-		try
-		{
-			saveToFile(propertiesFile);
-
-			log.debug("Updated configuration on disk with the latest version");
-		}
-		catch (IOException ex)
-		{
-			log.warn("Unable to update configuration on disk", ex);
-		}
+//			return;
+//		}
+//
+//		Map<String, String> configuration;
+//
+//		try
+//		{
+//			configuration = configClient.get();
+//		}
+//		catch (IOException ex)
+//		{
+//			log.debug("Unable to load configuration from client, using saved configuration from disk", ex);
+//			loadFromFile();
+//			return;
+//		}
+//
+//		if (configuration == null || configuration.isEmpty())
+//		{
+//			log.debug("No configuration from client, using saved configuration on disk");
+//			loadFromFile();
+//			return;
+//		}
+//
+//		Properties newProperties = new Properties();
+//		newProperties.putAll(configuration);
+//
+//		log.debug("Loading in config from server");
+//		swapProperties(newProperties, false);
+//
+//		try
+//		{
+//			saveToFile(propertiesFile);
+//
+//			log.debug("Updated configuration on disk with the latest version");
+//		}
+//		catch (IOException ex)
+//		{
+//			log.warn("Unable to update configuration on disk", ex);
+//		}
 	}
 
 	private void swapProperties(Properties newProperties, boolean saveToServer)
@@ -347,29 +347,30 @@ public class ConfigManager
 
 	public Future<Void> importLocal()
 	{
-		if (session == null)
-		{
-			// No session, no import
-			return null;
-		}
-
-		final File file = new File(propertiesFile.getParent(), propertiesFile.getName() + "." + TIME_FORMAT.format(new Date()));
-
-		try
-		{
-			saveToFile(file);
-		}
-		catch (IOException e)
-		{
-			log.warn("Backup failed, skipping import", e);
-			return null;
-		}
-
-		log.info("Importing local settings");
-
-		syncPropertiesFromFile(getLocalPropertiesFile());
-
-		return sendConfig();
+		return null;
+//		if (session == null)
+//		{
+//			// No session, no import
+//			return null;
+//		}
+//
+//		final File file = new File(propertiesFile.getParent(), propertiesFile.getName() + "." + TIME_FORMAT.format(new Date()));
+//
+//		try
+//		{
+//			saveToFile(file);
+//		}
+//		catch (IOException e)
+//		{
+//			log.warn("Backup failed, skipping import", e);
+//			return null;
+//		}
+//
+//		log.info("Importing local settings");
+//
+//		syncPropertiesFromFile(getLocalPropertiesFile());
+//
+//		return sendConfig();
 	}
 
 	private synchronized void loadFromFile()
@@ -548,7 +549,14 @@ public class ConfigManager
 		String oldValue;
 		synchronized (this)
 		{
-			oldValue = (String) properties.setProperty(wholeKey, value);
+			if (profile != null)
+			{
+				oldValue = (String) rsProfileConfigProfile.setProperty(wholeKey, value);
+			}
+			else
+			{
+				oldValue = (String) configProfile.setProperty(wholeKey, value);
+			}
 		}
 
 		if (Objects.equals(oldValue, value))
@@ -558,11 +566,6 @@ public class ConfigManager
 
 		log.debug("Setting configuration value for {} to {}", wholeKey, value);
 		handler.invalidate();
-
-		synchronized (pendingChanges)
-		{
-			pendingChanges.put(wholeKey, value);
-		}
 
 		ConfigChanged configChanged = new ConfigChanged();
 		configChanged.setGroup(groupName);
@@ -634,7 +637,14 @@ public class ConfigManager
 		String oldValue;
 		synchronized (this)
 		{
-			oldValue = (String) properties.remove(wholeKey);
+			if (profile != null)
+			{
+				oldValue = (String) rsProfileConfigProfile.unset(wholeKey);
+			}
+			else
+			{
+				oldValue = (String) configProfile.unset(wholeKey);
+			}
 		}
 
 		if (oldValue == null)
@@ -644,11 +654,6 @@ public class ConfigManager
 
 		log.debug("Unsetting configuration value for {}", wholeKey);
 		handler.invalidate();
-
-		synchronized (pendingChanges)
-		{
-			pendingChanges.put(wholeKey, null);
-		}
 
 		ConfigChanged configChanged = new ConfigChanged();
 		configChanged.setGroup(groupName);
@@ -964,42 +969,45 @@ public class ConfigManager
 		eventBus.post(new ConfigSync());
 
 		CompletableFuture<Void> future = null;
-		synchronized (pendingChanges)
-		{
-			if (pendingChanges.isEmpty())
-			{
-				return null;
-			}
-
-			if (session != null)
-			{
-				ConfigPatch patch = new ConfigPatch();
-				for (Map.Entry<String, String> entry : pendingChanges.entrySet())
-				{
-					final String key = entry.getKey(), value = entry.getValue();
-					if (value == null)
-					{
-						patch.getUnset().add(key);
-					}
-					else
-					{
-						patch.getEdit().put(key, value);
-					}
-				}
-
-				future = configClient.patch(patch);
-			}
-
-			pendingChanges.clear();
-		}
+//		synchronized (pendingChanges)
+//		{
+//			if (pendingChanges.isEmpty())
+//			{
+//				return null;
+//			}
+//
+//			if (session != null)
+//			{
+//				ConfigPatch patch = new ConfigPatch();
+//				for (Map.Entry<String, String> entry : pendingChanges.entrySet())
+//				{
+//					final String key = entry.getKey(), value = entry.getValue();
+//					if (value == null)
+//					{
+//						patch.getUnset().add(key);
+//					}
+//					else
+//					{
+//						patch.getEdit().put(key, value);
+//					}
+//				}
+//
+//				future = configClient.patch(patch);
+//			}
+//
+//			pendingChanges.clear();
+//		}
 
 		try
 		{
-			saveToFile(propertiesFile);
+			// XXX this needs to be synchronized but also i dont want to hold the lock when flushign to disk
+			configProfile.patch();
+			rsProfileConfigProfile.patch();
+//			saveToFile(propertiesFile);
 		}
 		catch (IOException ex)
 		{
-			log.warn("unable to save configuration file", ex);
+			log.error("unable to save configuration file", ex);
 		}
 
 		return future;
@@ -1011,7 +1019,7 @@ public class ConfigManager
 		Set<String> profileKeys = new HashSet<>();
 		synchronized (this)
 		{
-			for (Object oKey : properties.keySet())
+			for (Object oKey : rsProfileConfigProfile.keySet())
 			{
 				String key = (String) oKey;
 				if (!key.startsWith(prefix))
