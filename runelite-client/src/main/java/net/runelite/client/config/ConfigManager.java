@@ -171,15 +171,65 @@ public class ConfigManager
 		rsProfileConfigProfile = new ConfigData(ProfileManager.profileConfigFile(rsProfile));
 	}
 
-	public void switchProfile(ConfigProfile profile)
+	public void switchProfile(ConfigProfile newProfile)
 	{
 		// Ensure existing config is saved
 		sendConfig();
 
-		log.info("Switching profile to: {}", profile.getName());
+		log.info("Switching profile to: {}", newProfile.getName());
 
-		configProfile = new ConfigData(ProfileManager.profileConfigFile(profile));
-		handler.invalidate();
+		ConfigData newData = new ConfigData(ProfileManager.profileConfigFile(newProfile));
+		Set<Object> allKeys = new HashSet<>(newData.keySet());
+
+		ConfigData oldData;
+		synchronized (this)
+		{
+			handler.invalidate();
+			oldData = configProfile;
+			configProfile = newData;
+		}
+
+		// XXX previously this updated the rs profile but now I think that doesn't matter?
+
+		allKeys.addAll(oldData.keySet());
+
+		for (Object wholeKey : allKeys)
+		{
+			String[] split = splitKey((String) wholeKey);
+			if (split == null)
+			{
+				continue;
+			}
+
+			String groupName = split[KEY_SPLITTER_GROUP];
+			String profile = split[KEY_SPLITTER_PROFILE];
+			String key = split[KEY_SPLITTER_KEY];
+			String oldValue = oldData.getProperty((String) wholeKey);
+			String newValue = newData.getProperty((String) wholeKey);
+
+			if (Objects.equals(oldValue, newValue))
+			{
+				continue;
+			}
+
+			log.debug("Loading configuration value {}: {}", wholeKey, newValue);
+
+			ConfigChanged configChanged = new ConfigChanged();
+			configChanged.setGroup(groupName);
+			configChanged.setProfile(profile);
+			configChanged.setKey(key);
+			configChanged.setOldValue(oldValue);
+			configChanged.setNewValue(newValue);
+			eventBus.post(configChanged);
+
+//			if (saveToServer)
+//			{
+//				synchronized (pendingChanges)
+//				{
+//					pendingChanges.put((String) wholeKey, newValue);
+//				}
+//			}
+		}
 	}
 
 	public String getRSProfileKey()
