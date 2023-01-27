@@ -14,11 +14,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.function.Consumer;
 import javax.inject.Inject;
@@ -113,17 +110,17 @@ public class ProfileManager
 
 		log.debug("Cloning profile {} -> {}", from, to);
 
-		// backup target properties
-		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
-		File backupFile = new File(toFile.getParentFile(), toFile.getName() + "." + dateFormat.format(new Date()));
-		try
-		{
-			Files.copy(toFile.toPath(), backupFile.toPath());
-		}
-		catch (IOException ex)
-		{
-			throw new IOException("backup failed", ex);
-		}
+//		// backup target properties
+//		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+//		File backupFile = new File(toFile.getParentFile(), toFile.getName() + "." + dateFormat.format(new Date()));
+//		try
+//		{
+//			Files.copy(toFile.toPath(), backupFile.toPath());
+//		}
+//		catch (IOException ex)
+//		{
+//			throw new IOException("backup failed", ex);
+//		}
 
 		// copy source properties to target
 		Files.copy(fromFile.toPath(), toFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
