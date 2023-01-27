@@ -52,13 +52,13 @@ class ConfigData
 		return properties.get(key);
 	}
 
-	synchronized Object setProperty(String key, String value)
+	synchronized String setProperty(String key, String value)
 	{
 		patchChanges.put(key, value);
 		return properties.put(key, value);
 	}
 
-	synchronized Object unset(String key)
+	synchronized String unset(String key)
 	{
 		patchChanges.remove(key);
 		return properties.remove(key);

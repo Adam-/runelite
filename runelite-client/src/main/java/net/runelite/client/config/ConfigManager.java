@@ -563,7 +563,7 @@ public class ConfigManager
 
 		assert !key.startsWith(RSPROFILE_GROUP + ".");
 		String wholeKey = getWholeKey(groupName, profile, key);
-		String oldValue = (String) configData.setProperty(wholeKey, value);
+		String oldValue = configData.setProperty(wholeKey, value);
 
 		if (Objects.equals(oldValue, value))
 		{
@@ -652,7 +652,7 @@ public class ConfigManager
 	{
 		assert !key.startsWith(RSPROFILE_GROUP + ".");
 		String wholeKey = getWholeKey(groupName, profile, key);
-		String oldValue = (String) configData.unset(wholeKey);
+		String oldValue = configData.unset(wholeKey);
 
 		if (oldValue == null)
 		{
