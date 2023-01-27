@@ -99,7 +99,7 @@ public class RuneLite
 	public static final File SCREENSHOT_DIR = new File(RUNELITE_DIR, "screenshots");
 	public static final File LOGS_DIR = new File(RUNELITE_DIR, "logs");
 	public static final File DEFAULT_SESSION_FILE = new File(RUNELITE_DIR, "session");
-	public static final File DEFAULT_CONFIG_FILE = new File(RUNELITE_DIR, "settings.properties");
+//	public static final File DEFAULT_CONFIG_FILE = new File(RUNELITE_DIR, "settings.properties");
 
 	private static final int MAX_OKHTTP_CACHE_SIZE = 20 * 1024 * 1024; // 20mb
 	public static String USER_AGENT = "RuneLite/" + RuneLiteProperties.getVersion() + "-" + RuneLiteProperties.getCommit() + (RuneLiteProperties.isDirty() ? "+" : "");
@@ -169,16 +169,18 @@ public class RuneLite
 			.withRequiredArg()
 			.defaultsTo(RuneLiteProperties.getJavConfig());
 		parser.accepts("disable-telemetry", "Disable telemetry");
+		parser.accepts("profile", "Configuration profile to use").withRequiredArg();
+		parser.accepts("config", "Use a specified config file (deprecated)").withRequiredArg();
 
 		final ArgumentAcceptingOptionSpec<File> sessionfile = parser.accepts("sessionfile", "Use a specified session file")
 			.withRequiredArg()
 			.withValuesConvertedBy(new ConfigFileConverter())
 			.defaultsTo(DEFAULT_SESSION_FILE);
 
-		final ArgumentAcceptingOptionSpec<File> configfile = parser.accepts("config", "Use a specified config file")
-			.withRequiredArg()
-			.withValuesConvertedBy(new ConfigFileConverter())
-			.defaultsTo(DEFAULT_CONFIG_FILE);
+//		final ArgumentAcceptingOptionSpec<File> configfile = parser.accepts("config", "Use a specified config file")
+//			.withRequiredArg()
+//			.withValuesConvertedBy(new ConfigFileConverter())
+//			.defaultsTo(DEFAULT_CONFIG_FILE);
 
 		final ArgumentAcceptingOptionSpec<ClientUpdateCheckMode> updateMode = parser
 			.accepts("rs", "Select client type")
@@ -270,7 +272,9 @@ public class RuneLite
 				options.has("safe-mode"),
 				options.has("disable-telemetry"),
 				options.valueOf(sessionfile),
-				options.valueOf(configfile)));
+				(String) options.valueOf("config"),
+				(String) options.valueOf("profile")
+			));
 
 			injector.getInstance(RuneLite.class).start();
 

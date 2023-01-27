@@ -34,7 +34,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -83,7 +82,6 @@ import net.runelite.client.events.ConfigSync;
 import net.runelite.client.events.RuneScapeProfileChanged;
 import net.runelite.client.util.ColorUtil;
 import net.runelite.http.api.config.ConfigPatch;
-import org.jetbrains.annotations.NotNull;
 
 @Singleton
 @Slf4j
@@ -103,7 +101,10 @@ public class ConfigManager
 	private static final int KEY_SPLITTER_PROFILE = 1;
 	private static final int KEY_SPLITTER_KEY = 2;
 
-//	private final File settingsFileInput;
+	@Nullable
+	private final String configFile;
+	@Nullable
+	private final String configProfileName;
 	private final EventBus eventBus;
 	private final Gson gson;
 	@Nonnull
@@ -130,15 +131,19 @@ public class ConfigManager
 	// run migration if no profiles.json
 	@Inject
 	private ConfigManager(
-		@Named("config") File config,
+	//	@Named("config") File config,
+		@Nullable @Named("config") String config,
+		@Nullable @Named("profile") String profile,
 		ScheduledExecutorService scheduledExecutorService,
 		EventBus eventBus,
 		@Nullable Client client,
 		Gson gson,
-		@NotNull ConfigClient configClient,
+		@Nonnull ConfigClient configClient,
 		ProfileManager profileManager
 	)
 	{
+		this.configFile = config;
+		this.configProfileName = profile;
 //		this.settingsFileInput = config;
 		this.eventBus = eventBus;
 		this.client = client;
