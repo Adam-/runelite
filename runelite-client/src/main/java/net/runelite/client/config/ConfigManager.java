@@ -456,7 +456,6 @@ public class ConfigManager
 	public List<String> getConfigurationKeys(String prefix)
 	{
 		return configProfile.keySet().stream()
-			.map(String.class::cast)
 			.filter(k -> k.startsWith(prefix))
 			.collect(Collectors.toList());
 	}
@@ -472,7 +471,6 @@ public class ConfigManager
 
 		String prefix = group + "." + profile + "." + keyPrefix;
 		return rsProfileConfigProfile.keySet().stream()
-			.map(String.class::cast)
 			.filter(k -> k.startsWith(prefix))
 			.map(k -> splitKey(k)[KEY_SPLITTER_KEY])
 			.collect(Collectors.toList());
@@ -1062,9 +1060,9 @@ public class ConfigManager
 		Set<String> profileKeys = new HashSet<>();
 		synchronized (rsProfileConfigProfile)
 		{
-			for (Object oKey : rsProfileConfigProfile.keySet())
+			for (String oKey : rsProfileConfigProfile.keySet())
 			{
-				String key = (String) oKey;
+				String key = oKey;
 				if (!key.startsWith(prefix))
 				{
 					continue;
