@@ -34,7 +34,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.io.IOException;
+import java.io.File;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
@@ -73,6 +73,7 @@ import net.runelite.api.events.CommandExecuted;
 import net.runelite.api.events.PlayerChanged;
 import net.runelite.api.events.UsernameChanged;
 import net.runelite.api.events.WorldChanged;
+import net.runelite.client.RuneLite;
 import net.runelite.client.account.AccountSession;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
@@ -101,8 +102,8 @@ public class ConfigManager
 	private static final int KEY_SPLITTER_PROFILE = 1;
 	private static final int KEY_SPLITTER_KEY = 2;
 
-	@Nullable
-	private final String configFile;
+//	@Nullable
+	private final File configFile;
 	@Nullable
 	private final String configProfileName;
 	private final EventBus eventBus;
@@ -132,7 +133,7 @@ public class ConfigManager
 	@Inject
 	private ConfigManager(
 	//	@Named("config") File config,
-		@Nullable @Named("config") String config,
+		/*@Nullable*/ @Named("config") File config,
 		@Nullable @Named("profile") String profile,
 		ScheduledExecutorService scheduledExecutorService,
 		EventBus eventBus,
@@ -259,6 +260,67 @@ public class ConfigManager
 //			return new File(profileDir, RuneLite.DEFAULT_CONFIG_FILE.getName());
 //		}
 //	}
+
+	private void migrate()
+	{
+		// migrate if:
+		// profiles does not exist and config is default
+		// config is non-default and a profile with the config name doesn't exist
+		List<ConfigProfile> profiles = profileManager.listProfiles();
+		boolean defaultSettings = RuneLite.DEFAULT_CONFIG_FILE.equals(configFile);
+		String configProfileName = profileNameFromFile(configFile);
+		if (defaultSettings ? profiles.isEmpty() : profiles.stream().anyMatch(p -> p.getName().equals(configProfileName))
+			&& configFile.exists())
+		{
+			String targetProfileName = defaultSettings ? "default" : configProfileName;
+
+			log.info("Performing migration of config from {} to {}", configFile.getName(), targetProfileName);
+
+			ConfigProfile targetProfile = profileManager.createProfile(targetProfileName);
+//			targetProfile.setDefau
+			ConfigProfile rsProfile = profileManager.createProfile("$rsprofile");
+
+			ConfigData migratingData = new ConfigData(configFile);
+			ConfigData configData = new ConfigData(ProfileManager.profileConfigFile(targetProfile));
+			ConfigData rsData = new ConfigData(ProfileManager.profileConfigFile(rsProfile));
+
+			int keys = 0;
+			for (String wholeKey : migratingData.keySet())
+			{
+				String[] split = splitKey(wholeKey);
+				if (split == null)
+				{
+					continue;
+				}
+
+//				String groupName = split[KEY_SPLITTER_GROUP];
+				String profile = split[KEY_SPLITTER_PROFILE];
+//				String key = split[KEY_SPLITTER_KEY];
+
+				if (profile != null) {
+					rsData.setProperty(wholeKey, migratingData.getProperty(wholeKey));
+				} else {
+					configData.setProperty(wholeKey, migratingData.getProperty(wholeKey));
+				}
+
+				++keys;
+			}
+
+			configData.patch(configData.swapChanges());
+			rsData.patch(rsData.swapChanges());
+
+			log.info("Finished performing profile migration of {} keys", keys);
+		}
+	}
+
+	private static String profileNameFromFile(File file) {
+		String configProfileName = file.getName();
+		int idx = configProfileName.lastIndexOf('.');
+		if (idx > -1) {
+			configProfileName = configProfileName.substring(0, idx);
+		}
+		return configProfileName;
+	}
 
 	public void load()
 	{
@@ -1029,14 +1091,7 @@ public class ConfigManager
 
 //		buildConfigPatch(patch);
 
-		try
-		{
-			configProfile.patch(patch);
-		}
-		catch (IOException ex)
-		{
-			log.error("unable to save configuration file", ex);
-		}
+		configProfile.patch(patch);
 	}
 
 	private static ConfigPatch buildConfigPatch(Map<String, String> patchChanges)

@@ -81,7 +81,7 @@ class ConfigData
 		return p;
 	}
 
-	void patch(Map<String, String> patch) throws IOException
+	void patch(Map<String, String> patch)
 	{
 		// load + patch + store instead of just flushing the in-memory properties to disk so that
 		// multiple clients editing one config data (such as rs profile config) get their data merged
@@ -134,6 +134,10 @@ class ConfigData
 				log.debug("atomic move not supported", ex);
 				Files.move(tempFile.toPath(), configPath.toPath(), StandardCopyOption.REPLACE_EXISTING);
 			}
+		}
+		catch (IOException ex)
+		{
+			log.error("unable to save configuration file", ex);
 		}
 		lckFile.delete();
 	}
