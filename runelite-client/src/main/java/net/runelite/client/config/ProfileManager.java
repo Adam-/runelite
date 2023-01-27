@@ -119,40 +119,39 @@ public class ProfileManager
 
 	private void loadEditSave(Consumer<List<ConfigProfile>> c)
 	{
-		List<ConfigProfile> profiles;
-		try (FileInputStream in = new FileInputStream(PROFILES);
-			 FileChannel channel = in.getChannel()
-		)
+		File lckFile = new File(PROFILES_DIR, "profiles.lck");
+		try (FileOutputStream lockOut = new FileOutputStream(lckFile);
+			 FileChannel lckChannel = lockOut.getChannel())
 		{
-			channel.lock(0L, Long.MAX_VALUE, true);
-			profiles = gson.fromJson(new InputStreamReader(in),
-				new TypeToken<List<ConfigProfile>>()
-				{
-				}.getType());
-		}
-		catch (FileNotFoundException ex)
-		{
-			profiles = new ArrayList<>();
-		}
-		catch (IOException e)
-		{
-			log.warn("unable to read profiles");
-			profiles = new ArrayList<>();
-		}
+			lckChannel.lock();
 
-		c.accept(profiles);
+			List<ConfigProfile> profiles;
+			try (FileInputStream in = new FileInputStream(PROFILES))
+			{
+				profiles = gson.fromJson(new InputStreamReader(in),
+					new TypeToken<List<ConfigProfile>>()
+					{
+					}.getType());
+			}
+			catch (FileNotFoundException ex)
+			{
+				profiles = new ArrayList<>();
+			}
+			catch (IOException e)
+			{
+				log.warn("unable to read profiles", e);
+				profiles = new ArrayList<>();
+			}
 
-		try
-		{
+			c.accept(profiles);
+
 			File tempFile = File.createTempFile("runelite_profiles", null, PROFILES.getParentFile());
 			try (FileOutputStream out = new FileOutputStream(tempFile);
-				 FileChannel channel = out.getChannel();
+				 FileChannel channel = lockOut.getChannel();
 				 OutputStreamWriter writer = new OutputStreamWriter(out, StandardCharsets.UTF_8))
 			{
-				channel.lock();
 				gson.toJson(profiles, writer);
 				channel.force(true);
-				// FileChannel.close() frees the lock
 			}
 
 			try
