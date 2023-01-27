@@ -286,14 +286,12 @@ public class InfoPanel extends PluginPanel
 			emailLabel.setContentType("text/plain");
 			emailLabel.setText(name);
 			loggedLabel.setText("Signed in as");
-			actionsContainer.add(syncPanel, 0);
 		}
 		else
 		{
 			emailLabel.setContentType("text/html");
 			emailLabel.setText("<a href=\"" + RUNELITE_LOGIN + "\">Sign in</a> to sync settings to the cloud.");
 			loggedLabel.setText("Not signed in");
-			actionsContainer.remove(syncPanel);
 		}
 	}
 
