@@ -496,9 +496,14 @@ public class ConfigManager
 		}
 	}
 
+	private String getConfiguration(ConfigData configData, String groupName, String rsProfile, String key)
+	{
+		return configData.getProperty(getWholeKey(groupName, rsProfile, key));
+	}
+
 	public String getConfiguration(String groupName, String key)
 	{
-		return getConfiguration(groupName, null, key);
+		return getConfiguration(configProfile, groupName, null, key);
 	}
 
 	public String getRSProfileConfiguration(String groupName, String key)
@@ -509,15 +514,18 @@ public class ConfigManager
 			return null;
 		}
 
-		return getConfiguration(groupName, rsProfileKey, key);
+		return getConfiguration(rsProfileConfigProfile, groupName, rsProfileKey, key);
 	}
 
 	public String getConfiguration(String groupName, String profile, String key)
 	{
-		if (profile != null) {
-			return rsProfileConfigProfile.getProperty(getWholeKey(groupName, profile, key));
-		} else {
-			return configProfile.getProperty(getWholeKey(groupName, profile, key));
+		if (profile != null)
+		{
+			return getConfiguration(rsProfileConfigProfile, groupName, profile, key);
+		}
+		else
+		{
+			return getConfiguration(configProfile, groupName, null, key);
 		}
 	}
 
@@ -554,12 +562,7 @@ public class ConfigManager
 		return null;
 	}
 
-	public void setConfiguration(String groupName, String key, String value)
-	{
-		setConfiguration(groupName, null, key, value);
-	}
-
-	public void setConfiguration(String groupName, String profile, String key, @NonNull String value)
+	private void setConfiguration(ConfigData configData, String groupName, String profile, String key, @NonNull String value)
 	{
 		if (Strings.isNullOrEmpty(groupName) || Strings.isNullOrEmpty(key) || key.indexOf(':') != -1)
 		{
@@ -569,19 +572,9 @@ public class ConfigManager
 		assert !key.startsWith(RSPROFILE_GROUP + ".");
 		String wholeKey = getWholeKey(groupName, profile, key);
 		String oldValue;
-		if (profile != null)
+		synchronized (configData)
 		{
-			synchronized (rsProfileConfigProfile)
-			{
-				oldValue = (String) rsProfileConfigProfile.setProperty(wholeKey, value);
-			}
-		}
-		else
-		{
-			synchronized (configProfile)
-			{
-				oldValue = (String) configProfile.setProperty(wholeKey, value);
-			}
+			oldValue = (String) configData.setProperty(wholeKey, value);
 		}
 
 		if (Objects.equals(oldValue, value))
@@ -600,6 +593,23 @@ public class ConfigManager
 		configChanged.setNewValue(value);
 
 		eventBus.post(configChanged);
+	}
+
+	public void setConfiguration(String groupName, String profile, String key, @NonNull String value)
+	{
+		if (profile != null)
+		{
+			setConfiguration(rsProfileConfigProfile, groupName, profile, key, value);
+		}
+		else
+		{
+			setConfiguration(configProfile, groupName, null, key, value);
+		}
+	}
+
+	public void setConfiguration(String groupName, String key, String value)
+	{
+		setConfiguration(configProfile, groupName, null, key, value);
 	}
 
 	public <T> void setConfiguration(String groupName, String profile, String key, T value)
@@ -650,29 +660,14 @@ public class ConfigManager
 		setConfiguration(groupName, rsProfileKey, key, value);
 	}
 
-	public void unsetConfiguration(String groupName, String key)
-	{
-		unsetConfiguration(groupName, null, key);
-	}
-
-	public void unsetConfiguration(String groupName, String profile, String key)
+	private void unsetConfiguration(ConfigData configData, String groupName, String profile, String key)
 	{
 		assert !key.startsWith(RSPROFILE_GROUP + ".");
 		String wholeKey = getWholeKey(groupName, profile, key);
 		String oldValue;
-		if (profile != null)
+		synchronized (configData)
 		{
-			synchronized (rsProfileConfigProfile)
-			{
-				oldValue = (String) rsProfileConfigProfile.unset(wholeKey);
-			}
-		}
-		else
-		{
-			synchronized (configProfile)
-			{
-				oldValue = (String) configProfile.unset(wholeKey);
-			}
+			oldValue = (String) configData.unset(wholeKey);
 		}
 
 		if (oldValue == null)
@@ -692,6 +687,23 @@ public class ConfigManager
 		eventBus.post(configChanged);
 	}
 
+	public void unsetConfiguration(String groupName, String profile, String key)
+	{
+		if (profile != null)
+		{
+			unsetConfiguration(rsProfileConfigProfile, groupName, profile, key);
+		}
+		else
+		{
+			unsetConfiguration(configProfile, groupName, null, key);
+		}
+	}
+
+	public void unsetConfiguration(String groupName, String key)
+	{
+		unsetConfiguration(configProfile, groupName, null, key);
+	}
+
 	public void unsetRSProfileConfiguration(String groupName, String key)
 	{
 		String rsProfileKey = this.rsProfileKey;
@@ -700,7 +712,7 @@ public class ConfigManager
 			return;
 		}
 
-		unsetConfiguration(groupName, rsProfileKey, key);
+		unsetConfiguration(rsProfileConfigProfile, groupName, rsProfileKey, key);
 	}
 
 	public ConfigDescriptor getConfigDescriptor(Config configurationProxy)
