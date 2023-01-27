@@ -30,7 +30,7 @@ class ConfigData
 	{
 		this.configPath = configPath;
 
-		Properties props = new Properties(4096);
+		Properties props = new Properties();
 		try (FileInputStream fin = new FileInputStream(configPath))
 		{
 			props.load(fin);
