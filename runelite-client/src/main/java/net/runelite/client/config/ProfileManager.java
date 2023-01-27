@@ -75,6 +75,18 @@ public class ProfileManager
 		return profile;
 	}
 
+	public void updateProfile(ConfigProfile configProfile, Consumer<ConfigProfile> consumer) {
+//		AtomicReference<ConfigProfile>
+		loadEditSave(profiles -> {
+			for (ConfigProfile p : profiles) {
+				if (p.getId() == configProfile.getId()) {
+					consumer.accept(p);
+				}
+			}
+		});
+//		return null;
+	}
+
 	public void removeProfile(ConfigProfile profile)
 	{
 		loadEditSave(c ->

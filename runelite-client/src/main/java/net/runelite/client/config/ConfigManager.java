@@ -284,7 +284,7 @@ public class ConfigManager
 
 			ConfigProfile targetProfile = profileManager.createProfile(targetProfileName);
 			if (defaultSettings) {
-				targetProfile.setDefaultProfile(true);
+				profileManager.updateProfile(targetProfile, p -> p.setDefaultProfile(true));
 			}
 			ConfigProfile rsProfile = profileManager.createProfile("$rsprofile");
 
@@ -363,9 +363,8 @@ public class ConfigManager
 		} else {
 			profile = profileManager.createProfile(configProfileName != null ? configProfileName : "default");
 			if (configProfileName == null) {
-				profile.setDefaultProfile(true);
+				profileManager.updateProfile(profile, p -> p.setDefaultProfile(true));
 			}
-			//XXX need to save here
 
 
 			log.info("Creating profile: {}", profile.getName());
