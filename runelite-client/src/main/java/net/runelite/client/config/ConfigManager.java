@@ -389,34 +389,6 @@ public class ConfigManager
 //		swapProperties(properties, true);
 //	}
 
-	public Future<Void> importLocal()
-	{
-		return null;
-//		if (session == null)
-//		{
-//			// No session, no import
-//			return null;
-//		}
-//
-//		final File file = new File(propertiesFile.getParent(), propertiesFile.getName() + "." + TIME_FORMAT.format(new Date()));
-//
-//		try
-//		{
-//			saveToFile(file);
-//		}
-//		catch (IOException e)
-//		{
-//			log.warn("Backup failed, skipping import", e);
-//			return null;
-//		}
-//
-//		log.info("Importing local settings");
-//
-//		syncPropertiesFromFile(getLocalPropertiesFile());
-//
-//		return sendConfig();
-	}
-
 //	private synchronized void loadFromFile()
 //	{
 //		Properties newProperties = new Properties();
