@@ -168,6 +168,7 @@ public class ProfileManager
 		{
 			log.error("unable to write profiles", ex);
 		}
+		lckFile.delete();
 	}
 
 	public static File profileConfigFile(ConfigProfile profile)

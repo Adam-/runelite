@@ -86,53 +86,55 @@ class ConfigData
 		// load + patch + store instead of just flushing the in-memory properties to disk so that
 		// multiple clients editing one config data (such as rs profile config) get their data merged
 		// correctly
-		Properties tempProps = new Properties();
-		try (FileInputStream in = new FileInputStream(configPath);
-			 FileChannel channel = in.getChannel())
-		{
-			channel.lock(0L, Long.MAX_VALUE, true); // avoid file being clobbered while we load it
-			tempProps.load(in);
-		}
-		catch (FileNotFoundException e)
-		{
-			log.debug("config file {} does not exist", configPath);
-		}
 
-		// apply patches
-		for (Map.Entry<String, String> entry : patch.entrySet())
+		File lckFile = new File(configPath.getParentFile(), configPath.getName() + ".lck");
+		try (FileOutputStream lockOut = new FileOutputStream(lckFile);
+			 FileChannel lckChannel = lockOut.getChannel())
 		{
-			if (entry.getValue() == null)
+			lckChannel.lock();
+
+			Properties tempProps = new Properties();
+			try (FileInputStream in = new FileInputStream(configPath))
 			{
-				tempProps.remove(entry.getKey());
+				tempProps.load(in);
 			}
-			else
+			catch (FileNotFoundException e)
 			{
-				tempProps.put(entry.getKey(), entry.getValue());
+				log.debug("config file {} does not exist", configPath);
+			}
+
+			// apply patches
+			for (Map.Entry<String, String> entry : patch.entrySet())
+			{
+				if (entry.getValue() == null)
+				{
+					tempProps.remove(entry.getKey());
+				}
+				else
+				{
+					tempProps.put(entry.getKey(), entry.getValue());
+				}
+			}
+
+			File tempFile = File.createTempFile("runelite_config", null, configPath.getParentFile());
+			try (FileOutputStream out = new FileOutputStream(tempFile);
+				 FileChannel channel = out.getChannel();
+				 OutputStreamWriter writer = new OutputStreamWriter(out, StandardCharsets.UTF_8))
+			{
+				tempProps.store(writer, "RuneLite configuration");
+				channel.force(true);
+			}
+
+			try
+			{
+				Files.move(tempFile.toPath(), configPath.toPath(), StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
+			}
+			catch (AtomicMoveNotSupportedException ex)
+			{
+				log.debug("atomic move not supported", ex);
+				Files.move(tempFile.toPath(), configPath.toPath(), StandardCopyOption.REPLACE_EXISTING);
 			}
 		}
-
-		File tempFile = File.createTempFile("runelite_config", null, configPath.getParentFile());
-		try (FileOutputStream out = new FileOutputStream(tempFile);
-			 FileChannel channel = out.getChannel();
-			 OutputStreamWriter writer = new OutputStreamWriter(out, StandardCharsets.UTF_8))
-		{
-			channel.lock();
-			tempProps.store(writer, "RuneLite configuration");
-			channel.force(true);
-			// FileChannel.close() frees the lock
-		}
-
-		// this will overwrite modifications to the file in between our load and move, but I think that is unavoidable
-		// without either holding a separate lock file the entire time, or reusing the same file and holding a lock on
-		// it the entire time.
-		try
-		{
-			Files.move(tempFile.toPath(), configPath.toPath(), StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
-		}
-		catch (AtomicMoveNotSupportedException ex)
-		{
-			log.debug("atomic move not supported", ex);
-			Files.move(tempFile.toPath(), configPath.toPath(), StandardCopyOption.REPLACE_EXISTING);
-		}
+		lckFile.delete();
 	}
 }
