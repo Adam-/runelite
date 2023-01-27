@@ -154,7 +154,7 @@ public class ConfigManager
 		log.info("Switching profile to: {}", newProfile.getName());
 
 		ConfigData newData = new ConfigData(ProfileManager.profileConfigFile(newProfile));
-		Set<Object> allKeys = new HashSet<>(newData.keySet());
+		Set<String> allKeys = new HashSet<>(newData.keySet());
 
 		ConfigData oldData;
 		synchronized (this)
@@ -168,9 +168,9 @@ public class ConfigManager
 
 		allKeys.addAll(oldData.keySet());
 
-		for (Object wholeKey : allKeys)
+		for (String wholeKey : allKeys)
 		{
-			String[] split = splitKey((String) wholeKey);
+			String[] split = splitKey(wholeKey);
 			if (split == null)
 			{
 				continue;
@@ -179,8 +179,8 @@ public class ConfigManager
 			String groupName = split[KEY_SPLITTER_GROUP];
 			String profile = split[KEY_SPLITTER_PROFILE];
 			String key = split[KEY_SPLITTER_KEY];
-			String oldValue = oldData.getProperty((String) wholeKey);
-			String newValue = newData.getProperty((String) wholeKey);
+			String oldValue = oldData.getProperty(wholeKey);
+			String newValue = newData.getProperty(wholeKey);
 
 			if (Objects.equals(oldValue, newValue))
 			{
@@ -455,13 +455,10 @@ public class ConfigManager
 
 	public List<String> getConfigurationKeys(String prefix)
 	{
-		synchronized (configProfile)
-		{
-			return configProfile.keySet().stream()
-				.map(String.class::cast)
-				.filter(k -> k.startsWith(prefix))
-				.collect(Collectors.toList());
-		}
+		return configProfile.keySet().stream()
+			.map(String.class::cast)
+			.filter(k -> k.startsWith(prefix))
+			.collect(Collectors.toList());
 	}
 
 	public List<String> getRSProfileConfigurationKeys(String group, String profile, String keyPrefix)
@@ -474,14 +471,11 @@ public class ConfigManager
 		assert profile.startsWith(RSPROFILE_GROUP);
 
 		String prefix = group + "." + profile + "." + keyPrefix;
-		synchronized (configProfile)
-		{
-			return rsProfileConfigProfile.keySet().stream()
-				.map(String.class::cast)
-				.filter(k -> k.startsWith(prefix))
-				.map(k -> splitKey(k)[KEY_SPLITTER_KEY])
-				.collect(Collectors.toList());
-		}
+		return rsProfileConfigProfile.keySet().stream()
+			.map(String.class::cast)
+			.filter(k -> k.startsWith(prefix))
+			.map(k -> splitKey(k)[KEY_SPLITTER_KEY])
+			.collect(Collectors.toList());
 	}
 
 	public static String getWholeKey(String groupName, String profile, String key)
@@ -571,11 +565,7 @@ public class ConfigManager
 
 		assert !key.startsWith(RSPROFILE_GROUP + ".");
 		String wholeKey = getWholeKey(groupName, profile, key);
-		String oldValue;
-		synchronized (configData)
-		{
-			oldValue = (String) configData.setProperty(wholeKey, value);
-		}
+		String oldValue = (String) configData.setProperty(wholeKey, value);
 
 		if (Objects.equals(oldValue, value))
 		{
@@ -664,11 +654,7 @@ public class ConfigManager
 	{
 		assert !key.startsWith(RSPROFILE_GROUP + ".");
 		String wholeKey = getWholeKey(groupName, profile, key);
-		String oldValue;
-		synchronized (configData)
-		{
-			oldValue = (String) configData.unset(wholeKey);
-		}
+		String oldValue = (String) configData.unset(wholeKey);
 
 		if (oldValue == null)
 		{
@@ -1029,10 +1015,7 @@ public class ConfigManager
 	}
 
 	private void saveConfiguration(ConfigData configProfile) {
-		Map<String,String> patch;
-		synchronized (configProfile) {
-			patch = configProfile.swapChanges();
-		}
+		Map<String,String> patch = configProfile.swapChanges();
 
 		if (patch.isEmpty()) {
 			return;

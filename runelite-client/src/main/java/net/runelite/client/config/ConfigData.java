@@ -12,10 +12,10 @@ import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -23,16 +23,17 @@ class ConfigData
 {
 	private final File configPath;
 
-	private final Properties properties = new Properties();
-	private Map<String, String> patchChanges = new HashMap<>();
+	private final ConcurrentHashMap<String, String> properties;
+	private ConcurrentHashMap<String, String> patchChanges = new ConcurrentHashMap<>();
 
 	ConfigData(File configPath)
 	{
 		this.configPath = configPath;
 
+		Properties props = new Properties(4096);
 		try (FileInputStream fin = new FileInputStream(configPath))
 		{
-			properties.load(fin);
+			props.load(fin);
 		}
 		catch (FileNotFoundException ignored)
 		{
@@ -41,31 +42,34 @@ class ConfigData
 		{
 			throw new RuntimeException(ex);
 		}
+
+		properties = new ConcurrentHashMap<>(props.size());
+		props.forEach((k, v) -> properties.put((String) k, (String) v));
 	}
 
 	String getProperty(String key)
 	{
-		return properties.getProperty(key);
+		return properties.get(key);
 	}
 
-	Object setProperty(String key, String value)
+	synchronized Object setProperty(String key, String value)
 	{
 		patchChanges.put(key, value);
-		return properties.setProperty(key, value);
+		return properties.put(key, value);
 	}
 
-	Object unset(String key)
+	synchronized Object unset(String key)
 	{
 		patchChanges.remove(key);
 		return properties.remove(key);
 	}
 
-	Set<Object> keySet()
+	Set<String> keySet()
 	{
 		return properties.keySet();
 	}
 
-	Map<String, String> swapChanges()
+	synchronized Map<String, String> swapChanges()
 	{
 		if (patchChanges.isEmpty())
 		{
@@ -73,7 +77,7 @@ class ConfigData
 		}
 
 		Map<String, String> p = patchChanges;
-		patchChanges = new HashMap<>();
+		patchChanges = new ConcurrentHashMap<>();
 		return p;
 	}
 
