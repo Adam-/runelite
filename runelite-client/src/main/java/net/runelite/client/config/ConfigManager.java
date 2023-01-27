@@ -125,8 +125,11 @@ public class ConfigManager
 	@Nullable
 	private String rsProfileKey;
 
+	// --profile cli
+	// --config cli which converts config to a named profile
+	// run migration if no profiles.json
 	@Inject
-	public ConfigManager(
+	private ConfigManager(
 		@Named("config") File config,
 		ScheduledExecutorService scheduledExecutorService,
 		EventBus eventBus,
