@@ -16,58 +16,59 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 class ConfigData
 {
-	//private final ConfigProfile configProfile;
 	private final File configPath;
 
-	private Properties properties = new Properties();
+	private final Properties properties = new Properties();
 	private Map<String, String> patchChanges = new HashMap<>();
 
-	@SneakyThrows //XXX
 	ConfigData(File configPath)
 	{
-	//	this.configProfile = configProfile;
-//		this.configPath = ProfileManager.profileConfigFile(configProfile);
 		this.configPath = configPath;
-//
-		try (FileInputStream fin = new FileInputStream(configPath)) {
-properties.load(fin);
+
+		try (FileInputStream fin = new FileInputStream(configPath))
+		{
+			properties.load(fin);
+		}
+		catch (FileNotFoundException ignored)
+		{
+		}
+		catch (Exception ex)
+		{
+			throw new RuntimeException(ex);
 		}
 	}
 
-//	void load(File file) throws IOException
-//	{
-//		try (FileInputStream fin = new FileInputStream(file))
-//		{
-//			properties.load(fin);
-//		}
-//	}
-
-	String getProperty(String key) {
+	String getProperty(String key)
+	{
 		return properties.getProperty(key);
 	}
 
-	Object setProperty(String key, String value) {
+	Object setProperty(String key, String value)
+	{
 		patchChanges.put(key, value);
 		return properties.setProperty(key, value);
 	}
 
-	Object unset(String key) {
+	Object unset(String key)
+	{
 		patchChanges.remove(key);
 		return properties.remove(key);
 	}
 
-	Set<Object> keySet() {
+	Set<Object> keySet()
+	{
 		return properties.keySet();
 	}
 
-	Map<String, String> swapChanges() {
-		if (patchChanges.isEmpty()) {
+	Map<String, String> swapChanges()
+	{
+		if (patchChanges.isEmpty())
+		{
 			return Collections.emptyMap();
 		}
 
@@ -76,7 +77,8 @@ properties.load(fin);
 		return p;
 	}
 
-	void patch(Map<String, String> patch) throws IOException {
+	void patch(Map<String, String> patch) throws IOException
+	{
 		// load + patch + store instead of just flushing the in-memory properties to disk so that
 		// multiple clients editing one config data (such as rs profile config) get their data merged
 		// correctly
@@ -93,10 +95,14 @@ properties.load(fin);
 		}
 
 		// apply patches
-		for (Map.Entry<String, String> entry : patch.entrySet()) {
-			if (entry.getValue() == null) {
+		for (Map.Entry<String, String> entry : patch.entrySet())
+		{
+			if (entry.getValue() == null)
+			{
 				tempProps.remove(entry.getKey());
-			} else {
+			}
+			else
+			{
 				tempProps.put(entry.getKey(), entry.getValue());
 			}
 		}
@@ -125,36 +131,4 @@ properties.load(fin);
 			Files.move(tempFile.toPath(), configPath.toPath(), StandardCopyOption.REPLACE_EXISTING);
 		}
 	}
-
-//	ConfigPatch buildConfigPatch(Map<String, String> patch) {
-//		if (patchChanges.isEmpty()) {
-//			return null;
-//		}
-//
-//		ConfigPatch patch = new ConfigPatch();
-//		for (Map.Entry<String, String> entry : patchChanges.entrySet())
-//		{
-//			final String key = entry.getKey(), value = entry.getValue();
-//			if (value == null)
-//			{
-//				patch.getUnset().add(key);
-//			}
-//			else
-//			{
-//				patch.getEdit().put(key, value);
-//			}
-//		}
-//		return patch;
-//	}
-
-//	synchronized void copyFrom(ConfigData data) {
-////		synchronized (data)
-////		{
-////			properties.clear();
-////			properties.putAll(data.properties);
-////		}
-//
-//		// needs to flush to disk ..
-////		patch(properties);
-//	}
 }

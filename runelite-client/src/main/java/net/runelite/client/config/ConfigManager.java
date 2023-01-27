@@ -65,7 +65,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 import lombok.NonNull;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.Player;
@@ -145,30 +144,6 @@ public class ConfigManager
 		this.profileManager = profileManager;
 
 		scheduledExecutorService.scheduleWithFixedDelay(this::sendConfig, 30, 5 * 60, TimeUnit.SECONDS);
-
-		setupProfiles();
-	}
-
-	@SneakyThrows
-	private void setupProfiles()
-	{
-		List<ConfigProfile> profiles = profileManager.listProfiles();
-		ConfigProfile profile, rsProfile;
-
-		profile = profiles.stream()
-			.filter(p -> !p.getName().startsWith("$"))
-			.findFirst()
-			.orElseGet(() -> profileManager.createProfile("default"));
-
-		rsProfile = profiles.stream()
-			.filter(p -> p.getName().equals("$rsprofile"))
-			.findFirst()
-			.orElseGet(() -> profileManager.createProfile("$rsprofile"));
-
-		log.info("Using default profile: {}", profile.getName());
-
-		configProfile = new ConfigData(ProfileManager.profileConfigFile(profile));
-		rsProfileConfigProfile = new ConfigData(ProfileManager.profileConfigFile(rsProfile));
 	}
 
 	public void switchProfile(ConfigProfile newProfile)
@@ -279,6 +254,25 @@ public class ConfigManager
 
 	public void load()
 	{
+		// this assumes profile configs are already synced
+		List<ConfigProfile> profiles = profileManager.listProfiles();
+		ConfigProfile profile, rsProfile;
+
+		profile = profiles.stream()
+			.filter(p -> !p.getName().startsWith("$"))
+			.findFirst()
+			.orElseGet(() -> profileManager.createProfile("default"));
+
+		rsProfile = profiles.stream()
+			.filter(p -> p.getName().equals("$rsprofile"))
+			.findFirst()
+			.orElseGet(() -> profileManager.createProfile("$rsprofile"));
+
+		log.info("Using default profile: {}", profile.getName());
+
+		configProfile = new ConfigData(ProfileManager.profileConfigFile(profile));
+		rsProfileConfigProfile = new ConfigData(ProfileManager.profileConfigFile(rsProfile));
+
 //		if (session == null)
 //		{
 		//	loadFromFile();
