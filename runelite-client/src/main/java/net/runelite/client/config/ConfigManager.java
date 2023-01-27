@@ -275,7 +275,7 @@ public class ConfigManager
 
 		List<ConfigProfile> profiles = profileManager.listProfiles();
 		String configProfileName = profileNameFromFile(configFile);
-		if (defaultSettings ? profiles.isEmpty() : profiles.stream().anyMatch(p -> p.getName().equals(configProfileName))
+		if (defaultSettings ? profiles.isEmpty() : profiles.stream().noneMatch(p -> p.getName().equals(configProfileName))
 			&& configFile.exists())
 		{
 			String targetProfileName = defaultSettings ? "default" : configProfileName;
