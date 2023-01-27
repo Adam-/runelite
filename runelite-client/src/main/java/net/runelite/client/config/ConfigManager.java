@@ -266,15 +266,21 @@ public class ConfigManager
 		// migrate if:
 		// profiles does not exist and config is default
 		// config is non-default and a profile with the config name doesn't exist
-		List<ConfigProfile> profiles = profileManager.listProfiles();
+		// this is to avoid importing default config if the default profile is removed or renamed.
+
 		boolean defaultSettings = RuneLite.DEFAULT_CONFIG_FILE.equals(configFile);
+		if (!defaultSettings) {
+			log.warn("Use of --config is deprecated, use --profile instead.");
+		}
+
+		List<ConfigProfile> profiles = profileManager.listProfiles();
 		String configProfileName = profileNameFromFile(configFile);
 		if (defaultSettings ? profiles.isEmpty() : profiles.stream().anyMatch(p -> p.getName().equals(configProfileName))
 			&& configFile.exists())
 		{
 			String targetProfileName = defaultSettings ? "default" : configProfileName;
 
-			log.info("Performing migration of config from {} to {}", configFile.getName(), targetProfileName);
+			log.info("Performing migration of config from {} to profile '{}'", configFile.getName(), targetProfileName);
 
 			ConfigProfile targetProfile = profileManager.createProfile(targetProfileName);
 //			targetProfile.setDefau
@@ -324,6 +330,8 @@ public class ConfigManager
 
 	public void load()
 	{
+		migrate();
+
 		// this assumes profile configs are already synced
 		List<ConfigProfile> profiles = profileManager.listProfiles();
 		ConfigProfile profile, rsProfile;
