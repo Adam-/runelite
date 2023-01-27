@@ -349,28 +349,53 @@ public class ConfigManager
 				continue; // internal
 			}
 
-			if (configProfileName != null) {
-				if (p.getName().equals(configProfileName)) {
+			// --profile
+			if (configProfileName != null)
+			{
+				if (p.getName().equals(configProfileName))
+				{
 					profile = p;
 				}
-			} else if (p.isDefaultProfile()) {
+			}
+			// --config
+			else if (!RuneLite.DEFAULT_CONFIG_FILE.equals(configFile))
+			{
+				// find a profile matching the name of the file
+				String configProfileName = profileNameFromFile(configFile);
+				if (p.getName().equals(configProfileName))
+				{
+					profile = p;
+				}
+			}
+			else if (p.isDefaultProfile())
+			{
 				profile = p;
 			}
 		}
 
-		if (profile != null) {
+		if (profile != null)
+		{
 			log.info("Using profile: {}", profile.getName());
-		} else {
-			profile = profileManager.createProfile(configProfileName != null ? configProfileName : "default");
-			if (configProfileName == null) {
-				profileManager.updateProfile(profile, p -> p.setDefaultProfile(true));
+		}
+		else
+		{
+			if (!RuneLite.DEFAULT_CONFIG_FILE.equals(configFile))
+			{
+				// --config not matching an existing profile. Refuse to make a new profile.
+				throw new RuntimeException("--config is deprecated and is supported for migrating existing configuration, but can't be used to create new profiles. Use --profile instead.");
 			}
 
+			profile = profileManager.createProfile(configProfileName != null ? configProfileName : "default");
+			if (configProfileName == null)
+			{
+				profileManager.updateProfile(profile, p -> p.setDefaultProfile(true));
+			}
 
 			log.info("Creating profile: {}", profile.getName());
 		}
 
-		if (rsProfile == null) {
+		if (rsProfile == null)
+		{
 			rsProfile = profileManager.createProfile("$rsprofile");
 		}
 
