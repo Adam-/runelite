@@ -1058,24 +1058,21 @@ public class ConfigManager
 	{
 		String prefix = RSPROFILE_GROUP + "." + RSPROFILE_GROUP + ".";
 		Set<String> profileKeys = new HashSet<>();
-		synchronized (rsProfileConfigProfile)
+		for (String oKey : rsProfileConfigProfile.keySet())
 		{
-			for (String oKey : rsProfileConfigProfile.keySet())
+			String key = oKey;
+			if (!key.startsWith(prefix))
 			{
-				String key = oKey;
-				if (!key.startsWith(prefix))
-				{
-					continue;
-				}
-
-				String[] split = splitKey(key);
-				if (split == null)
-				{
-					continue;
-				}
-
-				profileKeys.add(split[KEY_SPLITTER_PROFILE]);
+				continue;
 			}
+
+			String[] split = splitKey(key);
+			if (split == null)
+			{
+				continue;
+			}
+
+			profileKeys.add(split[KEY_SPLITTER_PROFILE]);
 		}
 
 		return profileKeys.stream()
