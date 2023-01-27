@@ -283,7 +283,9 @@ public class ConfigManager
 			log.info("Performing migration of config from {} to profile '{}'", configFile.getName(), targetProfileName);
 
 			ConfigProfile targetProfile = profileManager.createProfile(targetProfileName);
-//			targetProfile.setDefau
+			if (defaultSettings) {
+				targetProfile.setDefaultProfile(true);
+			}
 			ConfigProfile rsProfile = profileManager.createProfile("$rsprofile");
 
 			ConfigData migratingData = new ConfigData(configFile);
@@ -332,21 +334,46 @@ public class ConfigManager
 	{
 		migrate();
 
-		// this assumes profile configs are already synced
 		List<ConfigProfile> profiles = profileManager.listProfiles();
-		ConfigProfile profile, rsProfile;
+		ConfigProfile profile = null, rsProfile = null;
 
-		profile = profiles.stream()
-			.filter(p -> !p.getName().startsWith("$"))
-			.findFirst()
-			.orElseGet(() -> profileManager.createProfile("default"));
+		for (ConfigProfile p : profiles)
+		{
+			if (p.getName().startsWith("$"))
+			{
+				if (p.getName().equals("$rsprofile"))
+				{
+					rsProfile = p;
+				}
 
-		rsProfile = profiles.stream()
-			.filter(p -> p.getName().equals("$rsprofile"))
-			.findFirst()
-			.orElseGet(() -> profileManager.createProfile("$rsprofile"));
+				continue; // internal
+			}
 
-		log.info("Using default profile: {}", profile.getName());
+			if (configProfileName != null) {
+				if (p.getName().equals(configProfileName)) {
+					profile = p;
+				}
+			} else if (p.isDefaultProfile()) {
+				profile = p;
+			}
+		}
+
+		if (profile != null) {
+			log.info("Using profile: {}", profile.getName());
+		} else {
+			profile = profileManager.createProfile(configProfileName != null ? configProfileName : "default");
+			if (configProfileName == null) {
+				profile.setDefaultProfile(true);
+			}
+			//XXX need to save here
+
+
+			log.info("Creating profile: {}", profile.getName());
+		}
+
+		if (rsProfile == null) {
+			rsProfile = profileManager.createProfile("$rsprofile");
+		}
 
 		configProfile = new ConfigData(ProfileManager.profileConfigFile(profile));
 		rsProfileConfigProfile = new ConfigData(ProfileManager.profileConfigFile(rsProfile));

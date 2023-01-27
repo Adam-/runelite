@@ -18,4 +18,7 @@ public class ConfigProfile
 	@Getter
 	@Setter
 	private boolean sync;
+	@Getter
+	@Setter
+	private boolean defaultProfile;
 }
