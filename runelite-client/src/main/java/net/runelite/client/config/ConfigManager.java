@@ -1289,39 +1289,68 @@ public class ConfigManager
 	{
 		eventBus.post(new ConfigSync());
 
-		CompletableFuture<Void> future = null;
+//		CompletableFuture<Void> future = null;
 
-		saveConfiguration(profile, configProfile);
-		saveConfiguration(rsProfile, rsProfileConfigProfile);
-
-		return future;
+		CompletableFuture<Void> f1 = saveConfiguration(profile, configProfile);
+		CompletableFuture<Void> f2 = saveConfiguration(rsProfile, rsProfileConfigProfile);
+		return CompletableFuture.allOf(f1, f2);
 	}
 
-	private void saveConfiguration(ConfigProfile profile, ConfigData data) {
-		Map<String,String> patch = data.swapChanges();
+	private CompletableFuture<Void> saveConfiguration(ConfigProfile profile, ConfigData data)
+	{
+		Map<String, String> patch = data.swapChanges();
 
-		if (patch.isEmpty()) {
-			return null;
+		if (patch.isEmpty())
+		{
+			return CompletableFuture.completedFuture(null);
 		}
 
 		log.debug("Saving profile {} (patch size: {})", profile.getName(), patch.size());
 
-		CompletableFuture<Void> future = new CompletableFuture<>();
+		CompletableFuture<Void> future;
 		if (profile.isSync())
 		{
-			CompletableFuture<ConfigClient.PatchResult> configFuture = configClient.patch(buildConfigPatch(patch), profile.getId());
-			configFuture.thenAccept(patchResult -> {
-				if (patchResult.oldRev == profile.getRev()) {
-					profile.setRev(patchResult.newRev);
-				} else {
-					log.debug("rev mismatch {} != {}, invalidating", patchResult.oldRev, profile.getRev());
-					profile.setRev(-1L);
-				}
-				//XXX save?
-			});
+			future = new CompletableFuture<>();
+			configClient.patch(buildConfigPatch(patch), profile.getId())
+				.whenComplete((patchResult, ex) ->
+				{
+					if (ex != null)
+					{
+						future.completeExceptionally(ex);
+						return;
+					}
+
+					if (patchResult == null)
+					{
+						future.complete(null);
+						return;
+					}
+
+					profileManager.updateProfile(profile, p -> {
+						// 'profile' is stale so we can only use it for the id
+						if (patchResult.oldRev == p.getRev())
+						{
+							p.setRev(patchResult.newRev);
+							log.debug("incremental patch applied");
+						}
+						else
+						{
+							log.debug("rev mismatch {} != {}, invalidating", patchResult.oldRev, p.getRev());
+							p.setRev(-1L);
+						}
+
+						future.complete(null);
+					});
+
+				});
+		}
+		else
+		{
+			future = CompletableFuture.completedFuture(null);
 		}
 
 		data.patch(patch);
+		return future;
 	}
 
 	private static ConfigPatch buildConfigPatch(Map<String, String> patchChanges)
