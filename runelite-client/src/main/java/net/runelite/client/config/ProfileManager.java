@@ -101,18 +101,27 @@ public class ProfileManager
 			log.debug("Default profile changed to: {}", name);
 		});
 	}
-//
-//	public void updateProfile(ConfigProfile configProfile, Consumer<ConfigProfile> consumer) {
-////		AtomicReference<ConfigProfile>
-//		loadEditSave(profiles -> {
-//			for (ConfigProfile p : profiles) {
-//				if (p.getId() == configProfile.getId()) {
-//					consumer.accept(p);
-//				}
-//			}
-//		});
-////		return null;
-//	}
+
+	public ConfigProfile updateProfile(ConfigProfile configProfile, Consumer<ConfigProfile> consumer) {
+		AtomicReference<ConfigProfile> ref = new AtomicReference<>();
+		loadEditSave(profiles -> {
+			for (ConfigProfile p : profiles) {
+				if (p.getId() == configProfile.getId()) {
+					consumer.accept(p);
+					ref.set(configProfile);
+					return;
+				}
+			}
+
+			log.debug("updating profile which doesn't exist! {}", configProfile);
+
+			// updating a profile which doesn't exist?
+			consumer.accept(configProfile);
+			profiles.add(configProfile);
+			ref.set(configProfile);
+		});
+		return ref.get();
+	}
 
 	public void removeProfile(ConfigProfile profile)
 	{

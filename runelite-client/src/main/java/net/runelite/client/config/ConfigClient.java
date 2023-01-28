@@ -164,7 +164,7 @@ public class ConfigClient
 					{
 						log.debug("Synchronized {}/{} configuration values",
 							patch.getEdit().size(), patch.getUnset().size());
-						future.complete(gson.fromJson(new InputStreamReader(response.body().byteStream(), StandardCharsets.UTF_8), PatchResult.class);
+						future.complete(gson.fromJson(new InputStreamReader(response.body().byteStream(), StandardCharsets.UTF_8), PatchResult.class));
 					}
 				} catch (Exception ex) {
 					future.completeExceptionally(ex);
