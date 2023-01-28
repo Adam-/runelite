@@ -500,32 +500,9 @@ public class ConfigManager
 			//XXX rsprofile probably needs to be synced
 		}
 
-		if (profile.isSync()) {
-			// synced profiles need to be fetched if outdated
-			long id = profile.getId();
-			ConfigClient.Profile remoteProfile = remoteProfiles.stream()
-				.filter(p -> p.id == id)
-				.findFirst()
-				.orElse(null);
-
-			if (remoteProfile == null) {
-				log.warn("synced profile {} has no remote!", profile);
-			} else {
-				if (profile.getRev() != remoteProfile.rev) {
-					log.info("Loading remote configuration for profile '{}'", profile.getName());
-
-					Map<String, String> remoteConfiguration;
-					try
-					{
-						remoteConfiguration = configClient.get(profile.getId());
-					}
-					catch (IOException ex)
-					{
-						log.error("unable to load remote configuration", ex);
-					}
-				}
-			}
-		}
+		// synced profiles need to be fetched if outdated
+		syncRemote(profile, remoteProfiles);
+		syncRemote(rsProfile, remoteProfiles);
 
 		this.profile = profile;
 		this.rsProfile = rsProfile;
@@ -574,6 +551,58 @@ public class ConfigManager
 //		{
 //			log.warn("Unable to update configuration on disk", ex);
 //		}
+	}
+
+	private void syncRemote(ConfigProfile profile, List<ConfigClient.Profile> remoteProfiles)
+	{
+		if (!profile.isSync())
+		{
+			return;
+		}
+
+		long id = profile.getId();
+		ConfigClient.Profile remoteProfile = remoteProfiles.stream()
+			.filter(p -> p.id == id)
+			.findFirst()
+			.orElse(null);
+
+		if (remoteProfile == null)
+		{
+			log.warn("synced profile {} has no remote!", profile);
+			return;
+		}
+
+		if (profile.getRev() == remoteProfile.rev)
+		{
+			log.debug("profile {} is up to date", profile);
+		}
+		else
+		{
+			log.info("Loading remote configuration for profile '{}'", profile.getName());
+
+			try
+			{
+				Map<String, String> remoteConfiguration = configClient.get(profile.getId());
+				if (remoteConfiguration == null || remoteConfiguration.isEmpty())
+				{
+					log.debug("no remote configuration for {}", profile);
+					return;
+				}
+
+				File configFile = ProfileManager.profileConfigFile(profile);
+				// remote configuration replaces local
+				configFile.delete();
+
+				ConfigData configData = new ConfigData(configFile);
+				configData.patch(remoteConfiguration);
+
+				log.debug("synced remote profile {} to disk", profile);
+			}
+			catch (IOException ex)
+			{
+				log.error("unable to load remote configuration for {}", profile, ex);
+			}
+		}
 	}
 
 //	private void swapProperties(Properties newProperties, boolean saveToServer)

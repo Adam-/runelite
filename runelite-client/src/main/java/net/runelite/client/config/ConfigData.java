@@ -47,11 +47,12 @@ class ConfigData
 		props.forEach((k, v) -> properties.put((String) k, (String) v));
 	}
 
-	ConfigData(File configPath, Map<String, String> config)
-	{
-		this.configPath = configPath;
-		properties = new ConcurrentHashMap<>(config);
-	}
+//	ConfigData(File configPath, Map<String, String> config)
+//	{
+//		this.configPath = configPath;
+//		properties = new ConcurrentHashMap<>(config);
+//		patchChanges = new ConcurrentHashMap<>(config);
+//	}
 
 	String getProperty(String key)
 	{
@@ -63,6 +64,12 @@ class ConfigData
 		patchChanges.put(key, value);
 		return properties.put(key, value);
 	}
+
+//	synchronized void setAll(Map<String, String> props)
+//	{
+//		properties.putAll(props);
+//		patchChanges.putAll(props);
+//	}
 
 	synchronized String unset(String key)
 	{
