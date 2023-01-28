@@ -227,43 +227,23 @@ public class ConfigManager
 
 	public final void switchSession(AccountSession session)
 	{
-		// Ensure existing config is saved
-//		sendConfig();
-
 		if (session == null)
 		{
 			this.session = null;
 			configClient.setUuid(null);
+
+			// remove the remote profiles
+			profileManager.loadEditSave(profiles -> profiles.removeIf(p -> !p.getName().startsWith("$") && p.isSync()));
 		}
 		else
 		{
 			this.session = session;
 			configClient.setUuid(session.getUuid());
+
+			List<ConfigClient.Profile> profiles = configClient.profiles();
+			mergeRemoteProfiles(profiles);
 		}
-
-//		this.propertiesFile = getPropertiesFile();
-//
-//		load(); // load profile specific config
 	}
-
-//	private File getLocalPropertiesFile()
-//	{
-//		return settingsFileInput;
-//	}
-//
-//	private File getPropertiesFile()
-//	{
-//		// Sessions that aren't logged in have no username
-//		if (session == null || session.getUsername() == null)
-//		{
-//			return getLocalPropertiesFile();
-//		}
-//		else
-//		{
-//			File profileDir = new File(RuneLite.PROFILES_DIR, session.getUsername().toLowerCase());
-//			return new File(profileDir, RuneLite.DEFAULT_CONFIG_FILE.getName());
-//		}
-//	}
 
 	private void migrate()
 	{
@@ -291,6 +271,7 @@ public class ConfigManager
 				profileManager.updateDefault(targetProfileName);
 			}
 			ConfigProfile rsProfile = profileManager.findOrCreateProfile("$rsprofile");
+			//XXX sync?
 
 			ConfigData migratingData = new ConfigData(configFile);
 			ConfigData configData = new ConfigData(ProfileManager.profileConfigFile(targetProfile));
@@ -405,30 +386,7 @@ public class ConfigManager
 		{
 			migrateRemote(remoteProfiles);
 
-			// merge remote profiles into local
-			profileManager.loadEditSave(profiles ->
-			{
-				outer:
-				for (ConfigClient.Profile remoteProfile : remoteProfiles)
-				{
-					for (ConfigProfile profile : profiles)
-					{
-						if (profile.getId() == remoteProfile.id)
-						{
-							log.debug("Found local profile {} for remote {}", profile, remoteProfile);
-							// sync could be off due to logging out, set it back on
-							profile.setSync(true);
-							continue outer;
-						}
-					}
-
-					log.debug("Creating local profile for remote {}", remoteProfile);
-					ConfigProfile profile = new ConfigProfile(System.nanoTime());
-					profile.setName(remoteProfile.name);
-					profile.setSync(true);
-					profiles.add(profile);
-				}
-			});
+			mergeRemoteProfiles(remoteProfiles);
 		}
 
 		List<ConfigProfile> profiles = profileManager.listProfiles();//XXX avoid the double load here?
@@ -548,6 +506,31 @@ public class ConfigManager
 //		{
 //			log.warn("Unable to update configuration on disk", ex);
 //		}
+	}
+
+	private void mergeRemoteProfiles(List<ConfigClient.Profile> remoteProfiles) {
+		profileManager.loadEditSave(profiles ->
+		{
+			outer:
+			for (ConfigClient.Profile remoteProfile : remoteProfiles)
+			{
+				for (ConfigProfile profile : profiles)
+				{
+					if (profile.getId() == remoteProfile.id)
+					{
+						log.debug("Found local profile {} for remote {}", profile, remoteProfile);
+						profile.setSync(true);
+						continue outer;
+					}
+				}
+
+				log.debug("Creating local profile for remote {}", remoteProfile);
+				ConfigProfile profile = new ConfigProfile(System.nanoTime());
+				profile.setName(remoteProfile.name);
+				profile.setSync(true);
+				profiles.add(profile);
+			}
+		});
 	}
 
 	private void syncRemote(ConfigProfile profile, List<ConfigClient.Profile> remoteProfiles)
@@ -1331,7 +1314,7 @@ public class ConfigManager
 						if (patchResult.oldRev == p.getRev())
 						{
 							p.setRev(patchResult.newRev);
-							log.debug("incremental patch applied");
+							log.debug("incremental patch applied {} -> {}", patchResult.oldRev, patchResult.newRev);
 						}
 						else
 						{
