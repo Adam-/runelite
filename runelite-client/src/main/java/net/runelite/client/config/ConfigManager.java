@@ -406,9 +406,32 @@ public class ConfigManager
 
 		if (remoteProfiles != null) {
 			migrateRemote(remoteProfiles);
-		}
 
-		// XXX merge remote profiles
+			List<ConfigClient.Profile> remoteProfiles2 = remoteProfiles;
+			profileManager.loadEditSave( profiles -> {
+				// XXX merge remote profiles
+				outer:
+				for (ConfigClient.Profile remoteProfile : remoteProfiles2)
+				{
+					for (ConfigProfile profile : profiles) {
+						if (profile.getId() == remoteProfile.id) {
+							log.debug("Found local profile {} for remote {}", profile, remoteProfile);
+							if (remoteProfile.rev != profile.getRev()) {
+								// fetch
+							}
+							continue  outer;
+						}
+					}
+
+					log.debug("Creating local profile for remote {}", remoteProfile);
+					ConfigProfile profile = new ConfigProfile(System.nanoTime());
+					profile.setName(remoteProfile.name);
+					profile.setSync(true);
+					// fetch
+					profiles.add(profile);
+				}
+			});
+		}
 
 		List<ConfigProfile> profiles = profileManager.listProfiles();
 		ConfigProfile profile = null, rsProfile = null;
@@ -1219,7 +1242,7 @@ public class ConfigManager
 		return future;
 	}
 
-	private CompletableFuture<Void> saveConfiguration(ConfigProfile profile, ConfigData data) {
+	private void saveConfiguration(ConfigProfile profile, ConfigData data) {
 		Map<String,String> patch = data.swapChanges();
 
 		if (patch.isEmpty()) {

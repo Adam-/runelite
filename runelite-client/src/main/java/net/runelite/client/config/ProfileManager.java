@@ -165,7 +165,7 @@ public class ProfileManager
 		Files.copy(fromFile.toPath(), toFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 	}
 
-	private void loadEditSave(Consumer<List<ConfigProfile>> c)
+	public void loadEditSave(Consumer<List<ConfigProfile>> c)
 	{
 		File lckFile = new File(PROFILES_DIR, "profiles.lck");
 		try (FileOutputStream lockOut = new FileOutputStream(lckFile);
