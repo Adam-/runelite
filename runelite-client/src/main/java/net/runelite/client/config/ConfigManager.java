@@ -35,6 +35,7 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
@@ -284,9 +285,9 @@ public class ConfigManager
 
 			ConfigProfile targetProfile = profileManager.createProfile(targetProfileName);
 			if (defaultSettings) {
-				profileManager.updateProfile(targetProfile, p -> p.setDefaultProfile(true));
+				profileManager.updateDefault(targetProfileName);
 			}
-			ConfigProfile rsProfile = profileManager.createProfile("$rsprofile");
+			ConfigProfile rsProfile = profileManager.findOrCreateProfile("$rsprofile");
 
 			ConfigData migratingData = new ConfigData(configFile);
 			ConfigData configData = new ConfigData(ProfileManager.profileConfigFile(targetProfile));
@@ -301,9 +302,7 @@ public class ConfigManager
 					continue;
 				}
 
-//				String groupName = split[KEY_SPLITTER_GROUP];
 				String profile = split[KEY_SPLITTER_PROFILE];
-//				String key = split[KEY_SPLITTER_KEY];
 
 				if (profile != null) {
 					rsData.setProperty(wholeKey, migratingData.getProperty(wholeKey));
@@ -321,6 +320,69 @@ public class ConfigManager
 		}
 	}
 
+	private void migrateRemote(List<ConfigClient.Profile> profiles) {
+		ConfigClient.Profile profile = profiles.stream()
+			.filter(p -> p.id == 0 && p.rev == 0)
+			.findAny().orElse(null);
+		if (profile == null) {
+			return;
+		}
+
+		log.info("Migrating remote profile");
+
+		Map<String, String> configuration;
+		try
+		{
+			configuration = configClient.get(0L);
+		}
+		catch (IOException e)
+		{
+			log.error("unable to fetch profile to migrate", e);
+			return;
+		}
+
+		// when logged in the remote non-migrated profile becomes default
+		ConfigProfile targetProfile = profileManager.createProfile(session.getUsername());
+		profileManager.updateDefault(targetProfile.getName());
+		//XXX SET SYNC
+
+		ConfigProfile rsProfile = profileManager.findOrCreateProfile("$rsprofile");
+
+		ConfigData configData = new ConfigData(ProfileManager.profileConfigFile(targetProfile));
+		ConfigData rsData = new ConfigData(ProfileManager.profileConfigFile(rsProfile));
+
+		int keys = 0;
+		for (String wholeKey : configuration.keySet())
+		{
+			String[] split = splitKey(wholeKey);
+			if (split == null)
+			{
+				continue;
+			}
+
+			String keyProfile = split[KEY_SPLITTER_PROFILE];
+
+			if (keyProfile != null) {
+				rsData.setProperty(wholeKey, configuration.get(wholeKey));
+			} else {
+				configData.setProperty(wholeKey, configuration.get(wholeKey));
+			}
+
+			++keys;
+		}
+
+		Map<String, String> swap = configData.swapChanges();
+		Map<String, String> rsSwap = rsData.swapChanges();
+
+		rsData.patch(rsSwap);
+		configData.patch(swap);
+
+		configClient.patch(buildConfigPatch(rsSwap), rsProfile.getId());
+		configClient.patch(buildConfigPatch(swap), targetProfile.getId());
+
+		log.info("Finished performing remote profile migration of {} keys", keys);
+	}
+
 	private static String profileNameFromFile(File file) {
 		String configProfileName = file.getName();
 		int idx = configProfileName.lastIndexOf('.');
@@ -332,21 +394,32 @@ public class ConfigManager
 
 	public void load()
 	{
+		List<ConfigClient.Profile> remoteProfiles = null;
+		if (session != null) {
+			remoteProfiles = configClient.profiles();
+		}
+
 		migrate();
+
+		if (remoteProfiles != null) {
+			migrateRemote(remoteProfiles);
+		}
+
+		// XXX merge remote profiles
 
 		List<ConfigProfile> profiles = profileManager.listProfiles();
 		ConfigProfile profile = null, rsProfile = null;
 
 		for (ConfigProfile p : profiles)
 		{
-			if (p.getName().startsWith("$"))
+			if (p.getName().startsWith("$")) // internal
 			{
 				if (p.getName().equals("$rsprofile"))
 				{
 					rsProfile = p;
 				}
 
-				continue; // internal
+				continue;
 			}
 
 			// --profile
@@ -388,7 +461,7 @@ public class ConfigManager
 			profile = profileManager.createProfile(configProfileName != null ? configProfileName : "default");
 			if (configProfileName == null)
 			{
-				profileManager.updateProfile(profile, p -> p.setDefaultProfile(true));
+				profileManager.updateDefault(profile.getName());
 			}
 
 			log.info("Creating profile: {}", profile.getName());

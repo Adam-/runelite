@@ -17,6 +17,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -72,17 +73,46 @@ public class ProfileManager
 		return profile;
 	}
 
-	public void updateProfile(ConfigProfile configProfile, Consumer<ConfigProfile> consumer) {
-//		AtomicReference<ConfigProfile>
+	public ConfigProfile findOrCreateProfile(String name) {
+		AtomicReference<ConfigProfile> ref = new AtomicReference<>();
 		loadEditSave(profiles -> {
-			for (ConfigProfile p : profiles) {
-				if (p.getId() == configProfile.getId()) {
-					consumer.accept(p);
+			for (ConfigProfile profile : profiles) {
+				if (profile.getName().equals(name)) {
+					ref.set(profile);
+					return;
 				}
 			}
+
+			ConfigProfile profile = new ConfigProfile(System.nanoTime());
+			profile.setName(name);
+			profile.setSync(false);
+			ref.set(profile);
+			profiles.add(profile);
+			log.debug("Created profile {}", profile);
 		});
-//		return null;
+		return ref.get();
 	}
+
+	public void updateDefault(String name) {
+		loadEditSave(profiles -> {
+			for (ConfigProfile p : profiles) {
+				p.setDefaultProfile(p.getName().equals(name));
+			}
+			log.debug("Default profile changed to: {}", name);
+		});
+	}
+//
+//	public void updateProfile(ConfigProfile configProfile, Consumer<ConfigProfile> consumer) {
+////		AtomicReference<ConfigProfile>
+//		loadEditSave(profiles -> {
+//			for (ConfigProfile p : profiles) {
+//				if (p.getId() == configProfile.getId()) {
+//					consumer.accept(p);
+//				}
+//			}
+//		});
+////		return null;
+//	}
 
 	public void removeProfile(ConfigProfile profile)
 	{

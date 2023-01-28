@@ -32,6 +32,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -67,11 +69,22 @@ public class ConfigClient
 		this.gson = gson;
 	}
 
-	public Map<String, String> get() throws IOException
+	public static class Profile {
+		long id;
+		String name;
+		long rev;
+	}
+
+	public List<Profile> profiles() {
+		return Collections.emptyList();
+	}
+
+	public Map<String, String> get(long profile) throws IOException
 	{
 		HttpUrl url = apiBase.newBuilder()
 			.addPathSegment("config")
-			.addPathSegment("v2")
+			.addPathSegment("v3")
+			.addPathSegment(Long.toString(profile))
 			.build();
 
 		log.debug("Built URI: {}", url);
@@ -95,13 +108,14 @@ public class ConfigClient
 		}
 	}
 
-	public CompletableFuture<Void> patch(ConfigPatch patch)
+	public CompletableFuture<Integer> patch(ConfigPatch patch, long profile)
 	{
-		CompletableFuture<Void> future = new CompletableFuture<>();
+		CompletableFuture<Integer> future = new CompletableFuture<>();
 
 		HttpUrl url = apiBase.newBuilder()
 			.addPathSegment("config")
-			.addPathSegment("v2")
+			.addPathSegment("v3")
+			.addPathSegment(Long.toString(profile))
 			.build();
 
 		log.debug("Built URI: {}", url);
@@ -124,27 +138,35 @@ public class ConfigClient
 			@Override
 			public void onResponse(Call call, Response response)
 			{
-				if (response.code() != 200)
+				try
 				{
-					String body = "bad response";
-					try
+					Integer rev = null;
+					if (response.code() != 200)
 					{
-						body = response.body().string();
-					}
-					catch (IOException ignored)
-					{
-					}
+						String body = "bad response";
+						try
+						{
+							body = response.body().string();
+						}
+						catch (IOException ignored)
+						{
+						}
 
-					log.warn("failed to synchronize some of {}/{} configuration values: {}",
-						patch.getEdit().size(), patch.getUnset().size(), body);
+						log.warn("failed to synchronize some of {}/{} configuration values: {}",
+							patch.getEdit().size(), patch.getUnset().size(), body);
+					}
+					else
+					{
+						log.debug("Synchronized {}/{} configuration values",
+							patch.getEdit().size(), patch.getUnset().size());
+						rev = Integer.parseInt(response.body().string());
+					}
+					future.complete(rev);
+				} catch (Exception ex) {
+					future.completeExceptionally(ex);
+				} finally {
+					response.close();
 				}
-				else
-				{
-					log.debug("Synchronized {}/{} configuration values",
-						patch.getEdit().size(), patch.getUnset().size());
-				}
-				response.close();
-				future.complete(null);
 			}
 		});
 
