@@ -397,30 +397,28 @@ public class ConfigManager
 
 	public void load()
 	{
-		List<ConfigClient.Profile> remoteProfiles = null;
-		if (session != null) {
-			remoteProfiles = configClient.profiles();
-		}
+		List<ConfigClient.Profile> remoteProfiles = session != null ? configClient.profiles() : Collections.emptyList();
 
 		migrate();
 
-		if (remoteProfiles != null) {
+		if (!remoteProfiles.isEmpty())
+		{
 			migrateRemote(remoteProfiles);
 
 			// merge remote profiles into local
-			List<ConfigClient.Profile> remoteProfiles2 = remoteProfiles;
-			profileManager.loadEditSave( profiles -> {
+			profileManager.loadEditSave(profiles ->
+			{
 				outer:
-				for (ConfigClient.Profile remoteProfile : remoteProfiles2)
+				for (ConfigClient.Profile remoteProfile : remoteProfiles)
 				{
-					for (ConfigProfile profile : profiles) {
-						if (profile.getId() == remoteProfile.id) {
+					for (ConfigProfile profile : profiles)
+					{
+						if (profile.getId() == remoteProfile.id)
+						{
 							log.debug("Found local profile {} for remote {}", profile, remoteProfile);
-							profile.setSync(true); // I think this should always be true, but just in case
-							if (remoteProfile.rev != profile.getRev()) {
-								// fetch
-							}
-							continue  outer;
+							// sync could be off due to logging out, set it back on
+							profile.setSync(true);
+							continue outer;
 						}
 					}
 
@@ -428,7 +426,6 @@ public class ConfigManager
 					ConfigProfile profile = new ConfigProfile(System.nanoTime());
 					profile.setName(remoteProfile.name);
 					profile.setSync(true);
-					// fetch
 					profiles.add(profile);
 				}
 			});
