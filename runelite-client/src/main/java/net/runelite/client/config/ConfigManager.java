@@ -121,6 +121,8 @@ public class ConfigManager
 	private final ConfigInvocationHandler handler = new ConfigInvocationHandler(this);
 //	private final Map<String, String> pendingChanges = new HashMap<>();
 
+	private ConfigProfile profile;
+	private ConfigProfile rsProfile;
 	private ConfigData configProfile;
 	private ConfigData rsProfileConfigProfile;
 
@@ -171,6 +173,7 @@ public class ConfigManager
 		{
 			handler.invalidate();
 			oldData = configProfile;
+			profile = newProfile;
 			configProfile = newData;
 		}
 
@@ -371,14 +374,14 @@ public class ConfigManager
 			++keys;
 		}
 
-		Map<String, String> swap = configData.swapChanges();
-		Map<String, String> rsSwap = rsData.swapChanges();
-
-		rsData.patch(rsSwap);
-		configData.patch(swap);
-
-		configClient.patch(buildConfigPatch(rsSwap), rsProfile.getId());
-		configClient.patch(buildConfigPatch(swap), targetProfile.getId());
+//		Map<String, String> swap = configData.swapChanges();
+//		Map<String, String> rsSwap = rsData.swapChanges();
+//
+//		rsData.patch(rsSwap);
+//		configData.patch(swap);
+//
+//		configClient.patch(buildConfigPatch(rsSwap), rsProfile.getId());
+//		configClient.patch(buildConfigPatch(swap), targetProfile.getId());
 
 		log.info("Finished performing remote profile migration of {} keys", keys);
 	}
@@ -472,6 +475,8 @@ public class ConfigManager
 			rsProfile = profileManager.createProfile("$rsprofile");
 		}
 
+		this.profile = profile;
+		this.rsProfile = rsProfile;
 		configProfile = new ConfigData(ProfileManager.profileConfigFile(profile));
 		rsProfileConfigProfile = new ConfigData(ProfileManager.profileConfigFile(rsProfile));
 
@@ -1208,22 +1213,37 @@ public class ConfigManager
 
 		CompletableFuture<Void> future = null;
 
-		saveConfiguration(configProfile);
-		saveConfiguration(rsProfileConfigProfile);
+		saveConfiguration(profile, configProfile);
+		saveConfiguration(rsProfile, rsProfileConfigProfile);
 
 		return future;
 	}
 
-	private void saveConfiguration(ConfigData configProfile) {
-		Map<String,String> patch = configProfile.swapChanges();
+	private CompletableFuture<Void> saveConfiguration(ConfigProfile profile, ConfigData data) {
+		Map<String,String> patch = data.swapChanges();
 
 		if (patch.isEmpty()) {
-			return;
+			return null;
 		}
 
-//		buildConfigPatch(patch);
+		log.debug("Saving profile {} (patch size: {})", profile.getName(), patch.size());
 
-		configProfile.patch(patch);
+		CompletableFuture<Void> future = new CompletableFuture<>();
+		if (profile.isSync())
+		{
+			CompletableFuture<ConfigClient.PatchResult> configFuture = configClient.patch(buildConfigPatch(patch), profile.getId());
+			configFuture.thenAccept(patchResult -> {
+				if (patchResult.oldRev == profile.getRev()) {
+					profile.setRev(patchResult.newRev);
+				} else {
+					log.debug("rev mismatch {} != {}, invalidating", patchResult.oldRev, profile.getRev());
+					profile.setRev(-1L);
+				}
+				//XXX save?
+			});
+		}
+
+		data.patch(patch);
 	}
 
 	private static ConfigPatch buildConfigPatch(Map<String, String> patchChanges)

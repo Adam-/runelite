@@ -21,4 +21,7 @@ public class ConfigProfile
 	@Getter
 	@Setter
 	private boolean defaultProfile;
+	@Getter(AccessLevel.PACKAGE)
+	@Setter(AccessLevel.PACKAGE)
+	private long rev;
 }

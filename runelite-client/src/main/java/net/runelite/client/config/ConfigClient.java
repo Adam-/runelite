@@ -108,9 +108,14 @@ public class ConfigClient
 		}
 	}
 
-	public CompletableFuture<Integer> patch(ConfigPatch patch, long profile)
+	public static class PatchResult {
+		long oldRev;
+		long newRev;
+	}
+
+	public CompletableFuture<PatchResult> patch(ConfigPatch patch, long profile)
 	{
-		CompletableFuture<Integer> future = new CompletableFuture<>();
+		CompletableFuture<PatchResult> future = new CompletableFuture<>();
 
 		HttpUrl url = apiBase.newBuilder()
 			.addPathSegment("config")
@@ -140,7 +145,6 @@ public class ConfigClient
 			{
 				try
 				{
-					Integer rev = null;
 					if (response.code() != 200)
 					{
 						String body = "bad response";
@@ -154,14 +158,14 @@ public class ConfigClient
 
 						log.warn("failed to synchronize some of {}/{} configuration values: {}",
 							patch.getEdit().size(), patch.getUnset().size(), body);
+						future.complete(null);
 					}
 					else
 					{
 						log.debug("Synchronized {}/{} configuration values",
 							patch.getEdit().size(), patch.getUnset().size());
-						rev = Integer.parseInt(response.body().string());
+						future.complete(gson.fromJson(new InputStreamReader(response.body().byteStream(), StandardCharsets.UTF_8), PatchResult.class);
 					}
-					future.complete(rev);
 				} catch (Exception ex) {
 					future.completeExceptionally(ex);
 				} finally {
