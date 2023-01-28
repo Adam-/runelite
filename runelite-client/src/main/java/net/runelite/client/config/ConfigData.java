@@ -47,6 +47,12 @@ class ConfigData
 		props.forEach((k, v) -> properties.put((String) k, (String) v));
 	}
 
+	ConfigData(File configPath, Map<String, String> config)
+	{
+		this.configPath = configPath;
+		properties = new ConcurrentHashMap<>(config);
+	}
+
 	String getProperty(String key)
 	{
 		return properties.get(key);

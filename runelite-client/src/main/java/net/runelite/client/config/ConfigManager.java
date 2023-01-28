@@ -407,15 +407,16 @@ public class ConfigManager
 		if (remoteProfiles != null) {
 			migrateRemote(remoteProfiles);
 
+			// merge remote profiles into local
 			List<ConfigClient.Profile> remoteProfiles2 = remoteProfiles;
 			profileManager.loadEditSave( profiles -> {
-				// XXX merge remote profiles
 				outer:
 				for (ConfigClient.Profile remoteProfile : remoteProfiles2)
 				{
 					for (ConfigProfile profile : profiles) {
 						if (profile.getId() == remoteProfile.id) {
 							log.debug("Found local profile {} for remote {}", profile, remoteProfile);
+							profile.setSync(true); // I think this should always be true, but just in case
 							if (remoteProfile.rev != profile.getRev()) {
 								// fetch
 							}
@@ -433,7 +434,7 @@ public class ConfigManager
 			});
 		}
 
-		List<ConfigProfile> profiles = profileManager.listProfiles();
+		List<ConfigProfile> profiles = profileManager.listProfiles();//XXX avoid the double load here?
 		ConfigProfile profile = null, rsProfile = null;
 
 		for (ConfigProfile p : profiles)
@@ -496,6 +497,34 @@ public class ConfigManager
 		if (rsProfile == null)
 		{
 			rsProfile = profileManager.createProfile("$rsprofile");
+			//XXX rsprofile probably needs to be synced
+		}
+
+		if (profile.isSync()) {
+			// synced profiles need to be fetched if outdated
+			long id = profile.getId();
+			ConfigClient.Profile remoteProfile = remoteProfiles.stream()
+				.filter(p -> p.id == id)
+				.findFirst()
+				.orElse(null);
+
+			if (remoteProfile == null) {
+				log.warn("synced profile {} has no remote!", profile);
+			} else {
+				if (profile.getRev() != remoteProfile.rev) {
+					log.info("Loading remote configuration for profile '{}'", profile.getName());
+
+					Map<String, String> remoteConfiguration;
+					try
+					{
+						remoteConfiguration = configClient.get(profile.getId());
+					}
+					catch (IOException ex)
+					{
+						log.error("unable to load remote configuration", ex);
+					}
+				}
+			}
 		}
 
 		this.profile = profile;
