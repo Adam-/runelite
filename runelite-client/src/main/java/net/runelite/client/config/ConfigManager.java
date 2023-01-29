@@ -1343,6 +1343,8 @@ public class ConfigManager
 			{
 				lock.removeProfile( name);
 			}
+		} else if (commandExecuted.getCommand().equals("syncon")) {
+			String name = commandExecuted.getArguments()[0];
 		}
 	}
 
