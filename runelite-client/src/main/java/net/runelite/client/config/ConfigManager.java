@@ -55,7 +55,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -398,14 +397,8 @@ public class ConfigManager
 			configData.setProperty("runelite.profileMigrationDone", "2");
 
 			// submit the delta
-			try
-			{
-				sendConfig().get();
-			}
-			catch (InterruptedException | ExecutionException e)
-			{
-				log.error(null, e);
-			}
+			saveConfiguration(lock, targetProfile, configData);
+			saveConfiguration(lock, rsProfile, rsData);
 
 			log.info("Finished performing remote profile migration of {} keys", keys);
 		}
