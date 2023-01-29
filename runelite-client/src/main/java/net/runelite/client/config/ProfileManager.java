@@ -14,6 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
@@ -75,7 +76,7 @@ public class ProfileManager
 				lockOut = new FileOutputStream(lockFile);
 			lockChannel = lockOut.getChannel();
 			lockChannel.lock();
-			profiles = load();
+			profiles = new ArrayList<>(load());
 		}
 
 		private List<ConfigProfile> load() {
@@ -152,6 +153,7 @@ public class ProfileManager
 			profile.setSync(false);
 			profiles.add(profile);
 			modified=true;
+//			profileConfigFile(profile).delete(); // just in case?
 			log.debug("Created profile {}", profile);
 			return profile;
 		}
@@ -172,6 +174,10 @@ public class ProfileManager
 				}
 			}
 			return null;
+		}
+
+		public void removeProfile(String profile) {
+			modified |= profiles.removeIf(p  -> p.getName().equals(profile));
 		}
 	}
 

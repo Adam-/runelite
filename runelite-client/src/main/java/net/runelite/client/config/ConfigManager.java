@@ -1309,8 +1309,35 @@ public class ConfigManager
 		}
 		else if (commandExecuted.getCommand().equals("create")) {
 			String name = commandExecuted.getArguments()[0];
-	//		ConfigProfile profile = profileManager.createProfile(name);
-//			loadDefaultPluginConfiguration(null);
+
+			try (ProfileManager.Lock lock = profileManager.lock())
+			{
+				ConfigProfile profile = lock.createProfile(name);
+			}
+		}
+		else if (commandExecuted.getCommand().equals("switch")) {
+			String name = commandExecuted.getArguments()[0];
+
+			ConfigProfile profile ;
+			try (ProfileManager.Lock lock = profileManager.lock()) {
+				 profile = lock .findProfile(name);
+			}
+			switchProfile( profile);
+		}
+		else if (commandExecuted.getCommand().equals("list")) {
+			try (ProfileManager.Lock lock = profileManager.lock())
+			{
+				for (ConfigProfile profile : lock.getProfiles()) {
+					log.info("{}", profile);
+				}
+			}
+		}
+		else if (commandExecuted.getCommand().equals("delete")) {
+			String name = commandExecuted.getArguments()[0];
+			try (ProfileManager.Lock lock = profileManager.lock())
+			{
+				lock.removeProfile( name);
+			}
 		}
 	}
 
