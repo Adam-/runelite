@@ -1295,10 +1295,7 @@ public class ConfigManager
 	private void onClientShutdown(ClientShutdown e)
 	{
 		Future<Void> f = sendConfig();
-		if (f != null)
-		{
-			e.waitFor(f);
-		}
+		e.waitFor(f);
 	}
 
 	@Subscribe
