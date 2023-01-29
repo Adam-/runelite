@@ -1313,7 +1313,7 @@ public class ConfigManager
 		}
 	}
 
-	@Nullable
+//	@Nullable
 	private CompletableFuture<Void> sendConfig()
 	{
 		eventBus.post(new ConfigSync());
@@ -1344,19 +1344,21 @@ public class ConfigManager
 			configClient.patch(buildConfigPatch(patch), profile.getId())
 				.whenComplete((patchResult, ex) ->
 				{
+					ConfigProfile profile_ = lock.findProfile(profile.getId());
 					if (ex != null)
 					{
+						profile_.setRev(-1L);
 						future.completeExceptionally(ex);
 						return;
 					}
 
 					if (patchResult == null)
 					{
+						profile_.setRev(-1L);
 						future.complete(null);
 						return;
 					}
 
-					ConfigProfile profile_ = lock.findProfile(profile.getId());
 					if (patchResult.oldRev == profile_.getRev()) {
 						profile_.setRev(patchResult.newRev);
 						log.debug("incremental patch applied {} -> {}", patchResult.oldRev, patchResult.newRev);
