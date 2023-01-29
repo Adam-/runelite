@@ -397,7 +397,7 @@ public class ConfigManager
 			// this key was used previously for rsprofile username migration and set to 1, and we can just reuse it.
 			configData.setProperty("runelite.profileMigrationDone", "2");
 
-			// write changes to disk
+			// submit the delta
 			try
 			{
 				sendConfig().get();
@@ -435,43 +435,43 @@ public class ConfigManager
 
 		try (ProfileManager.Lock lock = profileManager.lock())
 		{
-		ConfigProfile profile = null, rsProfile = null;
+			ConfigProfile profile = null, rsProfile = null;
 
-		for (ConfigProfile p : lock.getProfiles())
-		{
-			if (p.getName().startsWith("$")) // internal
+			for (ConfigProfile p : lock.getProfiles())
 			{
-				if (p.getName().equals("$rsprofile"))
+				if (p.getName().startsWith("$")) // internal
 				{
-					rsProfile = p;
+					if (p.getName().equals("$rsprofile"))
+					{
+						rsProfile = p;
+					}
+
+					continue;
 				}
 
-				continue;
-			}
-
-			// --profile
-			if (configProfileName != null)
-			{
-				if (p.getName().equals(configProfileName))
+				// --profile
+				if (configProfileName != null)
+				{
+					if (p.getName().equals(configProfileName))
+					{
+						profile = p;
+					}
+				}
+				// --config
+				else if (!RuneLite.DEFAULT_CONFIG_FILE.equals(configFile))
+				{
+					// find a profile matching the name of the file
+					String configProfileName = profileNameFromFile(configFile);
+					if (p.getName().equals(configProfileName))
+					{
+						profile = p;
+					}
+				}
+				else if (p.isDefaultProfile())
 				{
 					profile = p;
 				}
 			}
-			// --config
-			else if (!RuneLite.DEFAULT_CONFIG_FILE.equals(configFile))
-			{
-				// find a profile matching the name of the file
-				String configProfileName = profileNameFromFile(configFile);
-				if (p.getName().equals(configProfileName))
-				{
-					profile = p;
-				}
-			}
-			else if (p.isDefaultProfile())
-			{
-				profile = p;
-			}
-		}
 
 
 			if (profile != null)
@@ -489,8 +489,8 @@ public class ConfigManager
 				profile = lock.createProfile(configProfileName != null ? configProfileName : "default");
 				if (configProfileName == null)
 				{
+					lock.getProfiles().forEach(p -> p.setDefaultProfile(false));
 					profile.setDefaultProfile(true);
-//					profileManager.updateDefault(profile.getName());
 				}
 
 				log.info("Creating profile: {}", profile.getName());
@@ -499,8 +499,8 @@ public class ConfigManager
 			if (rsProfile == null)
 			{
 				rsProfile = lock.createProfile("$rsprofile");
-				//XXX rsprofile probably needs to be synced
 			}
+			rsProfile.setSync(true);
 
 			// synced profiles need to be fetched if outdated
 			syncRemote(profile, remoteProfiles);
