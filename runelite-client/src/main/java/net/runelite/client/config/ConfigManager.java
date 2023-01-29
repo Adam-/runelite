@@ -1406,9 +1406,8 @@ public class ConfigManager
 	{
 		String prefix = RSPROFILE_GROUP + "." + RSPROFILE_GROUP + ".";
 		Set<String> profileKeys = new HashSet<>();
-		for (String oKey : rsProfileConfigProfile.keySet())
+		for (String key : rsProfileConfigProfile.keySet())
 		{
-			String key = oKey;
 			if (!key.startsWith(prefix))
 			{
 				continue;
