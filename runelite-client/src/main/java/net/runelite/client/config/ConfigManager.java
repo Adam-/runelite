@@ -233,7 +233,10 @@ public class ConfigManager
 			configClient.setUuid(null);
 
 			// remove the remote profiles
-			profileManager.loadEditSave(profiles -> profiles.removeIf(p -> !p.getName().startsWith("$") && p.isSync()));
+			try (ProfileManager.Lock lock = profileManager.lock()) {
+				// this breaks modified check
+//				lock.getProfiles().removeIf(p -> !p.getName().startsWith("$") && p.isSync());
+			}
 		}
 		else
 		{
@@ -257,50 +260,62 @@ public class ConfigManager
 			log.warn("Use of --config is deprecated, use --profile instead.");
 		}
 
-		List<ConfigProfile> profiles = profileManager.listProfiles();
-		String configProfileName = profileNameFromFile(configFile);
-		if (defaultSettings ? profiles.isEmpty() : profiles.stream().noneMatch(p -> p.getName().equals(configProfileName))
-			&& configFile.exists())
+		try (ProfileManager.Lock lock = profileManager.lock())
 		{
-			String targetProfileName = defaultSettings ? "default" : configProfileName;
-
-			log.info("Performing migration of config from {} to profile '{}'", configFile.getName(), targetProfileName);
-
-			ConfigProfile targetProfile = profileManager.createProfile(targetProfileName);
-			if (defaultSettings) {
-				profileManager.updateDefault(targetProfileName);
-			}
-			ConfigProfile rsProfile = profileManager.findOrCreateProfile("$rsprofile");
-			//XXX sync?
-
-			ConfigData migratingData = new ConfigData(configFile);
-			ConfigData configData = new ConfigData(ProfileManager.profileConfigFile(targetProfile));
-			ConfigData rsData = new ConfigData(ProfileManager.profileConfigFile(rsProfile));
-
-			int keys = 0;
-			for (String wholeKey : migratingData.keySet())
+			List<ConfigProfile> profiles = lock.getProfiles();
+			String configProfileName = profileNameFromFile(configFile);
+			if (defaultSettings ? profiles.isEmpty() : profiles.stream().noneMatch(p -> p.getName().equals(configProfileName))
+				&& configFile.exists())
 			{
-				String[] split = splitKey(wholeKey);
-				if (split == null)
+				String targetProfileName = defaultSettings ? "default" : configProfileName;
+
+				log.info("Performing migration of config from {} to profile '{}'", configFile.getName(), targetProfileName);
+
+				ConfigProfile targetProfile = lock.createProfile(targetProfileName);
+				if (defaultSettings)
 				{
-					continue;
+					profiles.forEach(p -> p.setDefaultProfile(false));
+					targetProfile.setDefaultProfile(true);
+				}
+				ConfigProfile rsProfile = lock.findProfile("$rsprofile");
+				if (rsProfile == null)
+				{
+					rsProfile = lock.createProfile("$rsprofile");
+				}
+				rsProfile.setSync(true);
+
+				ConfigData migratingData = new ConfigData(configFile);
+				ConfigData configData = new ConfigData(ProfileManager.profileConfigFile(targetProfile));
+				ConfigData rsData = new ConfigData(ProfileManager.profileConfigFile(rsProfile));
+
+				int keys = 0;
+				for (String wholeKey : migratingData.keySet())
+				{
+					String[] split = splitKey(wholeKey);
+					if (split == null)
+					{
+						continue;
+					}
+
+					String profile = split[KEY_SPLITTER_PROFILE];
+
+					if (profile != null)
+					{
+						rsData.setProperty(wholeKey, migratingData.getProperty(wholeKey));
+					}
+					else
+					{
+						configData.setProperty(wholeKey, migratingData.getProperty(wholeKey));
+					}
+
+					++keys;
 				}
 
-				String profile = split[KEY_SPLITTER_PROFILE];
+				configData.patch(configData.swapChanges());
+				rsData.patch(rsData.swapChanges());
 
-				if (profile != null) {
-					rsData.setProperty(wholeKey, migratingData.getProperty(wholeKey));
-				} else {
-					configData.setProperty(wholeKey, migratingData.getProperty(wholeKey));
-				}
-
-				++keys;
+				log.info("Finished performing profile migration of {} keys", keys);
 			}
-
-			configData.patch(configData.swapChanges());
-			rsData.patch(rsData.swapChanges());
-
-			log.info("Finished performing profile migration of {} keys", keys);
 		}
 	}
 
@@ -325,35 +340,52 @@ public class ConfigManager
 			return;
 		}
 
-		// when logged in the remote non-migrated profile becomes default
-		ConfigProfile targetProfile = profileManager.createProfile(session.getUsername());
-		profileManager.updateDefault(targetProfile.getName());
-		//XXX SET SYNC
-
-		ConfigProfile rsProfile = profileManager.findOrCreateProfile("$rsprofile");
-
-		ConfigData configData = new ConfigData(ProfileManager.profileConfigFile(targetProfile));
-		ConfigData rsData = new ConfigData(ProfileManager.profileConfigFile(rsProfile));
-
-		int keys = 0;
-		for (String wholeKey : configuration.keySet())
+		try (ProfileManager.Lock lock = profileManager.lock())
 		{
-			String[] split = splitKey(wholeKey);
-			if (split == null)
+			if (lock.findProfile(session.getUsername()) != null) {
+				log.warn("unable to import profile {} because a profile with that name already exists", session.getUsername());
+				return;
+			}
+
+			// when logged in the remote non-migrated profile becomes default
+			ConfigProfile targetProfile = lock.createProfile(session.getUsername());
+			lock.getProfiles().forEach(p -> p.setDefaultProfile(false));
+			targetProfile.setDefaultProfile(true);
+			targetProfile.setSync(true);
+
+			ConfigProfile rsProfile = lock.findProfile("$rsprofile");
+			if (rsProfile == null) {
+				rsProfile = lock.createProfile("$rsprofile");
+			}
+			rsProfile.setSync(true);
+
+			ConfigData configData = new ConfigData(ProfileManager.profileConfigFile(targetProfile));
+			ConfigData rsData = new ConfigData(ProfileManager.profileConfigFile(rsProfile));
+
+			int keys = 0;
+			for (String wholeKey : configuration.keySet())
 			{
-				continue;
+				String[] split = splitKey(wholeKey);
+				if (split == null)
+				{
+					continue;
+				}
+
+				String keyProfile = split[KEY_SPLITTER_PROFILE];
+
+				if (keyProfile != null)
+				{
+					rsData.setProperty(wholeKey, configuration.get(wholeKey));
+				}
+				else
+				{
+					configData.setProperty(wholeKey, configuration.get(wholeKey));
+				}
+
+				++keys;
 			}
 
-			String keyProfile = split[KEY_SPLITTER_PROFILE];
-
-			if (keyProfile != null) {
-				rsData.setProperty(wholeKey, configuration.get(wholeKey));
-			} else {
-				configData.setProperty(wholeKey, configuration.get(wholeKey));
-			}
-
-			++keys;
-		}
+			// this is wrong since it needs to unset the profile keys
 
 //		Map<String, String> swap = configData.swapChanges();
 //		Map<String, String> rsSwap = rsData.swapChanges();
@@ -364,7 +396,8 @@ public class ConfigManager
 //		configClient.patch(buildConfigPatch(rsSwap), rsProfile.getId());
 //		configClient.patch(buildConfigPatch(swap), targetProfile.getId());
 
-		log.info("Finished performing remote profile migration of {} keys", keys);
+			log.info("Finished performing remote profile migration of {} keys", keys);
+		}
 	}
 
 	private static String profileNameFromFile(File file) {
@@ -389,10 +422,11 @@ public class ConfigManager
 			mergeRemoteProfiles(remoteProfiles);
 		}
 
-		List<ConfigProfile> profiles = profileManager.listProfiles();//XXX avoid the double load here?
+		try (ProfileManager.Lock lock = profileManager.lock())
+		{
 		ConfigProfile profile = null, rsProfile = null;
 
-		for (ConfigProfile p : profiles)
+		for (ConfigProfile p : lock.getProfiles())
 		{
 			if (p.getName().startsWith("$")) // internal
 			{
@@ -428,41 +462,44 @@ public class ConfigManager
 			}
 		}
 
-		if (profile != null)
-		{
-			log.info("Using profile: {}", profile.getName());
-		}
-		else
-		{
-			if (!RuneLite.DEFAULT_CONFIG_FILE.equals(configFile))
+
+			if (profile != null)
 			{
-				// --config not matching an existing profile. Refuse to make a new profile.
-				throw new RuntimeException("--config is deprecated and is supported for migrating existing configuration, but can't be used to create new profiles. Use --profile instead.");
+				log.info("Using profile: {}", profile.getName());
+			}
+			else
+			{
+				if (!RuneLite.DEFAULT_CONFIG_FILE.equals(configFile))
+				{
+					// --config not matching an existing profile. Refuse to make a new profile.
+					throw new RuntimeException("--config is deprecated and is supported for migrating existing configuration, but can't be used to create new profiles. Use --profile instead.");
+				}
+
+				profile = lock.createProfile(configProfileName != null ? configProfileName : "default");
+				if (configProfileName == null)
+				{
+					profile.setDefaultProfile(true);
+//					profileManager.updateDefault(profile.getName());
+				}
+
+				log.info("Creating profile: {}", profile.getName());
 			}
 
-			profile = profileManager.createProfile(configProfileName != null ? configProfileName : "default");
-			if (configProfileName == null)
+			if (rsProfile == null)
 			{
-				profileManager.updateDefault(profile.getName());
+				rsProfile = lock.createProfile("$rsprofile");
+				//XXX rsprofile probably needs to be synced
 			}
 
-			log.info("Creating profile: {}", profile.getName());
+			// synced profiles need to be fetched if outdated
+			syncRemote(profile, remoteProfiles);
+			syncRemote(rsProfile, remoteProfiles);
+
+			this.profile = profile;
+			this.rsProfile = rsProfile;
+			configProfile = new ConfigData(ProfileManager.profileConfigFile(profile));
+			rsProfileConfigProfile = new ConfigData(ProfileManager.profileConfigFile(rsProfile));
 		}
-
-		if (rsProfile == null)
-		{
-			rsProfile = profileManager.createProfile("$rsprofile");
-			//XXX rsprofile probably needs to be synced
-		}
-
-		// synced profiles need to be fetched if outdated
-		syncRemote(profile, remoteProfiles);
-		syncRemote(rsProfile, remoteProfiles);
-
-		this.profile = profile;
-		this.rsProfile = rsProfile;
-		configProfile = new ConfigData(ProfileManager.profileConfigFile(profile));
-		rsProfileConfigProfile = new ConfigData(ProfileManager.profileConfigFile(rsProfile));
 
 //		if (session == null)
 //		{
@@ -509,12 +546,12 @@ public class ConfigManager
 	}
 
 	private void mergeRemoteProfiles(List<ConfigClient.Profile> remoteProfiles) {
-		profileManager.loadEditSave(profiles ->
+		try (ProfileManager.Lock lock = profileManager.lock())
 		{
 			outer:
 			for (ConfigClient.Profile remoteProfile : remoteProfiles)
 			{
-				for (ConfigProfile profile : profiles)
+				for (ConfigProfile profile : lock.getProfiles())
 				{
 					if (profile.getId() == remoteProfile.id)
 					{
@@ -525,12 +562,10 @@ public class ConfigManager
 				}
 
 				log.debug("Creating local profile for remote {}", remoteProfile);
-				ConfigProfile profile = new ConfigProfile(System.nanoTime());
-				profile.setName(remoteProfile.name);
+				ConfigProfile profile = lock.createProfile(remoteProfile.name);
 				profile.setSync(true);
-				profiles.add(profile);
 			}
-		});
+		}
 	}
 
 	private void syncRemote(ConfigProfile profile, List<ConfigClient.Profile> remoteProfiles)
@@ -1272,14 +1307,15 @@ public class ConfigManager
 	{
 		eventBus.post(new ConfigSync());
 
-//		CompletableFuture<Void> future = null;
-
-		CompletableFuture<Void> f1 = saveConfiguration(profile, configProfile);
-		CompletableFuture<Void> f2 = saveConfiguration(rsProfile, rsProfileConfigProfile);
-		return CompletableFuture.allOf(f1, f2);
+		try (ProfileManager.Lock lock = profileManager.lock())
+		{
+			CompletableFuture<Void> f1 = saveConfiguration(lock, profile, configProfile);
+			CompletableFuture<Void> f2 = saveConfiguration(lock, rsProfile, rsProfileConfigProfile);
+			return CompletableFuture.allOf(f1, f2);
+		}
 	}
 
-	private CompletableFuture<Void> saveConfiguration(ConfigProfile profile, ConfigData data)
+	private CompletableFuture<Void> saveConfiguration(ProfileManager.Lock lock, ConfigProfile profile, ConfigData data)
 	{
 		Map<String, String> patch = data.swapChanges();
 
@@ -1309,22 +1345,16 @@ public class ConfigManager
 						return;
 					}
 
-					profileManager.updateProfile(profile, p -> {
-						// 'profile' is stale so we can only use it for the id
-						if (patchResult.oldRev == p.getRev())
-						{
-							p.setRev(patchResult.newRev);
-							log.debug("incremental patch applied {} -> {}", patchResult.oldRev, patchResult.newRev);
-						}
-						else
-						{
-							log.debug("rev mismatch {} != {}, invalidating", patchResult.oldRev, p.getRev());
-							p.setRev(-1L);
-						}
+					ConfigProfile profile_ = lock.findProfile(profile.getId());
+					if (patchResult.oldRev == profile_.getRev()) {
+						profile_.setRev(patchResult.newRev);
+						log.debug("incremental patch applied {} -> {}", patchResult.oldRev, patchResult.newRev);
+					} else {
+						log.debug("rev mismatch {} != {}, invalidating", patchResult.oldRev, profile_.getRev());
+						profile_.setRev(-1L);
+					}
 
-						future.complete(null);
-					});
-
+					future.complete(null);
 				});
 		}
 		else
