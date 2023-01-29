@@ -119,20 +119,9 @@ public class PluginManager
 		this.sceneTileManager = sceneTileManager;
 	}
 
-//	@Subscribe
-//	public void onSessionOpen(SessionOpen event)
-//	{
-//		refreshPlugins();
-//	}
-//
-//	@Subscribe
-//	public void onSessionClose(SessionClose event)
-//	{
-//		refreshPlugins();
-//	}
-//
 	@Subscribe
-	public void onProfileChanged(ProfileChanged profileChanged) {
+	public void onProfileChanged(ProfileChanged profileChanged)
+	{
 		refreshPlugins();
 	}
 

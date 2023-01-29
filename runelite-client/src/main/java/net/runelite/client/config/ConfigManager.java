@@ -166,19 +166,21 @@ public class ConfigManager
 
 		log.info("Switching profile to: {}", newProfile.getName());
 
+		// sync the latest config revision from the server
+		List<ConfigClient.Profile> profiles = configClient.profiles();
+		syncRemote(newProfile, profiles);
+
 		ConfigData newData = new ConfigData(ProfileManager.profileConfigFile(newProfile));
 		Set<String> allKeys = new HashSet<>(newData.keySet());
 
 		ConfigData oldData;
-		synchronized (this)
+		synchronized (this) // is this right?
 		{
 			handler.invalidate();
 			oldData = configProfile;
 			profile = newProfile;
 			configProfile = newData;
 		}
-
-		// XXX previously this updated the rs profile but now I think that doesn't matter?
 
 		allKeys.addAll(oldData.keySet());
 
