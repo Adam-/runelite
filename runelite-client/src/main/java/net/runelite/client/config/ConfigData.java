@@ -82,6 +82,11 @@ class ConfigData
 		return properties.keySet();
 	}
 
+	Map<String, String> get()
+	{
+		return Collections.unmodifiableMap(properties);
+	}
+
 	synchronized Map<String, String> swapChanges()
 	{
 		if (patchChanges.isEmpty())

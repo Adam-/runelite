@@ -336,11 +336,11 @@ public class RuneLite
 
 		SplashScreen.stage(.57, null, "Loading configuration");
 
+		// Load the session so that the session profiles can be loaded next
+		sessionManager.loadSession();
+
 		// Load user configuration
 		configManager.load();
-
-		// Load the session, including saved configuration
-		sessionManager.loadSession();
 
 		// Tell the plugin manager if client is outdated or not
 		pluginManager.setOutdated(isOutdated);

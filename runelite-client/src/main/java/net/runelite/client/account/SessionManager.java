@@ -151,14 +151,7 @@ public class SessionManager
 	private void openSession(AccountSession session)
 	{
 		accountSession = session;
-
-		if (session.getUsername() != null)
-		{
-			// Initialize config for new session
-			// If the session isn't logged in yet, don't switch to the new config
-			configManager.switchSession(session);
-		}
-
+		configManager.switchSession(session);
 		eventBus.post(new SessionOpen());
 	}
 
@@ -243,6 +236,8 @@ public class SessionManager
 				// open the session, which triggers the sessonopen event
 				AccountSession session = new AccountSession(sessionId, Instant.now(), username);
 				openSession(session);
+
+				configManager.mergeRsProfile();
 
 				// Save session to disk
 				saveSession();

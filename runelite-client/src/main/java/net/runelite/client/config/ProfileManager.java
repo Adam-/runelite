@@ -131,6 +131,7 @@ public class ProfileManager
 
 		public List<ConfigProfile> getProfiles()
 		{
+			modified=true;
 			return profiles;
 //			return Collections.unmodifiableList(profiles);
 		}

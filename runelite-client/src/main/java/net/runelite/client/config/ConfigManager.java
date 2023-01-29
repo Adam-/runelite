@@ -225,7 +225,7 @@ public class ConfigManager
 		return rsProfileKey;
 	}
 
-	public final void switchSession(AccountSession session)
+	public void switchSession(AccountSession session)
 	{
 		if (session == null)
 		{
@@ -234,8 +234,7 @@ public class ConfigManager
 
 			// remove the remote profiles
 			try (ProfileManager.Lock lock = profileManager.lock()) {
-				// this breaks modified check
-//				lock.getProfiles().removeIf(p -> !p.getName().startsWith("$") && p.isSync());
+				lock.getProfiles().removeIf(p -> !p.getName().startsWith("$") && p.isSync());
 			}
 		}
 		else
@@ -246,6 +245,18 @@ public class ConfigManager
 			List<ConfigClient.Profile> profiles = configClient.profiles();
 			mergeRemoteProfiles(profiles);
 		}
+	}
+
+	public void mergeRsProfile()
+	{
+		// special case for $rsprofile since it acts as an automatically-synced profile that is always merged
+		// instead of overwritten. After a login send a PATCH for the offline $rsprofile to merge it with the
+		// remote $rsprofile so that when $rsprofile is synced later it doesn't overwrite and lose the local
+		// $rsprofile settings.
+
+		ConfigPatch patch = buildConfigPatch(rsProfileConfigProfile.get());
+		configClient.patch(patch, rsProfile.getId());
+		log.debug("patched remote $rsprofile");
 	}
 
 	private void migrate()
