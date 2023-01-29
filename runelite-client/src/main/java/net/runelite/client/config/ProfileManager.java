@@ -135,6 +135,11 @@ public class ProfileManager
 //			return Collections.unmodifiableList(profiles);
 		}
 
+		public void addProfile(ConfigProfile profile) {
+			profiles.add(profile);
+			modified=true;
+		}
+
 		public ConfigProfile createProfile(String name) {
 			if (findProfile(name) != null) {
 				// profile names are used for the properties on disk, so they have to be unique

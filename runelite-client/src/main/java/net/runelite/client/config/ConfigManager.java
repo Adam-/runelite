@@ -55,6 +55,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -264,7 +265,7 @@ public class ConfigManager
 		{
 			List<ConfigProfile> profiles = lock.getProfiles();
 			String configProfileName = profileNameFromFile(configFile);
-			if (defaultSettings ? profiles.isEmpty() : profiles.stream().noneMatch(p -> p.getName().equals(configProfileName))
+			if (defaultSettings ? profiles.isEmpty() : lock.findProfile(configProfileName) == null
 				&& configFile.exists())
 			{
 				String targetProfileName = defaultSettings ? "default" : configProfileName;
@@ -348,10 +349,13 @@ public class ConfigManager
 			}
 
 			// when logged in the remote non-migrated profile becomes default
-			ConfigProfile targetProfile = lock.createProfile(session.getUsername());
-			lock.getProfiles().forEach(p -> p.setDefaultProfile(false));
+			ConfigProfile targetProfile = new ConfigProfile(0L); // migrated profile has special id 0
+			targetProfile.setName(session.getUsername());
 			targetProfile.setDefaultProfile(true);
 			targetProfile.setSync(true);
+
+			lock.getProfiles().forEach(p -> p.setDefaultProfile(false));
+			lock.addProfile(targetProfile);
 
 			ConfigProfile rsProfile = lock.findProfile("$rsprofile");
 			if (rsProfile == null) {
@@ -359,7 +363,15 @@ public class ConfigManager
 			}
 			rsProfile.setSync(true);
 
+			ProfileManager.profileConfigFile(targetProfile).delete(); // this should not exist.. but just in case
 			ConfigData configData = new ConfigData(ProfileManager.profileConfigFile(targetProfile));
+			// write config to be migrated to disk first, and then reload it, so that the rsprofile keys being
+			// moved to $rsprofile are properly recorded as unsets.
+			configData.patch(configuration);
+			log.debug("wrote migrated profile to disk");
+			configData = new ConfigData(ProfileManager.profileConfigFile(targetProfile));
+			log.debug("reloaded migrated profile");
+
 			ConfigData rsData = new ConfigData(ProfileManager.profileConfigFile(rsProfile));
 
 			int keys = 0;
@@ -376,25 +388,24 @@ public class ConfigManager
 				if (keyProfile != null)
 				{
 					rsData.setProperty(wholeKey, configuration.get(wholeKey));
+					configData.unset(wholeKey);
+					++keys;
 				}
-				else
-				{
-					configData.setProperty(wholeKey, configuration.get(wholeKey));
-				}
-
-				++keys;
 			}
 
-			// this is wrong since it needs to unset the profile keys
+			// set a key to be sure the remote rev gets bumped (in the event there was no $rsprofile keys to migrate)
+			// this key was used previously for rsprofile username migration and set to 1, and we can just reuse it.
+			configData.setProperty("runelite.profileMigrationDone", "2");
 
-//		Map<String, String> swap = configData.swapChanges();
-//		Map<String, String> rsSwap = rsData.swapChanges();
-//
-//		rsData.patch(rsSwap);
-//		configData.patch(swap);
-//
-//		configClient.patch(buildConfigPatch(rsSwap), rsProfile.getId());
-//		configClient.patch(buildConfigPatch(swap), targetProfile.getId());
+			// write changes to disk
+			try
+			{
+				sendConfig().get();
+			}
+			catch (InterruptedException | ExecutionException e)
+			{
+				log.error(null, e);
+			}
 
 			log.info("Finished performing remote profile migration of {} keys", keys);
 		}
