@@ -20,7 +20,6 @@ import net.runelite.client.config.ConfigProfile;
 import net.runelite.client.plugins.screenmarkers.ScreenMarkerPlugin;
 import net.runelite.client.ui.ColorScheme;
 import net.runelite.client.ui.PluginPanel;
-import net.runelite.client.ui.components.PluginErrorPanel;
 import net.runelite.client.util.ImageUtil;
 import net.runelite.client.util.SwingUtil;
 
@@ -47,7 +46,6 @@ class ProfilePanel extends PluginPanel
 	private final JLabel addMarker = new JLabel(ADD_ICON);
 
 	private final JPanel profileView = new JPanel(new GridBagLayout());
-	private final PluginErrorPanel noMarkersPanel = new PluginErrorPanel();
 
 	ProfilePanel(ProfilePlugin plugin)
 	{
@@ -70,23 +68,23 @@ class ProfilePanel extends PluginPanel
 
 		profileView.setBackground(ColorScheme.DARK_GRAY_COLOR);
 
-		GridBagConstraints constraints = new GridBagConstraints();
-		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.weightx = 1;
-		constraints.gridx = 0;
-		constraints.gridy = 0;
+//		GridBagConstraints constraints = new GridBagConstraints();
+//		constraints.fill = GridBagConstraints.HORIZONTAL;
+//		constraints.weightx = 1;
+//		constraints.gridx = 0;
+//		constraints.gridy = 0;
 
-		noMarkersPanel.setContent("Screen Markers", "Highlight a region on your screen.");
-		noMarkersPanel.setVisible(false);
-
-		profileView.add(noMarkersPanel, constraints);
-		constraints.gridy++;
+//		noMarkersPanel.setContent("Screen Markers", "Highlight a region on your screen.");
+//		noMarkersPanel.setVisible(false);
+//
+//		profileView.add(noMarkersPanel, constraints);
+//		constraints.gridy++;
 
 //		creationPanel = new ScreenMarkerCreationPanel(plugin);
 //		creationPanel.setVisible(false);
 //
 //		markerView.add(creationPanel, constraints);
-		constraints.gridy++;
+//		constraints.gridy++;
 
 		setupCreateProfile();
 
@@ -161,12 +159,12 @@ create();
 			constraints.gridy++;
 		}
 
-		boolean empty = constraints.gridy == 0;
-		noMarkersPanel.setVisible(empty);
-		title.setVisible(!empty);
+//		boolean empty = constraints.gridy == 0;
+//		noMarkersPanel.setVisible(empty);
+		title.setVisible(true);
 
-		profileView.add(noMarkersPanel, constraints);
-		constraints.gridy++;
+//		profileView.add(noMarkersPanel, constraints);
+//		constraints.gridy++;
 
 		//markerView.add(creationPanel, constraints);
 		//constraints.gridy++;
