@@ -420,9 +420,10 @@ class PPanel extends JPanel
 		add(bottomContainer, BorderLayout.CENTER);
 
 		{
-			JPanel linePanel = new JPanel();
-			linePanel.setBorder(BorderFactory.createMatteBorder(0,5,0,0, Color.ORANGE));
-			add(linePanel, BorderLayout.WEST);
+			setBorder(BorderFactory.createMatteBorder(0,5,0,0, Color.ORANGE));
+//			JPanel linePanel = new JPanel();
+//			linePanel.setBorder(BorderFactory.createMatteBorder(0,5,0,0, Color.ORANGE));
+//			add(linePanel, BorderLayout.WEST);
 		}
 
 		updateVisibility();
