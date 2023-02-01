@@ -8,6 +8,7 @@ import java.awt.GridBagLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.util.List;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -15,6 +16,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.border.EmptyBorder;
+import net.runelite.client.config.ConfigProfile;
 import net.runelite.client.plugins.screenmarkers.ScreenMarkerPlugin;
 import net.runelite.client.ui.ColorScheme;
 import net.runelite.client.ui.PluginPanel;
@@ -132,7 +134,7 @@ public class ProfilePanel extends PluginPanel
 		addMarker.setComponentPopupMenu(menu);
 	}
 
-	public void rebuild()
+	public void rebuild(List<ConfigProfile> profiles)
 	{
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -142,14 +144,10 @@ public class ProfilePanel extends PluginPanel
 
 		SwingUtil.fastRemoveAll(profileView);
 
-		//for (final ScreenMarkerOverlay marker : plugin.getScreenMarkers())
-		for (int i = 0; i < 20; ++i)
+		for (ConfigProfile profile : profiles)
 		{
-			profileView.add(new PPanel(), constraints);
+			profileView.add(new PPanel(profile), constraints);
 			constraints.gridy++;
-//			if (i == 0) {
-//				profileView.getComponent(0).setBackground(Color.YELLOW);
-//			}
 
 			profileView.add(Box.createRigidArea(new Dimension(0, 10)), constraints);
 			constraints.gridy++;

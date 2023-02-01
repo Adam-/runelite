@@ -48,6 +48,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
+import net.runelite.client.config.ConfigProfile;
 import net.runelite.client.plugins.screenmarkers.ScreenMarkerPlugin;
 import net.runelite.client.ui.ColorScheme;
 import net.runelite.client.ui.FontManager;
@@ -103,6 +104,8 @@ class PPanel extends JPanel
 //	private final SpinnerModel spinnerModel = new SpinnerNumberModel(5, 0, Integer.MAX_VALUE, 1);
 //	private final JSpinner thicknessSpinner = new JSpinner(spinnerModel);
 
+	private final ConfigProfile profile;
+
 	private boolean visible;
 	private boolean showLabel;
 
@@ -145,8 +148,9 @@ class PPanel extends JPanel
 		DELETE_HOVER_ICON = new ImageIcon(ImageUtil.alphaOffset(deleteImg, -100));
 	}
 
-	PPanel()//ScreenMarkerPlugin plugin, ScreenMarkerOverlay marker)
+	PPanel(ConfigProfile profile)
 	{
+		this.profile = profile;
 //		this.plugin = plugin;
 	//	this.marker = marker;
 		this.visible = true;///marker.getMarker().isVisible();
@@ -157,7 +161,7 @@ class PPanel extends JPanel
 
 		JPanel nameActions = setupNameActions();
 
-		nameInput.setText("test");//marker.getMarker().getName());
+		nameInput.setText(profile.getName());
 		nameInput.setBorder(null);
 		nameInput.setEditable(false);
 		nameInput.setBackground(ColorScheme.DARKER_GRAY_COLOR);
@@ -221,81 +225,6 @@ class PPanel extends JPanel
 
 		JPanel leftActions = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
 		leftActions.setBackground(ColorScheme.DARKER_GRAY_COLOR);
-
-//		borderColorIndicator.setToolTipText("Edit border color");
-//		borderColorIndicator.addMouseListener(new MouseAdapter()
-//		{
-//			@Override
-//			public void mousePressed(MouseEvent mouseEvent)
-//			{
-//				openBorderColorPicker();
-//			}
-//
-//			@Override
-//			public void mouseEntered(MouseEvent mouseEvent)
-//			{
-//				borderColorIndicator.setIcon(marker.getMarker().getBorderThickness() == 0 ? NO_BORDER_COLOR_HOVER_ICON : BORDER_COLOR_HOVER_ICON);
-//			}
-//
-//			@Override
-//			public void mouseExited(MouseEvent mouseEvent)
-//			{
-//				borderColorIndicator.setIcon(marker.getMarker().getBorderThickness() == 0 ? NO_BORDER_COLOR_ICON : BORDER_COLOR_ICON);
-//			}
-//		});
-
-//		fillColorIndicator.setToolTipText("Edit fill color");
-//		fillColorIndicator.addMouseListener(new MouseAdapter()
-//		{
-//			@Override
-//			public void mousePressed(MouseEvent mouseEvent)
-//			{
-//				openFillColorPicker();
-//			}
-//
-//			@Override
-//			public void mouseEntered(MouseEvent mouseEvent)
-//			{
-//				fillColorIndicator.setIcon(marker.getMarker().getFill().getAlpha() == 0 ? NO_FILL_COLOR_HOVER_ICON : FILL_COLOR_HOVER_ICON);
-//			}
-//
-//			@Override
-//			public void mouseExited(MouseEvent mouseEvent)
-//			{
-//				fillColorIndicator.setIcon(marker.getMarker().getFill().getAlpha() == 0 ? NO_FILL_COLOR_ICON : FILL_COLOR_ICON);
-//			}
-//		});
-
-//		thicknessSpinner.setValue(1);//marker.getMarker().getBorderThickness());
-//		thicknessSpinner.setPreferredSize(new Dimension(50, 20));
-//		thicknessSpinner.addChangeListener(ce -> updateThickness(true));
-//		thicknessSpinner.setToolTipText("Border thickness");
-
-//		labelIndicator.addMouseListener(new MouseAdapter()
-//		{
-//			@Override
-//			public void mousePressed(MouseEvent mouseEvent)
-//			{
-//				toggleLabelling(!showLabel);
-//			}
-//
-//			@Override
-//			public void mouseEntered(MouseEvent mouseEvent)
-//			{
-//				labelIndicator.setIcon(showLabel ? LABEL_HOVER_ICON : NO_LABEL_HOVER_ICON);
-//			}
-//
-//			@Override
-//			public void mouseExited(MouseEvent mouseEvent)
-//			{
-//				labelIndicator.setIcon(showLabel ? LABEL_ICON : NO_LABEL_ICON);
-//			}
-//		});
-//
-////		leftActions.add(borderColorIndicator);
-//		leftActions.add(fillColorIndicator);
-//		leftActions.add(labelIndicator);
-//		leftActions.add(thicknessSpinner);
 
 		JPanel rightActions = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
 		rightActions.setBackground(ColorScheme.DARKER_GRAY_COLOR);
