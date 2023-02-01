@@ -59,31 +59,31 @@ import net.runelite.client.util.SwingUtil;
 
 class PPanel extends JPanel
 {
-	private static final int DEFAULT_FILL_OPACITY = 75;
+//	private static final int DEFAULT_FILL_OPACITY = 75;
 
 	private static final Border NAME_BOTTOM_BORDER = new CompoundBorder(
 		BorderFactory.createMatteBorder(0, 0, 1, 0, ColorScheme.DARK_GRAY_COLOR),
 		BorderFactory.createLineBorder(ColorScheme.DARKER_GRAY_COLOR));
-
-	private static final ImageIcon BORDER_COLOR_ICON;
-	private static final ImageIcon BORDER_COLOR_HOVER_ICON;
-	private static final ImageIcon NO_BORDER_COLOR_ICON;
-	private static final ImageIcon NO_BORDER_COLOR_HOVER_ICON;
-
-	private static final ImageIcon FILL_COLOR_ICON;
-	private static final ImageIcon FILL_COLOR_HOVER_ICON;
-	private static final ImageIcon NO_FILL_COLOR_ICON;
-	private static final ImageIcon NO_FILL_COLOR_HOVER_ICON;
-
-	private static final ImageIcon LABEL_ICON;
-	private static final ImageIcon LABEL_HOVER_ICON;
-	private static final ImageIcon NO_LABEL_ICON;
-	private static final ImageIcon NO_LABEL_HOVER_ICON;
-
-	private static final ImageIcon VISIBLE_ICON;
-	private static final ImageIcon VISIBLE_HOVER_ICON;
-	private static final ImageIcon INVISIBLE_ICON;
-	private static final ImageIcon INVISIBLE_HOVER_ICON;
+//
+//	private static final ImageIcon BORDER_COLOR_ICON;
+//	private static final ImageIcon BORDER_COLOR_HOVER_ICON;
+//	private static final ImageIcon NO_BORDER_COLOR_ICON;
+//	private static final ImageIcon NO_BORDER_COLOR_HOVER_ICON;
+//
+//	private static final ImageIcon FILL_COLOR_ICON;
+//	private static final ImageIcon FILL_COLOR_HOVER_ICON;
+//	private static final ImageIcon NO_FILL_COLOR_ICON;
+//	private static final ImageIcon NO_FILL_COLOR_HOVER_ICON;
+//
+//	private static final ImageIcon LABEL_ICON;
+//	private static final ImageIcon LABEL_HOVER_ICON;
+//	private static final ImageIcon NO_LABEL_ICON;
+//	private static final ImageIcon NO_LABEL_HOVER_ICON;
+//
+//	private static final ImageIcon VISIBLE_ICON;
+//	private static final ImageIcon VISIBLE_HOVER_ICON;
+//	private static final ImageIcon INVISIBLE_ICON;
+//	private static final ImageIcon INVISIBLE_HOVER_ICON;
 
 	private static final ImageIcon DELETE_ICON;
 	private static final ImageIcon DELETE_HOVER_ICON;
@@ -108,42 +108,39 @@ class PPanel extends JPanel
 	private final ProfilePlugin plugin;
 	private final ConfigProfile profile;
 
-	private boolean visible;
-	private boolean showLabel;
-
 	static
 	{
-		final BufferedImage borderImg = ImageUtil.loadImageResource(ScreenMarkerPlugin.class, "border_color_icon.png");
-		final BufferedImage borderImgHover = ImageUtil.luminanceOffset(borderImg, -150);
-		BORDER_COLOR_ICON = new ImageIcon(borderImg);
-		BORDER_COLOR_HOVER_ICON = new ImageIcon(borderImgHover);
-
-		NO_BORDER_COLOR_ICON = new ImageIcon(borderImgHover);
-		NO_BORDER_COLOR_HOVER_ICON = new ImageIcon(ImageUtil.alphaOffset(borderImgHover, -100));
-
-		final BufferedImage fillImg = ImageUtil.loadImageResource(ScreenMarkerPlugin.class, "fill_color_icon.png");
-		final BufferedImage fillImgHover = ImageUtil.luminanceOffset(fillImg, -150);
-		FILL_COLOR_ICON = new ImageIcon(fillImg);
-		FILL_COLOR_HOVER_ICON = new ImageIcon(fillImgHover);
-
-		NO_FILL_COLOR_ICON = new ImageIcon(fillImgHover);
-		NO_FILL_COLOR_HOVER_ICON = new ImageIcon(ImageUtil.alphaOffset(fillImgHover, -100));
-
-		final BufferedImage labelImg = ImageUtil.loadImageResource(ScreenMarkerPlugin.class, "label_icon.png");
-		final BufferedImage labelImgHover = ImageUtil.luminanceOffset(labelImg, -150);
-		LABEL_ICON = new ImageIcon(labelImg);
-		LABEL_HOVER_ICON = new ImageIcon(labelImgHover);
-
-		NO_LABEL_ICON = new ImageIcon(labelImgHover);
-		NO_LABEL_HOVER_ICON = new ImageIcon(ImageUtil.alphaOffset(labelImgHover, -100));
-
-		final BufferedImage visibleImg = ImageUtil.loadImageResource(ScreenMarkerPlugin.class, "visible_icon.png");
-		VISIBLE_ICON = new ImageIcon(visibleImg);
-		VISIBLE_HOVER_ICON = new ImageIcon(ImageUtil.alphaOffset(visibleImg, -100));
-
-		final BufferedImage invisibleImg = ImageUtil.loadImageResource(ScreenMarkerPlugin.class, "invisible_icon.png");
-		INVISIBLE_ICON = new ImageIcon(invisibleImg);
-		INVISIBLE_HOVER_ICON = new ImageIcon(ImageUtil.alphaOffset(invisibleImg, -100));
+//		final BufferedImage borderImg = ImageUtil.loadImageResource(ScreenMarkerPlugin.class, "border_color_icon.png");
+//		final BufferedImage borderImgHover = ImageUtil.luminanceOffset(borderImg, -150);
+//		BORDER_COLOR_ICON = new ImageIcon(borderImg);
+//		BORDER_COLOR_HOVER_ICON = new ImageIcon(borderImgHover);
+//
+//		NO_BORDER_COLOR_ICON = new ImageIcon(borderImgHover);
+//		NO_BORDER_COLOR_HOVER_ICON = new ImageIcon(ImageUtil.alphaOffset(borderImgHover, -100));
+//
+//		final BufferedImage fillImg = ImageUtil.loadImageResource(ScreenMarkerPlugin.class, "fill_color_icon.png");
+//		final BufferedImage fillImgHover = ImageUtil.luminanceOffset(fillImg, -150);
+//		FILL_COLOR_ICON = new ImageIcon(fillImg);
+//		FILL_COLOR_HOVER_ICON = new ImageIcon(fillImgHover);
+//
+//		NO_FILL_COLOR_ICON = new ImageIcon(fillImgHover);
+//		NO_FILL_COLOR_HOVER_ICON = new ImageIcon(ImageUtil.alphaOffset(fillImgHover, -100));
+//
+//		final BufferedImage labelImg = ImageUtil.loadImageResource(ScreenMarkerPlugin.class, "label_icon.png");
+//		final BufferedImage labelImgHover = ImageUtil.luminanceOffset(labelImg, -150);
+//		LABEL_ICON = new ImageIcon(labelImg);
+//		LABEL_HOVER_ICON = new ImageIcon(labelImgHover);
+//
+//		NO_LABEL_ICON = new ImageIcon(labelImgHover);
+//		NO_LABEL_HOVER_ICON = new ImageIcon(ImageUtil.alphaOffset(labelImgHover, -100));
+//
+//		final BufferedImage visibleImg = ImageUtil.loadImageResource(ScreenMarkerPlugin.class, "visible_icon.png");
+//		VISIBLE_ICON = new ImageIcon(visibleImg);
+//		VISIBLE_HOVER_ICON = new ImageIcon(ImageUtil.alphaOffset(visibleImg, -100));
+//
+//		final BufferedImage invisibleImg = ImageUtil.loadImageResource(ScreenMarkerPlugin.class, "invisible_icon.png");
+//		INVISIBLE_ICON = new ImageIcon(invisibleImg);
+//		INVISIBLE_HOVER_ICON = new ImageIcon(ImageUtil.alphaOffset(invisibleImg, -100));
 
 		final BufferedImage deleteImg = ImageUtil.loadImageResource(ScreenMarkerPlugin.class, "delete_icon.png");
 		DELETE_ICON = new ImageIcon(deleteImg);
@@ -154,12 +151,8 @@ class PPanel extends JPanel
 	{
 				this.plugin = plugin;
 		this.profile = profile;
-	//	this.marker = marker;
-		this.visible = true;///marker.getMarker().isVisible();
-		this.showLabel = true;//marker.getMarker().isLabelled();
 
 		setLayout(new BorderLayout());
-//		setBackground(Color.YELLOW);//ColorScheme.DARKER_GRAY_COLOR);
 
 		JPanel nameActions = setupNameActions();
 
@@ -236,7 +229,7 @@ class PPanel extends JPanel
 //		});
 
 		deleteLabel.setIcon(DELETE_ICON);
-		deleteLabel.setToolTipText("Delete profile marker");
+		deleteLabel.setToolTipText("Delete profile");
 		deleteLabel.addMouseListener(new MouseAdapter()
 		{
 			@Override
@@ -414,10 +407,10 @@ class PPanel extends JPanel
 
 	private void preview(boolean on)
 	{
-		if (visible)
-		{
-			return;
-		}
+//		if (visible)
+//		{
+//			return;
+//		}
 
 //		marker.getMarker().setVisible(on);
 	}
@@ -454,13 +447,13 @@ class PPanel extends JPanel
 		requestFocusInWindow();
 	}
 
-	private void cancel()
-	{
-		nameInput.setEditable(false);
-//		nameInput.setText(marker.getMarker().getName());
-		updateNameActions(false);
-		requestFocusInWindow();
-	}
+//	private void cancel()
+//	{
+//		nameInput.setEditable(false);
+////		nameInput.setText(marker.getMarker().getName());
+//		updateNameActions(false);
+//		requestFocusInWindow();
+//	}
 
 	private void updateNameActions(boolean saveAndCancel)
 	{
