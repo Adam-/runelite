@@ -1336,6 +1336,7 @@ public class ConfigManager
 					log.info("{}", profile);
 				}
 			}
+			log.info("active profile {}", profile);
 		}
 		else if (commandExecuted.getCommand().equals("delete")) {
 			String name = commandExecuted.getArguments()[0];
