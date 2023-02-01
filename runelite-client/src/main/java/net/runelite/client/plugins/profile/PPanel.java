@@ -87,7 +87,7 @@ class PPanel extends JPanel
 //	private final JLabel borderColorIndicator = new JLabel();
 //	private final JLabel fillColorIndicator = new JLabel();
 //	private final JLabel labelIndicator = new JLabel();
-	private final JLabel visibilityLabel = new JLabel();
+//	private final JLabel visibilityLabel = new JLabel();
 	private final JLabel deleteLabel = new JLabel();
 
 	private final FlatTextField nameInput = new FlatTextField();
@@ -148,7 +148,7 @@ class PPanel extends JPanel
 		this.showLabel = true;//marker.getMarker().isLabelled();
 
 		setLayout(new BorderLayout());
-		setBackground(ColorScheme.DARKER_GRAY_COLOR);
+//		setBackground(Color.YELLOW);//ColorScheme.DARKER_GRAY_COLOR);
 
 		save.setVisible(false);
 		save.setFont(FontManager.getRunescapeSmallFont());
@@ -359,26 +359,26 @@ class PPanel extends JPanel
 		JPanel rightActions = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
 		rightActions.setBackground(ColorScheme.DARKER_GRAY_COLOR);
 
-		visibilityLabel.addMouseListener(new MouseAdapter()
-		{
-			@Override
-			public void mousePressed(MouseEvent mouseEvent)
-			{
-				toggle(!visible);
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent mouseEvent)
-			{
-				visibilityLabel.setIcon(visible ? VISIBLE_HOVER_ICON : INVISIBLE_HOVER_ICON);
-			}
-
-			@Override
-			public void mouseExited(MouseEvent mouseEvent)
-			{
-				updateVisibility();
-			}
-		});
+//		visibilityLabel.addMouseListener(new MouseAdapter()
+//		{
+//			@Override
+//			public void mousePressed(MouseEvent mouseEvent)
+//			{
+//				toggle(!visible);
+//			}
+//
+//			@Override
+//			public void mouseEntered(MouseEvent mouseEvent)
+//			{
+//				visibilityLabel.setIcon(visible ? VISIBLE_HOVER_ICON : INVISIBLE_HOVER_ICON);
+//			}
+//
+//			@Override
+//			public void mouseExited(MouseEvent mouseEvent)
+//			{
+//				updateVisibility();
+//			}
+//		});
 
 		deleteLabel.setIcon(DELETE_ICON);
 		deleteLabel.setToolTipText("Delete screen marker");
@@ -410,7 +410,7 @@ class PPanel extends JPanel
 			}
 		});
 
-		rightActions.add(visibilityLabel);
+//		rightActions.add(visibilityLabel);
 		rightActions.add(deleteLabel);
 
 		bottomContainer.add(leftActions, BorderLayout.WEST);
@@ -522,8 +522,8 @@ class PPanel extends JPanel
 
 	private void updateVisibility()
 	{
-		visibilityLabel.setIcon(visible ? VISIBLE_ICON : INVISIBLE_ICON);
-		visibilityLabel.setToolTipText(visible ? "Hide screen marker" : "Show screen marker");
+//		visibilityLabel.setIcon(visible ? VISIBLE_ICON : INVISIBLE_ICON);
+//		visibilityLabel.setToolTipText(visible ? "Hide screen marker" : "Show screen marker");
 	}
 
 	private void updateLabelling()

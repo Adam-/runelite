@@ -20,6 +20,7 @@ import net.runelite.client.ui.ColorScheme;
 import net.runelite.client.ui.PluginPanel;
 import net.runelite.client.ui.components.PluginErrorPanel;
 import net.runelite.client.util.ImageUtil;
+import net.runelite.client.util.SwingUtil;
 
 public class ProfilePanel extends PluginPanel
 {
@@ -139,13 +140,16 @@ public class ProfilePanel extends PluginPanel
 		constraints.gridx = 0;
 		constraints.gridy = 0;
 
-		profileView.removeAll();
+		SwingUtil.fastRemoveAll(profileView);
 
 		//for (final ScreenMarkerOverlay marker : plugin.getScreenMarkers())
 		for (int i = 0; i < 20; ++i)
 		{
 			profileView.add(new PPanel(), constraints);
 			constraints.gridy++;
+//			if (i == 0) {
+//				profileView.getComponent(0).setBackground(Color.YELLOW);
+//			}
 
 			profileView.add(Box.createRigidArea(new Dimension(0, 10)), constraints);
 			constraints.gridy++;
