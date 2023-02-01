@@ -36,11 +36,13 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
@@ -49,6 +51,7 @@ import net.runelite.client.ui.ColorScheme;
 import net.runelite.client.ui.FontManager;
 import net.runelite.client.ui.components.FlatTextField;
 import net.runelite.client.util.ImageUtil;
+import net.runelite.client.util.SwingUtil;
 
 class PPanel extends JPanel
 {
@@ -93,7 +96,7 @@ class PPanel extends JPanel
 	private final FlatTextField nameInput = new FlatTextField();
 	private final JLabel save = new JLabel("Save");
 	private final JLabel cancel = new JLabel("Cancel");
-	private final JLabel rename = new JLabel("Rename");
+	private final JButton rename = new JButton("Rename");
 
 //	private final SpinnerModel spinnerModel = new SpinnerNumberModel(5, 0, Integer.MAX_VALUE, 1);
 //	private final JSpinner thicknessSpinner = new JSpinner(spinnerModel);
@@ -150,85 +153,7 @@ class PPanel extends JPanel
 		setLayout(new BorderLayout());
 //		setBackground(Color.YELLOW);//ColorScheme.DARKER_GRAY_COLOR);
 
-		save.setVisible(false);
-		save.setFont(FontManager.getRunescapeSmallFont());
-		save.setForeground(ColorScheme.PROGRESS_COMPLETE_COLOR);
-		save.addMouseListener(new MouseAdapter()
-		{
-			@Override
-			public void mousePressed(MouseEvent mouseEvent)
-			{
-				save();
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent mouseEvent)
-			{
-				save.setForeground(ColorScheme.PROGRESS_COMPLETE_COLOR.darker());
-			}
-
-			@Override
-			public void mouseExited(MouseEvent mouseEvent)
-			{
-				save.setForeground(ColorScheme.PROGRESS_COMPLETE_COLOR);
-			}
-		});
-
-		cancel.setVisible(false);
-		cancel.setFont(FontManager.getRunescapeSmallFont());
-		cancel.setForeground(ColorScheme.PROGRESS_ERROR_COLOR);
-		cancel.addMouseListener(new MouseAdapter()
-		{
-			@Override
-			public void mousePressed(MouseEvent mouseEvent)
-			{
-				cancel();
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent mouseEvent)
-			{
-				cancel.setForeground(ColorScheme.PROGRESS_ERROR_COLOR.darker());
-			}
-
-			@Override
-			public void mouseExited(MouseEvent mouseEvent)
-			{
-				cancel.setForeground(ColorScheme.PROGRESS_ERROR_COLOR);
-			}
-		});
-
-		rename.setFont(FontManager.getRunescapeSmallFont());
-		rename.setForeground(ColorScheme.LIGHT_GRAY_COLOR.darker());
-		rename.addMouseListener(new MouseAdapter()
-		{
-			@Override
-			public void mousePressed(MouseEvent mouseEvent)
-			{
-				nameInput.setEditable(true);
-				updateNameActions(true);
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent mouseEvent)
-			{
-				rename.setForeground(ColorScheme.LIGHT_GRAY_COLOR.darker().darker());
-			}
-
-			@Override
-			public void mouseExited(MouseEvent mouseEvent)
-			{
-				rename.setForeground(ColorScheme.LIGHT_GRAY_COLOR.darker());
-			}
-		});
-
-		JPanel nameActions = new JPanel(new BorderLayout(3, 0));
-		nameActions.setBorder(new EmptyBorder(0, 0, 0, 8));
-		nameActions.setBackground(ColorScheme.DARKER_GRAY_COLOR);
-
-		nameActions.add(save, BorderLayout.EAST);
-		nameActions.add(cancel, BorderLayout.WEST);
-		nameActions.add(rename, BorderLayout.CENTER);
+		JPanel nameActions = setupNameActions();
 
 		nameInput.setText("test");//marker.getMarker().getName());
 		nameInput.setBorder(null);
@@ -420,7 +345,7 @@ class PPanel extends JPanel
 		add(bottomContainer, BorderLayout.CENTER);
 
 		{
-			setBorder(BorderFactory.createMatteBorder(0,5,0,0, Color.ORANGE));
+			setBorder(BorderFactory.createMatteBorder(0,5,0,0, ColorScheme.BRAND_ORANGE));
 //			JPanel linePanel = new JPanel();
 //			linePanel.setBorder(BorderFactory.createMatteBorder(0,5,0,0, Color.ORANGE));
 //			add(linePanel, BorderLayout.WEST);
@@ -437,6 +362,12 @@ class PPanel extends JPanel
 
 	private void setupMenu() {
 		JPopupMenu menu = new JPopupMenu();
+
+//		final JMenuItem rename = new JMenuItem("Rename");
+//		rename.addActionListener(e -> {
+//			String profileName = JOptionPane.showInputDialog("Profile name");
+//		});
+//		menu.add(rename);
 
 		final JMenuItem deleteProfile = new JMenuItem("Delete");
 		deleteProfile.addActionListener(e -> {
@@ -457,6 +388,93 @@ class PPanel extends JPanel
 		menu.add(cloneProfile);
 
 		setComponentPopupMenu(menu);
+	}
+
+	private JPanel setupNameActions() {
+		save.setVisible(false);
+		save.setFont(FontManager.getRunescapeSmallFont());
+		save.setForeground(ColorScheme.PROGRESS_COMPLETE_COLOR);
+		save.addMouseListener(new MouseAdapter()
+		{
+			@Override
+			public void mousePressed(MouseEvent mouseEvent)
+			{
+				save();
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent mouseEvent)
+			{
+				save.setForeground(ColorScheme.PROGRESS_COMPLETE_COLOR.darker());
+			}
+
+			@Override
+			public void mouseExited(MouseEvent mouseEvent)
+			{
+				save.setForeground(ColorScheme.PROGRESS_COMPLETE_COLOR);
+			}
+		});
+
+		cancel.setVisible(false);
+		cancel.setFont(FontManager.getRunescapeSmallFont());
+		cancel.setForeground(ColorScheme.PROGRESS_ERROR_COLOR);
+		cancel.addMouseListener(new MouseAdapter()
+		{
+			@Override
+			public void mousePressed(MouseEvent mouseEvent)
+			{
+				cancel();
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent mouseEvent)
+			{
+				cancel.setForeground(ColorScheme.PROGRESS_ERROR_COLOR.darker());
+			}
+
+			@Override
+			public void mouseExited(MouseEvent mouseEvent)
+			{
+				cancel.setForeground(ColorScheme.PROGRESS_ERROR_COLOR);
+			}
+		});
+
+		SwingUtil.removeButtonDecorations(rename);
+		rename.setHorizontalAlignment(SwingConstants.RIGHT);
+//		rename.setBorder(null);
+		rename.setFont(FontManager.getRunescapeSmallFont());
+		rename.setForeground(ColorScheme.LIGHT_GRAY_COLOR.darker());
+		rename.addMouseListener(new MouseAdapter()
+		{
+			@Override
+			public void mousePressed(MouseEvent mouseEvent)
+			{
+				nameInput.setEditable(true);
+				updateNameActions(true);
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent mouseEvent)
+			{
+				rename.setForeground(ColorScheme.LIGHT_GRAY_COLOR.darker().darker());
+			}
+
+			@Override
+			public void mouseExited(MouseEvent mouseEvent)
+			{
+				rename.setForeground(ColorScheme.LIGHT_GRAY_COLOR.darker());
+			}
+		});
+
+		JPanel nameActions = new JPanel(new BorderLayout(3, 0));
+		nameActions.setBorder(new EmptyBorder(0, 0, 0, 8));
+		nameActions.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+
+		nameActions.add(save, BorderLayout.EAST);
+		nameActions.add(cancel, BorderLayout.WEST);
+		nameActions.add(rename, BorderLayout.CENTER);
+
+		return nameActions;
 	}
 
 	private void preview(boolean on)
