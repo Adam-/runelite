@@ -29,6 +29,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -94,8 +96,8 @@ class PPanel extends JPanel
 	private final JLabel deleteLabel = new JLabel();
 
 	private final FlatTextField nameInput = new FlatTextField();
-	private final JLabel save = new JLabel("Save");
-	private final JLabel cancel = new JLabel("Cancel");
+//	private final JLabel save = new JLabel("Save");
+//	private final JLabel cancel = new JLabel("Cancel");
 	private final JButton rename = new JButton("Rename");
 
 //	private final SpinnerModel spinnerModel = new SpinnerNumberModel(5, 0, Integer.MAX_VALUE, 1);
@@ -177,22 +179,36 @@ class PPanel extends JPanel
 				}
 			}
 		});
-		nameInput.getTextField().addMouseListener(new MouseAdapter()
+//		nameInput.getTextField().addMouseListener(new MouseAdapter()
+//		{
+//			@Override
+//			public void mouseEntered(MouseEvent mouseEvent)
+//			{
+//				preview(true);
+//			}
+//
+//			@Override
+//			public void mouseExited(MouseEvent mouseEvent)
+//			{
+//				preview(false);
+//			}
+//		});
+		nameInput.getTextField().addFocusListener(new FocusListener()
 		{
 			@Override
-			public void mouseEntered(MouseEvent mouseEvent)
+			public void focusGained(FocusEvent e)
 			{
-				preview(true);
+
 			}
 
 			@Override
-			public void mouseExited(MouseEvent mouseEvent)
+			public void focusLost(FocusEvent e)
 			{
-				preview(false);
+				save();
 			}
 		});
 
-		JPanel nameWrapper = new JPanel(new BorderLayout());
+			JPanel nameWrapper = new JPanel(new BorderLayout());
 		nameWrapper.setBackground(ColorScheme.DARKER_GRAY_COLOR);
 		nameWrapper.setBorder(NAME_BOTTOM_BORDER);
 
@@ -344,14 +360,21 @@ class PPanel extends JPanel
 		add(nameWrapper, BorderLayout.NORTH);
 		add(bottomContainer, BorderLayout.CENTER);
 
-		{
-			setBorder(BorderFactory.createMatteBorder(0,5,0,0, ColorScheme.BRAND_ORANGE));
-//			JPanel linePanel = new JPanel();
-//			linePanel.setBorder(BorderFactory.createMatteBorder(0,5,0,0, Color.ORANGE));
-//			add(linePanel, BorderLayout.WEST);
-		}
+		setBorder(BorderFactory.createMatteBorder(0, 5, 0, 0, ColorScheme.BRAND_ORANGE));
 
-		updateVisibility();
+		addMouseListener(new MouseAdapter()
+		{
+			@Override
+			public void mouseClicked(MouseEvent e)
+			{
+				if (e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON1)
+				{
+					System.out.println("double click " + this);
+				}
+			}
+		});
+
+			updateVisibility();
 		updateFill();
 		updateBorder();
 		updateBorder();
@@ -391,53 +414,53 @@ class PPanel extends JPanel
 	}
 
 	private JPanel setupNameActions() {
-		save.setVisible(false);
-		save.setFont(FontManager.getRunescapeSmallFont());
-		save.setForeground(ColorScheme.PROGRESS_COMPLETE_COLOR);
-		save.addMouseListener(new MouseAdapter()
-		{
-			@Override
-			public void mousePressed(MouseEvent mouseEvent)
-			{
-				save();
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent mouseEvent)
-			{
-				save.setForeground(ColorScheme.PROGRESS_COMPLETE_COLOR.darker());
-			}
-
-			@Override
-			public void mouseExited(MouseEvent mouseEvent)
-			{
-				save.setForeground(ColorScheme.PROGRESS_COMPLETE_COLOR);
-			}
-		});
-
-		cancel.setVisible(false);
-		cancel.setFont(FontManager.getRunescapeSmallFont());
-		cancel.setForeground(ColorScheme.PROGRESS_ERROR_COLOR);
-		cancel.addMouseListener(new MouseAdapter()
-		{
-			@Override
-			public void mousePressed(MouseEvent mouseEvent)
-			{
-				cancel();
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent mouseEvent)
-			{
-				cancel.setForeground(ColorScheme.PROGRESS_ERROR_COLOR.darker());
-			}
-
-			@Override
-			public void mouseExited(MouseEvent mouseEvent)
-			{
-				cancel.setForeground(ColorScheme.PROGRESS_ERROR_COLOR);
-			}
-		});
+//		save.setVisible(false);
+//		save.setFont(FontManager.getRunescapeSmallFont());
+//		save.setForeground(ColorScheme.PROGRESS_COMPLETE_COLOR);
+//		save.addMouseListener(new MouseAdapter()
+//		{
+//			@Override
+//			public void mousePressed(MouseEvent mouseEvent)
+//			{
+//				save();
+//			}
+//
+//			@Override
+//			public void mouseEntered(MouseEvent mouseEvent)
+//			{
+//				save.setForeground(ColorScheme.PROGRESS_COMPLETE_COLOR.darker());
+//			}
+//
+//			@Override
+//			public void mouseExited(MouseEvent mouseEvent)
+//			{
+//				save.setForeground(ColorScheme.PROGRESS_COMPLETE_COLOR);
+//			}
+//		});
+//
+//		cancel.setVisible(false);
+//		cancel.setFont(FontManager.getRunescapeSmallFont());
+//		cancel.setForeground(ColorScheme.PROGRESS_ERROR_COLOR);
+//		cancel.addMouseListener(new MouseAdapter()
+//		{
+//			@Override
+//			public void mousePressed(MouseEvent mouseEvent)
+//			{
+//				cancel();
+//			}
+//
+//			@Override
+//			public void mouseEntered(MouseEvent mouseEvent)
+//			{
+//				cancel.setForeground(ColorScheme.PROGRESS_ERROR_COLOR.darker());
+//			}
+//
+//			@Override
+//			public void mouseExited(MouseEvent mouseEvent)
+//			{
+//				cancel.setForeground(ColorScheme.PROGRESS_ERROR_COLOR);
+//			}
+//		});
 
 		SwingUtil.removeButtonDecorations(rename);
 		rename.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -470,8 +493,8 @@ class PPanel extends JPanel
 		nameActions.setBorder(new EmptyBorder(0, 0, 0, 8));
 		nameActions.setBackground(ColorScheme.DARKER_GRAY_COLOR);
 
-		nameActions.add(save, BorderLayout.EAST);
-		nameActions.add(cancel, BorderLayout.WEST);
+//		nameActions.add(save, BorderLayout.EAST);
+//		nameActions.add(cancel, BorderLayout.WEST);
 		nameActions.add(rename, BorderLayout.CENTER);
 
 		return nameActions;
@@ -523,8 +546,8 @@ class PPanel extends JPanel
 
 	private void updateNameActions(boolean saveAndCancel)
 	{
-		save.setVisible(saveAndCancel);
-		cancel.setVisible(saveAndCancel);
+//		save.setVisible(saveAndCancel);
+//		cancel.setVisible(saveAndCancel);
 		rename.setVisible(!saveAndCancel);
 
 		if (saveAndCancel)
