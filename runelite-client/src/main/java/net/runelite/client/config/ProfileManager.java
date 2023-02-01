@@ -106,6 +106,8 @@ public class ProfileManager
 		public void close() //throws IOException
 		{
 			if (modified) {
+				log.debug("saving {} profiles", profiles.size());
+
 				File tempFile = File.createTempFile("runelite_profiles", null, PROFILES.getParentFile());
 				try (FileOutputStream out = new FileOutputStream(tempFile);
 					 FileChannel channel = lockOut.getChannel();
@@ -182,6 +184,10 @@ public class ProfileManager
 
 		public void removeProfile(long id) {
 			modified |= profiles.removeIf(p -> p.getId() == id);
+		}
+
+		public void dirty() {
+			modified |= true;
 		}
 	}
 

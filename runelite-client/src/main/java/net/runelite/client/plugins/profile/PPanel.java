@@ -25,6 +25,7 @@
  */
 package net.runelite.client.plugins.profile;
 
+import com.google.common.base.Strings;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -174,30 +175,13 @@ class PPanel extends JPanel
 			@Override
 			public void keyPressed(KeyEvent e)
 			{
-				if (e.getKeyCode() == KeyEvent.VK_ENTER)
+				if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_ESCAPE)
 				{
-					save();
-				}
-				else if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
-				{
-					cancel();
+					// this is enough to trip the focus listener to save.
+					requestFocusInWindow();
 				}
 			}
 		});
-//		nameInput.getTextField().addMouseListener(new MouseAdapter()
-//		{
-//			@Override
-//			public void mouseEntered(MouseEvent mouseEvent)
-//			{
-//				preview(true);
-//			}
-//
-//			@Override
-//			public void mouseExited(MouseEvent mouseEvent)
-//			{
-//				preview(false);
-//			}
-//		});
 		nameInput.getTextField().addFocusListener(new FocusListener()
 		{
 			@Override
@@ -323,9 +307,7 @@ class PPanel extends JPanel
 //		menu.add(rename);
 
 		final JMenuItem deleteProfile = new JMenuItem("Delete");
-		deleteProfile.addActionListener(e -> {
-
-		});
+		deleteProfile.addActionListener(e -> plugin.delete(profile.getId()));
 		menu.add(deleteProfile);
 
 		final JMenuItem exportProfile = new JMenuItem("Export");
@@ -458,6 +440,12 @@ class PPanel extends JPanel
 
 	private void save()
 	{
+		if (Strings.isNullOrEmpty(nameInput.getText())) {
+			nameInput.setText(profile.getName());
+			return;
+		}
+
+		plugin.rename(profile.getId(), nameInput.getText());
 //		marker.getMarker().setName(nameInput.getText());
 //		plugin.updateConfig();
 

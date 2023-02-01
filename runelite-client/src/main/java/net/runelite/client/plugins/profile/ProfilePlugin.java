@@ -108,4 +108,21 @@ public class ProfilePlugin extends Plugin
 
 		scheduledExecutorService.execute(this::load);
 	}
+
+	void rename(long id, String name) {
+		try (ProfileManager.Lock lock = profileManager.lock()) {
+			ConfigProfile profile = lock.findProfile(id);
+			if (profile == null) {
+				log.warn("rename for nonexistent profile {}", id);
+				return;
+			}
+
+			log.debug("renaming profile {} to {}", profile, name);
+
+			profile.setName(name);
+			lock.dirty();
+
+			// the panel updates the name label so it isn't necessary to rebuild
+		}
+	}
 }
