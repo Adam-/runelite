@@ -5,7 +5,10 @@ import static java.awt.image.BufferedImage.TYPE_INT_RGB;
 import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.swing.SwingUtilities;
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.client.config.ConfigProfile;
 import net.runelite.client.config.ProfileManager;
@@ -30,6 +33,11 @@ public class ProfilePlugin extends Plugin
 
 	@Inject
 	private ProfileManager profileManager;
+
+	@Inject
+	@Named("developerMode")
+		@Getter(AccessLevel.PACKAGE)
+	private boolean developerMode;
 
 	private ProfilePanel pluginPanel;
 	private NavigationButton navigationButton;

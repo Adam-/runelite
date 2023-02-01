@@ -240,6 +240,7 @@ public class ConfigManager
 			// remove the remote profiles
 			try (ProfileManager.Lock lock = profileManager.lock()) {
 				lock.getProfiles().removeIf(p -> !p.getName().startsWith("$") && p.isSync());
+				lock.dirty();
 			}
 		}
 		else

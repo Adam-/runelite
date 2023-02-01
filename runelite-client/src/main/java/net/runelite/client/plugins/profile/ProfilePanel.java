@@ -149,6 +149,11 @@ create();
 
 		for (ConfigProfile profile : profiles)
 		{
+			if (profile.getName().startsWith("$") && !plugin.isDeveloperMode()) {
+				// internal profile
+				continue;
+			}
+
 			profileView.add(new PPanel(plugin, profile), constraints);
 			constraints.gridy++;
 
