@@ -179,6 +179,10 @@ public class ProfileManager
 		public void removeProfile(String profile) {
 			modified |= profiles.removeIf(p  -> p.getName().equals(profile));
 		}
+
+		public void removeProfile(long id) {
+			modified |= profiles.removeIf(p -> p.getId() == id);
+		}
 	}
 
 	public Lock lock() //throws IOException

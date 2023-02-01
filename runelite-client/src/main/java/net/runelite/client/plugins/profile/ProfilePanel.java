@@ -24,7 +24,7 @@ import net.runelite.client.ui.components.PluginErrorPanel;
 import net.runelite.client.util.ImageUtil;
 import net.runelite.client.util.SwingUtil;
 
-public class ProfilePanel extends PluginPanel
+class ProfilePanel extends PluginPanel
 {
 	private static final ImageIcon ADD_ICON;
 	private static final ImageIcon ADD_HOVER_ICON;
@@ -41,6 +41,7 @@ public class ProfilePanel extends PluginPanel
 		ADD_HOVER_ICON = new ImageIcon(ImageUtil.alphaOffset(addIcon, 0.53f));
 	}
 
+	private final ProfilePlugin plugin;
 
 	private final JLabel title = new JLabel();
 	private final JLabel addMarker = new JLabel(ADD_ICON);
@@ -48,8 +49,10 @@ public class ProfilePanel extends PluginPanel
 	private final JPanel profileView = new JPanel(new GridBagLayout());
 	private final PluginErrorPanel noMarkersPanel = new PluginErrorPanel();
 
-	public ProfilePanel()
+	ProfilePanel(ProfilePlugin plugin)
 	{
+		this.plugin = plugin;
+
 		setLayout(new BorderLayout());
 		setBorder(new EmptyBorder(10, 10, 10, 10));
 
@@ -94,13 +97,13 @@ public class ProfilePanel extends PluginPanel
 	}
 
 	private void setupCreateProfile() {
-		addMarker.setToolTipText("Add new screen marker");
+		addMarker.setToolTipText("Add new profile");
 		addMarker.addMouseListener(new MouseAdapter()
 		{
 			@Override
 			public void mousePressed(MouseEvent mouseEvent)
 			{
-//				setCreation(true);
+				create();
 			}
 
 			@Override
@@ -121,7 +124,7 @@ public class ProfilePanel extends PluginPanel
 
 		final JMenuItem createProfile = new JMenuItem("Create new profile");
 		createProfile.addActionListener(e -> {
-
+create();
 		});
 		menu.add(createProfile);
 
@@ -146,7 +149,7 @@ public class ProfilePanel extends PluginPanel
 
 		for (ConfigProfile profile : profiles)
 		{
-			profileView.add(new PPanel(profile), constraints);
+			profileView.add(new PPanel(plugin, profile), constraints);
 			constraints.gridy++;
 
 			profileView.add(Box.createRigidArea(new Dimension(0, 10)), constraints);
@@ -164,6 +167,12 @@ public class ProfilePanel extends PluginPanel
 		//constraints.gridy++;
 
 //		repaint();
-//		revalidate();
+		revalidate();
+//		invalidate();
+	}
+
+	private void create() {
+		plugin.create();
+//		if (profileView.isShowing())
 	}
 }

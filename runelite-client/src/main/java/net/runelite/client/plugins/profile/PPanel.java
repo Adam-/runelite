@@ -104,6 +104,7 @@ class PPanel extends JPanel
 //	private final SpinnerModel spinnerModel = new SpinnerNumberModel(5, 0, Integer.MAX_VALUE, 1);
 //	private final JSpinner thicknessSpinner = new JSpinner(spinnerModel);
 
+	private final ProfilePlugin plugin;
 	private final ConfigProfile profile;
 
 	private boolean visible;
@@ -148,10 +149,10 @@ class PPanel extends JPanel
 		DELETE_HOVER_ICON = new ImageIcon(ImageUtil.alphaOffset(deleteImg, -100));
 	}
 
-	PPanel(ConfigProfile profile)
+	PPanel(ProfilePlugin plugin, ConfigProfile profile)
 	{
+				this.plugin = plugin;
 		this.profile = profile;
-//		this.plugin = plugin;
 	//	this.marker = marker;
 		this.visible = true;///marker.getMarker().isVisible();
 		this.showLabel = true;//marker.getMarker().isLabelled();
@@ -251,19 +252,19 @@ class PPanel extends JPanel
 //		});
 
 		deleteLabel.setIcon(DELETE_ICON);
-		deleteLabel.setToolTipText("Delete screen marker");
+		deleteLabel.setToolTipText("Delete profile marker");
 		deleteLabel.addMouseListener(new MouseAdapter()
 		{
 			@Override
 			public void mousePressed(MouseEvent mouseEvent)
 			{
 				int confirm = JOptionPane.showConfirmDialog(PPanel.this,
-					"Are you sure you want to permanently delete this screen marker?",
+					"Are you sure you want to delete this profile?",
 					"Warning", JOptionPane.OK_CANCEL_OPTION);
 
 				if (confirm == 0)
 				{
-				//	plugin.deleteMarker(marker);
+					plugin.delete(profile.getId());
 				}
 			}
 
