@@ -96,7 +96,10 @@ class ProfilePanel extends PluginPanel
 			@Override
 			public void mousePressed(MouseEvent mouseEvent)
 			{
-				create();
+				if (mouseEvent.getButton() == MouseEvent.BUTTON1)
+				{
+					create();
+				}
 			}
 
 			@Override
