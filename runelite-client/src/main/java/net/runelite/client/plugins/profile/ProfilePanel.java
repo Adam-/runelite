@@ -40,7 +40,6 @@ class ProfilePanel extends PluginPanel
 
 	private final ProfilePlugin plugin;
 
-	private final JLabel title = new JLabel();
 	private final JLabel addMarker = new JLabel(ADD_ICON);
 
 	private final JPanel profileView = new JPanel(new GridBagLayout());
@@ -55,8 +54,10 @@ class ProfilePanel extends PluginPanel
 		JPanel northPanel = new JPanel(new BorderLayout());
 		northPanel.setBorder(new EmptyBorder(1, 0, 10, 0));
 
+		JLabel title = new JLabel();
 		title.setText("Profiles");
 		title.setForeground(Color.WHITE);
+		title.setVisible(true);
 
 		northPanel.add(title, BorderLayout.WEST);
 		northPanel.add(addMarker, BorderLayout.EAST);
@@ -66,24 +67,6 @@ class ProfilePanel extends PluginPanel
 
 		profileView.setBackground(ColorScheme.DARK_GRAY_COLOR);
 
-//		GridBagConstraints constraints = new GridBagConstraints();
-//		constraints.fill = GridBagConstraints.HORIZONTAL;
-//		constraints.weightx = 1;
-//		constraints.gridx = 0;
-//		constraints.gridy = 0;
-
-//		noMarkersPanel.setContent("Screen Markers", "Highlight a region on your screen.");
-//		noMarkersPanel.setVisible(false);
-//
-//		profileView.add(noMarkersPanel, constraints);
-//		constraints.gridy++;
-
-//		creationPanel = new ScreenMarkerCreationPanel(plugin);
-//		creationPanel.setVisible(false);
-//
-//		markerView.add(creationPanel, constraints);
-//		constraints.gridy++;
-
 		setupCreateProfile();
 
 		centerPanel.add(profileView, BorderLayout.CENTER);
@@ -92,7 +75,8 @@ class ProfilePanel extends PluginPanel
 		add(centerPanel, BorderLayout.CENTER);
 	}
 
-	private void setupCreateProfile() {
+	private void setupCreateProfile()
+	{
 		addMarker.setToolTipText("Add new profile");
 		addMarker.addMouseListener(new MouseAdapter()
 		{
@@ -101,7 +85,7 @@ class ProfilePanel extends PluginPanel
 			{
 				if (mouseEvent.getButton() == MouseEvent.BUTTON1)
 				{
-					create();
+					plugin.create();
 				}
 			}
 
@@ -122,9 +106,7 @@ class ProfilePanel extends PluginPanel
 
 
 		final JMenuItem createProfile = new JMenuItem("Create new profile");
-		createProfile.addActionListener(e -> {
-create();
-		});
+		createProfile.addActionListener(e -> plugin.create());
 		menu.add(createProfile);
 
 		final JMenuItem importProfile = new JMenuItem("Import profile");
@@ -135,7 +117,8 @@ create();
 			fileChooser.setAcceptAllFileFilterUsed(false);
 			fileChooser.setCurrentDirectory(ProfilePlugin.lastFileChooserDirectory);
 			int selection = fileChooser.showOpenDialog(this);
-			if (selection == JFileChooser.APPROVE_OPTION) {
+			if (selection == JFileChooser.APPROVE_OPTION)
+			{
 				File file = fileChooser.getSelectedFile();
 				ProfilePlugin.lastFileChooserDirectory = file.getParentFile();
 				plugin.profileImport(file);
@@ -158,7 +141,8 @@ create();
 
 		for (ConfigProfile profile : profiles)
 		{
-			if (profile.getName().startsWith("$") && !plugin.isDeveloperMode()) {
+			if (profile.getName().startsWith("$") && !plugin.isDeveloperMode())
+			{
 				// internal profile
 				continue;
 			}
@@ -170,23 +154,6 @@ create();
 			constraints.gridy++;
 		}
 
-//		boolean empty = constraints.gridy == 0;
-//		noMarkersPanel.setVisible(empty);
-		title.setVisible(true);
-
-//		profileView.add(noMarkersPanel, constraints);
-//		constraints.gridy++;
-
-		//markerView.add(creationPanel, constraints);
-		//constraints.gridy++;
-
-//		repaint();
 		revalidate();
-//		invalidate();
-	}
-
-	private void create() {
-		plugin.create();
-//		if (profileView.isShowing())
 	}
 }

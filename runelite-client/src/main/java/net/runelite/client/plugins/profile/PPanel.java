@@ -358,54 +358,6 @@ class PPanel extends JPanel
 	}
 
 	private JPanel setupNameActions() {
-//		save.setVisible(false);
-//		save.setFont(FontManager.getRunescapeSmallFont());
-//		save.setForeground(ColorScheme.PROGRESS_COMPLETE_COLOR);
-//		save.addMouseListener(new MouseAdapter()
-//		{
-//			@Override
-//			public void mousePressed(MouseEvent mouseEvent)
-//			{
-//				save();
-//			}
-//
-//			@Override
-//			public void mouseEntered(MouseEvent mouseEvent)
-//			{
-//				save.setForeground(ColorScheme.PROGRESS_COMPLETE_COLOR.darker());
-//			}
-//
-//			@Override
-//			public void mouseExited(MouseEvent mouseEvent)
-//			{
-//				save.setForeground(ColorScheme.PROGRESS_COMPLETE_COLOR);
-//			}
-//		});
-//
-//		cancel.setVisible(false);
-//		cancel.setFont(FontManager.getRunescapeSmallFont());
-//		cancel.setForeground(ColorScheme.PROGRESS_ERROR_COLOR);
-//		cancel.addMouseListener(new MouseAdapter()
-//		{
-//			@Override
-//			public void mousePressed(MouseEvent mouseEvent)
-//			{
-//				cancel();
-//			}
-//
-//			@Override
-//			public void mouseEntered(MouseEvent mouseEvent)
-//			{
-//				cancel.setForeground(ColorScheme.PROGRESS_ERROR_COLOR.darker());
-//			}
-//
-//			@Override
-//			public void mouseExited(MouseEvent mouseEvent)
-//			{
-//				cancel.setForeground(ColorScheme.PROGRESS_ERROR_COLOR);
-//			}
-//		});
-
 		SwingUtil.removeButtonDecorations(rename);
 		rename.setHorizontalAlignment(SwingConstants.RIGHT);
 //		rename.setBorder(null);
