@@ -109,16 +109,26 @@ class ConfigData
 				log.debug("config file {} does not exist", configPath);
 			}
 
-			// apply patches
-			for (Map.Entry<String, String> entry : patch.entrySet())
+			if (tempProps.isEmpty())
 			{
-				if (entry.getValue() == null)
+				// this probably doesn't happen outside of the very first save (when no file exists)
+				// but to be safe in the event the prop is deleted off disk, flush the entire properties
+				// from memory
+				tempProps.putAll(properties);
+			}
+			else
+			{
+				// apply patches
+				for (Map.Entry<String, String> entry : patch.entrySet())
 				{
-					tempProps.remove(entry.getKey());
-				}
-				else
-				{
-					tempProps.put(entry.getKey(), entry.getValue());
+					if (entry.getValue() == null)
+					{
+						tempProps.remove(entry.getKey());
+					}
+					else
+					{
+						tempProps.put(entry.getKey(), entry.getValue());
+					}
 				}
 			}
 
