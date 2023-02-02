@@ -64,6 +64,7 @@ import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
@@ -122,6 +123,7 @@ public class ConfigManager
 	private final ConfigInvocationHandler handler = new ConfigInvocationHandler(this);
 //	private final Map<String, String> pendingChanges = new HashMap<>();
 
+	@Getter
 	private ConfigProfile profile;
 	private ConfigProfile rsProfile;
 	private ConfigData configProfile;
@@ -161,6 +163,12 @@ public class ConfigManager
 
 	public void switchProfile(ConfigProfile newProfile)
 	{
+		if (newProfile.getId() == profile.getId())
+		{
+			log.warn("switching to existing profile!");
+			return;
+		}
+
 		// Ensure existing config is saved
 		sendConfig();
 

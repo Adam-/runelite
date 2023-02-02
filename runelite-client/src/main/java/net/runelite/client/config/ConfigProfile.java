@@ -8,6 +8,7 @@ import lombok.ToString;
 
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 @ToString
+//@EqualsAndHashCode(of = {"id"})
 public class ConfigProfile
 {
 	@Getter

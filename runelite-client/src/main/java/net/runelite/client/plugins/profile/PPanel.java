@@ -147,7 +147,7 @@ class PPanel extends JPanel
 		DELETE_HOVER_ICON = new ImageIcon(ImageUtil.alphaOffset(deleteImg, -100));
 	}
 
-	PPanel(ProfilePlugin plugin, ConfigProfile profile)
+	PPanel(ProfilePlugin plugin, ConfigProfile profile, boolean active)
 	{
 				this.plugin = plugin;
 		this.profile = profile;
@@ -267,19 +267,26 @@ class PPanel extends JPanel
 		add(nameWrapper, BorderLayout.NORTH);
 		add(bottomContainer, BorderLayout.CENTER);
 
-		setBorder(BorderFactory.createMatteBorder(0, 5, 0, 0, ColorScheme.BRAND_ORANGE));
-
-		addMouseListener(new MouseAdapter()
+		if(active)
 		{
-			@Override
-			public void mouseClicked(MouseEvent e)
+			setBorder(BorderFactory.createMatteBorder(0, 5, 0, 0, ColorScheme.BRAND_ORANGE));
+		}
+		else
+		{
+			setBorder(BorderFactory.createMatteBorder(0, 5, 0, 0, getBackground()));
+			// mouse listener for switching profiles
+			addMouseListener(new MouseAdapter()
 			{
-				if (e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON1)
+				@Override
+				public void mouseClicked(MouseEvent e)
 				{
-					plugin.change(profile.getId());
+					if (e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON1)
+					{
+						plugin.change(profile.getId());
+					}
 				}
-			}
-		});
+			});
+		}
 
 			updateVisibility();
 		updateFill();

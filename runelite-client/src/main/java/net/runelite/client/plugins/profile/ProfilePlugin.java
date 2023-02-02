@@ -86,6 +86,10 @@ public class ProfilePlugin extends Plugin
 		SwingUtilities.invokeLater(() -> pluginPanel.rebuild(profiles));
 	}
 
+	ConfigProfile active() {
+		return configManager.getProfile();
+	}
+
 	void create() {
 		try (ProfileManager.Lock lock = profileManager.lock()) {
 			List<ConfigProfile> profiles = lock.getProfiles();
@@ -139,19 +143,22 @@ public class ProfilePlugin extends Plugin
 	}
 
 	void change(long id) {
+		ConfigProfile profile;
 		try (ProfileManager.Lock lock = profileManager.lock())
 		{
-			ConfigProfile profile = lock.findProfile(id);
+			profile = lock.findProfile(id);
 			if (profile == null)
 			{
-				log.warn("change to nonexistant profile {}", id);
+				log.warn("change to nonexistent profile {}", id);
+				// maybe profile was removed by another client, reload the panel
 				scheduledExecutorService.execute(this::load);
 				return;
 			}
 
-			configManager.switchProfile(profile);
-//			pluginPanel.change()
-//			scheduledExecutorService.execute(this::load);
+			log.debug("Switching profile to {}", profile.getName());
 		}
+
+		configManager.switchProfile(profile);
+		scheduledExecutorService.execute(this::load);
 	}
 }

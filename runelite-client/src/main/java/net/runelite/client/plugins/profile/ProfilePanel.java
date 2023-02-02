@@ -28,11 +28,6 @@ class ProfilePanel extends PluginPanel
 	private static final ImageIcon ADD_ICON;
 	private static final ImageIcon ADD_HOVER_ICON;
 
-	private static final Color DEFAULT_BORDER_COLOR = Color.GREEN;
-	private static final Color DEFAULT_FILL_COLOR = new Color(0, 255, 0, 0);
-
-	private static final int DEFAULT_BORDER_THICKNESS = 3;
-
 	static
 	{
 		final BufferedImage addIcon = ImageUtil.loadImageResource(ScreenMarkerPlugin.class, "add_icon.png");
@@ -152,7 +147,7 @@ create();
 				continue;
 			}
 
-			profileView.add(new PPanel(plugin, profile), constraints);
+			profileView.add(new PPanel(plugin, profile, plugin.active().getId() == profile.getId()), constraints);
 			constraints.gridy++;
 
 			profileView.add(Box.createRigidArea(new Dimension(0, 10)), constraints);
