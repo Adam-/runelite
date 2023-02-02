@@ -13,7 +13,7 @@ public class ConfigProfile
 	@Getter
 	private final long id;
 	@Getter
-	@Setter
+	@Setter(AccessLevel.PACKAGE)
 	private String name;
 	@Getter
 	@Setter

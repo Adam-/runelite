@@ -140,9 +140,7 @@ public class ProfilePlugin extends Plugin
 
 			log.debug("renaming profile {} to {}", profile, name);
 
-			profile.setName(name);
-			lock.dirty();
-
+			lock.renameProfile(profile, name);
 			// the panel updates the name label so it isn't necessary to rebuild
 		}
 	}
