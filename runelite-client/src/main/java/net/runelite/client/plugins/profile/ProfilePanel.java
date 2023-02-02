@@ -41,6 +41,7 @@ class ProfilePanel extends PluginPanel
 	private final ProfilePlugin plugin;
 
 	private final JPanel profileView = new JPanel(new GridBagLayout());
+	private final JLabel instructionsLabel;
 
 	ProfilePanel(ProfilePlugin plugin)
 	{
@@ -83,16 +84,22 @@ class ProfilePanel extends PluginPanel
 		JPopupMenu menu = setupCreateProfile();
 		addProfile.setComponentPopupMenu(menu);
 
-		JPanel northPanel = new JPanel(new BorderLayout());
-		northPanel.setBorder(new EmptyBorder(1, 0, 10, 0));
-		northPanel.add(title, BorderLayout.WEST);
-		northPanel.add(addProfile, BorderLayout.EAST);
+		JPanel titlePanel = new JPanel(new BorderLayout());
+		titlePanel.setBorder(new EmptyBorder(1, 0, 10, 0));
+		titlePanel.add(title, BorderLayout.WEST);
+		titlePanel.add(addProfile, BorderLayout.EAST);
 
 		JPanel centerPanel = new JPanel(new BorderLayout());
 		centerPanel.setBackground(ColorScheme.DARK_GRAY_COLOR);
 		centerPanel.add(profileView, BorderLayout.CENTER);
 
-		add(northPanel, BorderLayout.NORTH);
+		instructionsLabel = new JLabel("foo");
+//		Font boldFont = new Font(instructionsLabel.getFont().getFontName(), Font.BOLD, instructionsLabel.getFont().getSize());
+//		instructionsLabel.setFont(boldFont);
+		instructionsLabel.setBorder(new EmptyBorder(10,0,10,0));
+		centerPanel.add(instructionsLabel, BorderLayout.NORTH);
+
+		add(titlePanel, BorderLayout.NORTH);
 		add(centerPanel, BorderLayout.CENTER);
 	}
 
@@ -134,6 +141,7 @@ class ProfilePanel extends PluginPanel
 
 		SwingUtil.fastRemoveAll(profileView);
 
+		int num = 0;
 		for (ConfigProfile profile : profiles)
 		{
 			if (profile.getName().startsWith("$") && !plugin.isDeveloperMode())
@@ -147,6 +155,34 @@ class ProfilePanel extends PluginPanel
 
 			profileView.add(Box.createRigidArea(new Dimension(0, 10)), constraints);
 			constraints.gridy++;
+
+			++num;
+		}
+
+		if (num <= 3)
+		{
+			StringBuilder builder = new StringBuilder()
+				.append("<html>")
+				.append("Profiles are separate versions of RuneLite configuration that can be switched between. ")
+				.append("This includes all plugins, and their settings.<br/>")
+				.append("</br>");
+			if (num <= 1)
+			{
+				builder.append("You have just one profile, which is the currently active profile. Add more by clicking the green" +
+					" plus icon, or right-click and import a profile");
+			}
+			else
+			{
+				builder.append("Switch between profiles by double clicking them, and right click them to view more options.");
+			}
+			builder.append("</html>");
+
+			instructionsLabel.setText(builder.toString());
+			instructionsLabel.setVisible(true);
+		}
+		else
+		{
+			instructionsLabel.setVisible(false);
 		}
 
 		revalidate();
