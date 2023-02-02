@@ -10,6 +10,7 @@ import javax.swing.SwingUtilities;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import net.runelite.client.config.ConfigManager;
 import net.runelite.client.config.ConfigProfile;
 import net.runelite.client.config.ProfileManager;
 import net.runelite.client.plugins.Plugin;
@@ -35,8 +36,11 @@ public class ProfilePlugin extends Plugin
 	private ProfileManager profileManager;
 
 	@Inject
+	private ConfigManager configManager;
+
+	@Inject
 	@Named("developerMode")
-		@Getter(AccessLevel.PACKAGE)
+	@Getter(AccessLevel.PACKAGE)
 	private boolean developerMode;
 
 	private ProfilePanel pluginPanel;
@@ -131,6 +135,23 @@ public class ProfilePlugin extends Plugin
 			lock.dirty();
 
 			// the panel updates the name label so it isn't necessary to rebuild
+		}
+	}
+
+	void change(long id) {
+		try (ProfileManager.Lock lock = profileManager.lock())
+		{
+			ConfigProfile profile = lock.findProfile(id);
+			if (profile == null)
+			{
+				log.warn("change to nonexistant profile {}", id);
+				scheduledExecutorService.execute(this::load);
+				return;
+			}
+
+			configManager.switchProfile(profile);
+//			pluginPanel.change()
+//			scheduledExecutorService.execute(this::load);
 		}
 	}
 }

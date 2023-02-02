@@ -276,7 +276,7 @@ class PPanel extends JPanel
 			{
 				if (e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON1)
 				{
-					System.out.println("double click " + this);
+					plugin.change(profile.getId());
 				}
 			}
 		});
