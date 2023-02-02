@@ -40,8 +40,6 @@ class ProfilePanel extends PluginPanel
 
 	private final ProfilePlugin plugin;
 
-	private final JLabel addMarker = new JLabel(ADD_ICON);
-
 	private final JPanel profileView = new JPanel(new GridBagLayout());
 
 	ProfilePanel(ProfilePlugin plugin)
@@ -51,34 +49,14 @@ class ProfilePanel extends PluginPanel
 		setLayout(new BorderLayout());
 		setBorder(new EmptyBorder(10, 10, 10, 10));
 
-		JPanel northPanel = new JPanel(new BorderLayout());
-		northPanel.setBorder(new EmptyBorder(1, 0, 10, 0));
-
 		JLabel title = new JLabel();
 		title.setText("Profiles");
 		title.setForeground(Color.WHITE);
 		title.setVisible(true);
 
-		northPanel.add(title, BorderLayout.WEST);
-		northPanel.add(addMarker, BorderLayout.EAST);
-
-		JPanel centerPanel = new JPanel(new BorderLayout());
-		centerPanel.setBackground(ColorScheme.DARK_GRAY_COLOR);
-
-		profileView.setBackground(ColorScheme.DARK_GRAY_COLOR);
-
-		setupCreateProfile();
-
-		centerPanel.add(profileView, BorderLayout.CENTER);
-
-		add(northPanel, BorderLayout.NORTH);
-		add(centerPanel, BorderLayout.CENTER);
-	}
-
-	private void setupCreateProfile()
-	{
-		addMarker.setToolTipText("Add new profile");
-		addMarker.addMouseListener(new MouseAdapter()
+		JLabel addProfile = new JLabel(ADD_ICON);
+		addProfile.setToolTipText("Add new profile");
+		addProfile.addMouseListener(new MouseAdapter()
 		{
 			@Override
 			public void mousePressed(MouseEvent mouseEvent)
@@ -92,25 +70,43 @@ class ProfilePanel extends PluginPanel
 			@Override
 			public void mouseEntered(MouseEvent mouseEvent)
 			{
-				addMarker.setIcon(ADD_HOVER_ICON);
+				addProfile.setIcon(ADD_HOVER_ICON);
 			}
 
 			@Override
 			public void mouseExited(MouseEvent mouseEvent)
 			{
-				addMarker.setIcon(ADD_ICON);
+				addProfile.setIcon(ADD_ICON);
 			}
 		});
 
-		final JPopupMenu menu = new JPopupMenu();
+		JPopupMenu menu = setupCreateProfile();
+		addProfile.setComponentPopupMenu(menu);
 
+		JPanel northPanel = new JPanel(new BorderLayout());
+		northPanel.setBorder(new EmptyBorder(1, 0, 10, 0));
+		northPanel.add(title, BorderLayout.WEST);
+		northPanel.add(addProfile, BorderLayout.EAST);
+
+		JPanel centerPanel = new JPanel(new BorderLayout());
+		centerPanel.setBackground(ColorScheme.DARK_GRAY_COLOR);
+		centerPanel.add(profileView, BorderLayout.CENTER);
+
+		add(northPanel, BorderLayout.NORTH);
+		add(centerPanel, BorderLayout.CENTER);
+	}
+
+	private JPopupMenu setupCreateProfile()
+	{
+		final JPopupMenu menu = new JPopupMenu();
 
 		final JMenuItem createProfile = new JMenuItem("Create new profile");
 		createProfile.addActionListener(e -> plugin.create());
 		menu.add(createProfile);
 
 		final JMenuItem importProfile = new JMenuItem("Import profile");
-		importProfile.addActionListener(e -> {
+		importProfile.addActionListener(e ->
+		{
 			JFileChooser fileChooser = new JFileChooser();
 			fileChooser.setDialogTitle("Profile import");
 			fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("RuneLite properties", "properties"));
@@ -125,8 +121,7 @@ class ProfilePanel extends PluginPanel
 			}
 		});
 		menu.add(importProfile);
-
-		addMarker.setComponentPopupMenu(menu);
+		return menu;
 	}
 
 	public void rebuild(List<ConfigProfile> profiles)
