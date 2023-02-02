@@ -332,11 +332,6 @@ class PPanel extends JPanel
 		final JMenuItem exportProfile = new JMenuItem("Export");
 		exportProfile.addActionListener(e ->
 		{
-//			File source = ProfileManager.profileConfigFile(profile);
-//			if (!source.exists() || !source.canRead()) {
-//				JOptionPane.showMessageDialog(this, "");
-//			}
-
 			JFileChooser fileChooser = new JFileChooser();
 			fileChooser.setDialogTitle("Profile export");
 			fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("RuneLite properties", "properties"));
@@ -346,7 +341,6 @@ class PPanel extends JPanel
 				File file = fileChooser.getSelectedFile();
 				// add properties file extension
 				file = new File(file.getParentFile(), file.getName() + ".properties");
-//				log.debug("Exporting profile {} to {}", profile.getName(), file);
 				plugin.export(profile, file);
 			}
 		});

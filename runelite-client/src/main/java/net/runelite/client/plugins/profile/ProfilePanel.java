@@ -8,14 +8,17 @@ import java.awt.GridBagLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.List;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import net.runelite.client.config.ConfigProfile;
 import net.runelite.client.plugins.screenmarkers.ScreenMarkerPlugin;
 import net.runelite.client.ui.ColorScheme;
@@ -126,7 +129,15 @@ create();
 
 		final JMenuItem importProfile = new JMenuItem("Import profile");
 		importProfile.addActionListener(e -> {
-
+			JFileChooser fileChooser = new JFileChooser();
+			fileChooser.setDialogTitle("Profile import");
+			fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("RuneLite properties", "properties"));
+			fileChooser.setAcceptAllFileFilterUsed(false);
+			int selection = fileChooser.showSaveDialog(this);
+			if (selection == JFileChooser.APPROVE_OPTION) {
+				File file = fileChooser.getSelectedFile();
+				plugin.profileImport(file);
+			}
 		});
 		menu.add(importProfile);
 

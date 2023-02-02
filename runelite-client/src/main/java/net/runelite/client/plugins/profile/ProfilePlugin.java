@@ -187,4 +187,38 @@ public class ProfilePlugin extends Plugin
 			}
 		});
 	}
+
+	void profileImport(File file) {
+		log.debug("Importing profile from {}", file);
+
+		try (ProfileManager.Lock lock = profileManager.lock()) {
+			List<ConfigProfile> profiles = lock.getProfiles();
+
+			if (profiles.size() > 20) {
+
+			}
+
+			String name = "Imported Profile";
+			int number = 1;
+			while (lock.findProfile(name) != null) {
+				name = "Imported Profile (" + number++ + ")";
+			}
+
+			log.debug("selected new profile name: {}", name);
+			ConfigProfile profile = lock.createProfile(name);
+
+			// overwrite new profile properties with the provided file
+			Files.copy(
+				file.toPath(),
+				ProfileManager.profileConfigFile(profile).toPath(),
+				StandardCopyOption.REPLACE_EXISTING
+			);
+		}
+		catch (IOException e)
+		{
+			log.error("error importing profile", e);
+		}
+
+		scheduledExecutorService.execute(this::load);
+	}
 }
