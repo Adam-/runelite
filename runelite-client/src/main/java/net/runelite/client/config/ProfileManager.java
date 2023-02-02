@@ -1,6 +1,5 @@
 package net.runelite.client.config;
 
-import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import java.io.File;
 import java.io.FileInputStream;
@@ -80,15 +79,10 @@ public class ProfileManager
 		}
 
 		private List<ConfigProfile> load() {
-			try (FileInputStream in = new FileInputStream(PROFILES)
-//				 FileChannel channel = in.getChannel()
-			)
+			try (FileInputStream in = new FileInputStream(PROFILES))
 			{
-//				channel.lock(0L, Long.MAX_VALUE, true);
-				return gson.fromJson(new InputStreamReader(in),
-					new TypeToken<List<ConfigProfile>>()
-					{
-					}.getType());
+				return gson.fromJson(new InputStreamReader(in), Profiles.class)
+					.getProfiles();
 			}
 			catch (FileNotFoundException ex)
 			{
@@ -113,7 +107,9 @@ public class ProfileManager
 					 FileChannel channel = lockOut.getChannel();
 					 OutputStreamWriter writer = new OutputStreamWriter(out, StandardCharsets.UTF_8))
 				{
-					gson.toJson(profiles, writer);
+					Profiles profilesData = new Profiles();
+					profilesData.setProfiles(profiles);
+					gson.toJson(profilesData, writer);
 					channel.force(true);
 				}
 
