@@ -142,20 +142,18 @@ public class ProfileManager
 			modified=true;
 		}
 
-		public ConfigProfile createProfile(String name) {
-			if (findProfile(name) != null) {
-				// profile names are used for the properties on disk, so they have to be unique
-				throw new IllegalArgumentException("profile " + name + " already exists");
-			}
-
-			ConfigProfile profile = new ConfigProfile(System.nanoTime());
+		public ConfigProfile createProfile(String name, long id) {
+			ConfigProfile profile = new ConfigProfile(id);
 			profile.setName(name);
 			profile.setSync(false);
 			profiles.add(profile);
 			modified=true;
-//			profileConfigFile(profile).delete(); // just in case?
 			log.debug("Created profile {}", profile);
 			return profile;
+		}
+
+		public ConfigProfile createProfile(String name) {
+			return createProfile(name, System.nanoTime());
 		}
 
 		public ConfigProfile findProfile(String name) {
@@ -196,6 +194,6 @@ public class ProfileManager
 
 	public static File profileConfigFile(ConfigProfile profile)
 	{
-		return new File(PROFILES_DIR, profile.getName() + ".properties");
+		return new File(PROFILES_DIR, profile.getName() + "-" + profile.getId() + ".properties");
 	}
 }

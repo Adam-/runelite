@@ -1357,10 +1357,27 @@ public class ConfigManager
 
 		try (ProfileManager.Lock lock = profileManager.lock())
 		{
+			profile = updateProfile(lock, profile);
+			rsProfile = updateProfile(lock, rsProfile);
 			CompletableFuture<Void> f1 = saveConfiguration(lock, profile, configProfile);
 			CompletableFuture<Void> f2 = saveConfiguration(lock, rsProfile, rsProfileConfigProfile);
 			return CompletableFuture.allOf(f1, f2);
 		}
+	}
+
+	private static ConfigProfile updateProfile(ProfileManager.Lock lock, ConfigProfile profile)
+	{
+		// since we hold references to profiles outside of the lock, they are stale.
+		// fetch the latest version.
+		ConfigProfile p = lock.findProfile(profile.getId());
+		if (p == null)
+		{
+			log.warn("Lost active profile {}!", profile.getName());
+
+			// We just recreate it, with the same id, so that the ConfigData stays valid
+			p = lock.createProfile(profile.getName(), profile.getId());
+		}
+		return p;
 	}
 
 	private CompletableFuture<Void> saveConfiguration(ProfileManager.Lock lock, ConfigProfile profile, ConfigData data)
