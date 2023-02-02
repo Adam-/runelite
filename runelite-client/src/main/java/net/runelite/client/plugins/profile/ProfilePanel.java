@@ -133,9 +133,11 @@ create();
 			fileChooser.setDialogTitle("Profile import");
 			fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("RuneLite properties", "properties"));
 			fileChooser.setAcceptAllFileFilterUsed(false);
-			int selection = fileChooser.showSaveDialog(this);
+			fileChooser.setCurrentDirectory(ProfilePlugin.lastFileChooserDirectory);
+			int selection = fileChooser.showOpenDialog(this);
 			if (selection == JFileChooser.APPROVE_OPTION) {
 				File file = fileChooser.getSelectedFile();
+				ProfilePlugin.lastFileChooserDirectory = file.getParentFile();
 				plugin.profileImport(file);
 			}
 		});

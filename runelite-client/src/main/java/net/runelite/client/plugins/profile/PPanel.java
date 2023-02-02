@@ -336,9 +336,11 @@ class PPanel extends JPanel
 			fileChooser.setDialogTitle("Profile export");
 			fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("RuneLite properties", "properties"));
 			fileChooser.setAcceptAllFileFilterUsed(false);
+			fileChooser.setCurrentDirectory(ProfilePlugin.lastFileChooserDirectory);
 			int selection = fileChooser.showSaveDialog(this);
 			if (selection == JFileChooser.APPROVE_OPTION) {
 				File file = fileChooser.getSelectedFile();
+				ProfilePlugin.lastFileChooserDirectory = file.getParentFile();
 				// add properties file extension
 				file = new File(file.getParentFile(), file.getName() + ".properties");
 				plugin.export(profile, file);

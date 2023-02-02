@@ -49,6 +49,7 @@ public class ProfilePlugin extends Plugin
 
 	private ProfilePanel pluginPanel;
 	private NavigationButton navigationButton;
+	static File lastFileChooserDirectory;
 
 	@Override
 	protected void startUp()
