@@ -1346,20 +1346,19 @@ public class ConfigManager
 				}
 			}
 			log.info("active profile {}", profile);
-		}
-		else if (commandExecuted.getCommand().equals("delete")) {
-			String name = commandExecuted.getArguments()[0];
-			try (ProfileManager.Lock lock = profileManager.lock())
-			{
-				lock.removeProfile( name);
-			}
+//		else if (commandExecuted.getCommand().equals("delete")) {
+//			String name = commandExecuted.getArguments()[0];
+//			try (ProfileManager.Lock lock = profileManager.lock())
+//			{
+//				lock.removeProfile( name);
+//			}
 		} else if (commandExecuted.getCommand().equals("syncon")) {
 			String name = commandExecuted.getArguments()[0];
 		}
 	}
 
 //	@Nullable
-	private CompletableFuture<Void> sendConfig()
+	public CompletableFuture<Void> sendConfig()
 	{
 		eventBus.post(new ConfigSync());
 

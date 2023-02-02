@@ -16,6 +16,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Properties;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.RequiredArgsConstructor;
@@ -145,6 +146,16 @@ public class ProfileManager
 			profiles.add(profile);
 			modified=true;
 			log.debug("Created profile {}", profile);
+
+			// write a blank properties to disk so export has something to copy
+			Properties properties = new Properties();
+			try (FileOutputStream out = new FileOutputStream(profileConfigFile(profile))) {
+				properties.store(out, "RuneLite configuration");
+			}
+			catch (IOException e)
+			{
+				log.warn("unable to create properties", e);
+			}
 			return profile;
 		}
 
@@ -170,11 +181,8 @@ public class ProfileManager
 			return null;
 		}
 
-		public void removeProfile(String profile) {
-			modified |= profiles.removeIf(p  -> p.getName().equals(profile));
-		}
-
 		public void removeProfile(long id) {
+			// keep the properties around on disk as a backup
 			modified |= profiles.removeIf(p -> p.getId() == id);
 		}
 

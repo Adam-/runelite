@@ -37,9 +37,11 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -49,6 +51,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import net.runelite.client.config.ConfigProfile;
 import net.runelite.client.plugins.screenmarkers.ScreenMarkerPlugin;
 import net.runelite.client.ui.ColorScheme;
@@ -57,6 +60,7 @@ import net.runelite.client.ui.components.FlatTextField;
 import net.runelite.client.util.ImageUtil;
 import net.runelite.client.util.SwingUtil;
 
+//@Slf4j
 class PPanel extends JPanel
 {
 //	private static final int DEFAULT_FILL_OPACITY = 75;
@@ -312,13 +316,39 @@ class PPanel extends JPanel
 		if (!active)
 		{
 			final JMenuItem deleteProfile = new JMenuItem("Delete");
-			deleteProfile.addActionListener(e -> plugin.delete(profile.getId()));
+			deleteProfile.addActionListener(e ->
+			{
+				int confirm = JOptionPane.showConfirmDialog(PPanel.this,
+					"Are you sure you want to delete this profile?",
+					"Warning", JOptionPane.OK_CANCEL_OPTION);
+				if (confirm == 0)
+				{
+					plugin.delete(profile.getId());
+				}
+			});
 			menu.add(deleteProfile);
 		}
 
 		final JMenuItem exportProfile = new JMenuItem("Export");
-		exportProfile.addActionListener(e -> {
+		exportProfile.addActionListener(e ->
+		{
+//			File source = ProfileManager.profileConfigFile(profile);
+//			if (!source.exists() || !source.canRead()) {
+//				JOptionPane.showMessageDialog(this, "");
+//			}
 
+			JFileChooser fileChooser = new JFileChooser();
+			fileChooser.setDialogTitle("Profile export");
+			fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("RuneLite properties", "properties"));
+			fileChooser.setAcceptAllFileFilterUsed(false);
+			int selection = fileChooser.showSaveDialog(this);
+			if (selection == JFileChooser.APPROVE_OPTION) {
+				File file = fileChooser.getSelectedFile();
+				// add properties file extension
+				file = new File(file.getParentFile(), file.getName() + ".properties");
+//				log.debug("Exporting profile {} to {}", profile.getName(), file);
+				plugin.export(profile, file);
+			}
 		});
 		menu.add(exportProfile);
 

@@ -2,6 +2,10 @@ package net.runelite.client.plugins.profile;
 
 import java.awt.image.BufferedImage;
 import static java.awt.image.BufferedImage.TYPE_INT_RGB;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
 import javax.inject.Inject;
@@ -160,5 +164,27 @@ public class ProfilePlugin extends Plugin
 
 		configManager.switchProfile(profile);
 		scheduledExecutorService.execute(this::load);
+	}
+
+	void export(ConfigProfile profile, File file) {
+		log.debug("Exporting profile {} to {}", profile.getName(), file);
+		scheduledExecutorService.execute(() ->
+		{
+			// save config to disk so the export copies the full config
+			configManager.sendConfig();
+
+			try
+			{
+				Files.copy(
+					ProfileManager.profileConfigFile(profile).toPath(),
+					file.toPath(),
+					StandardCopyOption.REPLACE_EXISTING
+				);
+			}
+			catch (IOException e)
+			{
+				log.error("error performing profile export", e);
+			}
+		});
 	}
 }
