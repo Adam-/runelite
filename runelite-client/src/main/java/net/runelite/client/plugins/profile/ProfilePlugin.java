@@ -161,6 +161,11 @@ public class ProfilePlugin extends Plugin
 			}
 
 			log.debug("Switching profile to {}", profile.getName());
+
+			// change active profile
+			lock.getProfiles().forEach(p -> p.setActive(false));
+			profile.setActive(true);
+			lock.dirty();
 		}
 
 		configManager.switchProfile(profile);

@@ -281,7 +281,8 @@ public class ConfigManager
 		// this is to avoid importing default config if the default profile is removed or renamed.
 
 		boolean defaultSettings = RuneLite.DEFAULT_CONFIG_FILE.equals(configFile);
-		if (!defaultSettings) {
+		if (!defaultSettings)
+		{
 			log.warn("Use of --config is deprecated, use --profile instead.");
 		}
 
@@ -299,8 +300,8 @@ public class ConfigManager
 				ConfigProfile targetProfile = lock.createProfile(targetProfileName);
 				if (defaultSettings)
 				{
-					profiles.forEach(p -> p.setDefaultProfile(false));
-					targetProfile.setDefaultProfile(true);
+					profiles.forEach(p -> p.setActive(false));
+					targetProfile.setActive(true);
 				}
 				ConfigProfile rsProfile = lock.findProfile("$rsprofile");
 				if (rsProfile == null)
@@ -372,13 +373,13 @@ public class ConfigManager
 				return;
 			}
 
-			// when logged in the remote non-migrated profile becomes default
+			// when logged in the remote non-migrated profile becomes active
 			ConfigProfile targetProfile = new ConfigProfile(0L); // migrated profile has special id 0
 			targetProfile.setName(session.getUsername());
-			targetProfile.setDefaultProfile(true);
+			targetProfile.setActive(true);
 			targetProfile.setSync(true);
 
-			lock.getProfiles().forEach(p -> p.setDefaultProfile(false));
+			lock.getProfiles().forEach(p -> p.setActive(false));
 			lock.addProfile(targetProfile);
 
 			ConfigProfile rsProfile = lock.findProfile("$rsprofile");
@@ -485,12 +486,11 @@ public class ConfigManager
 						profile = p;
 					}
 				}
-				else if (p.isDefaultProfile())
+				else if (p.isActive())
 				{
 					profile = p;
 				}
 			}
-
 
 			if (profile != null)
 			{
@@ -507,8 +507,9 @@ public class ConfigManager
 				profile = lock.createProfile(configProfileName != null ? configProfileName : "default");
 				if (configProfileName == null)
 				{
-					lock.getProfiles().forEach(p -> p.setDefaultProfile(false));
-					profile.setDefaultProfile(true);
+					// if creating the initial default profile
+					lock.getProfiles().forEach(p -> p.setActive(false));
+					profile.setActive(true);
 				}
 
 				log.info("Creating profile: {}", profile.getName());

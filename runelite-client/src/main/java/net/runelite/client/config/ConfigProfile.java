@@ -8,7 +8,6 @@ import lombok.ToString;
 
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 @ToString
-//@EqualsAndHashCode(of = {"id"})
 public class ConfigProfile
 {
 	@Getter
@@ -21,7 +20,7 @@ public class ConfigProfile
 	private boolean sync;
 	@Getter
 	@Setter
-	private boolean defaultProfile;
+	private boolean active;
 	@Getter(AccessLevel.PACKAGE)
 	@Setter(AccessLevel.PACKAGE)
 	private long rev;
