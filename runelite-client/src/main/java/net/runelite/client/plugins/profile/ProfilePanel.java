@@ -163,9 +163,8 @@ class ProfilePanel extends PluginPanel
 		{
 			StringBuilder builder = new StringBuilder()
 				.append("<html>")
-				.append("Profiles are separate versions of RuneLite configuration that can be switched between. ")
-				.append("This includes all plugins, and their settings.<br/>")
-				.append("</br>");
+				.append("Profiles are separate sets of plugins and settings that you can switch between at any time. <br/>")
+				.append("<br/>");
 			if (num <= 1)
 			{
 				builder.append("You have just one profile, which is the currently active profile. Add more by clicking the green" +
