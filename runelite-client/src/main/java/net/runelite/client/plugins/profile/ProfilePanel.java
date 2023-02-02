@@ -150,7 +150,7 @@ class ProfilePanel extends PluginPanel
 				continue;
 			}
 
-			profileView.add(new PPanel(plugin, profile, plugin.active().getId() == profile.getId()), constraints);
+			profileView.add(new ProfileCard(plugin, profile, plugin.active().getId() == profile.getId()), constraints);
 			constraints.gridy++;
 
 			profileView.add(Box.createRigidArea(new Dimension(0, 10)), constraints);
@@ -163,7 +163,7 @@ class ProfilePanel extends PluginPanel
 		{
 			StringBuilder builder = new StringBuilder()
 				.append("<html>")
-				.append("Profiles are separate sets of plugins and settings that you can switch between at any time. <br/>")
+				.append("Profiles are separate sets of plugins and settings that you can switch between at any time.<br/>")
 				.append("<br/>");
 			if (num <= 1)
 			{

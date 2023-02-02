@@ -60,54 +60,19 @@ import net.runelite.client.ui.components.FlatTextField;
 import net.runelite.client.util.ImageUtil;
 import net.runelite.client.util.SwingUtil;
 
-//@Slf4j
-class PPanel extends JPanel
+class ProfileCard extends JPanel
 {
-//	private static final int DEFAULT_FILL_OPACITY = 75;
-
 	private static final Border NAME_BOTTOM_BORDER = new CompoundBorder(
 		BorderFactory.createMatteBorder(0, 0, 1, 0, ColorScheme.DARK_GRAY_COLOR),
 		BorderFactory.createLineBorder(ColorScheme.DARKER_GRAY_COLOR));
-//
-//	private static final ImageIcon BORDER_COLOR_ICON;
-//	private static final ImageIcon BORDER_COLOR_HOVER_ICON;
-//	private static final ImageIcon NO_BORDER_COLOR_ICON;
-//	private static final ImageIcon NO_BORDER_COLOR_HOVER_ICON;
-//
-//	private static final ImageIcon FILL_COLOR_ICON;
-//	private static final ImageIcon FILL_COLOR_HOVER_ICON;
-//	private static final ImageIcon NO_FILL_COLOR_ICON;
-//	private static final ImageIcon NO_FILL_COLOR_HOVER_ICON;
-//
-//	private static final ImageIcon LABEL_ICON;
-//	private static final ImageIcon LABEL_HOVER_ICON;
-//	private static final ImageIcon NO_LABEL_ICON;
-//	private static final ImageIcon NO_LABEL_HOVER_ICON;
-//
-//	private static final ImageIcon VISIBLE_ICON;
-//	private static final ImageIcon VISIBLE_HOVER_ICON;
-//	private static final ImageIcon INVISIBLE_ICON;
-//	private static final ImageIcon INVISIBLE_HOVER_ICON;
 
 	private static final ImageIcon DELETE_ICON;
 	private static final ImageIcon DELETE_HOVER_ICON;
 
-//	private final ScreenMarkerPlugin plugin;
-//	private final ScreenMarkerOverlay marker;
-
-//	private final JLabel borderColorIndicator = new JLabel();
-//	private final JLabel fillColorIndicator = new JLabel();
-//	private final JLabel labelIndicator = new JLabel();
-//	private final JLabel visibilityLabel = new JLabel();
 	private final JLabel deleteLabel = new JLabel();
 
 	private final FlatTextField nameInput = new FlatTextField();
-//	private final JLabel save = new JLabel("Save");
-//	private final JLabel cancel = new JLabel("Cancel");
 	private final JButton rename = new JButton("Rename");
-
-//	private final SpinnerModel spinnerModel = new SpinnerNumberModel(5, 0, Integer.MAX_VALUE, 1);
-//	private final JSpinner thicknessSpinner = new JSpinner(spinnerModel);
 
 	private final ProfilePlugin plugin;
 	private final ConfigProfile profile;
@@ -115,44 +80,12 @@ class PPanel extends JPanel
 
 	static
 	{
-//		final BufferedImage borderImg = ImageUtil.loadImageResource(ScreenMarkerPlugin.class, "border_color_icon.png");
-//		final BufferedImage borderImgHover = ImageUtil.luminanceOffset(borderImg, -150);
-//		BORDER_COLOR_ICON = new ImageIcon(borderImg);
-//		BORDER_COLOR_HOVER_ICON = new ImageIcon(borderImgHover);
-//
-//		NO_BORDER_COLOR_ICON = new ImageIcon(borderImgHover);
-//		NO_BORDER_COLOR_HOVER_ICON = new ImageIcon(ImageUtil.alphaOffset(borderImgHover, -100));
-//
-//		final BufferedImage fillImg = ImageUtil.loadImageResource(ScreenMarkerPlugin.class, "fill_color_icon.png");
-//		final BufferedImage fillImgHover = ImageUtil.luminanceOffset(fillImg, -150);
-//		FILL_COLOR_ICON = new ImageIcon(fillImg);
-//		FILL_COLOR_HOVER_ICON = new ImageIcon(fillImgHover);
-//
-//		NO_FILL_COLOR_ICON = new ImageIcon(fillImgHover);
-//		NO_FILL_COLOR_HOVER_ICON = new ImageIcon(ImageUtil.alphaOffset(fillImgHover, -100));
-//
-//		final BufferedImage labelImg = ImageUtil.loadImageResource(ScreenMarkerPlugin.class, "label_icon.png");
-//		final BufferedImage labelImgHover = ImageUtil.luminanceOffset(labelImg, -150);
-//		LABEL_ICON = new ImageIcon(labelImg);
-//		LABEL_HOVER_ICON = new ImageIcon(labelImgHover);
-//
-//		NO_LABEL_ICON = new ImageIcon(labelImgHover);
-//		NO_LABEL_HOVER_ICON = new ImageIcon(ImageUtil.alphaOffset(labelImgHover, -100));
-//
-//		final BufferedImage visibleImg = ImageUtil.loadImageResource(ScreenMarkerPlugin.class, "visible_icon.png");
-//		VISIBLE_ICON = new ImageIcon(visibleImg);
-//		VISIBLE_HOVER_ICON = new ImageIcon(ImageUtil.alphaOffset(visibleImg, -100));
-//
-//		final BufferedImage invisibleImg = ImageUtil.loadImageResource(ScreenMarkerPlugin.class, "invisible_icon.png");
-//		INVISIBLE_ICON = new ImageIcon(invisibleImg);
-//		INVISIBLE_HOVER_ICON = new ImageIcon(ImageUtil.alphaOffset(invisibleImg, -100));
-
 		final BufferedImage deleteImg = ImageUtil.loadImageResource(ScreenMarkerPlugin.class, "delete_icon.png");
 		DELETE_ICON = new ImageIcon(deleteImg);
 		DELETE_HOVER_ICON = new ImageIcon(ImageUtil.alphaOffset(deleteImg, -100));
 	}
 
-	PPanel(ProfilePlugin plugin, ConfigProfile profile, boolean active)
+	ProfileCard(ProfilePlugin plugin, ConfigProfile profile, boolean active)
 	{
 				this.plugin = plugin;
 		this.profile = profile;
@@ -186,7 +119,6 @@ class PPanel extends JPanel
 			@Override
 			public void focusGained(FocusEvent e)
 			{
-
 			}
 
 			@Override
@@ -196,7 +128,7 @@ class PPanel extends JPanel
 			}
 		});
 
-			JPanel nameWrapper = new JPanel(new BorderLayout());
+		JPanel nameWrapper = new JPanel(new BorderLayout());
 		nameWrapper.setBackground(ColorScheme.DARKER_GRAY_COLOR);
 		nameWrapper.setBorder(NAME_BOTTOM_BORDER);
 
@@ -213,27 +145,6 @@ class PPanel extends JPanel
 		JPanel rightActions = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
 		rightActions.setBackground(ColorScheme.DARKER_GRAY_COLOR);
 
-//		visibilityLabel.addMouseListener(new MouseAdapter()
-//		{
-//			@Override
-//			public void mousePressed(MouseEvent mouseEvent)
-//			{
-//				toggle(!visible);
-//			}
-//
-//			@Override
-//			public void mouseEntered(MouseEvent mouseEvent)
-//			{
-//				visibilityLabel.setIcon(visible ? VISIBLE_HOVER_ICON : INVISIBLE_HOVER_ICON);
-//			}
-//
-//			@Override
-//			public void mouseExited(MouseEvent mouseEvent)
-//			{
-//				updateVisibility();
-//			}
-//		});
-
 		deleteLabel.setIcon(DELETE_ICON);
 		deleteLabel.setToolTipText("Delete profile");
 		deleteLabel.addMouseListener(new MouseAdapter()
@@ -241,7 +152,7 @@ class PPanel extends JPanel
 			@Override
 			public void mousePressed(MouseEvent mouseEvent)
 			{
-				int confirm = JOptionPane.showConfirmDialog(PPanel.this,
+				int confirm = JOptionPane.showConfirmDialog(ProfileCard.this,
 					"Are you sure you want to delete this profile?",
 					"Warning", JOptionPane.OK_CANCEL_OPTION);
 
@@ -264,7 +175,6 @@ class PPanel extends JPanel
 			}
 		});
 
-//		rightActions.add(visibilityLabel);
 		if (!active)
 		rightActions.add(deleteLabel);
 
@@ -318,7 +228,7 @@ class PPanel extends JPanel
 			final JMenuItem deleteProfile = new JMenuItem("Delete");
 			deleteProfile.addActionListener(e ->
 			{
-				int confirm = JOptionPane.showConfirmDialog(PPanel.this,
+				int confirm = JOptionPane.showConfirmDialog(ProfileCard.this,
 					"Are you sure you want to delete this profile?",
 					"Warning", JOptionPane.OK_CANCEL_OPTION);
 				if (confirm == 0)
