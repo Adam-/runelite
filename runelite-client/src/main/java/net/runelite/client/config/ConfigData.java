@@ -12,6 +12,7 @@ import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -24,7 +25,7 @@ class ConfigData
 	private final File configPath;
 
 	private final ConcurrentHashMap<String, String> properties;
-	private ConcurrentHashMap<String, String> patchChanges = new ConcurrentHashMap<>();
+	private Map<String, String> patchChanges = new HashMap<>();
 
 	ConfigData(File configPath)
 	{
@@ -47,13 +48,6 @@ class ConfigData
 		props.forEach((k, v) -> properties.put((String) k, (String) v));
 	}
 
-//	ConfigData(File configPath, Map<String, String> config)
-//	{
-//		this.configPath = configPath;
-//		properties = new ConcurrentHashMap<>(config);
-//		patchChanges = new ConcurrentHashMap<>(config);
-//	}
-
 	String getProperty(String key)
 	{
 		return properties.get(key);
@@ -65,15 +59,9 @@ class ConfigData
 		return properties.put(key, value);
 	}
 
-//	synchronized void setAll(Map<String, String> props)
-//	{
-//		properties.putAll(props);
-//		patchChanges.putAll(props);
-//	}
-
 	synchronized String unset(String key)
 	{
-		patchChanges.remove(key);
+		patchChanges.put(key, null);
 		return properties.remove(key);
 	}
 
@@ -95,7 +83,7 @@ class ConfigData
 		}
 
 		Map<String, String> p = patchChanges;
-		patchChanges = new ConcurrentHashMap<>();
+		patchChanges = new HashMap<>();
 		return p;
 	}
 
