@@ -107,6 +107,7 @@ class PPanel extends JPanel
 
 	private final ProfilePlugin plugin;
 	private final ConfigProfile profile;
+	private final boolean active;
 
 	static
 	{
@@ -151,6 +152,7 @@ class PPanel extends JPanel
 	{
 				this.plugin = plugin;
 		this.profile = profile;
+		this.active = active;
 
 		setLayout(new BorderLayout());
 
@@ -259,6 +261,7 @@ class PPanel extends JPanel
 		});
 
 //		rightActions.add(visibilityLabel);
+		if (!active)
 		rightActions.add(deleteLabel);
 
 		bottomContainer.add(leftActions, BorderLayout.WEST);
@@ -306,9 +309,12 @@ class PPanel extends JPanel
 //		});
 //		menu.add(rename);
 
-		final JMenuItem deleteProfile = new JMenuItem("Delete");
-		deleteProfile.addActionListener(e -> plugin.delete(profile.getId()));
-		menu.add(deleteProfile);
+		if (!active)
+		{
+			final JMenuItem deleteProfile = new JMenuItem("Delete");
+			deleteProfile.addActionListener(e -> plugin.delete(profile.getId()));
+			menu.add(deleteProfile);
+		}
 
 		final JMenuItem exportProfile = new JMenuItem("Export");
 		exportProfile.addActionListener(e -> {
