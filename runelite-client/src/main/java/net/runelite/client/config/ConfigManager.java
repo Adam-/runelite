@@ -1400,7 +1400,7 @@ public class ConfigManager
 		log.debug("Saving profile {} (patch size: {})", profile.getName(), patch.size());
 
 		CompletableFuture<Void> future;
-		if (profile.isSync())
+		if (profile.isSync() && session != null)
 		{
 			future = new CompletableFuture<>();
 			configClient.patch(buildConfigPatch(patch), profile.getId())
