@@ -16,7 +16,6 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Properties;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.RequiredArgsConstructor;
@@ -148,14 +147,19 @@ public class ProfileManager
 			log.debug("Created profile {}", profile);
 
 			// write a blank properties to disk so export has something to copy
-			Properties properties = new Properties();
-			try (FileOutputStream out = new FileOutputStream(profileConfigFile(profile))) {
-				properties.store(out, "RuneLite configuration");
-			}
-			catch (IOException e)
-			{
-				log.warn("unable to create properties", e);
-			}
+//			File file = profileConfigFile(profile);
+//			if (!file.exists())
+//			{
+//				try (FileOutputStream out = new FileOutputStream(file))
+//				{
+//					Properties properties = new Properties();
+//					properties.store(out, "RuneLite configuration");
+//				}
+//				catch (IOException e)
+//				{
+//					log.warn("unable to create properties", e);
+//				}
+//			}
 			return profile;
 		}
 
@@ -182,16 +186,22 @@ public class ProfileManager
 		}
 
 		public void removeProfile(long id) {
-			// keep the properties around on disk as a backup
+			// keep the properties around on disk as a backup. If this profile is active on another client
+			// the profile will be recreated there later with the same id.
 			modified |= profiles.removeIf(p -> p.getId() == id);
 		}
 
 		public void renameProfile(ConfigProfile profile, String name) {
 			File oldFile = profileConfigFile(profile);
-			String old = profile.toString();
 			profile.setName(name);
 			modified = true;
 			File newFile = profileConfigFile(profile);
+
+			if (!oldFile.exists())
+			{
+				// no config file is valid if the profile hasn't been used yet.
+				return;
+			}
 
 			try
 			{
@@ -203,7 +213,6 @@ public class ProfileManager
 			catch (IOException e)
 			{
 				log.error("error renaming profile", e);
-				profile.setName(old); // try to avoid the config being lost
 			}
 		}
 

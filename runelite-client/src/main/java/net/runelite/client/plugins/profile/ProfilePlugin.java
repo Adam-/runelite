@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -30,6 +31,8 @@ import net.runelite.client.ui.NavigationButton;
 @Slf4j
 public class ProfilePlugin extends Plugin
 {
+	private static final int MAX_PROFILES = 20;
+
 	@Inject
 	private ClientToolbar clientToolbar;
 
@@ -177,10 +180,16 @@ public class ProfilePlugin extends Plugin
 			// save config to disk so the export copies the full config
 			configManager.sendConfig();
 
+			File source = ProfileManager.profileConfigFile(profile);
+			if (!source.exists()) {
+				SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null, "Profile '" + profile.getName() + "' can not be exported because it has no settings."));
+				return;
+			}
+
 			try
 			{
 				Files.copy(
-					ProfileManager.profileConfigFile(profile).toPath(),
+					source.toPath(),
 					file.toPath(),
 					StandardCopyOption.REPLACE_EXISTING
 				);
@@ -198,7 +207,7 @@ public class ProfilePlugin extends Plugin
 		try (ProfileManager.Lock lock = profileManager.lock()) {
 			List<ConfigProfile> profiles = lock.getProfiles();
 
-			if (profiles.size() > 20) {
+			if (profiles.size() > MAX_PROFILES) {
 
 			}
 
@@ -211,11 +220,10 @@ public class ProfilePlugin extends Plugin
 			log.debug("selected new profile name: {}", name);
 			ConfigProfile profile = lock.createProfile(name);
 
-			// overwrite new profile properties with the provided file
+			// copy the provided properties file
 			Files.copy(
 				file.toPath(),
-				ProfileManager.profileConfigFile(profile).toPath(),
-				StandardCopyOption.REPLACE_EXISTING
+				ProfileManager.profileConfigFile(profile).toPath()
 			);
 		}
 		catch (IOException e)
@@ -224,5 +232,52 @@ public class ProfilePlugin extends Plugin
 		}
 
 		scheduledExecutorService.execute(this::load);
+	}
+
+	void clone(ConfigProfile profile) {
+		scheduledExecutorService.execute(() ->
+		{
+			// save config to disk so the clone copies the full config
+			configManager.sendConfig();
+
+			try (ProfileManager.Lock lock = profileManager.lock())
+			{
+				List<ConfigProfile> profiles = lock.getProfiles();
+
+				if (profiles.size() > MAX_PROFILES)
+				{
+
+				}
+
+				int num = 1;
+				String name;
+				do
+				{
+					name = profile.getName() + " (" + num++ + ")";
+				} while (lock.findProfile(name) != null);
+
+				log.debug("Cloning profile {} to {}", profile.getName(), name);
+
+				ConfigProfile clonedProfile = lock.createProfile(name);
+
+				// copy config if present
+				File from = ProfileManager.profileConfigFile(profile);
+				File to = ProfileManager.profileConfigFile(clonedProfile);
+
+				if (from.exists()) {
+					try
+					{
+						Files.copy(
+							from.toPath(),
+							to.toPath()
+						);
+					}
+					catch (IOException e)
+					{
+						log.error("error cloning profile", e);
+					}
+				}
+			}
+		});
 	}
 }

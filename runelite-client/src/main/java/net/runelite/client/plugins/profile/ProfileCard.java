@@ -260,7 +260,7 @@ class ProfileCard extends JPanel
 
 		final JMenuItem cloneProfile = new JMenuItem("Clone");
 		cloneProfile.addActionListener(e -> {
-
+plugin.clone(profile);
 		});
 		menu.add(cloneProfile);
 
