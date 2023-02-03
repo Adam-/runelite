@@ -1,7 +1,5 @@
 package net.runelite.client.plugins.profile;
 
-import java.awt.image.BufferedImage;
-import static java.awt.image.BufferedImage.TYPE_INT_RGB;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -22,11 +20,13 @@ import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.ClientToolbar;
 import net.runelite.client.ui.NavigationButton;
+import net.runelite.client.util.ImageUtil;
 
 @PluginDescriptor(
 	name = "Profiles",
 	description = "Configuration profile management",
-	loadWhenOutdated = true
+	loadWhenOutdated = true,
+	enabledByDefault = false
 )
 @Slf4j
 public class ProfilePlugin extends Plugin
@@ -59,12 +59,10 @@ public class ProfilePlugin extends Plugin
 	{
 		pluginPanel = new ProfilePanel(this);
 
-		final BufferedImage icon = new BufferedImage(12,12,TYPE_INT_RGB);// ImageUtil.loadImageResource(getClass(), ICON_FILE);
-
 		navigationButton = NavigationButton.builder()
 			.tooltip("Profiles")
-			.icon(icon)
-			.priority(5)
+			.icon(ImageUtil.loadImageResource(getClass(), "profile_icon.png"))
+			.priority(1)
 			.panel(pluginPanel)
 			.build();
 
