@@ -460,8 +460,6 @@ class PluginHubPanel extends PluginPanel
 			});
 		}
 
-		GroupLayout layout = new GroupLayout(this);
-		setLayout(layout);
 		setBackground(ColorScheme.DARK_GRAY_COLOR);
 
 		searchBar = new IconTextField();
@@ -489,28 +487,22 @@ class PluginHubPanel extends PluginPanel
 			}
 		});
 
-		JLabel externalPluginWarning = new JLabel("<html>External plugins are verified to not be " +
+		JLabel externalPluginWarning1 = new JLabel("<html>External plugins are verified to not be " +
 			"malicious or rule-breaking, but are not " +
 			"maintained by the RuneLite developers. " +
 			"They may cause bugs or instability.</html>");
-		externalPluginWarning.setBackground(new Color(0xFFBB33));
-		externalPluginWarning.setForeground(Color.BLACK);
-		externalPluginWarning.setBorder(new EmptyBorder(5, 5, 5, 2));
-		externalPluginWarning.setOpaque(true);
+		externalPluginWarning1.setBackground(new Color(0xFFBB33));
+		externalPluginWarning1.setForeground(Color.BLACK);
+		externalPluginWarning1.setBorder(new EmptyBorder(5, 5, 5, 2));
+		externalPluginWarning1.setOpaque(true);
 
 		JLabel externalPluginWarning2 = new JLabel("Use at your own risk!");
 		externalPluginWarning2.setHorizontalAlignment(JLabel.CENTER);
 		externalPluginWarning2.setFont(FontManager.getRunescapeBoldFont());
-		externalPluginWarning2.setBackground(externalPluginWarning.getBackground());
-		externalPluginWarning2.setForeground(externalPluginWarning.getForeground());
+		externalPluginWarning2.setBackground(externalPluginWarning1.getBackground());
+		externalPluginWarning2.setForeground(externalPluginWarning1.getForeground());
 		externalPluginWarning2.setBorder(new EmptyBorder(0, 5, 5, 5));
 		externalPluginWarning2.setOpaque(true);
-
-		JButton backButton = new JButton(ConfigPanel.BACK_ICON);
-		backButton.setRolloverIcon(ConfigPanel.BACK_ICON_HOVER);
-		SwingUtil.removeButtonDecorations(backButton);
-		backButton.setToolTipText("Back");
-		backButton.addActionListener(l -> pluginListPanel.getMuxer().popState());
 
 		mainPanel = new JPanel();
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(0, 7, 7, 7));
@@ -521,9 +513,25 @@ class PluginHubPanel extends PluginPanel
 		refreshing.setHorizontalAlignment(JLabel.CENTER);
 
 		JPanel mainPanelWrapper = new FixedWidthPanel();
-		mainPanelWrapper.setLayout(new BorderLayout());
-		mainPanelWrapper.add(mainPanel, BorderLayout.NORTH);
-		mainPanelWrapper.add(refreshing, BorderLayout.CENTER);
+
+		{
+			GroupLayout layout = new GroupLayout(mainPanelWrapper);
+			mainPanelWrapper.setLayout(layout);
+
+			layout.setVerticalGroup(layout.createSequentialGroup()
+				.addComponent(externalPluginWarning1)
+				.addComponent(externalPluginWarning2)
+				.addGap(7)
+				.addComponent(mainPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addComponent(refreshing)
+				.addGap(0, 0, 0x7000));
+
+			layout.setHorizontalGroup(layout.createParallelGroup()
+				.addComponent(externalPluginWarning1, 0, Short.MAX_VALUE, Short.MAX_VALUE)
+				.addComponent(externalPluginWarning2, 0, Short.MAX_VALUE, Short.MAX_VALUE)
+				.addComponent(mainPanel)
+				.addComponent(refreshing, 0, Short.MAX_VALUE, Short.MAX_VALUE));
+		}
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -531,24 +539,23 @@ class PluginHubPanel extends PluginPanel
 		scrollPane.setPreferredSize(new Dimension(0x7000, 0x7000));
 		scrollPane.setViewportView(mainPanelWrapper);
 
-		layout.setVerticalGroup(layout.createSequentialGroup()
-			.addComponent(externalPluginWarning)
-			.addComponent(externalPluginWarning2)
-			.addGap(10)
-			.addGroup(layout.createParallelGroup()
-				.addComponent(backButton)
-				.addComponent(searchBar))
-			.addGap(10)
-			.addComponent(scrollPane));
+		{
+			GroupLayout layout = new GroupLayout(this);
+			setLayout(layout);
 
-		layout.setHorizontalGroup(layout.createParallelGroup()
-			.addComponent(externalPluginWarning, 0, Short.MAX_VALUE, Short.MAX_VALUE)
-			.addComponent(externalPluginWarning2, 0, Short.MAX_VALUE, Short.MAX_VALUE)
-			.addGroup(layout.createSequentialGroup()
-				.addComponent(backButton)
+			layout.setVerticalGroup(layout.createSequentialGroup()
+				.addGap(10)
 				.addComponent(searchBar)
-				.addGap(10))
-			.addComponent(scrollPane));
+				.addGap(10)
+				.addComponent(scrollPane));
+
+			layout.setHorizontalGroup(layout.createParallelGroup()
+				.addGroup(layout.createSequentialGroup()
+					.addGap(10)
+					.addComponent(searchBar)
+					.addGap(10))
+				.addComponent(scrollPane));
+		}
 
 		revalidate();
 
