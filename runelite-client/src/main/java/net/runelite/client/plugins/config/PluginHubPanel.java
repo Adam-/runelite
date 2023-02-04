@@ -29,7 +29,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 import com.google.common.html.HtmlEscapers;
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -545,7 +544,7 @@ class PluginHubPanel extends PluginPanel
 
 			layout.setVerticalGroup(layout.createSequentialGroup()
 				.addGap(10)
-				.addComponent(searchBar)
+				.addComponent(searchBar, 30, 30, 30)
 				.addGap(10)
 				.addComponent(scrollPane));
 
