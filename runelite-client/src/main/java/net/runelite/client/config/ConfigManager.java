@@ -129,12 +129,14 @@ public class ConfigManager
 	private ConfigProfile rsProfile;
 	private ConfigData configProfile;
 	private ConfigData rsProfileConfigProfile;
-	private List<net.runelite.http.api.config.ConfigProfile> remoteProfiles;
 
 	// null => we need to make a new profile
 	@Nullable
 	private String rsProfileKey;
 
+	// --profile cli
+	// --config cli which converts config to a named profile
+	// run migration if no profiles.json
 	@Inject
 	private ConfigManager(
 	//	@Named("config") File config,
@@ -173,25 +175,13 @@ public class ConfigManager
 
 		log.info("Switching profile to: {}", newProfile.getName());
 
+		// sync the latest config revision from the server
 		try
 		{
-			// sync the latest revision
 			List<net.runelite.http.api.config.ConfigProfile> profiles = configClient.profiles();
-			mergeRemoteProfiles(profiles);
+			syncRemote(newProfile, profiles);
 		} catch (IOException ex) {
 			log.error("error fetching remote profile", ex);
-		}
-
-		try (ProfileManager.Lock lock = profileManager.lock()) {
-			// fetch the updated profile with the newer rev
-			newProfile = lock.findProfile(profile.getId());
-			if (newProfile == null) {
-				log.warn("Lost profile {} when switching to it!", profile.getName());
-				return;
-			}
-
-			// sync the config to disk
-			syncRemote(lock, newProfile);
 		}
 
 		ConfigData newData = new ConfigData(ProfileManager.profileConfigFile(newProfile));
@@ -274,8 +264,8 @@ public class ConfigManager
 
 			try
 			{
-				remoteProfiles = configClient.profiles();
-				mergeRemoteProfiles(remoteProfiles);
+				List<net.runelite.http.api.config.ConfigProfile> profiles = configClient.profiles();
+				mergeRemoteProfiles(profiles);
 			}
 			catch (IOException e)
 			{
@@ -308,7 +298,6 @@ public class ConfigManager
 		{
 			List<ConfigProfile> profiles = lock.getProfiles();
 			String configProfileName = profileNameFromFile(configFile);
-
 			// migrate if:
 			// profiles does not exist and config is default
 			// config is non-default and a profile with the config name doesn't exist
@@ -463,14 +452,13 @@ public class ConfigManager
 
 	public void load()
 	{
-		// remote profile are already loaded by now
-//		List<net.runelite.http.api.config.ConfigProfile> remoteProfiles;
-//		try {
-//			remoteProfiles = configClient.profiles();
-//		} catch (IOException ex) {
-//			log.error("error loading remote profiles", ex);
-//			remoteProfiles = Collections.emptyList();
-//		}
+		List<net.runelite.http.api.config.ConfigProfile> remoteProfiles;
+		try {
+			remoteProfiles = configClient.profiles();
+		} catch (IOException ex) {
+			log.error("error loading remote profiles", ex);
+			remoteProfiles = Collections.emptyList();
+		}
 
 		migrate();
 
@@ -551,8 +539,8 @@ public class ConfigManager
 			rsProfile.setSync(true);
 
 			// synced profiles need to be fetched if outdated
-			syncRemote(lock, profile);
-			syncRemote(lock, rsProfile);
+			syncRemote(profile, remoteProfiles);
+			syncRemote(rsProfile, remoteProfiles);
 
 			this.profile = profile;
 			this.rsProfile = rsProfile;
@@ -618,7 +606,6 @@ public class ConfigManager
 					{
 						log.debug("Found local profile {} for remote {}", profile, remoteProfile);
 						profile.setSync(true);
-						profile.setRemoteRev(remoteProfile.getRev());
 						continue outer;
 					}
 				}
@@ -626,64 +613,64 @@ public class ConfigManager
 				log.debug("Creating local profile for remote {}", remoteProfile);
 				ConfigProfile profile = lock.createProfile(remoteProfile.getName(), remoteProfile.getId());
 				profile.setSync(true);
-				profile.setRemoteRev(remoteProfile.getRev());
 
 				if (migrating && remoteProfile.getId() == 0L)
 				{
-//					log.info("Setting remote profile {} as active profile",
 					profile.setActive(true);
 				}
 			}
-
-			lock.dirty();
 		}
 	}
 
-	private void syncRemote(ProfileManager.Lock lock, ConfigProfile profile)
+	private void syncRemote(ConfigProfile profile, List<net.runelite.http.api.config.ConfigProfile> remoteProfiles)
 	{
 		if (!profile.isSync())
 		{
 			return;
 		}
 
-		if (profile.getRev() > profile.getRemoteRev())
+		long id = profile.getId();
+		net.runelite.http.api.config.ConfigProfile remoteProfile = remoteProfiles.stream()
+			.filter(p -> p.getId() == id)
+			.findFirst()
+			.orElse(null);
+
+		if (remoteProfile == null)
 		{
-			log.warn("profile {} is newer than remote", profile.getName());
+			log.warn("synced profile {} has no remote!", profile);
 			return;
 		}
 
-		if (profile.getRev() == profile.getRemoteRev())
+		if (profile.getRev() == remoteProfile.getRev())
 		{
-			log.debug("profile {} is up to date", profile.getName());
-			return;
+			log.debug("profile {} is up to date", profile);
 		}
-
-		log.info("Loading remote configuration for profile '{}'", profile.getName());
-
-		try
+		else
 		{
-			Map<String, String> remoteConfiguration = configClient.get(profile.getId());
-			if (remoteConfiguration == null || remoteConfiguration.isEmpty())
+			log.info("Loading remote configuration for profile '{}'", profile.getName());
+
+			try
 			{
-				log.debug("no remote configuration for {}", profile);
-				return;
+				Map<String, String> remoteConfiguration = configClient.get(profile.getId());
+				if (remoteConfiguration == null || remoteConfiguration.isEmpty())
+				{
+					log.debug("no remote configuration for {}", profile);
+					return;
+				}
+
+				File configFile = ProfileManager.profileConfigFile(profile);
+				// remote configuration replaces local
+				configFile.delete();
+
+				ConfigData configData = new ConfigData(configFile);
+				configData.patch(remoteConfiguration);
+
+				log.debug("synced remote profile {} to disk", profile);
 			}
-
-			File configFile = ProfileManager.profileConfigFile(profile);
-			// remote configuration replaces local
-			configFile.delete();
-
-			ConfigData configData = new ConfigData(configFile);
-			configData.patch(remoteConfiguration);
-
-			profile.setRev(profile.getRemoteRev());//XXX this races
-			lock.dirty();
-
-			log.debug("synced remote profile {} to disk", profile);
-		}
-		catch (IOException ex)
-		{
-			log.error("unable to load remote configuration for {}", profile, ex);
+			catch (IOException ex)
+			{
+				log.error("unable to load remote configuration for {}", profile, ex);
+			}
 		}
 	}
 
