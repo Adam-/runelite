@@ -42,6 +42,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.http.api.RuneLiteAPI;
 import net.runelite.http.api.config.ConfigPatch;
+import net.runelite.http.api.config.ConfigPatchResult;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.HttpUrl;
@@ -132,15 +133,8 @@ public class ConfigClient
 		}
 	}
 
-	public static class PatchResult {
-		long oldRev;
-		long newRev;
-	}
-
-	public CompletableFuture<PatchResult> patch(ConfigPatch patch, long profile)
+	public ConfigPatchResult patch(ConfigPatch patch, long profile) throws IOException
 	{
-		CompletableFuture<PatchResult> future = new CompletableFuture<>();
-
 		HttpUrl url = apiBase.newBuilder()
 			.addPathSegment("config")
 			.addPathSegment("v3")
@@ -155,49 +149,73 @@ public class ConfigClient
 			.url(url)
 			.build();
 
-		client.newCall(request).enqueue(new Callback()
-		{
-			@Override
-			public void onFailure(Call call, IOException e)
+		try (Response response = client.newCall(request).execute()) {
+			if (response.code() != 200)
 			{
-				log.warn("Unable to synchronize configuration item", e);
-				future.completeExceptionally(e);
-			}
-
-			@Override
-			public void onResponse(Call call, Response response)
-			{
+				String body = "bad response";
 				try
 				{
-					if (response.code() != 200)
-					{
-						String body = "bad response";
-						try
-						{
-							body = response.body().string();
-						}
-						catch (IOException ignored)
-						{
-						}
-
-						log.warn("failed to synchronize some of {}/{} configuration values: {}",
-							patch.getEdit().size(), patch.getUnset().size(), body);
-						future.complete(null);
-					}
-					else
-					{
-						log.debug("Synchronized {}/{} configuration values",
-							patch.getEdit().size(), patch.getUnset().size());
-						future.complete(gson.fromJson(new InputStreamReader(response.body().byteStream(), StandardCharsets.UTF_8), PatchResult.class));
-					}
-				} catch (Exception ex) {
-					future.completeExceptionally(ex);
-				} finally {
-					response.close();
+					body = response.body().string();
 				}
-			}
-		});
+				catch (IOException ignored)
+				{
+				}
 
-		return future;
+				log.warn("failed to synchronize some of {}/{} configuration values: {}",
+					patch.getEdit().size(), patch.getUnset().size(), body);
+				throw new IOException("failed to synchronize some configuration values");
+			}
+			else
+			{
+				log.debug("Synchronized {}/{} configuration values",
+					patch.getEdit().size(), patch.getUnset().size());
+				return gson.fromJson(new InputStreamReader(response.body().byteStream(), StandardCharsets.UTF_8), ConfigPatchResult.class);
+			}
+		}
+
+//		client.newCall(request).enqueue(new Callback()
+//		{
+//			@Override
+//			public void onFailure(Call call, IOException e)
+//			{
+//				log.warn("Unable to synchronize configuration item", e);
+//				future.completeExceptionally(e);
+//			}
+//
+//			@Override
+//			public void onResponse(Call call, Response response)
+//			{
+//				try
+//				{
+//					if (response.code() != 200)
+//					{
+//						String body = "bad response";
+//						try
+//						{
+//							body = response.body().string();
+//						}
+//						catch (IOException ignored)
+//						{
+//						}
+//
+//						log.warn("failed to synchronize some of {}/{} configuration values: {}",
+//							patch.getEdit().size(), patch.getUnset().size(), body);
+//						future.complete(null);
+//					}
+//					else
+//					{
+//						log.debug("Synchronized {}/{} configuration values",
+//							patch.getEdit().size(), patch.getUnset().size());
+//						future.complete(gson.fromJson(new InputStreamReader(response.body().byteStream(), StandardCharsets.UTF_8), ConfigPatchResult.class));
+//					}
+//				} catch (Exception ex) {
+//					future.completeExceptionally(ex);
+//				} finally {
+//					response.close();
+//				}
+//			}
+//		});
+//
+//		return future;
 	}
 }

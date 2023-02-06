@@ -142,6 +142,7 @@ public class ProfileManager
 			ConfigProfile profile = new ConfigProfile(id);
 			profile.setName(name);
 			profile.setSync(false);
+			profile.setRev(-1);
 			profiles.add(profile);
 			modified=true;
 			log.debug("Created profile {}", profile);

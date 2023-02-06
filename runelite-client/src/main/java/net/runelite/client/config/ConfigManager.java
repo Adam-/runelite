@@ -54,8 +54,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -87,6 +85,7 @@ import net.runelite.client.events.ProfileChanged;
 import net.runelite.client.events.RuneScapeProfileChanged;
 import net.runelite.client.util.ColorUtil;
 import net.runelite.http.api.config.ConfigPatch;
+import net.runelite.http.api.config.ConfigPatchResult;
 
 @Singleton
 @Slf4j
@@ -183,7 +182,7 @@ public class ConfigManager
 		try
 		{
 			List<net.runelite.http.api.config.ConfigProfile> profiles = configClient.profiles();
-			syncRemote(newProfile, profiles);
+//			syncRemote(newProfile, profiles);
 		} catch (IOException ex) {
 			log.error("error fetching remote profile", ex);
 		}
@@ -286,7 +285,7 @@ public class ConfigManager
 		// $rsprofile settings.
 
 		ConfigPatch patch = buildConfigPatch(rsProfileConfigProfile.get());
-		configClient.patch(patch, rsProfile.getId());
+//		configClient.patch(patch, rsProfile.getId());
 		log.debug("patched remote {}", RSPROFILE_NAME);
 	}
 
@@ -546,8 +545,8 @@ public class ConfigManager
 			rsProfile.setSync(true);
 
 			// synced profiles need to be fetched if outdated
-			syncRemote(profile, remoteProfiles);
-			syncRemote(rsProfile, remoteProfiles);
+			syncRemote(lock, profile, remoteProfiles);
+			syncRemote(lock, rsProfile, remoteProfiles);
 
 			this.profile = profile;
 			this.rsProfile = rsProfile;
@@ -620,7 +619,7 @@ public class ConfigManager
 				log.debug("Creating local profile for remote {}", remoteProfile);
 				ConfigProfile profile = lock.createProfile(remoteProfile.getName(), remoteProfile.getId());
 				profile.setSync(true);
-				profile.setRev(-1L);
+//				profile.setRev(-1L);
 
 				if (migrating && remoteProfile.getId() == 0L)
 				{
@@ -631,7 +630,7 @@ public class ConfigManager
 		}
 	}
 
-	private void syncRemote(ConfigProfile profile, List<net.runelite.http.api.config.ConfigProfile> remoteProfiles)
+	private void syncRemote(ProfileManager.Lock lock, ConfigProfile profile, List<net.runelite.http.api.config.ConfigProfile> remoteProfiles)
 	{
 		if (!profile.isSync())
 		{
@@ -676,6 +675,8 @@ public class ConfigManager
 				configData.patch(configData.swapChanges());
 
 				log.debug("synced remote profile {} to disk", profile);
+				profile.setRev(remoteProfile.getRev()); // XXX this races
+				lock.dirty();
 			}
 			catch (IOException ex)
 			{
@@ -1347,8 +1348,9 @@ public class ConfigManager
 	)
 	private void onClientShutdown(ClientShutdown e)
 	{
-		Future<Void> f = sendConfig();
-		e.waitFor(f);
+//		Future<Void> f = sendConfig();
+//		e.waitFor(f);
+		sendConfig();
 	}
 
 	@Subscribe
@@ -1393,7 +1395,7 @@ public class ConfigManager
 	}
 
 //	@Nullable
-	public CompletableFuture<Void> sendConfig()
+	public void sendConfig()
 	{
 		eventBus.post(new ConfigSync());
 
@@ -1401,10 +1403,11 @@ public class ConfigManager
 		{
 			profile = updateProfile(lock, profile);
 			rsProfile = updateProfile(lock, rsProfile);
-			CompletableFuture<Void> f1 = saveConfiguration(lock, profile, configProfile);
-			CompletableFuture<Void> f2 = saveConfiguration(lock, rsProfile, rsProfileConfigProfile);
-			return CompletableFuture.allOf(f1, f2);
+			saveConfiguration(lock, profile, configProfile);
+			saveConfiguration(lock, rsProfile, rsProfileConfigProfile);
 		}
+
+//		return CompletableFuture.allOf(f1, f2);
 	}
 
 	private static ConfigProfile updateProfile(ProfileManager.Lock lock, ConfigProfile profile)
@@ -1419,60 +1422,61 @@ public class ConfigManager
 			// We just recreate it, with the same id, so that the ConfigData stays valid
 			p = lock.createProfile(profile.getName(), profile.getId());
 		}
+		else if (profile.getRev() != p.getRev())
+		{
+			// I think this is okay because while the in memory config on this client will be outdated,
+			// the version on disk and also the remote version will still be consistent
+			log.debug("Profile {} changed on disk", p.getName());
+		}
 		return p;
 	}
 
-	private CompletableFuture<Void> saveConfiguration(ProfileManager.Lock lock, ConfigProfile profile, ConfigData data)
+	private void saveConfiguration(ProfileManager.Lock lock, ConfigProfile profile, ConfigData data)
 	{
 		Map<String, String> patch = data.swapChanges();
 
 		if (patch.isEmpty())
 		{
-			return CompletableFuture.completedFuture(null);
+			return;
 		}
 
 		log.debug("Saving profile {} (patch size: {})", profile.getName(), patch.size());
 
-		CompletableFuture<Void> future;
 		if (profile.isSync() && sessionManager.getAccountSession() != null)
 		{
-			future = new CompletableFuture<>();
-			configClient.patch(buildConfigPatch(patch), profile.getId())
-				.whenComplete((patchResult, ex) ->
-				{
-					ConfigProfile profile_ = lock.findProfile(profile.getId());
-					if (ex != null)
+			try
+			{
+				ConfigPatchResult patch1 = configClient.patch(buildConfigPatch(patch), profile.getId());
+				if (patch1 == null) {
+					profile.setRev(-1L);
+				} else {
+					long oldRev = patch1.getRev() - 1;
+					long newRev = patch1.getRev();
+
+					if (oldRev == profile.getRev())
 					{
-						profile_.setRev(-1L);
-						future.completeExceptionally(ex);
-						return;
+						profile.setRev(newRev);
+						log.debug("incremental patch applied {} -> {}", oldRev, newRev);
 					}
-
-					if (patchResult == null)
+					else
 					{
-						profile_.setRev(-1L);
-						future.complete(null);
-						return;
+						// version on disk now mismatches the remote config. Set rev as -1 to force a reload
+						// on next start.
+						log.debug("rev mismatch {} != {}, invalidating", oldRev, newRev);
+						profile.setRev(-1L);
 					}
-
-					if (patchResult.oldRev == profile_.getRev()) {
-						profile_.setRev(patchResult.newRev);
-						log.debug("incremental patch applied {} -> {}", patchResult.oldRev, patchResult.newRev);
-					} else {
-						log.debug("rev mismatch {} != {}, invalidating", patchResult.oldRev, profile_.getRev());
-						profile_.setRev(-1L);
-					}
-
-					future.complete(null);
-				});
-		}
-		else
-		{
-			future = CompletableFuture.completedFuture(null);
+				}
+				lock.dirty();
+			}
+			catch (IOException e)
+			{
+				profile.setRev(-1L);
+				lock.dirty();
+				log.error("error applying incremental patch", e);
+			}
 		}
 
 		data.patch(patch);
-		return future;
 	}
 
 	private static ConfigPatch buildConfigPatch(Map<String, String> patchChanges)
