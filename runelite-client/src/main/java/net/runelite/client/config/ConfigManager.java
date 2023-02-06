@@ -77,6 +77,7 @@ import net.runelite.api.events.UsernameChanged;
 import net.runelite.api.events.WorldChanged;
 import net.runelite.client.RuneLite;
 import net.runelite.client.account.AccountSession;
+import net.runelite.client.account.SessionManager;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ClientShutdown;
@@ -115,8 +116,9 @@ public class ConfigManager
 	@Nonnull
 	private final ConfigClient configClient;
 	private final ProfileManager profileManager;
+	private final SessionManager sessionManager;
 
-	private AccountSession session;
+//	private AccountSession session;
 
 	@Nullable
 	private final Client client;
@@ -147,7 +149,8 @@ public class ConfigManager
 		@Nullable Client client,
 		Gson gson,
 		@Nonnull ConfigClient configClient,
-		ProfileManager profileManager
+		ProfileManager profileManager,
+		SessionManager sessionManager
 	)
 	{
 		this.configFile = config;
@@ -158,6 +161,7 @@ public class ConfigManager
 		this.gson = gson;
 		this.configClient = configClient;
 		this.profileManager = profileManager;
+		this.sessionManager = sessionManager;
 
 		scheduledExecutorService.scheduleWithFixedDelay(this::sendConfig, 30, 5 * 60, TimeUnit.SECONDS);
 	}
@@ -243,36 +247,36 @@ public class ConfigManager
 	{
 		return rsProfileKey;
 	}
-
-	public void switchSession(AccountSession session)
-	{
-		if (session == null)
-		{
-			this.session = null;
-			configClient.setUuid(null);
-
-			// remove the remote profiles
-			try (ProfileManager.Lock lock = profileManager.lock()) {
-				lock.getProfiles().removeIf(p -> !p.getName().startsWith("$") && p.isSync());
-				lock.dirty();
-			}
-		}
-		else
-		{
-			this.session = session;
-			configClient.setUuid(session.getUuid());
-
-			try
-			{
-				List<net.runelite.http.api.config.ConfigProfile> profiles = configClient.profiles();
-				mergeRemoteProfiles(profiles);
-			}
-			catch (IOException e)
-			{
-				log.error("error syncing remote profiles", e);
-			}
-		}
-	}
+//
+//	public void switchSession(AccountSession session)
+//	{
+//		if (session == null)
+//		{
+//			this.session = null;
+//			configClient.setUuid(null);
+//
+//			// remove the remote profiles
+//			try (ProfileManager.Lock lock = profileManager.lock()) {
+//				lock.getProfiles().removeIf(p -> !p.getName().startsWith("$") && p.isSync());
+//				lock.dirty();
+//			}
+//		}
+//		else
+//		{
+//			this.session = session;
+//			configClient.setUuid(session.getUuid());
+//
+//			try
+//			{
+//				List<net.runelite.http.api.config.ConfigProfile> profiles = configClient.profiles();
+//				mergeRemoteProfiles(profiles);
+//			}
+//			catch (IOException e)
+//			{
+//				log.error("error syncing remote profiles", e);
+//			}
+//		}
+//	}
 
 	public void mergeRsProfile()
 	{
@@ -358,88 +362,88 @@ public class ConfigManager
 		}
 	}
 
-	private void migrateRemote(List<net.runelite.http.api.config.ConfigProfile> profiles) {
-		net.runelite.http.api.config.ConfigProfile profile = profiles.stream()
-			.filter(p -> p.getId() == 0 && p.getRev() == 0)
-			.findAny().orElse(null);
-		if (profile == null) {
-			return;
-		}
-
-		log.info("Migrating remote profile");
-//
-//		Map<String, String> configuration;
-//		try
-//		{
-//			configuration = configClient.get(0L);
-//		}
-//		catch (IOException e)
-//		{
-//			log.error("unable to fetch profile to migrate", e);
+//	private void migrateRemote(List<net.runelite.http.api.config.ConfigProfile> profiles) {
+//		net.runelite.http.api.config.ConfigProfile profile = profiles.stream()
+//			.filter(p -> p.getId() == 0 && p.getRev() == 0)
+//			.findAny().orElse(null);
+//		if (profile == null) {
 //			return;
 //		}
-
-		try (ProfileManager.Lock lock = profileManager.lock())
-		{
-			if (lock.findProfile(session.getUsername()) != null) {
-				log.warn("unable to import profile {} because a profile with that name already exists", session.getUsername());
-				return;
-			}
-
-			lock.getProfiles().forEach(p -> p.setActive(false));
-
-			// when logged in the remote non-migrated profile becomes active
-			ConfigProfile targetProfile = lock.createProfile(session.getUsername(), 0L); // migrated profile has special id 0
-			targetProfile.setActive(true);
-			targetProfile.setSync(true);
-
-//			ConfigProfile rsProfile = lock.findProfile("$rsprofile");
-//			if (rsProfile == null) {
-//				rsProfile = lock.createProfile("$rsprofile");
-//			}
-//			rsProfile.setSync(true);
-
-//			ProfileManager.profileConfigFile(targetProfile).delete(); // this should not exist.. but just in case
-//			ConfigData configData = new ConfigData(ProfileManager.profileConfigFile(targetProfile));
-//			// write config to be migrated to disk first, and then reload it, so that the rsprofile keys being
-//			// moved to $rsprofile are properly recorded as unsets.
-//			configData.patch(configuration);
-//			log.debug("wrote migrated profile to disk");
-//			configData = new ConfigData(ProfileManager.profileConfigFile(targetProfile));
-//			log.debug("reloaded migrated profile");
 //
-//			ConfigData rsData = new ConfigData(ProfileManager.profileConfigFile(rsProfile));
+//		log.info("Migrating remote profile");
+////
+////		Map<String, String> configuration;
+////		try
+////		{
+////			configuration = configClient.get(0L);
+////		}
+////		catch (IOException e)
+////		{
+////			log.error("unable to fetch profile to migrate", e);
+////			return;
+////		}
 //
-//			int keys = 0;
-//			for (String wholeKey : configuration.keySet())
-//			{
-//				String[] split = splitKey(wholeKey);
-//				if (split == null)
-//				{
-//					continue;
-//				}
-//
-//				String keyProfile = split[KEY_SPLITTER_PROFILE];
-//
-//				if (keyProfile != null)
-//				{
-//					rsData.setProperty(wholeKey, configuration.get(wholeKey));
-//					configData.unset(wholeKey);
-//					++keys;
-//				}
+//		try (ProfileManager.Lock lock = profileManager.lock())
+//		{
+//			if (lock.findProfile(session.getUsername()) != null) {
+//				log.warn("unable to import profile {} because a profile with that name already exists", session.getUsername());
+//				return;
 //			}
 //
-//			// set a key to be sure the remote rev gets bumped (in the event there was no $rsprofile keys to migrate)
-//			// this key was used previously for rsprofile username migration and set to 1, and we can just reuse it.
-//			configData.setProperty("runelite.profileMigrationDone", "2");
+//			lock.getProfiles().forEach(p -> p.setActive(false));
 //
-//			// submit the delta
-//			saveConfiguration(lock, targetProfile, configData);
-//			saveConfiguration(lock, rsProfile, rsData);
+//			// when logged in the remote non-migrated profile becomes active
+//			ConfigProfile targetProfile = lock.createProfile(session.getUsername(), 0L); // migrated profile has special id 0
+//			targetProfile.setActive(true);
+//			targetProfile.setSync(true);
 //
-//			log.info("Finished performing remote profile migration of {} keys", keys);
-		}
-	}
+////			ConfigProfile rsProfile = lock.findProfile("$rsprofile");
+////			if (rsProfile == null) {
+////				rsProfile = lock.createProfile("$rsprofile");
+////			}
+////			rsProfile.setSync(true);
+//
+////			ProfileManager.profileConfigFile(targetProfile).delete(); // this should not exist.. but just in case
+////			ConfigData configData = new ConfigData(ProfileManager.profileConfigFile(targetProfile));
+////			// write config to be migrated to disk first, and then reload it, so that the rsprofile keys being
+////			// moved to $rsprofile are properly recorded as unsets.
+////			configData.patch(configuration);
+////			log.debug("wrote migrated profile to disk");
+////			configData = new ConfigData(ProfileManager.profileConfigFile(targetProfile));
+////			log.debug("reloaded migrated profile");
+////
+////			ConfigData rsData = new ConfigData(ProfileManager.profileConfigFile(rsProfile));
+////
+////			int keys = 0;
+////			for (String wholeKey : configuration.keySet())
+////			{
+////				String[] split = splitKey(wholeKey);
+////				if (split == null)
+////				{
+////					continue;
+////				}
+////
+////				String keyProfile = split[KEY_SPLITTER_PROFILE];
+////
+////				if (keyProfile != null)
+////				{
+////					rsData.setProperty(wholeKey, configuration.get(wholeKey));
+////					configData.unset(wholeKey);
+////					++keys;
+////				}
+////			}
+////
+////			// set a key to be sure the remote rev gets bumped (in the event there was no $rsprofile keys to migrate)
+////			// this key was used previously for rsprofile username migration and set to 1, and we can just reuse it.
+////			configData.setProperty("runelite.profileMigrationDone", "2");
+////
+////			// submit the delta
+////			saveConfiguration(lock, targetProfile, configData);
+////			saveConfiguration(lock, rsProfile, rsData);
+////
+////			log.info("Finished performing remote profile migration of {} keys", keys);
+//		}
+//	}
 
 	private static String profileNameFromFile(File file) {
 		String configProfileName = file.getName();
@@ -452,22 +456,25 @@ public class ConfigManager
 
 	public void load()
 	{
-		List<net.runelite.http.api.config.ConfigProfile> remoteProfiles;
-		try {
-			remoteProfiles = configClient.profiles();
-		} catch (IOException ex) {
-			log.error("error loading remote profiles", ex);
-			remoteProfiles = Collections.emptyList();
+		AccountSession session = sessionManager.getAccountSession();
+		List<net.runelite.http.api.config.ConfigProfile> remoteProfiles = Collections.emptyList();
+		if (session != null)
+		{
+			configClient.setUuid(session.getUuid());
+			try
+			{
+				remoteProfiles = configClient.profiles();
+			}
+			catch (IOException ex)
+			{
+				log.error("error loading remote profiles", ex);
+				remoteProfiles = Collections.emptyList();
+			}
 		}
 
-		migrate();
+		mergeRemoteProfiles(remoteProfiles);
 
-//		if (!remoteProfiles.isEmpty())
-//		{
-//			migrateRemote(remoteProfiles);
-//
-//			mergeRemoteProfiles(remoteProfiles);
-//		}
+		migrate();
 
 		try (ProfileManager.Lock lock = profileManager.lock())
 		{
@@ -613,9 +620,11 @@ public class ConfigManager
 				log.debug("Creating local profile for remote {}", remoteProfile);
 				ConfigProfile profile = lock.createProfile(remoteProfile.getName(), remoteProfile.getId());
 				profile.setSync(true);
+				profile.setRev(-1L);
 
 				if (migrating && remoteProfile.getId() == 0L)
 				{
+					log.info("Migrating remote profile {} to be the current active profile", profile.getName());
 					profile.setActive(true);
 				}
 			}
@@ -1424,7 +1433,7 @@ public class ConfigManager
 		log.debug("Saving profile {} (patch size: {})", profile.getName(), patch.size());
 
 		CompletableFuture<Void> future;
-		if (profile.isSync() && session != null)
+		if (profile.isSync() && sessionManager.getAccountSession() != null)
 		{
 			future = new CompletableFuture<>();
 			configClient.patch(buildConfigPatch(patch), profile.getId())
