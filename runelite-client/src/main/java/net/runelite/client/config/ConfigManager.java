@@ -672,7 +672,8 @@ public class ConfigManager
 				configFile.delete();
 
 				ConfigData configData = new ConfigData(configFile);
-				configData.patch(remoteConfiguration);
+				configData.putAll(remoteConfiguration);
+				configData.patch(configData.swapChanges());
 
 				log.debug("synced remote profile {} to disk", profile);
 			}

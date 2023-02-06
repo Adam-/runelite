@@ -65,6 +65,12 @@ class ConfigData
 		return properties.remove(key);
 	}
 
+	synchronized void putAll(Map<String, String> values)
+	{
+		patchChanges.putAll(values);
+		properties.putAll(values);
+	}
+
 	Set<String> keySet()
 	{
 		return properties.keySet();
