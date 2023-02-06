@@ -24,6 +24,9 @@ public class ConfigProfile
 	@Getter(AccessLevel.PACKAGE)
 	@Setter(AccessLevel.PACKAGE)
 	private long rev;
+//	@Getter(AccessLevel.PACKAGE)
+//	@Setter(AccessLevel.PACKAGE)
+//	private transient long remoteRev;
 
 	public boolean isInternal()
 	{

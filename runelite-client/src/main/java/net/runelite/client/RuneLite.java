@@ -336,7 +336,7 @@ public class RuneLite
 
 		SplashScreen.stage(.57, null, "Loading configuration");
 
-		// Load the session so that the session profiles can be loaded next
+		// Load the session and remote profiles
 		sessionManager.loadSession();
 
 		// Load user configuration
