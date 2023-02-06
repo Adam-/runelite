@@ -32,7 +32,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -69,14 +68,39 @@ public class ConfigClient
 		this.gson = gson;
 	}
 
-	public static class Profile {
-		long id;
-		String name;
-		long rev;
-	}
+//	public static class Profile {
+//		long id;
+//		String name;
+//		long rev;
+//	}
 
-	public List<Profile> profiles() {
-		return Collections.emptyList();
+	public List<net.runelite.http.api.config.ConfigProfile> profiles() throws IOException
+	{
+		HttpUrl url = apiBase.newBuilder()
+			.addPathSegment("config")
+			.addPathSegment("v3")
+			.addPathSegment("list")
+			.build();
+
+		log.debug("Built URI: {}", url);
+
+		Request request = new Request.Builder()
+			.header(RuneLiteAPI.RUNELITE_AUTH, uuid.toString())
+			.url(url)
+			.build();
+
+		try (Response response = client.newCall(request).execute())
+		{
+			InputStream in = response.body().byteStream();
+			// CHECKSTYLE:OFF
+			final Type type = new TypeToken<List<net.runelite.http.api.config.ConfigProfile>>(){}.getType();
+			// CHECKSTYLE:ON
+			return gson.fromJson(new InputStreamReader(in, StandardCharsets.UTF_8), type);
+		}
+		catch (JsonParseException ex)
+		{
+			throw new IOException(ex);
+		}
 	}
 
 	public Map<String, String> get(long profile) throws IOException
