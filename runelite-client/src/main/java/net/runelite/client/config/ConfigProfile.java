@@ -24,4 +24,9 @@ public class ConfigProfile
 	@Getter(AccessLevel.PACKAGE)
 	@Setter(AccessLevel.PACKAGE)
 	private long rev;
+
+	public boolean isInternal()
+	{
+		return name.startsWith("$");
+	}
 }
