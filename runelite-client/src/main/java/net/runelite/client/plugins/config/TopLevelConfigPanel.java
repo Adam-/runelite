@@ -39,7 +39,7 @@ import net.runelite.client.ui.components.materialtabs.MaterialTabGroup;
 import net.runelite.client.util.ImageUtil;
 
 @Singleton
-public class TopLevelConfigPanel extends PluginPanel
+class TopLevelConfigPanel extends PluginPanel
 {
 	private final MaterialTabGroup tabGroup;
 	private final CardLayout layout;
@@ -55,6 +55,7 @@ public class TopLevelConfigPanel extends PluginPanel
 	@Inject
 	TopLevelConfigPanel(
 		PluginListPanel pluginListPanel,
+		ProfilePanel profilePanel,
 		Provider<PluginHubPanel> pluginHubPanelProvider
 	)
 	{
@@ -73,21 +74,24 @@ public class TopLevelConfigPanel extends PluginPanel
 		add(content, BorderLayout.CENTER);
 
 		this.pluginListPanel = pluginListPanel;
-		pluginListPanelTab = addTab(pluginListPanel.getMuxer(), "config_icon.png");
+		pluginListPanelTab = addTab(pluginListPanel.getMuxer(), "config_icon_lg.png", "Configuration");
 
-		addTab(pluginHubPanelProvider, "plugin_hub_icon.png");
+		addTab(profilePanel, "profile_icon.png", "Profiles");
+
+		addTab(pluginHubPanelProvider, "plugin_hub_icon.png", "Plugin Hub");
 
 		pluginListPanelTab.select();
 	}
 
-	private MaterialTab addTab(PluginPanel panel, String image)
+	private MaterialTab addTab(PluginPanel panel, String image, String tooltip)
 	{
 		MaterialTab mt = new MaterialTab(
 			new ImageIcon(ImageUtil.loadImageResource(TopLevelConfigPanel.class, image)),
 			tabGroup, null);
+		mt.setToolTipText(tooltip);
 		tabGroup.addTab(mt);
 
-		content.add(image, panel);
+		content.add(image, panel.getWrappedPanel());
 
 		mt.setOnSelectEvent(() ->
 		{
@@ -97,17 +101,18 @@ public class TopLevelConfigPanel extends PluginPanel
 		return mt;
 	}
 
-	private MaterialTab addTab(Provider<? extends PluginPanel> panelProvider, String image)
+	private MaterialTab addTab(Provider<? extends PluginPanel> panelProvider, String image, String tooltip)
 	{
 		MaterialTab mt = new MaterialTab(
 			new ImageIcon(ImageUtil.loadImageResource(TopLevelConfigPanel.class, image)),
 			tabGroup, null);
+		mt.setToolTipText(tooltip);
 		tabGroup.addTab(mt);
 
 		mt.setOnSelectEvent(() ->
 		{
 			PluginPanel panel = panelProvider.get();
-			content.add(image, panel);
+			content.add(image, panel.getWrappedPanel());
 			switchTo(image, panel, true);
 			return true;
 		});
@@ -131,10 +136,10 @@ public class TopLevelConfigPanel extends PluginPanel
 
 		if (doRemove)
 		{
-			remove(prevPanel);
+			content.remove(prevPanel.getWrappedPanel());
 		}
 
-		revalidate();
+		content.revalidate();
 	}
 
 	@Override
