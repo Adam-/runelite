@@ -233,7 +233,7 @@ public class SessionManager
 
 				log.debug("Now signed in as {}", username);
 
-				// open the session, which triggers the sessonopen event
+				// open the session, which triggers the sessionopen event
 				AccountSession session = new AccountSession(sessionId, Instant.now(), username);
 				openSession(session);
 

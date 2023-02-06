@@ -462,12 +462,12 @@ public class ConfigManager
 
 		migrate();
 
-		if (!remoteProfiles.isEmpty())
-		{
-			migrateRemote(remoteProfiles);
-
-			mergeRemoteProfiles(remoteProfiles);
-		}
+//		if (!remoteProfiles.isEmpty())
+//		{
+//			migrateRemote(remoteProfiles);
+//
+//			mergeRemoteProfiles(remoteProfiles);
+//		}
 
 		try (ProfileManager.Lock lock = profileManager.lock())
 		{
@@ -595,6 +595,8 @@ public class ConfigManager
 	private void mergeRemoteProfiles(List<net.runelite.http.api.config.ConfigProfile> remoteProfiles) {
 		try (ProfileManager.Lock lock = profileManager.lock())
 		{
+			boolean migrating = lock.getProfiles().isEmpty();
+
 			outer:
 			for (net.runelite.http.api.config.ConfigProfile remoteProfile : remoteProfiles)
 			{
@@ -609,8 +611,13 @@ public class ConfigManager
 				}
 
 				log.debug("Creating local profile for remote {}", remoteProfile);
-				ConfigProfile profile = lock.createProfile(remoteProfile.getName());
+				ConfigProfile profile = lock.createProfile(remoteProfile.getName(), remoteProfile.getId());
 				profile.setSync(true);
+
+				if (migrating && remoteProfile.getId() == 0L)
+				{
+					profile.setActive(true);
+				}
 			}
 		}
 	}
