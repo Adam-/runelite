@@ -162,7 +162,7 @@ public class ConfigManager
 		this.profileManager = profileManager;
 		this.sessionManager = sessionManager;
 
-		scheduledExecutorService.scheduleWithFixedDelay(this::sendConfig, 30, 5 * 60, TimeUnit.SECONDS);
+		scheduledExecutorService.scheduleWithFixedDelay(this::sendConfig, 30, 15, TimeUnit.SECONDS);
 	}
 
 	public void switchProfile(ConfigProfile newProfile)

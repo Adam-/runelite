@@ -14,6 +14,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -55,14 +56,22 @@ class ConfigData
 
 	synchronized String setProperty(String key, String value)
 	{
-		patchChanges.put(key, value);
-		return properties.put(key, value);
+		String old = properties.put(key, value);
+		if (!Objects.equals(old, value))
+		{
+			patchChanges.put(key, value);
+		}
+		return old;
 	}
 
 	synchronized String unset(String key)
 	{
-		patchChanges.put(key, null);
-		return properties.remove(key);
+		String old = properties.remove(key);
+		if (old != null)
+		{
+			patchChanges.put(key, null);
+		}
+		return old;
 	}
 
 	synchronized void putAll(Map<String, String> values)
