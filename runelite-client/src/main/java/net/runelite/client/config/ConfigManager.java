@@ -512,7 +512,11 @@ public class ConfigManager
 
 		if (remoteProfile == null)
 		{
-			log.warn("synced profile {} has no remote!", profile);
+			// $rsprofile is normally synced, even when logged out
+			if (!profile.isInternal())
+			{
+				log.warn("synced profile {} has no remote!", profile);
+			}
 			return;
 		}
 
