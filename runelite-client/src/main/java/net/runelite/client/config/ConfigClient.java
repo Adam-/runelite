@@ -199,4 +199,37 @@ public class ConfigClient
 
 		return future;
 	}
+
+	public void delete(long profile)
+	{
+		HttpUrl url = apiBase.newBuilder()
+			.addPathSegment("config")
+			.addPathSegment("v3")
+			.addPathSegment(Long.toString(profile))
+			.build();
+
+		log.debug("Built URI: {}", url);
+
+		Request request = new Request.Builder()
+			.delete()
+			.header(RuneLiteAPI.RUNELITE_AUTH, uuid.toString())
+			.url(url)
+			.build();
+
+		client.newCall(request).enqueue(new Callback()
+		{
+			@Override
+			public void onFailure(Call call, IOException e)
+			{
+				log.warn("error deleting profile {}", profile, e);
+			}
+
+			@Override
+			public void onResponse(Call call, Response response)
+			{
+				log.debug("deleted profile {}", profile);
+				response.close();
+			}
+		});
+	}
 }

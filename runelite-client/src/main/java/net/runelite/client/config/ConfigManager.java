@@ -296,6 +296,37 @@ public class ConfigManager
 		}
 	}
 
+	public void toggleSync(ConfigProfile profile, boolean sync) {
+		log.debug("Setting sync for {}: {}", profile.getName(), sync);
+
+		// flush pending config changes first in the event the profile being
+		// synced is the active profile.
+		sendConfig();
+
+		try (ProfileManager.Lock lock = profileManager.lock()) {
+			profile = lock.findProfile(profile.getId());
+			if (profile == null || profile.isSync() == sync) {
+				return;
+			}
+
+			profile.setSync(sync);
+			lock.dirty();
+
+			if (sync)
+			{
+				File from = ProfileManager.profileConfigFile(profile);
+				ConfigData data = new ConfigData(from);
+				ConfigPatch patch = buildConfigPatch(data.get());
+
+				configClient.patch(patch, rsProfile.getId());
+			}
+			else
+			{
+				configClient.delete(profile.getId());
+			}
+		}
+	}
+
 	private void migrate()
 	{
 		boolean defaultSettings = RuneLite.DEFAULT_CONFIG_FILE.equals(configFile);

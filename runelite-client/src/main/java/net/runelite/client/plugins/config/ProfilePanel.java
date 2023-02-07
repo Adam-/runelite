@@ -711,16 +711,6 @@ class ProfilePanel extends PluginPanel
 
 	private void toggleSync(ConfigProfile profile, boolean sync) {
 		log.debug("Setting sync for {}: {}", profile.getName(), sync);
-
-		try (ProfileManager.Lock lock = profileManager.lock()) {
-			profile = lock.findProfile(profile.getId());
-			if (profile == null) {
-				return;
-			}
-
-			profile.setSync(sync);
-
-			//
-		}
+		configManager.toggleSync(profile, sync);
 	}
 }
