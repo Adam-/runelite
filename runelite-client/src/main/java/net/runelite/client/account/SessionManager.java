@@ -150,7 +150,6 @@ public class SessionManager
 	private void openSession(AccountSession session)
 	{
 		accountSession = session;
-//		configManager.switchSession(session);
 		eventBus.post(new SessionOpen());
 	}
 
@@ -235,8 +234,6 @@ public class SessionManager
 				// open the session, which triggers the sessionopen event
 				AccountSession session = new AccountSession(sessionId, Instant.now(), username);
 				openSession(session);
-
-//				configManager.mergeRsProfile();
 
 				// Save session to disk
 				saveSession();

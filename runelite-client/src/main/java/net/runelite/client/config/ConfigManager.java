@@ -54,6 +54,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -264,6 +265,14 @@ public class ConfigManager
 		{
 			log.error("error syncing remote profiles", e);
 		}
+
+		// special case for $rsprofile since it acts as an automatically-synced profile that is always merged
+		// instead of overwritten. After a login send a PATCH for the offline $rsprofile to merge it with the
+		// remote $rsprofile so that when $rsprofile is synced later it doesn't overwrite and lose the local
+		// $rsprofile settings.
+		ConfigPatch patch = buildConfigPatch(rsProfileConfigProfile.get());
+		configClient.patch(patch, rsProfile.getId());
+		log.debug("patched remote {}", RSPROFILE_NAME);
 	}
 
 	@Subscribe
@@ -1320,12 +1329,15 @@ public class ConfigManager
 		{
 			try
 			{
-				ConfigPatchResult patch1 = configClient.patch(buildConfigPatch(patch), profile.getId());
-				if (patch1 == null) {
+				ConfigPatchResult patchResult = configClient.patch(buildConfigPatch(patch), profile.getId()).get();
+				if (patchResult == null)
+				{
 					profile.setRev(-1L);
-				} else {
-					long oldRev = patch1.getRev() - 1;
-					long newRev = patch1.getRev();
+				}
+				else
+				{
+					long oldRev = patchResult.getRev() - 1;
+					long newRev = patchResult.getRev();
 
 					if (oldRev == profile.getRev())
 					{
@@ -1342,7 +1354,7 @@ public class ConfigManager
 				}
 				lock.dirty();
 			}
-			catch (IOException e)
+			catch (ExecutionException | InterruptedException e)
 			{
 				profile.setRev(-1L);
 				lock.dirty();

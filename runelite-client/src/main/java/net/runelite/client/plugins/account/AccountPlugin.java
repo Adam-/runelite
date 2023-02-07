@@ -116,7 +116,10 @@ public class AccountPlugin extends Plugin
 			"Are you sure you want to sign out of RuneLite?", "Sign Out Confirmation",
 			JOptionPane.YES_NO_OPTION))
 		{
-			executor.execute(sessionManager::logout);
+			executor.execute(() -> {
+		//		configMan
+				sessionManager.logout();
+			});
 		}
 	}
 

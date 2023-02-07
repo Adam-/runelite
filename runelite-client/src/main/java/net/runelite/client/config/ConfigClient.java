@@ -133,7 +133,7 @@ public class ConfigClient
 		}
 	}
 
-	public ConfigPatchResult patch(ConfigPatch patch, long profile) throws IOException
+	public CompletableFuture<ConfigPatchResult> patch(ConfigPatch patch, long profile)
 	{
 		HttpUrl url = apiBase.newBuilder()
 			.addPathSegment("config")
@@ -149,73 +149,54 @@ public class ConfigClient
 			.url(url)
 			.build();
 
-		try (Response response = client.newCall(request).execute()) {
-			if (response.code() != 200)
+		CompletableFuture<ConfigPatchResult> future = new CompletableFuture<>();
+		client.newCall(request).enqueue(new Callback()
+		{
+			@Override
+			public void onFailure(Call call, IOException e)
 			{
-				String body = "bad response";
+				log.warn("Unable to synchronize configuration item", e);
+				future.completeExceptionally(e);
+			}
+
+			@Override
+			public void onResponse(Call call, Response response)
+			{
 				try
 				{
-					body = response.body().string();
+					if (response.code() != 200)
+					{
+						String body = "bad response";
+						try
+						{
+							body = response.body().string();
+						}
+						catch (IOException ignored)
+						{
+						}
+
+						log.warn("failed to synchronize some of {}/{} configuration values: {}",
+							patch.getEdit().size(), patch.getUnset().size(), body);
+						future.complete(null);
+					}
+					else
+					{
+						log.debug("Synchronized {}/{} configuration values",
+							patch.getEdit().size(), patch.getUnset().size());
+						future.complete(gson.fromJson(new InputStreamReader(response.body().byteStream(), StandardCharsets.UTF_8), ConfigPatchResult.class));
+					}
 				}
-				catch (IOException ignored)
+				catch (Exception ex)
 				{
+					future.completeExceptionally(ex);
 				}
-
-				log.warn("failed to synchronize some of {}/{} configuration values: {}",
-					patch.getEdit().size(), patch.getUnset().size(), body);
-				throw new IOException("failed to synchronize some configuration values");
+				finally
+				{
+					response.close();
+				}
 			}
-			else
-			{
-				log.debug("Synchronized {}/{} configuration values",
-					patch.getEdit().size(), patch.getUnset().size());
-				return gson.fromJson(new InputStreamReader(response.body().byteStream(), StandardCharsets.UTF_8), ConfigPatchResult.class);
-			}
-		}
+		});
 
-//		client.newCall(request).enqueue(new Callback()
-//		{
-//			@Override
-//			public void onFailure(Call call, IOException e)
-//			{
-//				log.warn("Unable to synchronize configuration item", e);
-//				future.completeExceptionally(e);
-//			}
-//
-//			@Override
-//			public void onResponse(Call call, Response response)
-//			{
-//				try
-//				{
-//					if (response.code() != 200)
-//					{
-//						String body = "bad response";
-//						try
-//						{
-//							body = response.body().string();
-//						}
-//						catch (IOException ignored)
-//						{
-//						}
-//
-//						log.warn("failed to synchronize some of {}/{} configuration values: {}",
-//							patch.getEdit().size(), patch.getUnset().size(), body);
-//						future.complete(null);
-//					}
-//					else
-//					{
-//						log.debug("Synchronized {}/{} configuration values",
-//							patch.getEdit().size(), patch.getUnset().size());
-//						future.complete(gson.fromJson(new InputStreamReader(response.body().byteStream(), StandardCharsets.UTF_8), ConfigPatchResult.class));
-//					}
-//				} catch (Exception ex) {
-//					future.completeExceptionally(ex);
-//				} finally {
-//					response.close();
-//				}
-//			}
-//		});
-//
-//		return future;
+		return future;
 	}
 }
