@@ -178,12 +178,24 @@ public class ConfigManager
 		log.info("Switching profile to: {}", newProfile.getName());
 
 		// sync the latest config revision from the server
-		try
+		if (sessionManager.getAccountSession() != null && newProfile.isSync())
 		{
-			List<net.runelite.http.api.config.ConfigProfile> profiles = configClient.profiles();
-//			syncRemote(newProfile, profiles);
-		} catch (IOException ex) {
-			log.error("error fetching remote profile", ex);
+			try (ProfileManager.Lock lock = profileManager.lock())
+			{
+				ConfigProfile profile = lock.findProfile(newProfile.getId());
+				if (profile == null)
+				{
+					log.warn("lost profile while switching!");
+					return;
+				}
+
+				List<net.runelite.http.api.config.ConfigProfile> profiles = configClient.profiles();
+				syncRemote(lock, profile, profiles);
+			}
+			catch (IOException ex)
+			{
+				log.error("error fetching remote profile", ex);
+			}
 		}
 
 		ConfigData newData = new ConfigData(ProfileManager.profileConfigFile(newProfile));
