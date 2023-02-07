@@ -114,19 +114,15 @@ public class ConfigManager
 	@Nullable
 	private final String configProfileName;
 	private final EventBus eventBus;
+	@Nullable
+	private final Client client;
 	private final Gson gson;
 	@Nonnull
 	private final ConfigClient configClient;
 	private final ProfileManager profileManager;
 	private final SessionManager sessionManager;
 
-//	private AccountSession session;
-
-	@Nullable
-	private final Client client;
-
 	private final ConfigInvocationHandler handler = new ConfigInvocationHandler(this);
-//	private final Map<String, String> pendingChanges = new HashMap<>();
 
 	@Getter
 	private ConfigProfile profile;
@@ -138,12 +134,13 @@ public class ConfigManager
 	@Nullable
 	private String rsProfileKey;
 
-	// --profile cli
-	// --config cli which converts config to a named profile
-	// run migration if no profiles.json
+	// sync mode on/off
+	// import old style profile
+	// ui rotate collapse arrow >
+	// renaming remote profiles
+	// deleting remote profiles
 	@Inject
 	private ConfigManager(
-	//	@Named("config") File config,
 		/*@Nullable*/ @Named("config") File config,
 		@Nullable @Named("profile") String profile,
 		ScheduledExecutorService scheduledExecutorService,
@@ -157,7 +154,6 @@ public class ConfigManager
 	{
 		this.configFile = config;
 		this.configProfileName = profile;
-//		this.settingsFileInput = config;
 		this.eventBus = eventBus;
 		this.client = client;
 		this.gson = gson;
@@ -288,18 +284,6 @@ public class ConfigManager
 		}
 	}
 
-	public void mergeRsProfile()
-	{
-		// special case for $rsprofile since it acts as an automatically-synced profile that is always merged
-		// instead of overwritten. After a login send a PATCH for the offline $rsprofile to merge it with the
-		// remote $rsprofile so that when $rsprofile is synced later it doesn't overwrite and lose the local
-		// $rsprofile settings.
-
-		ConfigPatch patch = buildConfigPatch(rsProfileConfigProfile.get());
-//		configClient.patch(patch, rsProfile.getId());
-		log.debug("patched remote {}", RSPROFILE_NAME);
-	}
-
 	private void migrate()
 	{
 		boolean defaultSettings = RuneLite.DEFAULT_CONFIG_FILE.equals(configFile);
@@ -408,7 +392,7 @@ public class ConfigManager
 
 			for (ConfigProfile p : lock.getProfiles())
 			{
-				if (p.getName().startsWith("$")) // internal
+				if (p.isInternal())
 				{
 					if (p.getName().equals(RSPROFILE_NAME))
 					{
