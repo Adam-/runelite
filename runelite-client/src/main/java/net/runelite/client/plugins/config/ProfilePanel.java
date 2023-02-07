@@ -83,6 +83,8 @@ class ProfilePanel extends PluginPanel
 	private static final ImageIcon RENAME_ACTIVE_ICON;
 	private static final ImageIcon CLONE_ICON = new ImageIcon(ImageUtil.loadImageResource(ProfilePanel.class, "mdi_content-duplicate.png"));
 	private static final ImageIcon ARROW_RIGHT_ICON = new ImageIcon(ImageUtil.loadImageResource(ProfilePanel.class, "/util/arrow_right.png"));
+	private static final ImageIcon SYNC_ICON;
+	private static final ImageIcon SYNC_ACTIVE_ICON;
 
 	private final ConfigManager configManager;
 	private final ProfileManager profileManager;
@@ -103,6 +105,10 @@ class ProfilePanel extends PluginPanel
 		BufferedImage rename = ImageUtil.loadImageResource(ProfilePanel.class, "mdi_rename.png");
 		RENAME_ICON = new ImageIcon(rename);
 		RENAME_ACTIVE_ICON = new ImageIcon(ImageUtil.recolorImage(rename, ColorScheme.BRAND_ORANGE));
+
+		BufferedImage sync = ImageUtil.loadImageResource(ProfilePanel.class, "/util/reset.png");
+		SYNC_ICON = new ImageIcon(sync);
+		SYNC_ACTIVE_ICON = new ImageIcon(ImageUtil.recolorImage(sync, ColorScheme.BRAND_ORANGE));
 	}
 
 	@Inject
@@ -335,6 +341,14 @@ class ProfilePanel extends PluginPanel
 					}
 				});
 				btns.add(export);
+
+				JToggleButton sync = new JToggleButton(SYNC_ICON);
+				SwingUtil.removeButtonDecorations(sync);
+				sync.setSelectedIcon(SYNC_ACTIVE_ICON);
+				sync.setToolTipText("Sync");
+				sync.setSelected(profile.isSync());
+				sync.addActionListener(ev -> toggleSync(profile, sync.isSelected()));
+				btns.add(sync);
 
 				delete = new JButton(DELETE_ICON);
 				delete.setToolTipText("Delete profile");
@@ -693,5 +707,20 @@ class ProfilePanel extends PluginPanel
 				}
 			}
 		});
+	}
+
+	private void toggleSync(ConfigProfile profile, boolean sync) {
+		log.debug("Setting sync for {}: {}", profile.getName(), sync);
+
+		try (ProfileManager.Lock lock = profileManager.lock()) {
+			profile = lock.findProfile(profile.getId());
+			if (profile == null) {
+				return;
+			}
+
+			profile.setSync(sync);
+
+			//
+		}
 	}
 }
