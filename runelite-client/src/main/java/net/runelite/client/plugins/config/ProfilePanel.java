@@ -27,6 +27,7 @@ package net.runelite.client.plugins.config;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -97,7 +98,6 @@ class ProfilePanel extends PluginPanel
 
 	private final Map<Long, ProfileCard> cards = new HashMap<>();
 
-	private long expandedProfile = -1;
 	private File lastFileChooserDirectory;
 
 	static
@@ -106,7 +106,7 @@ class ProfilePanel extends PluginPanel
 		RENAME_ICON = new ImageIcon(rename);
 		RENAME_ACTIVE_ICON = new ImageIcon(ImageUtil.recolorImage(rename, ColorScheme.BRAND_ORANGE));
 
-		BufferedImage sync = ImageUtil.loadImageResource(ProfilePanel.class, "/util/reset.png");
+		BufferedImage sync = ImageUtil.loadImageResource(ProfilePanel.class, "cloud_sync.png");
 		SYNC_ICON = new ImageIcon(sync);
 		SYNC_ACTIVE_ICON = new ImageIcon(ImageUtil.recolorImage(sync, ColorScheme.BRAND_ORANGE));
 	}
@@ -228,7 +228,7 @@ class ProfilePanel extends PluginPanel
 					continue;
 				}
 
-				ProfileCard pc = new ProfileCard(profile, activePanel == profile.getId(), expandedProfile == profile.getId(), limited);
+				ProfileCard pc = new ProfileCard(profile, activePanel == profile.getId(), limited);
 				cards.put(profile.getId(), pc);
 				profilesList.add(pc);
 			}
@@ -252,7 +252,7 @@ class ProfilePanel extends PluginPanel
 		private boolean expanded;
 		private boolean active;
 
-		private ProfileCard(ConfigProfile profile, boolean isActive, boolean isExpanded, boolean limited)
+		private ProfileCard(ConfigProfile profile, boolean isActive, boolean limited)
 		{
 			this.profile = profile;
 
@@ -400,7 +400,7 @@ class ProfilePanel extends PluginPanel
 						}
 						else
 						{
-							switchExpanded(expanded ? -1 : profile.getId());
+							setExpanded(!expanded);
 						}
 					}
 				}
@@ -442,7 +442,7 @@ class ProfilePanel extends PluginPanel
 			activate.addMouseListener(expandListener);
 
 			setActive(isActive);
-			setExpanded(isExpanded);
+			setExpanded(false);
 		}
 
 		void setActive(boolean active)
@@ -488,22 +488,6 @@ class ProfilePanel extends PluginPanel
 			{
 				renameProfile(profile.getId(), name.getText().trim());
 			}
-		}
-	}
-
-	private void switchExpanded(long id)
-	{
-		ProfileCard card = cards.get(expandedProfile);
-		if (card != null)
-		{
-			card.setExpanded(false);
-		}
-		expandedProfile = id;
-
-		card = cards.get(id);
-		if (card != null)
-		{
-			card.setExpanded(true);
 		}
 	}
 
