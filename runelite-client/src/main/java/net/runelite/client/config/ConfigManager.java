@@ -318,7 +318,7 @@ public class ConfigManager
 				ConfigData data = new ConfigData(from);
 				ConfigPatch patch = buildConfigPatch(data.get());
 
-				configClient.patch(patch, rsProfile.getId());
+				configClient.patch(patch, profile.getId());
 			}
 			else
 			{

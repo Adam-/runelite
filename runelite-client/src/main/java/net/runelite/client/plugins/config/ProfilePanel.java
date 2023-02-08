@@ -360,7 +360,7 @@ class ProfilePanel extends PluginPanel
 						"Warning", JOptionPane.OK_CANCEL_OPTION);
 					if (confirm == 0)
 					{
-						deleteProfile(profile.getId());
+						deleteProfile(profile);
 					}
 				});
 				btns.add(delete);
@@ -525,18 +525,14 @@ class ProfilePanel extends PluginPanel
 		}
 	}
 
-	private void deleteProfile(long id)
+	private void deleteProfile(ConfigProfile profile)
 	{
+		// disabling sync causes the profile to be deleted
+		configManager.toggleSync(profile, false);
+
 		try (ProfileManager.Lock lock = profileManager.lock())
 		{
-			ConfigProfile profile = lock.findProfile(id);
-			if (profile == null)
-			{
-				log.warn("delete for nonexistent profile {}", id);
-				return;
-			}
-
-			lock.removeProfile(id);
+			lock.removeProfile(profile.getId());
 
 			reload(lock.getProfiles());
 		}
