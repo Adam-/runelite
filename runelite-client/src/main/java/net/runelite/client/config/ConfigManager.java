@@ -330,7 +330,10 @@ public class ConfigManager
 
 	public void renameProfile(ConfigProfile profile, String name)
 	{
-		configClient.rename(profile.getId(), name);
+		if (profile.isSync() && sessionManager.getAccountSession() != null)
+		{
+			configClient.rename(profile.getId(), name);
+		}
 	}
 
 	private void migrate()

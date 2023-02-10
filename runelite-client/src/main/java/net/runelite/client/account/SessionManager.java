@@ -37,6 +37,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.time.Instant;
 import java.util.UUID;
+import java.util.concurrent.ScheduledExecutorService;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -62,6 +63,7 @@ public class SessionManager
 	private final AccountClient accountClient;
 	private final Gson gson;
 	private final String oauthRedirect;
+	private final ScheduledExecutorService scheduledExecutorService;
 
 	private HttpServer server;
 
@@ -72,7 +74,8 @@ public class SessionManager
 		EventBus eventBus,
 		AccountClient accountClient,
 		Gson gson,
-		@Named("runelite.oauth.redirect") String oauthRedirect
+		@Named("runelite.oauth.redirect") String oauthRedirect,
+		ScheduledExecutorService scheduledExecutorService
 	)
 	{
 //		this.configManager = configManager;
@@ -81,6 +84,7 @@ public class SessionManager
 		this.accountClient = accountClient;
 		this.gson = gson;
 		this.oauthRedirect = oauthRedirect;
+		this.scheduledExecutorService = scheduledExecutorService;
 
 		eventBus.register(this);
 	}
@@ -252,7 +256,7 @@ public class SessionManager
 			finally
 			{
 				req.close();
-				stopServer();
+				scheduledExecutorService.execute(this::stopServer);
 			}
 		});
 
@@ -262,8 +266,8 @@ public class SessionManager
 
 	private void stopServer()
 	{
-		log.debug("Stopping server {}", server);
 		server.stop(0);
 		server = null;
+
 	}
 }

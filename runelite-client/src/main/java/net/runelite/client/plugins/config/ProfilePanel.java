@@ -58,12 +58,15 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import lombok.extern.slf4j.Slf4j;
+import net.runelite.client.account.SessionManager;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.config.ConfigProfile;
 import net.runelite.client.config.ProfileManager;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ProfileChanged;
+import net.runelite.client.events.SessionClose;
+import net.runelite.client.events.SessionOpen;
 import net.runelite.client.plugins.screenmarkers.ScreenMarkerPlugin;
 import net.runelite.client.ui.ColorScheme;
 import net.runelite.client.ui.DynamicGridLayout;
@@ -88,6 +91,7 @@ class ProfilePanel extends PluginPanel
 
 	private final ConfigManager configManager;
 	private final ProfileManager profileManager;
+	private final SessionManager sessionManager;
 	private final ScheduledExecutorService executor;
 	private final EventBus eventBus;
 
@@ -114,12 +118,14 @@ class ProfilePanel extends PluginPanel
 	ProfilePanel(
 		ConfigManager configManager,
 		ProfileManager profileManager,
+		SessionManager sessionManager,
 		ScheduledExecutorService executor,
 		EventBus eventBus
 	)
 	{
 		this.profileManager = profileManager;
 		this.configManager = configManager;
+		this.sessionManager = sessionManager;
 		this.executor = executor;
 		this.eventBus = eventBus;
 
@@ -197,6 +203,39 @@ class ProfilePanel extends PluginPanel
 	{
 		SwingUtil.fastRemoveAll(profilesList);
 		eventBus.unregister(this);
+	}
+
+	@Subscribe
+	private void onProfileChanged(ProfileChanged ev)
+	{
+		SwingUtilities.invokeLater(() ->
+		{
+			for (ProfileCard card : cards.values())
+			{
+				card.setActive(false);
+			}
+
+			ProfileCard card = cards.get(configManager.getProfile().getId());
+			if (card == null)
+			{
+				reload();
+				return;
+			}
+
+			card.setActive(true);
+		});
+	}
+
+	@Subscribe
+	public void onSessionOpen(SessionOpen sessionOpen)
+	{
+		reload();
+	}
+
+	@Subscribe
+	public void onSessionClose(SessionClose sessionClose)
+	{
+		reload();
 	}
 
 	private void reload()
@@ -341,13 +380,16 @@ class ProfilePanel extends PluginPanel
 				});
 				btns.add(export);
 
-				JToggleButton sync = new JToggleButton(SYNC_ICON);
-				SwingUtil.removeButtonDecorations(sync);
-				sync.setSelectedIcon(SYNC_ACTIVE_ICON);
-				sync.setToolTipText("Sync");
-				sync.setSelected(profile.isSync());
-				sync.addActionListener(ev -> toggleSync(profile, sync.isSelected()));
-				btns.add(sync);
+				if (sessionManager.getAccountSession() != null)
+				{
+					JToggleButton sync = new JToggleButton(SYNC_ICON);
+					SwingUtil.removeButtonDecorations(sync);
+					sync.setSelectedIcon(SYNC_ACTIVE_ICON);
+					sync.setToolTipText("Sync");
+					sync.setSelected(profile.isSync());
+					sync.addActionListener(ev -> toggleSync(profile, sync.isSelected()));
+					btns.add(sync);
+				}
 
 				delete = new JButton(DELETE_ICON);
 				delete.setToolTipText("Delete profile");
@@ -565,27 +607,6 @@ class ProfilePanel extends PluginPanel
 		}
 
 		configManager.switchProfile(profile);
-	}
-
-	@Subscribe
-	private void onProfileChanged(ProfileChanged ev)
-	{
-		SwingUtilities.invokeLater(() ->
-		{
-			for (ProfileCard card : cards.values())
-			{
-				card.setActive(false);
-			}
-
-			ProfileCard card = cards.get(configManager.getProfile().getId());
-			if (card == null)
-			{
-				reload();
-				return;
-			}
-
-			card.setActive(true);
-		});
 	}
 
 	private void exportProfile(ConfigProfile profile, File file)
