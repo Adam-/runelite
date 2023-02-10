@@ -89,6 +89,7 @@ import net.runelite.client.events.SessionOpen;
 import net.runelite.client.util.ColorUtil;
 import net.runelite.http.api.config.ConfigPatch;
 import net.runelite.http.api.config.ConfigPatchResult;
+import net.runelite.http.api.config.Configuration;
 
 @Singleton
 @Slf4j
@@ -573,8 +574,8 @@ public class ConfigManager
 
 			try
 			{
-				Map<String, String> remoteConfiguration = configClient.get(profile.getId());
-				if (remoteConfiguration == null || remoteConfiguration.isEmpty())
+				Configuration remoteConfiguration = configClient.get(profile.getId());
+				if (remoteConfiguration == null || remoteConfiguration.getConfig() == null || remoteConfiguration.getConfig().isEmpty())
 				{
 					log.debug("no remote configuration for {}", profile);
 					return;
@@ -585,11 +586,11 @@ public class ConfigManager
 				configFile.delete();
 
 				ConfigData configData = new ConfigData(configFile);
-				configData.putAll(remoteConfiguration);
+				configData.putAll(remoteConfiguration.getConfig());
 				configData.patch(configData.swapChanges());
 
-				log.debug("synced remote profile {} to disk", profile);
-				profile.setRev(remoteProfile.getRev()); // XXX this races
+				log.debug("synced remote profile {} rev {} to disk", profile, remoteConfiguration.getRev());
+				profile.setRev(remoteConfiguration.getRev());
 				lock.dirty();
 			}
 			catch (IOException ex)

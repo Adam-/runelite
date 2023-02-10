@@ -43,6 +43,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.runelite.http.api.RuneLiteAPI;
 import net.runelite.http.api.config.ConfigPatch;
 import net.runelite.http.api.config.ConfigPatchResult;
+import net.runelite.http.api.config.Configuration;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.HttpUrl;
@@ -104,7 +105,7 @@ public class ConfigClient
 		}
 	}
 
-	public Map<String, String> get(long profile) throws IOException
+	public Configuration get(long profile) throws IOException
 	{
 		HttpUrl url = apiBase.newBuilder()
 			.addPathSegment("config")
@@ -122,10 +123,7 @@ public class ConfigClient
 		try (Response response = client.newCall(request).execute())
 		{
 			InputStream in = response.body().byteStream();
-			// CHECKSTYLE:OFF
-			final Type type = new TypeToken<Map<String, String>>(){}.getType();
-			// CHECKSTYLE:ON
-			return gson.fromJson(new InputStreamReader(in, StandardCharsets.UTF_8), type);
+			return gson.fromJson(new InputStreamReader(in, StandardCharsets.UTF_8), Configuration.class);
 		}
 		catch (JsonParseException ex)
 		{
