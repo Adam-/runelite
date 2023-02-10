@@ -590,7 +590,8 @@ class ProfilePanel extends PluginPanel
 
 	private void exportProfile(ConfigProfile profile, File file)
 	{
-		log.debug("Exporting profile {} to {}", profile.getName(), file);
+		log.info("Exporting profile {} to {}", profile.getName(), file);
+
 		executor.execute(() ->
 		{
 			// save config to disk so the export copies the full config
@@ -620,32 +621,27 @@ class ProfilePanel extends PluginPanel
 
 	private void importProfile(File file)
 	{
-		log.debug("Importing profile from {}", file);
+		log.info("Importing profile from {}", file);
 
-		try (ProfileManager.Lock lock = profileManager.lock())
-		{
-			String name = "Imported Profile";
-			int number = 1;
-			while (lock.findProfile(name) != null)
+		executor.execute(() -> {
+			try (ProfileManager.Lock lock = profileManager.lock())
 			{
-				name = "Imported Profile (" + number++ + ")";
+				String name = "Imported Profile";
+				int number = 1;
+				while (lock.findProfile(name) != null)
+				{
+					name = "Imported Profile (" + number++ + ")";
+				}
+
+				log.debug("selected new profile name: {}", name);
+				ConfigProfile profile = lock.createProfile(name);
+				ConfigProfile rsProfile = lock.findProfile("$rsprofile");
+
+				reload(lock.getProfiles());
+
+				ConfigManager.importAndMigrate(file, profile, rsProfile);
 			}
-
-			log.debug("selected new profile name: {}", name);
-			ConfigProfile profile = lock.createProfile(name);
-
-			reload(lock.getProfiles());
-
-			// copy the provided properties file
-			Files.copy(
-				file.toPath(),
-				ProfileManager.profileConfigFile(profile).toPath()
-			);
-		}
-		catch (IOException e)
-		{
-			log.error("error importing profile", e);
-		}
+		});
 	}
 
 	private void cloneProfile(ConfigProfile profile)
@@ -664,7 +660,7 @@ class ProfilePanel extends PluginPanel
 					name = profile.getName() + " (" + (num++) + ")";
 				} while (lock.findProfile(name) != null);
 
-				log.debug("Cloning profile {} to {}", profile.getName(), name);
+				log.info("Cloning profile {} to {}", profile.getName(), name);
 
 				ConfigProfile clonedProfile = lock.createProfile(name);
 				reload(lock.getProfiles());

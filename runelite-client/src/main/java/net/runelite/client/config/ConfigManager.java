@@ -370,39 +370,46 @@ public class ConfigManager
 				}
 				rsProfile.setSync(true);
 
-				ConfigData migratingData = new ConfigData(configFile);
-				ConfigData configData = new ConfigData(ProfileManager.profileConfigFile(targetProfile));
-				ConfigData rsData = new ConfigData(ProfileManager.profileConfigFile(rsProfile));
-
-				int keys = 0;
-				for (String wholeKey : migratingData.keySet())
-				{
-					String[] split = splitKey(wholeKey);
-					if (split == null)
-					{
-						continue;
-					}
-
-					String profile = split[KEY_SPLITTER_PROFILE];
-
-					if (profile != null)
-					{
-						rsData.setProperty(wholeKey, migratingData.getProperty(wholeKey));
-					}
-					else
-					{
-						configData.setProperty(wholeKey, migratingData.getProperty(wholeKey));
-					}
-
-					++keys;
-				}
-
-				configData.patch(configData.swapChanges());
-				rsData.patch(rsData.swapChanges());
-
-				log.info("Finished performing profile migration of {} keys", keys);
+				importAndMigrate(configFile, targetProfile, rsProfile);
 			}
 		}
+	}
+
+	public static void importAndMigrate(File from, ConfigProfile targetProfile, ConfigProfile rsProfile)
+	{
+		ConfigData migratingData = new ConfigData(from);
+		ConfigData configData = new ConfigData(ProfileManager.profileConfigFile(targetProfile));
+		ConfigData rsData = new ConfigData(ProfileManager.profileConfigFile(rsProfile));
+
+		log.debug("Importing profile from {}", from);
+
+		int keys = 0;
+		for (String wholeKey : migratingData.keySet())
+		{
+			String[] split = splitKey(wholeKey);
+			if (split == null)
+			{
+				continue;
+			}
+
+			String profile = split[KEY_SPLITTER_PROFILE];
+
+			if (profile != null)
+			{
+				rsData.setProperty(wholeKey, migratingData.getProperty(wholeKey));
+			}
+			else
+			{
+				configData.setProperty(wholeKey, migratingData.getProperty(wholeKey));
+			}
+
+			++keys;
+		}
+
+		configData.patch(configData.swapChanges());
+		rsData.patch(rsData.swapChanges());
+
+		log.info("Finished importing {} keys", keys);
 	}
 
 	private static String profileNameFromFile(File file) {
