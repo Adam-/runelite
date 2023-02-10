@@ -33,7 +33,6 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import javax.inject.Inject;
@@ -69,12 +68,6 @@ public class ConfigClient
 		this.apiBase = apiBase;
 		this.gson = gson;
 	}
-
-//	public static class Profile {
-//		long id;
-//		String name;
-//		long rev;
-//	}
 
 	public List<net.runelite.http.api.config.ConfigProfile> profiles() throws IOException
 	{
@@ -226,6 +219,39 @@ public class ConfigClient
 			public void onResponse(Call call, Response response)
 			{
 				log.debug("deleted profile {}", profile);
+				response.close();
+			}
+		});
+	}
+
+	public void rename(long profile, String name) {
+		HttpUrl url = apiBase.newBuilder()
+			.addPathSegment("config")
+			.addPathSegment("v3")
+			.addPathSegment(Long.toString(profile))
+			.addPathSegment("name")
+			.build();
+
+		log.debug("Built URI: {}", url);
+
+		Request request = new Request.Builder()
+			.post(RequestBody.create(null, name))
+			.header(RuneLiteAPI.RUNELITE_AUTH, uuid.toString())
+			.url(url)
+			.build();
+
+		client.newCall(request).enqueue(new Callback()
+		{
+			@Override
+			public void onFailure(Call call, IOException e)
+			{
+				log.warn("error renaming profile {}", profile, e);
+			}
+
+			@Override
+			public void onResponse(Call call, Response response)
+			{
+				log.debug("renamed profile {} to {}", profile, name);
 				response.close();
 			}
 		});

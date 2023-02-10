@@ -328,6 +328,10 @@ public class ConfigManager
 		}
 	}
 
+	public void renameProfile(ConfigProfile profile, String name) {
+		configClient.rename(profile.getId(), name);
+	}
+
 	private void migrate()
 	{
 		boolean defaultSettings = RuneLite.DEFAULT_CONFIG_FILE.equals(configFile);
@@ -523,7 +527,9 @@ public class ConfigManager
 					if (profile.getId() == remoteProfile.getId())
 					{
 						log.debug("Found local profile {} for remote {}", profile, remoteProfile);
+						profile.setName(remoteProfile.getName());
 						profile.setSync(true);
+						lock.dirty();
 						continue outer;
 					}
 				}

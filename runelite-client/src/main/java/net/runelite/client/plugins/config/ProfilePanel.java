@@ -27,7 +27,6 @@ package net.runelite.client.plugins.config;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -530,6 +529,8 @@ class ProfilePanel extends PluginPanel
 			if (profile == null)
 			{
 				log.warn("rename for nonexistent profile {}", id);
+				// maybe profile was removed by another client, reload the panel
+				reload(lock.getProfiles());
 				return;
 			}
 
@@ -537,6 +538,7 @@ class ProfilePanel extends PluginPanel
 
 			lock.renameProfile(profile, name);
 			// the panel updates the name label so it isn't necessary to rebuild
+			configManager.renameProfile(profile, name);
 		}
 	}
 
