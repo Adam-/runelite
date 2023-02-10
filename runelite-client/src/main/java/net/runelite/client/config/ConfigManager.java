@@ -328,7 +328,8 @@ public class ConfigManager
 		}
 	}
 
-	public void renameProfile(ConfigProfile profile, String name) {
+	public void renameProfile(ConfigProfile profile, String name)
+	{
 		configClient.rename(profile.getId(), name);
 	}
 

@@ -251,7 +251,14 @@ public class ConfigClient
 			@Override
 			public void onResponse(Call call, Response response)
 			{
-				log.debug("renamed profile {} to {}", profile, name);
+				if (!response.isSuccessful())
+				{
+					log.debug("unable to rename profile {} to {}", profile, name);
+				}
+				else
+				{
+					log.debug("renamed profile {} to {}", profile, name);
+				}
 				response.close();
 			}
 		});
