@@ -39,13 +39,6 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
-import java.nio.charset.StandardCharsets;
-import java.security.SecureRandom;
-import java.nio.file.AtomicMoveNotSupportedException;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Arrays;
@@ -90,6 +83,7 @@ import net.runelite.client.util.ColorUtil;
 import net.runelite.http.api.config.ConfigPatch;
 import net.runelite.http.api.config.ConfigPatchResult;
 import net.runelite.http.api.config.Configuration;
+import net.runelite.http.api.config.Profile;
 
 @Singleton
 @Slf4j
@@ -182,7 +176,7 @@ public class ConfigManager
 					return;
 				}
 
-				List<net.runelite.http.api.config.ConfigProfile> profiles = configClient.profiles();
+				List<Profile> profiles = configClient.profiles();
 				syncRemote(lock, profile, profiles);
 			}
 			catch (IOException ex)
@@ -251,7 +245,7 @@ public class ConfigManager
 
 		try
 		{
-			List<net.runelite.http.api.config.ConfigProfile> profiles = configClient.profiles();
+			List<Profile> profiles = configClient.profiles();
 			mergeRemoteProfiles(profiles);
 		}
 		catch (IOException e)
@@ -411,7 +405,7 @@ public class ConfigManager
 	public void load()
 	{
 		AccountSession session = sessionManager.getAccountSession();
-		List<net.runelite.http.api.config.ConfigProfile> remoteProfiles = Collections.emptyList();
+		List<Profile> remoteProfiles = Collections.emptyList();
 		if (session != null)
 		{
 			configClient.setUuid(session.getUuid());
@@ -509,13 +503,13 @@ public class ConfigManager
 		}
 	}
 
-	private void mergeRemoteProfiles(List<net.runelite.http.api.config.ConfigProfile> remoteProfiles) {
+	private void mergeRemoteProfiles(List<Profile> remoteProfiles) {
 		try (ProfileManager.Lock lock = profileManager.lock())
 		{
 			boolean migrating = lock.getProfiles().isEmpty();
 
 			outer:
-			for (net.runelite.http.api.config.ConfigProfile remoteProfile : remoteProfiles)
+			for (Profile remoteProfile : remoteProfiles)
 			{
 				for (ConfigProfile profile : lock.getProfiles())
 				{
@@ -542,7 +536,7 @@ public class ConfigManager
 		}
 	}
 
-	private void syncRemote(ProfileManager.Lock lock, ConfigProfile profile, List<net.runelite.http.api.config.ConfigProfile> remoteProfiles)
+	private void syncRemote(ProfileManager.Lock lock, ConfigProfile profile, List<Profile> remoteProfiles)
 	{
 		if (!profile.isSync())
 		{
@@ -550,7 +544,7 @@ public class ConfigManager
 		}
 
 		long id = profile.getId();
-		net.runelite.http.api.config.ConfigProfile remoteProfile = remoteProfiles.stream()
+		Profile remoteProfile = remoteProfiles.stream()
 			.filter(p -> p.getId() == id)
 			.findFirst()
 			.orElse(null);

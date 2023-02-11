@@ -43,6 +43,7 @@ import net.runelite.http.api.RuneLiteAPI;
 import net.runelite.http.api.config.ConfigPatch;
 import net.runelite.http.api.config.ConfigPatchResult;
 import net.runelite.http.api.config.Configuration;
+import net.runelite.http.api.config.Profile;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.HttpUrl;
@@ -69,7 +70,7 @@ public class ConfigClient
 		this.gson = gson;
 	}
 
-	public List<net.runelite.http.api.config.ConfigProfile> profiles() throws IOException
+	public List<Profile> profiles() throws IOException
 	{
 		HttpUrl url = apiBase.newBuilder()
 			.addPathSegment("config")
@@ -88,7 +89,7 @@ public class ConfigClient
 		{
 			InputStream in = response.body().byteStream();
 			// CHECKSTYLE:OFF
-			final Type type = new TypeToken<List<net.runelite.http.api.config.ConfigProfile>>(){}.getType();
+			final Type type = new TypeToken<List<Profile>>(){}.getType();
 			// CHECKSTYLE:ON
 			return gson.fromJson(new InputStreamReader(in, StandardCharsets.UTF_8), type);
 		}
