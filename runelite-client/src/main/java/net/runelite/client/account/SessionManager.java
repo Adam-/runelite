@@ -58,7 +58,6 @@ public class SessionManager
 	private AccountSession accountSession;
 
 	private final EventBus eventBus;
-//	private final ConfigManager configManager;
 	private final File sessionFile;
 	private final AccountClient accountClient;
 	private final Gson gson;
@@ -70,7 +69,6 @@ public class SessionManager
 	@Inject
 	private SessionManager(
 		@Named("sessionfile") File sessionfile,
-//		ConfigManager configManager,
 		EventBus eventBus,
 		AccountClient accountClient,
 		Gson gson,
@@ -78,7 +76,6 @@ public class SessionManager
 		ScheduledExecutorService scheduledExecutorService
 	)
 	{
-//		this.configManager = configManager;
 		this.eventBus = eventBus;
 		this.sessionFile = sessionfile;
 		this.accountClient = accountClient;
@@ -266,8 +263,8 @@ public class SessionManager
 
 	private void stopServer()
 	{
+		log.debug("Stopping server {}", server);
 		server.stop(0);
 		server = null;
-
 	}
 }

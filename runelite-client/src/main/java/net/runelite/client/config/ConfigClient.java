@@ -89,7 +89,7 @@ public class ConfigClient
 		{
 			InputStream in = response.body().byteStream();
 			// CHECKSTYLE:OFF
-			final Type type = new TypeToken<List<Profile>>(){}.getType();
+			final Type type = new TypeToken<List<Profile>>() {}.getType();
 			// CHECKSTYLE:ON
 			return gson.fromJson(new InputStreamReader(in, StandardCharsets.UTF_8), type);
 		}
@@ -225,7 +225,8 @@ public class ConfigClient
 		});
 	}
 
-	public void rename(long profile, String name) {
+	public void rename(long profile, String name)
+	{
 		HttpUrl url = apiBase.newBuilder()
 			.addPathSegment("config")
 			.addPathSegment("v3")
