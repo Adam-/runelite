@@ -148,7 +148,7 @@ public class ConfigManager
 		this.profileManager = profileManager;
 		this.sessionManager = sessionManager;
 
-		scheduledExecutorService.scheduleWithFixedDelay(this::sendConfig, 30, 15, TimeUnit.SECONDS);
+		scheduledExecutorService.scheduleWithFixedDelay(this::sendConfig, 30, 15, TimeUnit.SECONDS);///XXX CHANGE THIS BACK
 	}
 
 	public void switchProfile(ConfigProfile newProfile)
@@ -1418,6 +1418,4 @@ public class ConfigManager
 			profile = key.substring(0, i);
 			key = key.substring(i + 1);
 		}
-		return new String[]{group, profile, key};
-	}
-}
+		return new String[]{grou
