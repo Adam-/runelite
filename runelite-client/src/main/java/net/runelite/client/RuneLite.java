@@ -95,7 +95,6 @@ public class RuneLite
 	public static final File RUNELITE_DIR = new File(System.getProperty("user.home"), ".runelite");
 	public static final File CACHE_DIR = new File(RUNELITE_DIR, "cache");
 	public static final File PLUGINS_DIR = new File(RUNELITE_DIR, "plugins");
-//	public static final File PROFILES_DIR = new File(RUNELITE_DIR, "profiles");
 	public static final File SCREENSHOT_DIR = new File(RUNELITE_DIR, "screenshots");
 	public static final File LOGS_DIR = new File(RUNELITE_DIR, "logs");
 	public static final File DEFAULT_SESSION_FILE = new File(RUNELITE_DIR, "session");
@@ -170,7 +169,6 @@ public class RuneLite
 			.defaultsTo(RuneLiteProperties.getJavConfig());
 		parser.accepts("disable-telemetry", "Disable telemetry");
 		parser.accepts("profile", "Configuration profile to use").withRequiredArg();
-//		parser.accepts("config", "Use a specified config file (deprecated)").withRequiredArg();
 
 		final ArgumentAcceptingOptionSpec<File> sessionfile = parser.accepts("sessionfile", "Use a specified session file")
 			.withRequiredArg()
@@ -181,7 +179,6 @@ public class RuneLite
 			.withRequiredArg()
 			.withValuesConvertedBy(new ConfigFileConverter())
 			.defaultsTo(DEFAULT_CONFIG_FILE);
-//		;
 
 		final ArgumentAcceptingOptionSpec<ClientUpdateCheckMode> updateMode = parser
 			.accepts("rs", "Select client type")
@@ -273,7 +270,6 @@ public class RuneLite
 				options.has("safe-mode"),
 				options.has("disable-telemetry"),
 				options.valueOf(sessionfile),
-				//(String) options.valueOf("config"),
 				options.valueOf(configfile),
 				(String) options.valueOf("profile")
 			));
