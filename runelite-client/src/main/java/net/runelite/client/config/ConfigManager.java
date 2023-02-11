@@ -189,7 +189,7 @@ public class ConfigManager
 		Set<String> allKeys = new HashSet<>(newData.keySet());
 
 		ConfigData oldData;
-		synchronized (this) // is this right?
+		synchronized (this)
 		{
 			handler.invalidate();
 			oldData = configProfile;
@@ -275,16 +275,19 @@ public class ConfigManager
 		}
 	}
 
-	public void toggleSync(ConfigProfile profile, boolean sync) {
+	public void toggleSync(ConfigProfile profile, boolean sync)
+	{
 		log.debug("Setting sync for {}: {}", profile.getName(), sync);
 
 		// flush pending config changes first in the event the profile being
 		// synced is the active profile.
 		sendConfig();
 
-		try (ProfileManager.Lock lock = profileManager.lock()) {
+		try (ProfileManager.Lock lock = profileManager.lock())
+		{
 			profile = lock.findProfile(profile.getId());
-			if (profile == null || profile.isSync() == sync) {
+			if (profile == null || profile.isSync() == sync)
+			{
 				return;
 			}
 
@@ -393,10 +396,12 @@ public class ConfigManager
 		log.info("Finished importing {} keys", keys);
 	}
 
-	private static String profileNameFromFile(File file) {
+	private static String profileNameFromFile(File file)
+	{
 		String configProfileName = file.getName();
 		int idx = configProfileName.lastIndexOf('.');
-		if (idx > -1) {
+		if (idx > -1)
+		{
 			configProfileName = configProfileName.substring(0, idx);
 		}
 		return configProfileName;

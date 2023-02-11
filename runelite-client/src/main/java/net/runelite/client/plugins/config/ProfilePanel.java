@@ -606,7 +606,7 @@ class ProfilePanel extends PluginPanel
 			lock.dirty();
 		}
 
-		configManager.switchProfile(profile);
+		executor.submit(() -> configManager.switchProfile(profile));
 	}
 
 	private void exportProfile(ConfigProfile profile, File file)
@@ -644,7 +644,8 @@ class ProfilePanel extends PluginPanel
 	{
 		log.info("Importing profile from {}", file);
 
-		executor.execute(() -> {
+		executor.execute(() ->
+		{
 			try (ProfileManager.Lock lock = profileManager.lock())
 			{
 				String name = "Imported Profile";
@@ -679,7 +680,8 @@ class ProfilePanel extends PluginPanel
 				do
 				{
 					name = profile.getName() + " (" + (num++) + ")";
-				} while (lock.findProfile(name) != null);
+				}
+				while (lock.findProfile(name) != null);
 
 				log.info("Cloning profile {} to {}", profile.getName(), name);
 
@@ -708,7 +710,8 @@ class ProfilePanel extends PluginPanel
 		});
 	}
 
-	private void toggleSync(ConfigProfile profile, boolean sync) {
+	private void toggleSync(ConfigProfile profile, boolean sync)
+	{
 		log.debug("Setting sync for {}: {}", profile.getName(), sync);
 		configManager.toggleSync(profile, sync);
 	}
