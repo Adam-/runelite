@@ -110,7 +110,6 @@ public class ConfigManager
 	private static final int KEY_SPLITTER_PROFILE = 1;
 	private static final int KEY_SPLITTER_KEY = 2;
 
-//	@Nullable
 	private final File configFile;
 	@Nullable
 	private final String configProfileName;
@@ -135,14 +134,9 @@ public class ConfigManager
 	@Nullable
 	private String rsProfileKey;
 
-	// sync mode on/off
-	// import old style profile
-	// ui rotate collapse arrow >
-	// renaming remote profiles
-	// deleting remote profiles
 	@Inject
 	private ConfigManager(
-		/*@Nullable*/ @Named("config") File config,
+		@Named("config") File config,
 		@Nullable @Named("profile") String profile,
 		ScheduledExecutorService scheduledExecutorService,
 		EventBus eventBus,
