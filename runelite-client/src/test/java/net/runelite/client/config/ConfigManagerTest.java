@@ -30,10 +30,12 @@ import com.google.inject.testing.fieldbinder.BoundFieldModule;
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.ScheduledExecutorService;
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 import net.runelite.api.Client;
 import net.runelite.client.RuneLite;
+import net.runelite.client.account.SessionManager;
 import net.runelite.client.eventbus.EventBus;
 import org.junit.Assert;
 import static org.junit.Assert.assertNotNull;
@@ -62,9 +64,14 @@ public class ConfigManagerTest
 	@Named("sessionfile")
 	File sessionfile = RuneLite.DEFAULT_SESSION_FILE;
 
-//	@Bind
-//	@Named("config")
-//	File config = RuneLite.DEFAULT_CONFIG_FILE;
+	@Bind
+	@Named("config")
+	File config = RuneLite.DEFAULT_CONFIG_FILE;
+
+	@Bind
+	@Named("profile")
+	@Nullable
+	String profile;
 
 	@Mock
 	@Bind
@@ -74,6 +81,10 @@ public class ConfigManagerTest
 	@Bind
 	ConfigClient configClient;
 
+	@Mock
+	@Bind
+	SessionManager sessionManager;
+
 	@Inject
 	ConfigManager manager;
 
@@ -81,6 +92,7 @@ public class ConfigManagerTest
 	public void before()
 	{
 		Guice.createInjector(BoundFieldModule.of(this)).injectMembers(this);
+		//manager.load();
 	}
 
 	@Test
