@@ -70,7 +70,6 @@ import net.runelite.api.Client;
 import net.runelite.api.Player;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.AccountHashChanged;
-import net.runelite.api.events.CommandExecuted;
 import net.runelite.api.events.PlayerChanged;
 import net.runelite.api.events.UsernameChanged;
 import net.runelite.api.events.WorldChanged;
@@ -235,14 +234,6 @@ public class ConfigManager
 			configChanged.setOldValue(oldValue);
 			configChanged.setNewValue(newValue);
 			eventBus.post(configChanged);
-
-//			if (saveToServer)
-//			{
-//				synchronized (pendingChanges)
-//				{
-//					pendingChanges.put((String) wholeKey, newValue);
-//				}
-//			}
 		}
 
 		eventBus.post(new ProfileChanged());
@@ -610,127 +601,6 @@ public class ConfigManager
 			}
 		}
 	}
-
-//	private void swapProperties(Properties newProperties, boolean saveToServer)
-//	{
-//		Set<Object> allKeys = new HashSet<>(newProperties.keySet());
-//
-//		Properties oldProperties;
-//		synchronized (this)
-//		{
-//			handler.invalidate();
-//			oldProperties = properties;
-//			this.properties = newProperties;
-//		}
-//
-//		updateRSProfile();
-//
-//		allKeys.addAll(oldProperties.keySet());
-//
-//		for (Object wholeKey : allKeys)
-//		{
-//			String[] split = splitKey((String) wholeKey);
-//			if (split == null)
-//			{
-//				continue;
-//			}
-//
-//			String groupName = split[KEY_SPLITTER_GROUP];
-//			String profile = split[KEY_SPLITTER_PROFILE];
-//			String key = split[KEY_SPLITTER_KEY];
-//			String oldValue = (String) oldProperties.get(wholeKey);
-//			String newValue = (String) newProperties.get(wholeKey);
-//
-//			if (Objects.equals(oldValue, newValue))
-//			{
-//				continue;
-//			}
-//
-//			log.debug("Loading configuration value {}: {}", wholeKey, newValue);
-//
-//			ConfigChanged configChanged = new ConfigChanged();
-//			configChanged.setGroup(groupName);
-//			configChanged.setProfile(profile);
-//			configChanged.setKey(key);
-//			configChanged.setOldValue(oldValue);
-//			configChanged.setNewValue(newValue);
-//			eventBus.post(configChanged);
-//
-//			if (saveToServer)
-//			{
-//				synchronized (pendingChanges)
-//				{
-//					pendingChanges.put((String) wholeKey, newValue);
-//				}
-//			}
-//		}
-//	}
-
-//	private void syncPropertiesFromFile(File propertiesFile)
-//	{
-//		final Properties properties = new Properties();
-//		try (FileInputStream in = new FileInputStream(propertiesFile))
-//		{
-//			properties.load(new InputStreamReader(in, StandardCharsets.UTF_8));
-//		}
-//		catch (Exception e)
-//		{
-//			log.warn("Malformed properties, skipping update");
-//			return;
-//		}
-//
-//		log.debug("Syncing properties from {}", propertiesFile);
-//		swapProperties(properties, true);
-//	}
-
-//	private synchronized void loadFromFile()
-//	{
-//		Properties newProperties = new Properties();
-//		try (FileInputStream in = new FileInputStream(propertiesFile))
-//		{
-//			newProperties.load(new InputStreamReader(in, StandardCharsets.UTF_8));
-//		}
-//		catch (FileNotFoundException ex)
-//		{
-//			log.debug("Unable to load settings - no such file");
-//		}
-//		catch (IllegalArgumentException | IOException ex)
-//		{
-//			log.warn("Unable to load settings", ex);
-//		}
-//
-//		log.debug("Loading in config from disk");
-//		swapProperties(newProperties, false);
-//	}
-//
-//	private void saveToFile(final File propertiesFile) throws IOException
-//	{
-//		File parent = propertiesFile.getParentFile();
-//
-//		parent.mkdirs();
-//
-//		File tempFile = File.createTempFile("runelite", null, parent);
-//
-//		try (FileOutputStream out = new FileOutputStream(tempFile);
-//			FileChannel channel = out.getChannel();
-//			OutputStreamWriter writer = new OutputStreamWriter(out, StandardCharsets.UTF_8))
-//		{
-//			channel.lock();
-//			properties.store(writer, "RuneLite configuration");
-//			channel.force(true);
-//			// FileChannel.close() frees the lock
-//		}
-//
-//		try
-//		{
-//			Files.move(tempFile.toPath(), propertiesFile.toPath(), StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
-//		}
-//		catch (AtomicMoveNotSupportedException ex)
-//		{
-//			log.debug("atomic move not supported", ex);
-//			Files.move(tempFile.toPath(), propertiesFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-//		}
-//	}
 
 	public <T extends Config> T getConfig(Class<T> clazz)
 	{
@@ -1274,72 +1144,27 @@ public class ConfigManager
 	)
 	private void onClientShutdown(ClientShutdown e)
 	{
-//		Future<Void> f = sendConfig();
-//		e.waitFor(f);
 		sendConfig();
 	}
 
-	@Subscribe
-	public void onCommandExecuted(CommandExecuted commandExecuted) {
-		if (commandExecuted.getCommand().equals("save")) {
-			sendConfig();
-		}
-		else if (commandExecuted.getCommand().equals("create")) {
-			String name = commandExecuted.getArguments()[0];
-
-			try (ProfileManager.Lock lock = profileManager.lock())
-			{
-				ConfigProfile profile = lock.createProfile(name);
-			}
-		}
-		else if (commandExecuted.getCommand().equals("switch")) {
-			String name = commandExecuted.getArguments()[0];
-
-			ConfigProfile profile ;
-			try (ProfileManager.Lock lock = profileManager.lock()) {
-				 profile = lock .findProfile(name);
-			}
-			switchProfile( profile);
-		}
-		else if (commandExecuted.getCommand().equals("list")) {
-			try (ProfileManager.Lock lock = profileManager.lock())
-			{
-				for (ConfigProfile profile : lock.getProfiles()) {
-					log.info("{}", profile);
-				}
-			}
-			log.info("active profile {}", profile);
-//		else if (commandExecuted.getCommand().equals("delete")) {
-//			String name = commandExecuted.getArguments()[0];
-//			try (ProfileManager.Lock lock = profileManager.lock())
-//			{
-//				lock.removeProfile( name);
-//			}
-		} else if (commandExecuted.getCommand().equals("syncon")) {
-			String name = commandExecuted.getArguments()[0];
-		}
-	}
-
-//	@Nullable
 	public void sendConfig()
 	{
 		eventBus.post(new ConfigSync());
 
 		try (ProfileManager.Lock lock = profileManager.lock())
 		{
+			// since we hold references to profiles outside of the lock, they are stale.
+			// fetch the latest version.
 			profile = updateProfile(lock, profile);
 			rsProfile = updateProfile(lock, rsProfile);
+
 			saveConfiguration(lock, profile, configProfile);
 			saveConfiguration(lock, rsProfile, rsProfileConfigProfile);
 		}
-
-//		return CompletableFuture.allOf(f1, f2);
 	}
 
 	private static ConfigProfile updateProfile(ProfileManager.Lock lock, ConfigProfile profile)
 	{
-		// since we hold references to profiles outside of the lock, they are stale.
-		// fetch the latest version.
 		ConfigProfile p = lock.findProfile(profile.getId());
 		if (p == null)
 		{
