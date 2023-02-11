@@ -296,6 +296,7 @@ public class ConfigManager
 
 			if (sync)
 			{
+				// sync the entire profile from disk
 				File from = ProfileManager.profileConfigFile(profile);
 				ConfigData data = new ConfigData(from);
 				ConfigPatch patch = buildConfigPatch(data.get());
@@ -508,7 +509,8 @@ public class ConfigManager
 		}
 	}
 
-	private void mergeRemoteProfiles(List<Profile> remoteProfiles) {
+	private void mergeRemoteProfiles(List<Profile> remoteProfiles)
+	{
 		try (ProfileManager.Lock lock = profileManager.lock())
 		{
 			boolean migrating = lock.getProfiles().isEmpty();
