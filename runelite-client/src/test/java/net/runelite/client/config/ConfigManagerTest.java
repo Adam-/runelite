@@ -62,9 +62,9 @@ public class ConfigManagerTest
 	@Named("sessionfile")
 	File sessionfile = RuneLite.DEFAULT_SESSION_FILE;
 
-	@Bind
-	@Named("config")
-	File config = RuneLite.DEFAULT_CONFIG_FILE;
+//	@Bind
+//	@Named("config")
+//	File config = RuneLite.DEFAULT_CONFIG_FILE;
 
 	@Mock
 	@Bind

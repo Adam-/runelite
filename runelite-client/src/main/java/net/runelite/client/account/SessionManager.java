@@ -43,7 +43,6 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.events.SessionClose;
 import net.runelite.client.events.SessionOpen;
@@ -59,7 +58,7 @@ public class SessionManager
 	private AccountSession accountSession;
 
 	private final EventBus eventBus;
-	private final ConfigManager configManager;
+//	private final ConfigManager configManager;
 	private final File sessionFile;
 	private final AccountClient accountClient;
 	private final Gson gson;
@@ -71,7 +70,7 @@ public class SessionManager
 	@Inject
 	private SessionManager(
 		@Named("sessionfile") File sessionfile,
-		ConfigManager configManager,
+//		ConfigManager configManager,
 		EventBus eventBus,
 		AccountClient accountClient,
 		Gson gson,
@@ -79,7 +78,7 @@ public class SessionManager
 		ScheduledExecutorService scheduledExecutorService
 	)
 	{
-		this.configManager = configManager;
+//		this.configManager = configManager;
 		this.eventBus = eventBus;
 		this.sessionFile = sessionfile;
 		this.accountClient = accountClient;
@@ -120,7 +119,7 @@ public class SessionManager
 			return;
 		}
 
-		openSession(session);
+		accountSession = session;
 	}
 
 	private void saveSession()
@@ -155,14 +154,6 @@ public class SessionManager
 	private void openSession(AccountSession session)
 	{
 		accountSession = session;
-
-		if (session.getUsername() != null)
-		{
-			// Initialize config for new session
-			// If the session isn't logged in yet, don't switch to the new config
-			configManager.switchSession(session);
-		}
-
 		eventBus.post(new SessionOpen());
 	}
 
@@ -174,9 +165,6 @@ public class SessionManager
 		}
 
 		log.debug("Logging out of account {}", accountSession.getUsername());
-
-		// Restore config prior to deleting session so that pending config changes get saved correctly
-		configManager.switchSession(null);
 
 		// Delete session
 		accountClient.setUuid(accountSession.getUuid());
@@ -244,7 +232,7 @@ public class SessionManager
 
 				log.debug("Now signed in as {}", username);
 
-				// open the session, which triggers the sessonopen event
+				// open the session, which triggers the sessionopen event
 				AccountSession session = new AccountSession(sessionId, Instant.now(), username);
 				openSession(session);
 
@@ -278,8 +266,8 @@ public class SessionManager
 
 	private void stopServer()
 	{
-		log.debug("Stopping server {}", server);
 		server.stop(0);
 		server = null;
+
 	}
 }
