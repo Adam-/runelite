@@ -75,7 +75,6 @@ public class ChatMessageManager
 		this.chatColorConfig = chatColorConfig;
 		this.clientThread = clientThread;
 		eventBus.register(this);
-		loadColors();
 	}
 
 	@Subscribe
