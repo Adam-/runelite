@@ -645,6 +645,7 @@ public class ConfigManager
 		}
 	}
 
+	// region get configuration
 	private String getConfiguration(ConfigData configData, String groupName, String rsProfile, String key)
 	{
 		return configData.getProperty(getWholeKey(groupName, rsProfile, key));
@@ -710,7 +711,9 @@ public class ConfigManager
 		}
 		return null;
 	}
+	// endregion
 
+	// region set configuration
 	private void setConfiguration(ConfigData configData, String groupName, String profile, String key, @NonNull String value)
 	{
 		if (Strings.isNullOrEmpty(groupName) || Strings.isNullOrEmpty(key) || key.indexOf(':') != -1)
@@ -804,7 +807,9 @@ public class ConfigManager
 		}
 		setConfiguration(groupName, rsProfileKey, key, value);
 	}
+	// endregion
 
+	// region unset configuration
 	private void unsetConfiguration(ConfigData configData, String groupName, String profile, String key)
 	{
 		assert !key.startsWith(RSPROFILE_GROUP + ".");
@@ -855,6 +860,7 @@ public class ConfigManager
 
 		unsetConfiguration(rsProfileConfigProfile, groupName, rsProfileKey, key);
 	}
+	// endregion
 
 	public ConfigDescriptor getConfigDescriptor(Config configurationProxy)
 	{
