@@ -29,6 +29,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
@@ -57,9 +58,10 @@ class ConfigData
 		this.configPath = configPath;
 
 		Properties props = new Properties();
-		try (FileInputStream fin = new FileInputStream(configPath))
+		try (FileInputStream in = new FileInputStream(configPath);
+			 InputStreamReader reader = new InputStreamReader(in, StandardCharsets.UTF_8))
 		{
-			props.load(fin);
+			props.load(reader);
 		}
 		catch (FileNotFoundException ignored)
 		{
@@ -139,9 +141,10 @@ class ConfigData
 			lckChannel.lock();
 
 			Properties tempProps = new Properties();
-			try (FileInputStream in = new FileInputStream(configPath))
+			try (FileInputStream in = new FileInputStream(configPath);
+				 InputStreamReader reader = new InputStreamReader(in, StandardCharsets.UTF_8))
 			{
-				tempProps.load(in);
+				tempProps.load(reader);
 			}
 			catch (FileNotFoundException e)
 			{
@@ -176,6 +179,7 @@ class ConfigData
 				 FileChannel channel = out.getChannel();
 				 OutputStreamWriter writer = new OutputStreamWriter(out, StandardCharsets.UTF_8))
 			{
+				channel.lock();
 				tempProps.store(writer, "RuneLite configuration");
 				channel.force(true);
 			}
