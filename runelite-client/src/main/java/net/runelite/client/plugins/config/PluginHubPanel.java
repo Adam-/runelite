@@ -306,14 +306,14 @@ class PluginHubPanel extends PluginPanel
 					}
 					else
 					{
-						configure.addActionListener(l -> pluginListPanel.openConfigurationPanel(plugin));
+						configure.addActionListener(l -> topLevelConfigPanel.openConfigurationPanel(plugin));
 					}
 				}
 
 				if (search != null)
 				{
 					final String javaIsABadLanguage = search;
-					configure.addActionListener(l -> pluginListPanel.openWithFilter(javaIsABadLanguage));
+					configure.addActionListener(l -> topLevelConfigPanel.openWithFilter(javaIsABadLanguage));
 				}
 			}
 			else
@@ -418,7 +418,7 @@ class PluginHubPanel extends PluginPanel
 		}
 	}
 
-	private final PluginListPanel pluginListPanel;
+	private final TopLevelConfigPanel topLevelConfigPanel;
 	private final ExternalPluginManager externalPluginManager;
 	private final PluginManager pluginManager;
 	private final ExternalPluginClient externalPluginClient;
@@ -433,14 +433,14 @@ class PluginHubPanel extends PluginPanel
 
 	@Inject
 	PluginHubPanel(
-		PluginListPanel pluginListPanel,
+		TopLevelConfigPanel topLevelConfigPanel,
 		ExternalPluginManager externalPluginManager,
 		PluginManager pluginManager,
 		ExternalPluginClient externalPluginClient,
 		ScheduledExecutorService executor)
 	{
 		super(false);
-		this.pluginListPanel = pluginListPanel;
+		this.topLevelConfigPanel = topLevelConfigPanel;
 		this.externalPluginManager = externalPluginManager;
 		this.pluginManager = pluginManager;
 		this.externalPluginClient = externalPluginClient;

@@ -33,6 +33,7 @@ import javax.inject.Singleton;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import net.runelite.client.plugins.Plugin;
 import net.runelite.client.ui.PluginPanel;
 import net.runelite.client.ui.components.materialtabs.MaterialTab;
 import net.runelite.client.ui.components.materialtabs.MaterialTabGroup;
@@ -158,7 +159,19 @@ class TopLevelConfigPanel extends PluginPanel
 
 	public void openConfigurationPanel(String name)
 	{
-		pluginListPanelTab.select();
+		tabGroup.select(pluginListPanelTab);
 		pluginListPanel.openConfigurationPanel(name);
+	}
+
+	public void openConfigurationPanel(Plugin plugin)
+	{
+		tabGroup.select(pluginListPanelTab);
+		pluginListPanel.openConfigurationPanel(plugin);
+	}
+
+	public void openWithFilter(String filter)
+	{
+		tabGroup.select(pluginListPanelTab);
+		pluginListPanel.openWithFilter(filter);
 	}
 }
