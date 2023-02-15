@@ -46,7 +46,6 @@ import javax.swing.event.HyperlinkEvent;
 import net.runelite.api.Client;
 import net.runelite.client.RuneLiteProperties;
 import net.runelite.client.account.SessionManager;
-import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.SessionClose;
@@ -83,9 +82,6 @@ public class InfoPanel extends PluginPanel
 
 	@Inject
 	private ScheduledExecutorService executor;
-
-	@Inject
-	private ConfigManager configManager;
 
 	@Inject
 	@Named("runelite.version")

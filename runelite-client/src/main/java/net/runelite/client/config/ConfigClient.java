@@ -154,7 +154,7 @@ public class ConfigClient
 			@Override
 			public void onResponse(Call call, Response response)
 			{
-				try
+				try // NOPMD: UseTryWithResources
 				{
 					if (response.code() != 200)
 					{
