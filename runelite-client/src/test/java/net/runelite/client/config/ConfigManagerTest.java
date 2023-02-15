@@ -102,14 +102,16 @@ public class ConfigManagerTest
 		Guice.createInjector(BoundFieldModule.of(this)).injectMembers(this);
 
 		ProfileManager.Lock lock = mock(ProfileManager.Lock.class);
-		when(lock.createProfile(anyString())).thenAnswer(a -> {
+		when(lock.createProfile(anyString())).thenAnswer(a ->
+		{
 			String name = a.getArgument(0);
 			ConfigProfile profile = new ConfigProfile(System.nanoTime());
 			profile.setName(name);
 			return profile;
 		});
 
-		when(lock.createProfile(anyString(), anyLong())).thenAnswer(a -> {
+		when(lock.createProfile(anyString(), anyLong())).thenAnswer(a ->
+		{
 			String name = a.getArgument(0);
 			long id = a.getArgument(1);
 			ConfigProfile profile = new ConfigProfile(id);

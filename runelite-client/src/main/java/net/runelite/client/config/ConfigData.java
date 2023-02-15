@@ -59,7 +59,7 @@ class ConfigData
 
 		Properties props = new Properties();
 		try (FileInputStream in = new FileInputStream(configPath);
-			 InputStreamReader reader = new InputStreamReader(in, StandardCharsets.UTF_8))
+			InputStreamReader reader = new InputStreamReader(in, StandardCharsets.UTF_8))
 		{
 			props.load(reader);
 		}
@@ -136,13 +136,13 @@ class ConfigData
 
 		File lckFile = new File(configPath.getParentFile(), configPath.getName() + ".lck");
 		try (FileOutputStream lockOut = new FileOutputStream(lckFile);
-			 FileChannel lckChannel = lockOut.getChannel())
+			FileChannel lckChannel = lockOut.getChannel())
 		{
 			lckChannel.lock();
 
 			Properties tempProps = new Properties();
 			try (FileInputStream in = new FileInputStream(configPath);
-				 InputStreamReader reader = new InputStreamReader(in, StandardCharsets.UTF_8))
+				InputStreamReader reader = new InputStreamReader(in, StandardCharsets.UTF_8))
 			{
 				tempProps.load(reader);
 			}
@@ -176,8 +176,8 @@ class ConfigData
 
 			File tempFile = File.createTempFile("runelite_config", null, configPath.getParentFile());
 			try (FileOutputStream out = new FileOutputStream(tempFile);
-				 FileChannel channel = out.getChannel();
-				 OutputStreamWriter writer = new OutputStreamWriter(out, StandardCharsets.UTF_8))
+				FileChannel channel = out.getChannel();
+				OutputStreamWriter writer = new OutputStreamWriter(out, StandardCharsets.UTF_8))
 			{
 				channel.lock();
 				tempProps.store(writer, "RuneLite configuration");
