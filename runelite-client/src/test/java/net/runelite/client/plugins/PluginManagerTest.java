@@ -96,7 +96,7 @@ public class PluginManagerTest
 		Injector injector = Guice.createInjector(Modules
 			.override(new RuneLiteModule(okHttpClient, () -> null, () -> mock(RuntimeConfig.class), true, false, false,
 				RuneLite.DEFAULT_SESSION_FILE,
-				null,
+				RuneLite.DEFAULT_CONFIG_FILE,
 				null
 			))
 			.with(BoundFieldModule.of(this)));
