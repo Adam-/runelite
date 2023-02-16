@@ -511,6 +511,8 @@ public class ConfigManager
 			configProfile = new ConfigData(ProfileManager.profileConfigFile(profile));
 			rsProfileConfigProfile = new ConfigData(ProfileManager.profileConfigFile(rsProfile));
 		}
+
+		eventBus.post(new ProfileChanged());
 	}
 
 	private void mergeRemoteProfiles(List<Profile> remoteProfiles)

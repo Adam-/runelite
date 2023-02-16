@@ -49,6 +49,7 @@ import net.runelite.client.config.ChatColorConfig;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
+import net.runelite.client.events.ProfileChanged;
 import net.runelite.client.ui.JagexColors;
 import net.runelite.client.util.ColorUtil;
 import net.runelite.client.util.Text;
@@ -85,6 +86,13 @@ public class ChatMessageManager
 			loadColors();
 			clientThread.invokeLater(client::refreshChat);
 		}
+	}
+
+	@Subscribe
+	public void onProfileChanged(ProfileChanged profileChanged)
+	{
+		loadColors();
+		clientThread.invokeLater(client::refreshChat);
 	}
 
 	@VisibleForTesting

@@ -24,6 +24,9 @@
  */
 package net.runelite.client.events;
 
+/**
+ * Fired when the active {@link net.runelite.client.config.ConfigProfile} is changed
+ */
 public class ProfileChanged
 {
 }
