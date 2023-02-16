@@ -25,6 +25,7 @@
 package net.runelite.client.config;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Strings;
 import com.google.common.collect.ComparisonChain;
 import com.google.gson.Gson;
@@ -301,7 +302,10 @@ public class ConfigManager
 				ConfigData data = new ConfigData(from);
 				ConfigPatch patch = buildConfigPatch(data.get());
 
-				configClient.patch(patch, profile.getId());
+				long id = profile.getId();
+				String name = profile.getName();
+
+				configClient.patch(patch, profile.getId()).thenRun(() -> configClient.rename(id, name));
 			}
 			else
 			{
@@ -523,7 +527,7 @@ public class ConfigManager
 					if (profile.getId() == remoteProfile.getId())
 					{
 						log.debug("Found local profile {} for remote {}", profile, remoteProfile);
-						profile.setName(remoteProfile.getName());
+						profile.setName(MoreObjects.firstNonNull(remoteProfile.getName(), ""));
 						profile.setSync(true);
 						lock.dirty();
 						continue outer;
@@ -531,7 +535,7 @@ public class ConfigManager
 				}
 
 				log.debug("Creating local profile for remote {}", remoteProfile);
-				ConfigProfile profile = lock.createProfile(remoteProfile.getName(), remoteProfile.getId());
+				ConfigProfile profile = lock.createProfile(MoreObjects.firstNonNull(remoteProfile.getName(), ""), remoteProfile.getId());
 				profile.setSync(true);
 
 				if (migrating && remoteProfile.getId() == 0L)

@@ -385,9 +385,9 @@ class ProfilePanel extends PluginPanel
 					JToggleButton sync = new JToggleButton(SYNC_ICON);
 					SwingUtil.removeButtonDecorations(sync);
 					sync.setSelectedIcon(SYNC_ACTIVE_ICON);
-					sync.setToolTipText("Sync");
+					sync.setToolTipText(profile.isSync() ? "Disable cloud sync" : "Enable cloud sync");
 					sync.setSelected(profile.isSync());
-					sync.addActionListener(ev -> toggleSync(profile, sync.isSelected()));
+					sync.addActionListener(ev -> toggleSync(ev, profile, sync.isSelected()));
 					btns.add(sync);
 				}
 
@@ -710,9 +710,10 @@ class ProfilePanel extends PluginPanel
 		});
 	}
 
-	private void toggleSync(ConfigProfile profile, boolean sync)
+	private void toggleSync(ActionEvent event, ConfigProfile profile, boolean sync)
 	{
 		log.debug("Setting sync for {}: {}", profile.getName(), sync);
 		configManager.toggleSync(profile, sync);
+		((JToggleButton) event.getSource()).setToolTipText(sync ? "Disable cloud sync" : "Enable cloud sync");
 	}
 }

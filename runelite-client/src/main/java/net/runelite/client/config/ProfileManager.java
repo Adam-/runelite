@@ -203,7 +203,8 @@ public class ProfileManager
 			{
 				Files.move(
 					oldFile.toPath(),
-					newFile.toPath()
+					newFile.toPath(),
+					StandardCopyOption.REPLACE_EXISTING
 				);
 			}
 			catch (IOException e)
