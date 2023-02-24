@@ -293,7 +293,7 @@ public class PlayerIndicatorsPlugin extends Plugin
 				}
 
 				PlayerIndicatorsService.Decorations decorations = playerIndicatorsService.getDecorations(targetPlayer);
-				if (decorations != null)
+				if (decorations != null && decorations.getColor() != null)
 				{
 					tradeTitle.setText(TRADING_WITH_TEXT + ColorUtil.wrapWithColorTag(playerName, decorations.getColor()));
 				}

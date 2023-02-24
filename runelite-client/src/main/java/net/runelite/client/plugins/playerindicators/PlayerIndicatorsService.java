@@ -70,7 +70,7 @@ class PlayerIndicatorsService
 			}
 
 			Decorations decorations = getDecorations(player);
-			if (decorations != null)
+			if (decorations != null && decorations.getColor() != null)
 			{
 				consumer.accept(player, decorations);
 			}
@@ -87,18 +87,10 @@ class PlayerIndicatorsService
 		final Predicate<PlayerIndicatorsConfig.HighlightSetting> isEnabled = (hs) -> hs == PlayerIndicatorsConfig.HighlightSetting.ENABLED ||
 			(hs == PlayerIndicatorsConfig.HighlightSetting.PVP && (client.getVarbitValue(Varbits.IN_WILDERNESS) == 1 || client.getVarbitValue(Varbits.PVP_SPEC_ORB) == 1));
 
-		Color color;
-
+		Color color = null;
 		if (player == client.getLocalPlayer())
 		{
-			if (isEnabled.test(config.highlightOwnPlayer()))
-			{
-				color = config.getOwnPlayerColor();
-			}
-			else
-			{
-				return null;
-			}
+			color = config.getOwnPlayerColor();
 		}
 		else if (partyService.isInParty() && isEnabled.test(config.highlightPartyMembers()) && partyService.getMemberByDisplayName(player.getName()) != null)
 		{
@@ -124,10 +116,6 @@ class PlayerIndicatorsService
 		{
 			color = config.getOthersColor();
 		}
-		else
-		{
-			return null;
-		}
 
 		FriendsChatRank rank = null;
 		ClanTitle clanTitle = null;
@@ -138,6 +126,11 @@ class PlayerIndicatorsService
 		if (player.isClanMember() && config.showClanChatRanks())
 		{
 			clanTitle = getClanTitle(player);
+		}
+
+		if (color == null && rank == null && clanTitle == null)
+		{
+			return null;
 		}
 
 		return new Decorations(rank, clanTitle, color);
