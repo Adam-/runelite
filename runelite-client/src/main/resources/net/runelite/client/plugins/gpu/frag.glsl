@@ -55,6 +55,7 @@ void main() {
     float light = fHsl / 127.f;
     vec3 mul = (1.f - textureLightMode) * vec3(light) + textureLightMode * Color.rgb;
     c = textureColorBrightness * vec4(mul, 1.f);
+    //c = vec4(fUv.x, 0.0f, fUv.y, 1.0f);
   } else {
     // pick interpolated hsl or rgb depending on smooth banding setting
     vec3 rgb = hslToRgb(int(fHsl)) * smoothBanding + Color.rgb * (1.f - smoothBanding);
