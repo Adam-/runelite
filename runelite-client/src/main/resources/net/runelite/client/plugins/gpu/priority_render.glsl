@@ -67,18 +67,6 @@ int priority_map(int p, int distance, int _min10, int avg1, int avg2, int avg3) 
   }
 }
 
-// calculate the number of faces with a lower adjusted priority than
-// the given adjusted priority
-int count_prio_offset(int priority) {
-  // this shouldn't ever be outside of (0, 17) because it is the return value from priority_map
-  priority = clamp(priority, 0, 17);
-  int total = 0;
-  for (int i = 0; i < priority; i++) {
-      total += totalMappedNum[i];
-  }
-  return total;
-}
-
 void get_face(uint localId, modelinfo minfo, int cameraYaw, int cameraPitch,
     out int prio, out int dis, out ivec4 o1, out ivec4 o2, out ivec4 o3) {
   int size = minfo.size;
@@ -155,11 +143,10 @@ void add_face_prio_distance(uint localId, modelinfo minfo, ivec4 thisrvA, ivec4 
   }
 }
 
-int map_face_priority(uint localId, modelinfo minfo, int thisPriority, int thisDistance, out int prio) {
+void map_face_priority(uint localId, modelinfo minfo, int thisPriority, int thisDistance, out int prio) {
   int size = minfo.size;
 
   // Compute average distances for 0/2, 3/4, and 6/8
-
   if (localId < size) {
     int avg1 = 0;
     int avg2 = 0;
@@ -178,29 +165,17 @@ int map_face_priority(uint localId, modelinfo minfo, int thisPriority, int thisD
     }
 
     int adjPrio = priority_map(thisPriority, thisDistance, min10, avg1, avg2, avg3);
-    int prioIdx = atomicAdd(totalMappedNum[adjPrio], 1);
+
+    renderPris[localId] = (adjPrio << 26) | ((6000 - thisDistance) << 13) | int(localId);
 
     prio = adjPrio;
-    return prioIdx;
+    return;
   }
 
   prio = 0;
-  return 0;
-}
-
-void insert_dfs(uint localId, modelinfo minfo, int adjPrio, int distance, int prioIdx) {
-  int size = minfo.size;
-
-  if (localId < size) {
-    // calculate base offset into dfs based on number of faces with a lower priority
-    int baseOff = count_prio_offset(adjPrio);
-    // store into face array offset array by unique index
-    dfs[baseOff + prioIdx] = (int(localId) << 16) | distance;
-  }
 }
 
 void sort_and_insert(uint localId, modelinfo minfo, int thisPriority, int thisDistance, ivec4 thisrvA, ivec4 thisrvB, ivec4 thisrvC) {
-  /* compute face distance */
   int size = minfo.size;
 
   if (localId < size) {
@@ -209,30 +184,16 @@ void sort_and_insert(uint localId, modelinfo minfo, int thisPriority, int thisDi
     int flags = minfo.flags;
     ivec4 pos = ivec4(minfo.x, minfo.y, minfo.z, 0);
 
-    const int priorityOffset = count_prio_offset(thisPriority);
-    const int numOfPriority = totalMappedNum[thisPriority];
-    int start = priorityOffset; // index of first face with this priority
-    int end = priorityOffset + numOfPriority; // index of last face with this priority
-    int myOffset = priorityOffset;
-
-    // we only have to order faces against others of the same priority
-    // calculate position this face will be in
-    for (int i = start; i < end; ++i) {
-      int d1 = dfs[i];
-      int theirId = d1 >> 16;
-      int theirDistance = d1 & 0xffff;
-
-      // the closest faces draw last, so have the highest index
-      // if two faces have the same distance, the one with the
-      // higher id draws last
-      if ((theirDistance > thisDistance)
-        || (theirDistance == thisDistance && theirId < localId)) {
-        ++myOffset;
-      }
+    int myOffset = 0;
+    int myPri = (thisPriority << 26) | ((6000 - thisDistance) << 13) | int(localId);
+    for (int i = 0; i < size; ++i) {
+        if (renderPris[i] < myPri) {
+            ++myOffset;
+        }
     }
 
     // position vertices in scene and write to out buffer
-    vout[outOffset + myOffset * 3]     = pos + thisrvA;
+    vout[outOffset + myOffset * 3    ] = pos + thisrvA;
     vout[outOffset + myOffset * 3 + 1] = pos + thisrvB;
     vout[outOffset + myOffset * 3 + 2] = pos + thisrvC;
 
