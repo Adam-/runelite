@@ -31,11 +31,13 @@ import java.util.Random;
 import javax.inject.Inject;
 import net.runelite.api.Client;
 import net.runelite.api.FontID;
+import net.runelite.api.GameState;
 import net.runelite.api.ScriptEvent;
 import net.runelite.api.events.ScriptPostFired;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetTextAlignment;
 import net.runelite.api.widgets.WidgetType;
+import net.runelite.client.callback.ClientThread;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
@@ -53,6 +55,9 @@ public class AprilFoolsPlugin extends Plugin
 	@Inject
 	private Client client;
 
+	@Inject
+	private ClientThread clientThread;
+
 	private final Random random = new Random();
 
 	@Override
@@ -63,6 +68,13 @@ public class AprilFoolsPlugin extends Plugin
 			BufferedImage sailing = ImageUtil.loadImageResource(AprilFoolsPlugin.class, SKILLS[i].toLowerCase() + ".png");
 			client.getSpriteOverrides().put(SPRITE_IDS[i], ImageUtil.getImageSpritePixels(sailing, client));
 		}
+		clientThread.invokeLater(() ->
+		{
+			if (client.getGameState() == GameState.LOGGED_IN)
+			{
+				addFakeSkill();
+			}
+		});
 	}
 
 	@Override
@@ -72,6 +84,13 @@ public class AprilFoolsPlugin extends Plugin
 		{
 			client.getSpriteOverrides().remove(SPRITE_IDS[i]);
 		}
+		clientThread.invokeLater(() ->
+		{
+			if (client.getGameState() == GameState.LOGGED_IN)
+			{
+				removeFakeSkill();
+			}
+		});
 	}
 
 	private static boolean isApr1()
@@ -85,70 +104,100 @@ public class AprilFoolsPlugin extends Plugin
 	{
 		if (scriptPostFired.getScriptId() == 393 && isApr1()) // [clientscript,stats_init]
 		{
-			int skillId = random.nextInt(3);
-			String name = SKILLS[skillId];
-			int sprite = SPRITE_IDS[skillId];
+			addFakeSkill();
+		}
+	}
 
-			Widget w = client.getWidget(320, 25);
-			w.setHidden(true);
-			w = client.getWidget(320, 26);
-			w.setHidden(true);
-			w = client.getWidget(320, 27);
-			w.setHidden(true);
+	private void addFakeSkill()
+	{
+		int skillId = random.nextInt(3);
+		String name = SKILLS[skillId];
+		int sprite = SPRITE_IDS[skillId];
 
-			w = client.getWidget(320, 24);
+		Widget w = client.getWidget(320, 25);
+		w.setHidden(true);
+		w = client.getWidget(320, 26);
+		w.setHidden(true);
+		w = client.getWidget(320, 27);
+		w.setHidden(true);
 
+		w = client.getWidget(320, 24);
+
+		w.deleteAllChildren();
+
+		w.setHasListener(true);
+		w.setOnMouseRepeatListener(992, ScriptEvent.WIDGET_ID, -1, 20971548, name + " XP:|Next level at:|Remaining XP:", "0|83|83", FontID.PLAIN_12, 5);
+		w.setOnMouseLeaveListener(40, 20971548);
+
+		Widget w0 = w.createChild(WidgetType.GRAPHIC);
+		w0.setSpriteId(174);
+		w0.setOriginalX(-2);
+		w0.setOriginalY(-2);
+		w0.setOriginalWidth(36);
+		w0.setOriginalHeight(36);
+		w0.revalidate();
+
+		Widget w1 = w.createChild(WidgetType.GRAPHIC);
+		w1.setSpriteId(175);
+		w1.setOriginalX(28);
+		w1.setOriginalY(-2);
+		w1.setOriginalWidth(36);
+		w1.setOriginalHeight(36);
+		w1.revalidate();
+
+		Widget w2 = w.createChild(WidgetType.GRAPHIC);
+		w2.setSpriteId(sprite);
+		w2.setOriginalX(5);
+		w2.setOriginalY(4);
+		w2.setOriginalWidth(25);
+		w2.setOriginalHeight(25);
+		w2.revalidate();
+
+		Widget w3 = w.createChild(WidgetType.TEXT);
+		w3.setXTextAlignment(WidgetTextAlignment.CENTER);
+		w3.setTextColor(0xffff00);
+		w3.setText("1");
+		w3.setFontId(FontID.PLAIN_11);
+		w3.setOriginalX(32);
+		w3.setOriginalY(4);
+		w3.setOriginalWidth(15);
+		w3.setOriginalHeight(12);
+		w3.revalidate();
+
+		Widget w4 = w.createChild(WidgetType.TEXT);
+		w4.setXTextAlignment(WidgetTextAlignment.CENTER);
+		w4.setTextColor(0xffff00);
+		w4.setText("1");
+		w4.setFontId(FontID.PLAIN_11);
+		w4.setOriginalX(44);
+		w4.setOriginalY(16);
+		w4.setOriginalWidth(15);
+		w4.setOriginalHeight(12);
+		w4.revalidate();
+	}
+
+	private void removeFakeSkill()
+	{
+		Widget w = client.getWidget(320, 25);
+		if (w != null)
+		{
+			w.setHidden(false);
+		}
+		w = client.getWidget(320, 26);
+		if (w != null)
+		{
+			w.setHidden(false);
+		}
+		w = client.getWidget(320, 27);
+		if (w != null)
+		{
+			w.setHidden(false);
+		}
+
+		w = client.getWidget(320, 24);
+		if (w != null)
+		{
 			w.deleteAllChildren();
-
-			w.setHasListener(true);
-			w.setOnMouseRepeatListener(992, ScriptEvent.WIDGET_ID, -1, 20971548, name + " XP:|Next level at:|Remaining XP:", "0|83|83", FontID.PLAIN_12, 5);
-			w.setOnMouseLeaveListener(40, 20971548);
-
-			Widget w0 = w.createChild(WidgetType.GRAPHIC);
-			w0.setSpriteId(174);
-			w0.setOriginalX(-2);
-			w0.setOriginalY(-2);
-			w0.setOriginalWidth(36);
-			w0.setOriginalHeight(36);
-			w0.revalidate();
-
-			Widget w1 = w.createChild(WidgetType.GRAPHIC);
-			w1.setSpriteId(175);
-			w1.setOriginalX(28);
-			w1.setOriginalY(-2);
-			w1.setOriginalWidth(36);
-			w1.setOriginalHeight(36);
-			w1.revalidate();
-
-			Widget w2 = w.createChild(WidgetType.GRAPHIC);
-			w2.setSpriteId(sprite);
-			w2.setOriginalX(5);
-			w2.setOriginalY(4);
-			w2.setOriginalWidth(25);
-			w2.setOriginalHeight(25);
-			w2.revalidate();
-
-			Widget w3 = w.createChild(WidgetType.TEXT);
-			w3.setXTextAlignment(WidgetTextAlignment.CENTER);
-			w3.setTextColor(0xffff00);
-			w3.setText("1");
-			w3.setFontId(FontID.PLAIN_11);
-			w3.setOriginalX(32);
-			w3.setOriginalY(4);
-			w3.setOriginalWidth(15);
-			w3.setOriginalHeight(12);
-			w3.revalidate();
-
-			Widget w4 = w.createChild(WidgetType.TEXT);
-			w4.setXTextAlignment(WidgetTextAlignment.CENTER);
-			w4.setTextColor(0xffff00);
-			w4.setText("1");
-			w4.setFontId(FontID.PLAIN_11);
-			w4.setOriginalX(44);
-			w4.setOriginalY(16);
-			w4.setOriginalWidth(15);
-			w4.setOriginalHeight(12);
-			w4.revalidate();
 		}
 	}
 }
