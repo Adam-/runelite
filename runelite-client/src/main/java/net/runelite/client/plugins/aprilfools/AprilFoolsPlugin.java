@@ -70,7 +70,7 @@ public class AprilFoolsPlugin extends Plugin
 		}
 		clientThread.invokeLater(() ->
 		{
-			if (client.getGameState() == GameState.LOGGED_IN)
+			if (client.getGameState() == GameState.LOGGED_IN && isApr1())
 			{
 				addFakeSkill();
 			}
@@ -96,7 +96,7 @@ public class AprilFoolsPlugin extends Plugin
 	private static boolean isApr1()
 	{
 		LocalDate now = LocalDate.now();
-		return true || (now.getMonth() == Month.APRIL && now.getDayOfMonth() == 1);
+		return now.getMonth() == Month.APRIL && now.getDayOfMonth() == 1;
 	}
 
 	@Subscribe
