@@ -197,7 +197,10 @@ public class AprilFoolsPlugin extends Plugin
 		w = client.getWidget(320, 24);
 		if (w != null)
 		{
+			w.setHasListener(false);
 			w.deleteAllChildren();
+			w.setOnMouseRepeatListener((Object[]) null);
+			w.setOnMouseLeaveListener((Object[]) null);
 		}
 	}
 }
