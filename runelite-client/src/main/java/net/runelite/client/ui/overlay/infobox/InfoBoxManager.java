@@ -29,6 +29,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.ComparisonChain;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -48,6 +49,7 @@ import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.events.InfoBoxMenuClicked;
+import net.runelite.client.events.ProfileChanged;
 import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.ui.overlay.OverlayMenuEntry;
 import net.runelite.client.ui.overlay.components.ComponentOrientation;
@@ -105,6 +107,16 @@ public class InfoBoxManager
 		{
 			layers.values().forEach(l -> l.getInfoBoxes().forEach(this::updateInfoBoxImage));
 		}
+	}
+
+	@Subscribe
+	public synchronized void onProfileChanged(ProfileChanged profileChanged)
+	{
+		// infobox layers may have changed due to the profile change, just rebuild the infoboxes
+		List<InfoBox> infoBoxes = getInfoBoxes();
+		infoBoxes.forEach(this::removeInfoBox);
+		new ArrayList<>(layers.values()).forEach(this::removeOverlay);
+		infoBoxes.forEach(this::addInfoBox);
 	}
 
 	@Subscribe
@@ -177,7 +189,8 @@ public class InfoBoxManager
 			return;
 		}
 
-		if (layers.get(getLayer(infoBox)).getInfoBoxes().remove(infoBox))
+		InfoBoxOverlay overlay = layers.get(infoBox);
+		if (overlay != null && overlay.getInfoBoxes().remove(infoBox))
 		{
 			log.debug("Removed InfoBox {}", infoBox);
 		}
@@ -278,7 +291,6 @@ public class InfoBoxManager
 
 	private void removeOverlay(InfoBoxOverlay overlay)
 	{
-		unsetOrientation(overlay.getName());
 		eventBus.unregister(overlay);
 		overlayManager.remove(overlay);
 		layers.remove(overlay.getName());
@@ -296,6 +308,7 @@ public class InfoBoxManager
 		if (oldOverlay.getInfoBoxes().isEmpty())
 		{
 			log.debug("Deleted layer: {}", oldOverlay.getName());
+			unsetOrientation(oldOverlay.getName());
 			removeOverlay(oldOverlay);
 		}
 
@@ -337,6 +350,7 @@ public class InfoBoxManager
 		source.getInfoBoxes().clear();
 
 		// remove source
+		unsetOrientation(source.getName());
 		removeOverlay(source);
 		log.debug("Deleted layer: {}", source.getName());
 	}
