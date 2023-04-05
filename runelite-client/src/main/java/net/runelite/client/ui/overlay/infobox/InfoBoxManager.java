@@ -129,14 +129,14 @@ public class InfoBoxManager
 		}
 		else if (FLIP.equals(event.getEntry().getOption()))
 		{
-			InfoBoxOverlay infoBoxOverlay = layers.get(getLayer(event.getInfoBox()));
+			InfoBoxOverlay infoBoxOverlay = layers.get(event.getInfoBox().layer);
 			ComponentOrientation newOrientation = infoBoxOverlay.flip();
 			setOrientation(infoBoxOverlay.getName(), newOrientation);
 		}
 		else if (DELETE.equals(event.getEntry().getOption()))
 		{
 			// This is just a merge into the default layer
-			InfoBoxOverlay source = layers.get(getLayer(event.getInfoBox()));
+			InfoBoxOverlay source = layers.get(event.getInfoBox().layer);
 			InfoBoxOverlay dest = layers.computeIfAbsent(DEFAULT_LAYER, this::makeOverlay);
 			if (source != dest)
 			{
@@ -153,6 +153,7 @@ public class InfoBoxManager
 		updateInfoBoxImage(infoBox);
 
 		String layerName = getLayer(infoBox);
+		infoBox.layer = layerName;
 		InfoBoxOverlay overlay = layers.computeIfAbsent(layerName, this::makeOverlay);
 		List<OverlayMenuEntry> menuEntries = infoBox.getMenuEntries();
 		menuEntries.add(DETACH_ME);
@@ -184,16 +185,17 @@ public class InfoBoxManager
 
 	public synchronized void removeInfoBox(InfoBox infoBox)
 	{
-		if (infoBox == null)
+		if (infoBox == null || infoBox.layer == null)
 		{
 			return;
 		}
 
-		InfoBoxOverlay overlay = layers.get(infoBox);
-		if (overlay != null && overlay.getInfoBoxes().remove(infoBox))
+		if (layers.get(infoBox.layer).getInfoBoxes().remove(infoBox))
 		{
 			log.debug("Removed InfoBox {}", infoBox);
 		}
+
+		infoBox.layer = null;
 
 		infoBox.getMenuEntries().remove(DETACH_ME);
 		infoBox.getMenuEntries().remove(FLIP_ME);
@@ -298,8 +300,8 @@ public class InfoBoxManager
 
 	private synchronized void splitInfobox(String newLayer, InfoBox infoBox)
 	{
-		String layer = getLayer(infoBox);
-		InfoBoxOverlay oldOverlay = layers.get(layer);
+		final String oldLayer = infoBox.layer;
+		InfoBoxOverlay oldOverlay = layers.get(infoBox.layer);
 		// Find all infoboxes with the same name, as they are all within the same group and so move at once.
 		Collection<InfoBox> filtered = oldOverlay.getInfoBoxes().stream()
 			.filter(i -> i.getName().equals(infoBox.getName())).collect(Collectors.toList());
@@ -319,6 +321,7 @@ public class InfoBoxManager
 		for (InfoBox i : filtered)
 		{
 			setLayer(i, newLayer);
+			i.layer = newLayer;
 
 			if (!i.getMenuEntries().contains(DELETE_ME))
 			{
@@ -326,7 +329,7 @@ public class InfoBoxManager
 			}
 		}
 
-		log.debug("Moving infobox named {} (layer {}) to layer {}: {} boxes", infoBox.getName(), layer, newLayer, filtered.size());
+		log.debug("Moving infobox named {} (layer {}) to layer {}: {} boxes", infoBox.getName(), oldLayer, newLayer, filtered.size());
 	}
 
 	public synchronized void mergeInfoBoxes(InfoBoxOverlay source, InfoBoxOverlay dest)
@@ -339,6 +342,7 @@ public class InfoBoxManager
 		for (InfoBox infoBox : infoBoxesToMove)
 		{
 			setLayer(infoBox, dest.getName());
+			infoBox.layer = dest.getName();
 
 			if (isDefault)
 			{
