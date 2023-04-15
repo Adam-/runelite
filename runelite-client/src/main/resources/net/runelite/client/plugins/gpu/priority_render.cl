@@ -95,30 +95,25 @@ void get_face(__local struct shared_data *shared, __constant struct uniform *uni
   int size = minfo.size;
   int offset = minfo.offset;
   int flags = minfo.flags;
-  uint ssboOffset;
 
   if (localId < size) {
-    ssboOffset = localId;
-  } else {
-    ssboOffset = 0;
-  }
+    uint ssboOffset = localId;
 
-  int4 thisA;
-  int4 thisB;
-  int4 thisC;
+    int4 thisA;
+    int4 thisB;
+    int4 thisC;
 
-  // Grab triangle vertices from the correct buffer
-  if (flags < 0) {
-    thisA = vb[offset + ssboOffset * 3];
-    thisB = vb[offset + ssboOffset * 3 + 1];
-    thisC = vb[offset + ssboOffset * 3 + 2];
-  } else {
-    thisA = tempvb[offset + ssboOffset * 3];
-    thisB = tempvb[offset + ssboOffset * 3 + 1];
-    thisC = tempvb[offset + ssboOffset * 3 + 2];
-  }
+    // Grab triangle vertices from the correct buffer
+    if (flags < 0) {
+      thisA = vb[offset + ssboOffset * 3];
+      thisB = vb[offset + ssboOffset * 3 + 1];
+      thisC = vb[offset + ssboOffset * 3 + 2];
+    } else {
+      thisA = tempvb[offset + ssboOffset * 3];
+      thisB = tempvb[offset + ssboOffset * 3 + 1];
+      thisC = tempvb[offset + ssboOffset * 3 + 2];
+    }
 
-  if (localId < size) {
     int radius = (flags & 0x7fffffff) >> 12;
     int orientation = flags & 0x7ff;
 
