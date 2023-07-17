@@ -237,7 +237,7 @@ class Updater
 			var tempExe = Files.createTempFile("rlupdate", "exe");
 			HashCode hash;
 			try (Response response = okHttpClient.newCall(request).execute();
-				 HashingOutputStream out = new HashingOutputStream(Hashing.sha256(), Files.newOutputStream(tempExe)))
+				HashingOutputStream out = new HashingOutputStream(Hashing.sha256(), Files.newOutputStream(tempExe)))
 			{
 				if (!response.isSuccessful())
 				{
