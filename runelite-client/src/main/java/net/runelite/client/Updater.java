@@ -59,10 +59,10 @@ class Updater
 	private static final String LAUNCHER_EXECUTABLE_NAME_WIN = "RuneLite.exe";
 
 	// Props can be overwritten by rtconfig, which is unsigned, and so is not safe for this
-	private static final String WIN64_URL = "http://192.168.1.2/runelite/RuneLiteSetup.exe";
+	private static final String WIN64_URL = "https://github.com/runelite/launcher/releases/download/2.6.4/RuneLiteSetup.exe";
 	private static final String WIN64_CHECKSUM = "ae1ef12e6a820c5a94c1b834246def883515e9669175a6a94e47aae35e2ca7ab";
 	private static final int WIN64_SIZE = 29440704;
-	private static final String WIN32_URL = "http://192.168.1.2/runelite/RuneLiteSetup32.exe";
+	private static final String WIN32_URL = "https://github.com/runelite/launcher/releases/download/2.6.4/RuneLiteSetup32.exe";
 	private static final String WIN32_CHECKSUM = "6655c149fa86d0750b0e66b575560f97e6e5b04f734c8d0e899457f694e3ff50";
 	private static final int WIN32_SIZE = 25297512;
 
