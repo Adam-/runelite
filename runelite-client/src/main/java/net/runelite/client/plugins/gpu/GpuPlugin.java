@@ -74,6 +74,7 @@ import org.lwjgl.opencl.CL10GL;
 import org.lwjgl.opencl.CL12;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL43C;
+import org.lwjgl.opengl.GL44C;
 import org.lwjgl.opengl.GLCapabilities;
 import org.lwjgl.opengl.GLUtil;
 import org.lwjgl.system.Callback;
@@ -1069,6 +1070,8 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 		}
 	}
 
+	private IntBuffer interfaceBuffer;
+
 	private void prepareInterfaceTexture(int canvasWidth, int canvasHeight)
 	{
 		if (canvasWidth != lastCanvasWidth || canvasHeight != lastCanvasHeight)
@@ -1076,8 +1079,15 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 			lastCanvasWidth = canvasWidth;
 			lastCanvasHeight = canvasHeight;
 
+			// glBufferStorage() makes the buffer immutable, so we have to delete and recreate it.
+			GL43C.glDeleteBuffers(interfacePbo);
+			interfacePbo = GL43C.glGenBuffers();
+
 			GL43C.glBindBuffer(GL43C.GL_PIXEL_UNPACK_BUFFER, interfacePbo);
-			GL43C.glBufferData(GL43C.GL_PIXEL_UNPACK_BUFFER, canvasWidth * canvasHeight * 4L, GL43C.GL_STREAM_DRAW);
+			GL44C.glBufferStorage(GL44C.GL_PIXEL_UNPACK_BUFFER, canvasWidth * canvasHeight * 4L, GL44C.GL_MAP_WRITE_BIT | GL44C.GL_MAP_PERSISTENT_BIT);
+			checkGLErrors();
+			interfaceBuffer = GL44C.glMapBufferRange(GL44C.GL_PIXEL_UNPACK_BUFFER, 0, canvasWidth * canvasHeight * 4L, GL44C.GL_MAP_WRITE_BIT | GL44C.GL_MAP_PERSISTENT_BIT)
+				.asIntBuffer();
 			GL43C.glBindBuffer(GL43C.GL_PIXEL_UNPACK_BUFFER, 0);
 
 			GL43C.glBindTexture(GL43C.GL_TEXTURE_2D, interfaceTexture);
@@ -1090,15 +1100,17 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 		final int width = bufferProvider.getWidth();
 		final int height = bufferProvider.getHeight();
 
+		interfaceBuffer.rewind();
+		interfaceBuffer.put(pixels, 0, width * height);
+		GL44C.glMemoryBarrier(GL44C.GL_CLIENT_MAPPED_BUFFER_BARRIER_BIT);
+
 		GL43C.glBindBuffer(GL43C.GL_PIXEL_UNPACK_BUFFER, interfacePbo);
-		GL43C.glMapBuffer(GL43C.GL_PIXEL_UNPACK_BUFFER, GL43C.GL_WRITE_ONLY)
-			.asIntBuffer()
-			.put(pixels, 0, width * height);
-		GL43C.glUnmapBuffer(GL43C.GL_PIXEL_UNPACK_BUFFER);
 		GL43C.glBindTexture(GL43C.GL_TEXTURE_2D, interfaceTexture);
 		GL43C.glTexSubImage2D(GL43C.GL_TEXTURE_2D, 0, 0, 0, width, height, GL43C.GL_BGRA, GL43C.GL_UNSIGNED_INT_8_8_8_8_REV, 0);
 		GL43C.glBindBuffer(GL43C.GL_PIXEL_UNPACK_BUFFER, 0);
 		GL43C.glBindTexture(GL43C.GL_TEXTURE_2D, 0);
+
+		checkGLErrors();
 	}
 
 	@Override
@@ -1120,7 +1132,7 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 
 		// Setup anti-aliasing
 		final AntiAliasingMode antiAliasingMode = config.antiAliasingMode();
-		final boolean aaEnabled = antiAliasingMode != AntiAliasingMode.DISABLED;
+		final boolean aaEnabled = false ;//antiAliasingMode != AntiAliasingMode.DISABLED;
 
 		if (aaEnabled)
 		{
