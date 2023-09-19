@@ -27,11 +27,13 @@ package net.runelite.client.ui;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatNativeWindowBorder;
 import com.google.common.base.Strings;
+import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
 import java.applet.Applet;
 import java.awt.AWTException;
 import java.awt.Canvas;
-import java.awt.CardLayout;
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.Dimension;
@@ -42,6 +44,8 @@ import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
+import java.awt.Insets;
+import java.awt.LayoutManager2;
 import java.awt.Rectangle;
 import java.awt.SystemTray;
 import java.awt.Toolkit;
@@ -52,25 +56,26 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.time.Duration;
-import java.util.function.BiConsumer;
+import java.util.TreeSet;
+import java.util.function.Function;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.inject.Named;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 import javax.swing.Box;
-import javax.swing.BoxLayout;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JRootPane;
+import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
 import javax.swing.event.HyperlinkEvent;
@@ -94,8 +99,6 @@ import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ClientShutdown;
 import net.runelite.client.events.ConfigChanged;
-import net.runelite.client.events.NavigationButtonAdded;
-import net.runelite.client.events.NavigationButtonRemoved;
 import net.runelite.client.input.KeyManager;
 import net.runelite.client.input.MouseAdapter;
 import net.runelite.client.input.MouseListener;
@@ -106,6 +109,7 @@ import net.runelite.client.util.ImageUtil;
 import net.runelite.client.util.LinkBrowser;
 import net.runelite.client.util.OSType;
 import net.runelite.client.util.OSXUtil;
+import net.runelite.client.util.SwingUtil;
 import net.runelite.client.util.WinUtil;
 
 @Slf4j
@@ -131,22 +135,21 @@ public class ClientUI
 	private final boolean safeMode;
 	private final String title;
 
-	private final CardLayout cardLayout = new CardLayout();
 	private final Rectangle sidebarButtonPosition = new Rectangle();
-	private boolean withTitleBar;
 	private BufferedImage sidebarOpenIcon;
-	private BufferedImage sidebarClosedIcon;
+	private BufferedImage sidebarCloseIcon;
+
+	private JTabbedPane sidebar;
+	private final TreeSet<NavigationButton> sidebarEntries = new TreeSet<>(NavigationButton.COMPARATOR);
+	private NavigationButton selectedTab;
+	private NavigationButton lastSelectedTab;
+
+	private ClientToolbarPanel toolbarPanel;
+	private boolean withTitleBar;
+
 	private ContainableFrame frame;
-	private JPanel navContainer;
-	private PluginPanel pluginPanel;
-	private ClientPluginToolbar pluginToolbar;
-	private ClientTitleToolbar titleToolbar;
-	private JButton currentButton;
-	private NavigationButton currentNavButton;
-	private boolean sidebarOpen;
-	private JPanel container;
-	private NavigationButton sidebarNavigationButton;
-	private JButton sidebarNavigationJButton;
+	private JPanel content;
+	private JButton sidebarNavBtn;
 	private Dimension lastClientSize;
 	private Cursor defaultCursor;
 
@@ -183,7 +186,7 @@ public class ClientUI
 	}
 
 	@Subscribe
-	public void onConfigChanged(ConfigChanged event)
+	private void onConfigChanged(ConfigChanged event)
 	{
 		if (!event.getGroup().equals(CONFIG_GROUP) ||
 			event.getKey().equals(CONFIG_CLIENT_MAXIMIZED) ||
@@ -195,93 +198,40 @@ public class ClientUI
 		SwingUtilities.invokeLater(() -> updateFrameConfig(event.getKey().equals("lockWindowSize")));
 	}
 
-	@Subscribe
-	public void onNavigationButtonAdded(final NavigationButtonAdded event)
+	void addNavigation(NavigationButton navBtn)
 	{
-		SwingUtilities.invokeLater(() ->
+		if (navBtn.getPanel() == null)
 		{
-			final NavigationButton navigationButton = event.getButton();
-			final PluginPanel pluginPanel = navigationButton.getPanel();
-			final boolean inTitle = !event.getButton().isTab() && withTitleBar;
-			final int iconSize = 16;
+			toolbarPanel.add(navBtn, true);
+			return;
+		}
 
-			if (pluginPanel != null)
-			{
-				navContainer.add(pluginPanel.getWrappedPanel(), navigationButton.getTooltip());
-			}
+		if (!sidebarEntries.add(navBtn))
+		{
+			return;
+		}
 
-			final JButton button = createSwingButton(navigationButton, iconSize, (navButton, jButton) ->
-			{
-				final PluginPanel panel = navButton.getPanel();
+		final int TAB_SIZE = 16;
+		Icon icon = new ImageIcon(ImageUtil.resizeImage(navBtn.getIcon(), TAB_SIZE, TAB_SIZE));
 
-				if (panel == null)
-				{
-					return;
-				}
+		sidebar.insertTab(null, icon, navBtn.getPanel().getWrappedPanel(), navBtn.getTooltip(),
+			sidebarEntries.headSet(navBtn).size());
+		sidebar.getModel().clearSelection();
+	}
 
-				boolean doClose = currentButton != null && currentButton == jButton && currentButton.isSelected();
+	void removeNavigation(NavigationButton navBtn)
+	{
+		if (navBtn.getPanel() == null)
+		{
+			toolbarPanel.remove(navBtn);
+		}
 
-				if (doClose)
-				{
-					contract();
-					currentButton.setSelected(false);
-					currentNavButton.setSelected(false);
-					currentButton = null;
-					currentNavButton = null;
-				}
-				else
-				{
-					if (currentButton != null)
-					{
-						currentButton.setSelected(false);
-					}
-
-					if (currentNavButton != null)
-					{
-						currentNavButton.setSelected(false);
-					}
-
-					currentButton = jButton;
-					currentNavButton = navButton;
-					currentButton.setSelected(true);
-					currentNavButton.setSelected(true);
-					expand(navButton);
-				}
-			});
-
-			if (inTitle)
-			{
-				titleToolbar.addComponent(event.getButton(), button);
-				titleToolbar.revalidate();
-			}
-			else
-			{
-				pluginToolbar.addComponent(event.getButton(), button);
-				pluginToolbar.revalidate();
-			}
-		});
+		sidebarEntries.remove(navBtn);
+		sidebar.remove(navBtn.getPanel());
 	}
 
 	@Subscribe
-	public void onNavigationButtonRemoved(final NavigationButtonRemoved event)
-	{
-		SwingUtilities.invokeLater(() ->
-		{
-			pluginToolbar.removeComponent(event.getButton());
-			pluginToolbar.revalidate();
-			titleToolbar.removeComponent(event.getButton());
-			titleToolbar.revalidate();
-			final PluginPanel pluginPanel = event.getButton().getPanel();
-
-			if (pluginPanel != null)
-			{
-				navContainer.remove(pluginPanel.getWrappedPanel());
-			}
-		});
-	}
-
-	@Subscribe
-	public void onGameStateChanged(final GameStateChanged event)
+	private void onGameStateChanged(final GameStateChanged event)
 	{
 		if (event.getGameState() != GameState.LOGGED_IN || !(client instanceof Client) || !config.usernameInTitle())
 		{
@@ -379,31 +329,54 @@ public class ClientUI
 				}
 			});
 
-			frame.addWindowStateListener(l ->
+			content = new JPanel();
+			content.setLayout(new Layout());
+			content.add(new ClientPanel(client));
+
+			sidebar = new JTabbedPane(JTabbedPane.RIGHT);
+			sidebar.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+			sidebar.setOpaque(true);
+			sidebar.putClientProperty(FlatClientProperties.STYLE, "tabInsets: 2,5,2,5; variableSize: true; deselectable: true");
+			sidebar.setSelectedIndex(-1);
+			sidebar.addChangeListener(ev ->
 			{
-				if (l.getNewState() == Frame.NORMAL)
+				NavigationButton oldSelectedTab = selectedTab;
+				NavigationButton newSelectedTab;
+
+				int index = sidebar.getSelectedIndex();
+				if (index < 0)
 				{
-					// Recompute minimum size after a restore.
-					// Invoking this immediately causes the minimum size to be 8px too small with custom chrome on.
-					SwingUtilities.invokeLater(frame::revalidateMinimumSize);
+					newSelectedTab = null;
+				}
+				else
+				{
+					// maybe just include a map component -> navbtn?
+					lastSelectedTab = newSelectedTab = Iterables.get(sidebarEntries, index);
+				}
+
+				if (oldSelectedTab == newSelectedTab)
+				{
+					return;
+				}
+
+				selectedTab = newSelectedTab;
+
+				if (sidebar.isVisible())
+				{
+					if (oldSelectedTab != null)
+					{
+						SwingUtil.deactivate(oldSelectedTab.getPanel());
+					}
+					if (newSelectedTab != null)
+					{
+						SwingUtil.activate(newSelectedTab.getPanel());
+					}
 				}
 			});
 
-			container = new JPanel();
-			container.setLayout(new BoxLayout(container, BoxLayout.X_AXIS));
-			container.add(new ClientPanel(client));
+			content.add(sidebar);
 
-			navContainer = new JPanel();
-			navContainer.setLayout(cardLayout);
-			navContainer.setMinimumSize(new Dimension(0, 0));
-			navContainer.setMaximumSize(new Dimension(0, 0));
-			navContainer.setPreferredSize(new Dimension(0, 0));
-
-			container.add(navContainer);
-
-			pluginToolbar = new ClientPluginToolbar();
-			titleToolbar = new ClientTitleToolbar();
-			frame.add(container);
+			frame.setContentPane(content);
 
 			// Add key listener
 			final HotkeyListener sidebarListener = new HotkeyListener(config::sidebarToggleKey)
@@ -447,13 +420,16 @@ public class ClientUI
 
 			// Decorate window with custom chrome and titlebar if needed
 			withTitleBar = config.enableCustomChrome();
+			toolbarPanel = new ClientToolbarPanel(!withTitleBar);
+
+			sidebarOpenIcon = ImageUtil.loadImageResource(ClientUI.class, withTitleBar ? "open.png" : "open_rs.png");
+			sidebarCloseIcon = ImageUtil.flipImage(sidebarOpenIcon, true, false);
 
 			if (withTitleBar)
 			{
 				JMenuBar menuBar = new JMenuBar();
 				menuBar.add(Box.createGlue());
-				titleToolbar.setAlignmentY(.5f);
-				menuBar.add(titleToolbar);
+				menuBar.add(toolbarPanel);
 				frame.setJMenuBar(menuBar);
 
 				JRootPane rp = frame.getRootPane();
@@ -472,35 +448,29 @@ public class ClientUI
 					frame.setUndecorated(true);
 					rp.setWindowDecorationStyle(JRootPane.FRAME);
 				}
+
+				sidebarNavBtn = toolbarPanel.add(NavigationButton
+					.builder()
+					.priority(100)
+					.icon(sidebarCloseIcon)
+					.tooltip("Close sidebar")
+					.onClick(this::toggleSidebar)
+					.build(), false);
+			}
+			else
+			{
+				sidebar.putClientProperty(
+					FlatClientProperties.TABBED_PANE_TRAILING_COMPONENT,
+					toolbarPanel.createSidebarPanel());
 			}
 
 			// Update config
 			updateFrameConfig(false);
 
-			// Create hide sidebar button
-
-			sidebarOpenIcon = ImageUtil.loadImageResource(ClientUI.class, withTitleBar ? "open.png" : "open_rs.png");
-			sidebarClosedIcon = ImageUtil.flipImage(sidebarOpenIcon, true, false);
-
-			sidebarNavigationButton = NavigationButton
-				.builder()
-				.priority(100)
-				.icon(sidebarOpenIcon)
-				.tooltip("Open SideBar")
-				.onClick(this::toggleSidebar)
-				.build();
-
-			sidebarNavigationJButton = createSwingButton(
-				sidebarNavigationButton,
-				0,
-				null);
-
-			titleToolbar.addComponent(sidebarNavigationButton, sidebarNavigationJButton);
-
 			// Open sidebar if the config closed state is unset
-			if (configManager.getConfiguration(CONFIG_GROUP, CONFIG_CLIENT_SIDEBAR_CLOSED) == null)
+			if (configManager.getConfiguration(CONFIG_GROUP, CONFIG_CLIENT_SIDEBAR_CLOSED, Boolean.class) == Boolean.TRUE)
 			{
-				toggleSidebar();
+				toggleSidebar(false);
 			}
 		});
 	}
@@ -513,7 +483,6 @@ public class ClientUI
 		{
 			// Layout frame
 			frame.pack();
-			frame.revalidateMinimumSize();
 
 			// Create tray icon (needs to be created after frame is packed)
 			if (config.enableTrayIcon())
@@ -768,7 +737,7 @@ public class ClientUI
 	 */
 	public Cursor getCurrentCursor()
 	{
-		return container.getCursor();
+		return content.getCursor();
 	}
 
 	/**
@@ -788,7 +757,7 @@ public class ClientUI
 	 */
 	public void setCursor(final BufferedImage image, final String name)
 	{
-		if (container == null)
+		if (content == null)
 		{
 			return;
 		}
@@ -805,7 +774,7 @@ public class ClientUI
 	 */
 	public void setCursor(final Cursor cursor)
 	{
-		container.setCursor(cursor);
+		content.setCursor(cursor);
 	}
 
 	/**
@@ -814,13 +783,13 @@ public class ClientUI
 	 */
 	public void resetCursor()
 	{
-		if (container == null)
+		if (content == null)
 		{
 			return;
 		}
 
 		defaultCursor = null;
-		container.setCursor(Cursor.getDefaultCursor());
+		content.setCursor(Cursor.getDefaultCursor());
 	}
 
 	/**
@@ -863,7 +832,7 @@ public class ClientUI
 			? logoutButton.getHeight() + logoutButton.getRelativeY()
 			: 5;
 
-		final BufferedImage image = sidebarOpen ? sidebarClosedIcon : sidebarOpenIcon;
+		final BufferedImage image = sidebar.isVisible() ? sidebarCloseIcon : sidebarOpenIcon;
 
 		final Rectangle sidebarButtonRange = new Rectangle(x - 15, 0, image.getWidth() + 25, client.getRealDimensions().height);
 		final Point mousePosition = new Point(
@@ -884,148 +853,72 @@ public class ClientUI
 		return frame.getGraphicsConfiguration();
 	}
 
+	void openPanel(NavigationButton navBtn)
+	{
+		if (navBtn != null && !sidebarEntries.contains(navBtn))
+		{
+			return;
+		}
+
+		toggleSidebar(true);
+
+		int index = navBtn == null ? -1 : sidebarEntries.headSet(navBtn).size();
+		sidebar.setSelectedIndex(index);
+	}
+
 	private void toggleSidebar()
 	{
-		// Toggle sidebar open
-		boolean isSidebarOpen = sidebarOpen;
-		sidebarOpen = !sidebarOpen;
+		toggleSidebar(!sidebar.isVisible());
+	}
 
-		// Select/deselect buttons
-		if (currentButton != null)
+	private void toggleSidebar(boolean open)
+	{
+		if (sidebar.isVisible() == open)
 		{
-			currentButton.setSelected(sidebarOpen);
+			return;
 		}
 
-		if (currentNavButton != null)
+		if (open)
 		{
-			currentNavButton.setSelected(sidebarOpen);
-		}
-
-		if (isSidebarOpen)
-		{
-			sidebarNavigationJButton.setIcon(new ImageIcon(sidebarOpenIcon));
-			sidebarNavigationJButton.setToolTipText("Open SideBar");
-			configManager.setConfiguration(CONFIG_GROUP, CONFIG_CLIENT_SIDEBAR_CLOSED, true);
-
-			contract();
-
-			// Remove plugin toolbar
-			container.remove(pluginToolbar);
-		}
-		else
-		{
-			sidebarNavigationJButton.setIcon(new ImageIcon(sidebarClosedIcon));
-			sidebarNavigationJButton.setToolTipText("Close SideBar");
 			configManager.unsetConfiguration(CONFIG_GROUP, CONFIG_CLIENT_SIDEBAR_CLOSED);
-
-			// Try to restore last panel
-			expand(currentNavButton);
-
-			// Add plugin toolbar back
-			container.add(pluginToolbar);
-		}
-
-		// Revalidate sizes of affected Swing components
-		container.revalidate();
-		giveClientFocus();
-
-		if (sidebarOpen)
-		{
-			frame.expandBy(pluginToolbar.getWidth());
 		}
 		else
 		{
-			frame.contractBy(pluginToolbar.getWidth());
+			configManager.setConfiguration(CONFIG_GROUP, CONFIG_CLIENT_SIDEBAR_CLOSED, true);
+		}
+
+		sidebar.setVisible(open);
+		content.revalidate();
+
+		if (selectedTab != null)
+		{
+			if (open)
+			{
+				SwingUtil.activate(selectedTab.getPanel());
+			}
+			else
+			{
+				SwingUtil.deactivate(selectedTab.getPanel());
+			}
+		}
+
+		if (sidebarNavBtn != null)
+		{
+			sidebarNavBtn.setIcon(new ImageIcon(open ? sidebarCloseIcon : sidebarOpenIcon));
+			sidebarNavBtn.setToolTipText(open ? "Close sidebar" : "Open sidebar");
 		}
 	}
 
 	private void togglePluginPanel()
 	{
-		// Toggle plugin panel open
-		final boolean pluginPanelOpen = pluginPanel != null;
-
-		if (currentButton != null)
+		if (sidebar.getSelectedIndex() < 0)
 		{
-			currentButton.setSelected(!pluginPanelOpen);
-		}
-
-		if (pluginPanelOpen)
-		{
-			contract();
+			openPanel(lastSelectedTab);
 		}
 		else
 		{
-			expand(currentNavButton);
+			sidebar.setSelectedIndex(-1);
 		}
-	}
-
-	private void expand(@Nullable NavigationButton button)
-	{
-		if (button == null)
-		{
-			return;
-		}
-
-		final PluginPanel panel = button.getPanel();
-
-		if (panel == null)
-		{
-			return;
-		}
-
-		if (!sidebarOpen)
-		{
-			toggleSidebar();
-		}
-
-		int width = panel.getWrappedPanel().getPreferredSize().width;
-		int expandBy = pluginPanel != null ? pluginPanel.getWrappedPanel().getPreferredSize().width - width : width;
-
-		// Deactivate previously active panel
-		if (pluginPanel != null)
-		{
-			pluginPanel.onDeactivate();
-		}
-
-		pluginPanel = panel;
-
-		// Expand sidebar
-		navContainer.setMinimumSize(new Dimension(width, 0));
-		navContainer.setMaximumSize(new Dimension(width, Integer.MAX_VALUE));
-		navContainer.setPreferredSize(new Dimension(width, 0));
-		navContainer.revalidate();
-		cardLayout.show(navContainer, button.getTooltip());
-
-		// panel.onActivate has to go after giveClientFocus so it can get focus if it needs.
-		giveClientFocus();
-		panel.onActivate();
-
-		// Check if frame was really expanded or contracted
-		if (expandBy > 0)
-		{
-			frame.expandBy(expandBy);
-		}
-		else if (expandBy < 0)
-		{
-			frame.contractBy(expandBy);
-		}
-	}
-
-	private void contract()
-	{
-		if (pluginPanel == null)
-		{
-			return;
-		}
-
-		pluginPanel.onDeactivate();
-		navContainer.setMinimumSize(new Dimension(0, 0));
-		navContainer.setMaximumSize(new Dimension(0, 0));
-		navContainer.setPreferredSize(new Dimension(0, 0));
-		navContainer.revalidate();
-		giveClientFocus();
-		frame.contractBy(pluginPanel.getWrappedPanel().getPreferredSize().width);
-		pluginPanel = null;
 	}
 
 	private void giveClientFocus()
@@ -1083,8 +976,6 @@ public class ClientUI
 			frame.setResizable(!config.lockWindowSize());
 		}
 
-		frame.setExpandResizeType(config.automaticResizeType());
-
 		ContainableFrame.Mode containMode = config.containInScreen();
 		if (containMode == ContainableFrame.Mode.ALWAYS && !withTitleBar)
 		{
@@ -1138,10 +1029,10 @@ public class ClientUI
 		{
 			if (config.automaticResizeType() == ExpandResizeType.KEEP_GAME_SIZE)
 			{
-				// Try to contract plugin panel
-				if (pluginPanel != null)
+				if (sidebar.isVisible() && sidebar.getSelectedComponent() != null)
 				{
-					bounds.width -= pluginPanel.getWrappedPanel().getPreferredSize().width;
+					// Try to contract plugin panel
+					bounds.width -= sidebar.getSelectedComponent().getWidth();
 				}
 			}
 
@@ -1150,7 +1041,7 @@ public class ClientUI
 		}
 	}
 
-	public static void setupDefaults()
+	private static void setupDefaults()
 	{
 		// Force heavy-weight popups/tooltips.
 		// Prevents them from being obscured by the game applet.
@@ -1164,7 +1055,7 @@ public class ClientUI
 	}
 
 	@Nullable
-	public static TrayIcon createTrayIcon(@Nonnull final Image icon, @Nonnull final String title, @Nonnull final Frame frame)
+	private static TrayIcon createTrayIcon(@Nonnull final Image icon, @Nonnull final String title, @Nonnull final Frame frame)
 	{
 		if (!SystemTray.isSupported())
 		{
@@ -1211,57 +1102,148 @@ public class ClientUI
 		return trayIcon;
 	}
 
-	/**
-	 * Create swing button from navigation button.
-	 *
-	 * @param navigationButton the navigation button
-	 * @param iconSize         the icon size (in case it is 0 default icon size will be used)
-	 * @param specialCallback  the special callback
-	 * @return the swing button
-	 */
-	public static JButton createSwingButton(
-		@Nonnull final NavigationButton navigationButton,
-		int iconSize,
-		@Nullable final BiConsumer<NavigationButton, JButton> specialCallback)
+	private class Layout implements LayoutManager2
 	{
+		private int previousContentWidth;
 
-		final BufferedImage scaledImage = iconSize > 0
-			? ImageUtil.resizeImage(navigationButton.getIcon(), iconSize, iconSize)
-			: navigationButton.getIcon();
-
-		final JButton button = new JButton();
-		button.setSize(scaledImage.getWidth(), scaledImage.getHeight());
-		button.setToolTipText(navigationButton.getTooltip());
-		button.setIcon(new ImageIcon(scaledImage));
-		button.setFocusable(false);
-		button.addActionListener(e ->
+		@Override
+		public void addLayoutComponent(String name, Component comp)
 		{
-			if (specialCallback != null)
-			{
-				specialCallback.accept(navigationButton, button);
-			}
-
-			if (navigationButton.getOnClick() != null)
-			{
-				navigationButton.getOnClick().run();
-			}
-		});
-
-		if (navigationButton.getPopup() != null)
-		{
-			final JPopupMenu popupMenu = new JPopupMenu();
-
-			navigationButton.getPopup().forEach((name, callback) ->
-			{
-				final JMenuItem menuItem = new JMenuItem(name);
-				menuItem.addActionListener((e) -> callback.run());
-				popupMenu.add(menuItem);
-			});
-
-			button.setComponentPopupMenu(popupMenu);
 		}
 
-		navigationButton.setOnSelect(button::doClick);
-		return button;
+		@Override
+		public void removeLayoutComponent(Component comp)
+		{
+		}
+
+		@Override
+		public void addLayoutComponent(Component comp, Object constraints)
+		{
+		}
+
+		@Override
+		public Dimension preferredLayoutSize(Container content)
+		{
+			synchronized (content.getTreeLock())
+			{
+				return size(content, Component::getPreferredSize);
+			}
+		}
+
+		@Override
+		public Dimension minimumLayoutSize(Container content)
+		{
+			synchronized (content.getTreeLock())
+			{
+				return size(content, Component::getMinimumSize);
+			}
+		}
+
+		@Override
+		public void layoutContainer(Container content)
+		{
+			Component client = content.getComponent(0);
+			Component sidebar = content.getComponent(1);
+
+			log.trace("starting layout  - content={} client={} sidebar={} frame={} prevContent={}", content.getWidth(), client.getWidth(), sidebar.getWidth(), frame.getWidth(), previousContentWidth);
+
+			// adjust sidebar height first, as changing it's height can make it's min width change too
+			int height = Math.max(content.getHeight(), Math.max(
+				client.getMinimumSize().height,
+				sidebar.getMinimumSize().height));
+			{
+				sidebar.setSize(sidebar.getWidth(), height);
+			}
+
+			Dimension minimumSize = minimumLayoutSize(content);
+
+			int contentWidth = Math.max(minimumSize.width, content.getWidth());
+			if (previousContentWidth <= 0)
+			{
+				previousContentWidth = contentWidth;
+			}
+
+			// we do not handle insets for the content frame
+			assert content.getInsets().equals(new Insets(0, 0, 0, 0));
+
+			final int clientMinWidth = client.getMinimumSize().width;
+			int clientWidth = Math.max(client.getWidth(), clientMinWidth);
+			int sidebarWidth = sidebar.isVisible()
+				? sidebar.getPreferredSize().width
+				: 0;
+
+			boolean keepGameSize = (frame.getExtendedState() & Frame.MAXIMIZED_HORIZ) == 0
+				&& config.automaticResizeType() == ExpandResizeType.KEEP_GAME_SIZE;
+
+			if (keepGameSize)
+			{
+				// adjust client for window resizes
+				clientWidth = Math.max(clientMinWidth, clientWidth + content.getWidth() - previousContentWidth);
+			}
+			else
+			{
+				// fit client to window
+				clientWidth = Math.max(clientMinWidth, contentWidth - sidebarWidth);
+			}
+
+			// fit window to client
+			int width = clientWidth + sidebarWidth;
+
+			content.setSize(width, height);
+			content.setPreferredSize(content.getSize());
+			previousContentWidth = width;
+
+			client.setBounds(0, 0, clientWidth, height);
+			sidebar.setBounds(clientWidth, 0, sidebarWidth, height);
+
+			frame.revalidateMinimumSize();
+			frame.containedSetSize(frame.getPreferredSize());
+
+			log.trace("finishing layout - content={} client={} sidebar={} frame={}", content.getWidth(), client.getWidth(), sidebar.getWidth(), frame.getWidth());
+		}
+
+		private Dimension size(Container content, Function<Component, Dimension> sizer)
+		{
+			Dimension out = new Dimension(0, 0);
+			for (int i = 0; i < content.getComponentCount(); i++)
+			{
+				Component child = content.getComponent(i);
+				if (child.isVisible())
+				{
+					Dimension dim = sizer.apply(child);
+					out.width += dim.width;
+					out.height = Math.max(out.height, dim.height);
+				}
+			}
+
+			Insets is = content.getInsets();
+			out.width += is.left + is.right;
+			out.height += is.top + is.bottom;
+
+			return out;
+		}
+
+		@Override
+		public Dimension maximumLayoutSize(Container content)
+		{
+			return size(content, Component::getMaximumSize);
+		}
+
+		@Override
+		public float getLayoutAlignmentX(Container target)
+		{
+			return 0;
+		}
+
+		@Override
+		public float getLayoutAlignmentY(Container target)
+		{
+			return 0;
+		}
+
+		@Override
+		public void invalidateLayout(Container target)
+		{
+		}
 	}
 }
