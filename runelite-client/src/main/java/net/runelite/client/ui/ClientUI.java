@@ -26,6 +26,7 @@ package net.runelite.client.ui;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatNativeWindowBorder;
+import com.formdev.flatlaf.util.SystemInfo;
 import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
@@ -78,6 +79,7 @@ import javax.swing.JRootPane;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.HyperlinkEvent;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -437,12 +439,12 @@ public class ClientUI
 				{
 					rp.putClientProperty(FlatClientProperties.USE_WINDOW_DECORATIONS, true);
 				}
-				/*else if (OSType.getOSType() == OSType.MacOS && SystemInfo.isMacFullWindowContentSupported)
+				else if (OSType.getOSType() == OSType.MacOS && SystemInfo.isMacFullWindowContentSupported)
 				{
 					rp.putClientProperty("apple.awt.fullWindowContent", true);
 					rp.putClientProperty("apple.awt.transparentTitleBar", true);
 					menuBar.setBorder(new EmptyBorder(3, 70, 3, 10));
-				}*/
+				}
 				else
 				{
 					frame.setUndecorated(true);

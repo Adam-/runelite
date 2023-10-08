@@ -227,6 +227,15 @@ public class RuneLite
 		final OkHttpClient okHttpClient = buildHttpClient(options.has("insecure-skip-tls-verification"));
 		RuneLiteAPI.CLIENT = okHttpClient;
 
+		if (OSType.getOSType() == OSType.MacOS)
+		{
+			// with custom chrome on we enable full window content and transparent titlebar, which makes
+			// the back of the title bar black. Force the application appearance to dark mode so that
+			// the title text drawn by macos is white, making it visible against the black background.
+			// This must be set prior to awt startup.
+			System.setProperty("apple.awt.application.appearance", "NSAppearanceNameDarkAqua");
+		}
+
 		SplashScreen.init();
 		SplashScreen.stage(0, "Retrieving client", "");
 
