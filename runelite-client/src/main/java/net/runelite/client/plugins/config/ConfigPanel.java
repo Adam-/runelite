@@ -63,6 +63,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
+import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SpinnerModel;
@@ -591,11 +592,36 @@ class ConfigPanel extends PluginPanel
 		return dimensionPanel;
 	}
 
+	private static final class TitleCaseListCellRenderer<T> extends JLabel implements ListCellRenderer<T>
+	{
+		@Override
+		public Component getListCellRendererComponent(JList<? extends T> list, T o, int index, boolean isSelected, boolean cellHasFocus)
+		{
+			String text;
+			if (o instanceof Enum<?>)
+			{
+				text = Text.titleCase((Enum<?>) o);
+			}
+			else
+			{
+				text = o.toString();
+			}
+
+			setText(text);
+
+			return this;
+		}
+	}
+
 	private JComboBox<Enum<?>> createComboBox(ConfigDescriptor cd, ConfigItemDescriptor cid)
 	{
 		Class<? extends Enum> type = (Class<? extends Enum>) cid.getType();
 
 		JComboBox<Enum<?>> box = new JComboBox<Enum<?>>(type.getEnumConstants()); // NOPMD: UseDiamondOperator
+		// set renderer prior to calling box.getPreferredSize(), since it will invoke the renderer
+		// to build components for each combobox element in order to compute the display size of the
+		// combobox
+		box.setRenderer(new TitleCaseListCellRenderer<>());
 		box.setPreferredSize(new Dimension(box.getPreferredSize().width, 22));
 
 		try
@@ -648,6 +674,7 @@ class ConfigPanel extends PluginPanel
 			cid.getItem().keyName(), parameterizedType);
 
 		JList<Enum<?>> list = new JList<Enum<?>>(type.getEnumConstants()); // NOPMD: UseDiamondOperator
+		list.setCellRenderer(new TitleCaseListCellRenderer<>());
 		list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		list.setLayoutOrientation(JList.VERTICAL);
 		list.setSelectedIndices(
