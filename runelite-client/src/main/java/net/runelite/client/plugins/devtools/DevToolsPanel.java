@@ -30,18 +30,22 @@ import com.google.inject.ProvisionException;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.TrayIcon;
+import java.awt.image.BufferedImage;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
 import net.runelite.api.MenuAction;
 import net.runelite.client.Notifier;
 import net.runelite.client.callback.ClientThread;
+import net.runelite.client.ui.ClientToolbar;
 import net.runelite.client.ui.ColorScheme;
+import net.runelite.client.ui.NavigationButton;
 import net.runelite.client.ui.PluginPanel;
 import net.runelite.client.ui.overlay.OverlayMenuEntry;
 import net.runelite.client.ui.overlay.infobox.Counter;
@@ -62,6 +66,7 @@ class DevToolsPanel extends PluginPanel
 	private final InventoryInspector inventoryInspector;
 	private final InfoBoxManager infoBoxManager;
 	private final ScheduledExecutorService scheduledExecutorService;
+	private final ClientToolbar clientToolbar;
 
 	@Inject
 	private DevToolsPanel(
@@ -74,7 +79,9 @@ class DevToolsPanel extends PluginPanel
 		InventoryInspector inventoryInspector,
 		Notifier notifier,
 		InfoBoxManager infoBoxManager,
-		ScheduledExecutorService scheduledExecutorService)
+		ScheduledExecutorService scheduledExecutorService,
+		ClientToolbar clientToolbar
+	)
 	{
 		super();
 		this.client = client;
@@ -87,6 +94,7 @@ class DevToolsPanel extends PluginPanel
 		this.notifier = notifier;
 		this.infoBoxManager = infoBoxManager;
 		this.scheduledExecutorService = scheduledExecutorService;
+		this.clientToolbar = clientToolbar;
 
 		setBackground(ColorScheme.DARK_GRAY_COLOR);
 
@@ -216,6 +224,26 @@ class DevToolsPanel extends PluginPanel
 		catch (LinkageError e)
 		{
 		}
+
+		final JButton navButtonButton = new JButton("Nav Buttons");
+		navButtonButton.addActionListener(e ->
+		{
+			final BufferedImage icon = ImageUtil.loadImageResource(getClass(), "devtools_icon.png");
+			for (int i = 0; i < 10; ++i)
+			{
+				NavigationButton navButton = NavigationButton.builder()
+					.tooltip("Developer Tools " + i)
+					.icon(icon)
+					.priority(1)
+					.panel(new PluginPanel()
+					{
+					})
+					.build();
+
+				clientToolbar.addNavigation(navButton);
+			}
+		});
+		container.add(navButtonButton);
 
 		return container;
 	}
