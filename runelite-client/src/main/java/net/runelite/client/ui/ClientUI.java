@@ -1106,6 +1106,7 @@ public class ClientUI
 
 	private class Layout implements LayoutManager2
 	{
+		private int prevState;
 		private int previousContentWidth;
 
 		@Override
@@ -1144,6 +1145,9 @@ public class ClientUI
 		@Override
 		public void layoutContainer(Container content)
 		{
+			int changed = prevState ^ frame.getExtendedState();
+			prevState = frame.getExtendedState();
+
 			Component client = content.getComponent(0);
 			Component sidebar = content.getComponent(1);
 
@@ -1199,7 +1203,10 @@ public class ClientUI
 			sidebar.setBounds(clientWidth, 0, sidebarWidth, height);
 
 			frame.revalidateMinimumSize();
-			frame.containedSetSize(frame.getPreferredSize());
+			if ((changed & Frame.MAXIMIZED_BOTH) == 0 && OSType.getOSType() == OSType.Windows)
+			{
+				frame.containedSetSize(frame.getPreferredSize());
+			}
 
 			log.trace("finishing layout - content={} client={} sidebar={} frame={}", content.getWidth(), client.getWidth(), sidebar.getWidth(), frame.getWidth());
 		}
