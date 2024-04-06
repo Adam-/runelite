@@ -192,7 +192,7 @@ public class Notifier
 
 		assert notification.isInitialized();
 
-		log.debug(message);
+		log.debug("{}", message);
 		eventBus.post(new NotificationFired(notification, message, notification.getTrayIconType()));
 
 		if (!notification.isSendWhenFocused() && clientUI.isFocused())
