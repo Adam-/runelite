@@ -287,12 +287,12 @@ class NotificationPanel extends PluginPanel
 			});
 			item("Tray notification", "Enables tray notifications", checkboxTray);
 
-			var comboboxRequestFocus = combobox(RequestFocusType.class, notif.getRequestfocus());
+			var comboboxRequestFocus = combobox(RequestFocusType.class, notif.getRequestFocus());
 			comboboxRequestFocus.addItemListener(e -> {
 				if (e.getStateChange() == ItemEvent.SELECTED)
 				{
 					var n = loadNotification();
-					saveNotification(n.withRequestfocus((RequestFocusType) comboboxRequestFocus.getSelectedItem()));
+					saveNotification(n.withRequestFocus((RequestFocusType) comboboxRequestFocus.getSelectedItem()));
 				}
 			});
 			item("Request focus", "Configures the window focus request type on notification", comboboxRequestFocus);
@@ -321,10 +321,10 @@ class NotificationPanel extends PluginPanel
 			});
 			item("Notification timeout", "How long notification will be shown in milliseconds. A value of 0 will make it use the system configuration. (Linux only)", spinnerTimeout);
 
-			var checkboxGameMessage = checkbox(notif.isGamemessage());
+			var checkboxGameMessage = checkbox(notif.isGameMessage());
 			checkboxGameMessage.addActionListener(ae -> {
 				var n = loadNotification();
-				saveNotification(n.withGamemessage(checkboxGameMessage.isSelected()));
+				saveNotification(n.withGameMessage(checkboxGameMessage.isSelected()));
 			});
 			item("Game message notification", "Adds a notification message to the chatbox", checkboxGameMessage);
 
@@ -338,9 +338,9 @@ class NotificationPanel extends PluginPanel
 			});
 			item("Flash", "Flashes the game frame as a notification", combobox(FlashNotification.class, notif.getFlash()));
 
-			var colorpickerFlashColor = createColorPicker("Flash color", notif.getFlashcolor(), c -> {
+			var colorpickerFlashColor = createColorPicker("Flash color", notif.getFlashColor(), c -> {
 				var n = loadNotification();
-				saveNotification(n.withFlashcolor(c));
+				saveNotification(n.withFlashColor(c));
 			});
 			item("Flash color", "Sets the color of the notification flashes.", colorpickerFlashColor);
 

@@ -200,7 +200,7 @@ public class Notifier
 			return;
 		}
 
-		switch (notification.getRequestfocus())
+		switch (notification.getRequestFocus())
 		{
 			case REQUEST:
 				clientUI.requestFocus();
@@ -228,7 +228,7 @@ public class Notifier
 				executorService.submit(() -> playCustomSound(n));
 		}
 
-		if (notification.isGamemessage() && client.getGameState() == GameState.LOGGED_IN)
+		if (notification.isGameMessage() && client.getGameState() == GameState.LOGGED_IN)
 		{
 			final String formattedMessage = new ChatMessageBuilder()
 				.append(ChatColorType.HIGHLIGHT)
@@ -245,7 +245,7 @@ public class Notifier
 		if (notification.getFlash() != FlashNotification.DISABLED)
 		{
 			flashNotification = notification.getFlash();
-			flashColor = notification.getFlashcolor();
+			flashColor = notification.getFlashColor();
 			flashStart = Instant.now();
 			mouseLastPressedMillis = client.getMouseLastPressedMillis();
 		}

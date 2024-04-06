@@ -51,13 +51,13 @@ public class Notification
 	boolean override;
 	boolean tray;
 	transient TrayIcon.MessageType trayIconType = TrayIcon.MessageType.NONE;
-	RequestFocusType requestfocus;
+	RequestFocusType requestFocus;
 	Notifier.NativeCustomOff sound;
 	int volume;
 	int timeout;
-	boolean gamemessage;
+	boolean gameMessage;
 	FlashNotification flash;
-	Color flashcolor;
+	Color flashColor;
 	boolean sendWhenFocused;
 }
 
