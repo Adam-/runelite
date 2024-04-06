@@ -672,7 +672,10 @@ class ConfigPanel extends PluginPanel
 		panel.add(button, BorderLayout.WEST);
 
 		JCheckBox checkbox = new JCheckBox();
-		checkbox.setSelected(Boolean.parseBoolean(configManager.getConfiguration(cd.getGroup().value(), cid.getItem().keyName())));
+		{
+			Notification notif = configManager.getConfiguration(cd.getGroup().value(), cid.getItem().keyName(), Notification.class);
+			checkbox.setSelected(notif.isEnabled());
+		}
 		checkbox.addActionListener(ae -> {
 			button.setVisible(checkbox.isSelected());
 
