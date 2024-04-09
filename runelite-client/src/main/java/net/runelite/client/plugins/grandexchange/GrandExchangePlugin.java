@@ -602,13 +602,13 @@ public class GrandExchangePlugin extends Plugin
 
 		String message = Text.removeTags(event.getMessage());
 
-		if (message.startsWith("Grand Exchange:"))
-		{
-			notifier.notify(config.enableNotifications(), message);
-		}
-		else if (message.startsWith("Grand Exchange: Finished"))
+		if (message.startsWith("Grand Exchange: Finished"))
 		{
 			notifier.notify(config.notifyOnOfferComplete(), message);
+		}
+		else if (message.startsWith("Grand Exchange:"))
+		{
+			notifier.notify(config.enableNotifications(), message);
 		}
 	}
 
