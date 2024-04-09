@@ -663,7 +663,8 @@ class ConfigPanel extends PluginPanel
 		JButton button = new JButton(ConfigPanel.CONFIG_ICON);
 		SwingUtil.removeButtonDecorations(button);
 		button.setPreferredSize(new Dimension(25, 0));
-		button.addActionListener(l -> {
+		button.addActionListener(l ->
+		{
 			var muxer = pluginList.getMuxer();
 			var notifPanel = notificationPanelProvider.get();
 			notifPanel.init(cd, cid);
@@ -676,7 +677,8 @@ class ConfigPanel extends PluginPanel
 			Notification notif = configManager.getConfiguration(cd.getGroup().value(), cid.getItem().keyName(), Notification.class);
 			checkbox.setSelected(notif.isEnabled());
 		}
-		checkbox.addActionListener(ae -> {
+		checkbox.addActionListener(ae ->
+		{
 			button.setVisible(checkbox.isSelected());
 
 			Notification notif = configManager.getConfiguration(cd.getGroup().value(), cid.getItem().keyName(), Notification.class);

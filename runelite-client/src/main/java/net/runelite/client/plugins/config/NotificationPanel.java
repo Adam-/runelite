@@ -281,14 +281,16 @@ class NotificationPanel extends PluginPanel
 		if (notif.isOverride())
 		{
 			var checkboxTray = checkbox(notif.isTray());
-			checkboxTray.addActionListener(ae -> {
+			checkboxTray.addActionListener(ae ->
+			{
 				var n = loadNotification();
 				saveNotification(n.withTray(checkboxTray.isSelected()));
 			});
 			item("Tray notification", "Enables tray notifications", checkboxTray);
 
 			var comboboxRequestFocus = combobox(RequestFocusType.class, notif.getRequestFocus());
-			comboboxRequestFocus.addItemListener(e -> {
+			comboboxRequestFocus.addItemListener(e ->
+			{
 				if (e.getStateChange() == ItemEvent.SELECTED)
 				{
 					var n = loadNotification();
@@ -298,7 +300,8 @@ class NotificationPanel extends PluginPanel
 			item("Request focus", "Configures the window focus request type on notification", comboboxRequestFocus);
 
 			var comboboxSound = combobox(Notifier.NativeCustomOff.class, notif.getSound());
-			comboboxSound.addItemListener(e -> {
+			comboboxSound.addItemListener(e ->
+			{
 				if (e.getStateChange() == ItemEvent.SELECTED)
 				{
 					var n = loadNotification();
@@ -308,28 +311,32 @@ class NotificationPanel extends PluginPanel
 			item("Notification sound", "Enables the playing of a beep sound when notifications are displayed", comboboxSound);
 
 			var spinnerVolume = createIntSpinner(0, 100, notif.getVolume(), "%");
-			spinnerVolume.addChangeListener(ce -> {
+			spinnerVolume.addChangeListener(ce ->
+			{
 				var n = loadNotification();
 				saveNotification(n.withVolume((int) spinnerVolume.getValue()));
 			});
 			item("Notification volume", "Configures the volume of custom notifications (does not control native volume).", spinnerVolume);
 
 			var spinnerTimeout = createIntSpinner(0, Integer.MAX_VALUE, notif.getTimeout(), "ms");
-			spinnerVolume.addChangeListener(ce -> {
+			spinnerVolume.addChangeListener(ce ->
+			{
 				var n = loadNotification();
 				saveNotification(n.withTimeout((int) spinnerTimeout.getValue()));
 			});
 			item("Notification timeout", "How long notification will be shown in milliseconds. A value of 0 will make it use the system configuration. (Linux only)", spinnerTimeout);
 
 			var checkboxGameMessage = checkbox(notif.isGameMessage());
-			checkboxGameMessage.addActionListener(ae -> {
+			checkboxGameMessage.addActionListener(ae ->
+			{
 				var n = loadNotification();
 				saveNotification(n.withGameMessage(checkboxGameMessage.isSelected()));
 			});
 			item("Game message notification", "Adds a notification message to the chatbox", checkboxGameMessage);
 
 			var comboboxFlash = combobox(FlashNotification.class, notif.getFlash());
-			comboboxFlash.addItemListener(e -> {
+			comboboxFlash.addItemListener(e ->
+			{
 				if (e.getStateChange() == ItemEvent.SELECTED)
 				{
 					var n = loadNotification();
@@ -338,14 +345,16 @@ class NotificationPanel extends PluginPanel
 			});
 			item("Flash", "Flashes the game frame as a notification", combobox(FlashNotification.class, notif.getFlash()));
 
-			var colorpickerFlashColor = createColorPicker("Flash color", notif.getFlashColor(), c -> {
+			var colorpickerFlashColor = createColorPicker("Flash color", notif.getFlashColor(), c ->
+			{
 				var n = loadNotification();
 				saveNotification(n.withFlashColor(c));
 			});
 			item("Flash color", "Sets the color of the notification flashes.", colorpickerFlashColor);
 
 			var checkboxSendWhenFocused = checkbox(notif.isSendWhenFocused());
-			checkboxSendWhenFocused.addActionListener(ae -> {
+			checkboxSendWhenFocused.addActionListener(ae ->
+			{
 				var n = loadNotification();
 				saveNotification(n.withSendWhenFocused(checkboxSendWhenFocused.isSelected()));
 			});
