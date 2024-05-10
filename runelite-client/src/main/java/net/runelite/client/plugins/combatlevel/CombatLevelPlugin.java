@@ -40,6 +40,7 @@ import net.runelite.api.WorldType;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.ScriptPostFired;
 import net.runelite.api.events.ScriptPreFired;
+import net.runelite.api.events.StatChanged;
 import net.runelite.api.widgets.ComponentID;
 import net.runelite.api.widgets.Widget;
 import net.runelite.client.config.ConfigManager;
@@ -112,6 +113,25 @@ public class CombatLevelPlugin extends Plugin
 		}
 
 		shutDownAttackLevelRange();
+	}
+
+	@Subscribe
+	private void onStatChanged(StatChanged statChanged)
+	{
+		Skill skill = statChanged.getSkill();
+		if (skill == Skill.ATTACK || skill == Skill.DEFENCE || skill == Skill.STRENGTH || skill == Skill.HITPOINTS
+			|| skill == Skill.MAGIC || skill == Skill.PRAYER || skill == Skill.RANGED)
+		{
+			double combatLevelPrecise = Experience.getCombatLevelPrecise(
+				client.getRealSkillLevel(Skill.ATTACK),
+				client.getRealSkillLevel(Skill.STRENGTH),
+				client.getRealSkillLevel(Skill.DEFENCE),
+				client.getRealSkillLevel(Skill.HITPOINTS),
+				client.getRealSkillLevel(Skill.MAGIC),
+				client.getRealSkillLevel(Skill.RANGED),
+				client.getRealSkillLevel(Skill.PRAYER)
+			);
+		}
 	}
 
 	@Subscribe
