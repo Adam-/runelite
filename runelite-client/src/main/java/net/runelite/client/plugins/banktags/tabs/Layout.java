@@ -95,7 +95,8 @@ public class Layout
 	{
 		dirty = true;
 
-		for (int i = pos; i < layout.length; ++i)
+		int i;
+		for (i = pos; i < layout.length; ++i)
 		{
 			if (layout[i] == -1)
 			{
@@ -105,7 +106,7 @@ public class Layout
 		}
 
 		resize(Math.max(pos + 1, layout.length + 1));
-		layout[pos] = itemId;
+		layout[i] = itemId;
 	}
 
 	public void removeItem(int itemId)

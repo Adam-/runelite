@@ -577,7 +577,10 @@ public class LayoutManager
 
 					int lpos = base + (pos % 3);
 					int old = l.getItemAtPos(lpos);
-					if (old != -1) removed.add(old);
+					if (old != -1) {
+						log.debug("Moving {}", itemManager.getItemComposition(old).getName());
+						removed.add(old);
+					}
 
 					Item item = e.getItem(format[pos]);
 					if (item != null)
@@ -618,9 +621,23 @@ public class LayoutManager
 				}
 			}
 
+			// Middle row
+			for (int j = 0; j < 5; ++j)
+			{
+				int idx = j*8 + 3;
+
+				int old = l.getItemAtPos(idx);
+				if (old != -1)
+				{
+					removed.add(old);
+					l.setItemAtPos(-1, idx);
+				}
+			}
+
 			int pos = 56;
 			for (int itemId : removed) {
 				if (l.count(itemId) == 0) {
+					log.debug("Adding {} at {}", itemManager.getItemComposition(itemId).getName(), pos);
 					l.addItemAfter(itemId, pos++);
 				}
 			}
