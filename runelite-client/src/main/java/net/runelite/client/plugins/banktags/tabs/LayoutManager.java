@@ -621,7 +621,7 @@ public class LayoutManager
 				}
 			}
 
-			// Middle row
+			// Middle column
 			for (int j = 0; j < 5; ++j)
 			{
 				int idx = j*8 + 3;

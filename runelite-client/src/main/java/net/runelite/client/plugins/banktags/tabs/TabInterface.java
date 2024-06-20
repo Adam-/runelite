@@ -555,7 +555,7 @@ public class TabInterface
 						bankSearch.reset(true);
 					}
 
-					sendChatMessage("Tag tab " + tab.getTag() + " has been imported from your clipboard!");
+					sendChatMessage("Tag tab '" + tab.getTag() + "' has been imported from your clipboard!");
 				}
 				catch (UnsupportedFlavorException | NoSuchElementException | IOException | NumberFormatException ex)
 				{
@@ -788,7 +788,7 @@ public class TabInterface
 
 				final StringSelection stringSelection = new StringSelection(Text.toCSV(data));
 				Toolkit.getDefaultToolkit().getSystemClipboard().setContents(stringSelection, null);
-				sendChatMessage("Tag tab " + tagTab.getTag() + " has been copied to your clipboard!");
+				sendChatMessage("Tag tab '" + tagTab.getTag() + "' has been copied to your clipboard!");
 				break;
 			case TAB_OP_RENAME_TAB:
 				String renameTarget = Text.standardize(event.getOpbase());
