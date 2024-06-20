@@ -44,6 +44,7 @@ import net.runelite.api.InventoryID;
 import net.runelite.api.Item;
 import net.runelite.api.ItemComposition;
 import net.runelite.api.ItemContainer;
+import net.runelite.api.ItemID;
 import net.runelite.api.MenuAction;
 import net.runelite.api.NullItemID;
 import net.runelite.api.ScriptEvent;
@@ -193,16 +194,8 @@ public class LayoutManager
 			ItemComposition def = itemManager.getItemComposition(itemId);
 			log.debug("Layout contains {}{} with no matching item", def.getName(), def.getPlaceholderTemplateId() > -1 && def.getPlaceholderId() > -1 ? " (placeholder)" : "");
 
-			int qty = bank.count(itemId);
-//			if (qty == 0 && def.getPlaceholderTemplateId() > -1 && def.getPlaceholderId() > -1)
-//			{
-//				itemId = def.getPlaceholderId();
-//				qty = bank.count(def.getPlaceholderId());
-//				log.debug("Converting {} to a regular item with qty {}", def.getName(), qty);
-//			}
-
 			Widget c = itemContainer.getChild(pos);
-			drawItem(l, c, itemId, qty, pos);
+			drawItem(l, c, itemId, bank.count(itemId), pos);
 		}
 
 		int lastEmptySlot = -1;
@@ -256,7 +249,7 @@ public class LayoutManager
 	// mostly from ~bankmain_drawitem
 	private void drawItem(Layout l, Widget c, int item, int qty, int idx)
 	{
-		if (item > -1)
+		if (item > -1 && item != ItemID.BANK_FILLER)
 		{
 			ItemComposition def = client.getItemDefinition(item);
 
