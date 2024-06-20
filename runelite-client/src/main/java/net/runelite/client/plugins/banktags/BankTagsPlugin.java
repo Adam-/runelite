@@ -39,9 +39,7 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import net.runelite.api.Client;
 import net.runelite.api.InventoryID;
-import net.runelite.api.Item;
 import net.runelite.api.ItemComposition;
-import net.runelite.api.ItemContainer;
 import net.runelite.api.MenuAction;
 import net.runelite.api.MenuEntry;
 import net.runelite.api.VarClientStr;
@@ -61,6 +59,7 @@ import net.runelite.client.game.SpriteManager;
 import net.runelite.client.game.chatbox.ChatboxPanelManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.plugins.banktags.tabs.LayoutManager;
 import net.runelite.client.plugins.banktags.tabs.TabInterface;
 import static net.runelite.client.plugins.banktags.tabs.TabInterface.FILTERED_CHARS;
 import net.runelite.client.plugins.banktags.tabs.TabSprites;
@@ -77,9 +76,10 @@ public class BankTagsPlugin extends Plugin
 	public static final String CONFIG_GROUP = "banktags";
 	public static final String TAG_SEARCH = "tag:";
 	private static final String EDIT_TAGS_MENU_OPTION = "Edit-tags";
-	public static final String ICON_SEARCH = "icon_";
+	public static final String TAG_ICON_PREFIX = "icon_";
 	public static final String TAG_TABS_CONFIG = "tagtabs";
 	public static final String VAR_TAG_SUFFIX = "*";
+	public static final String TAG_LAYOUT_PREFIX = "layout_";
 
 	private static final int MAX_RESULT_COUNT = 250;
 
@@ -109,6 +109,9 @@ public class BankTagsPlugin extends Plugin
 	private TabInterface tabInterface;
 
 	@Inject
+	private LayoutManager layoutManager;
+
+	@Inject
 	private SpriteManager spriteManager;
 
 	@Inject
@@ -128,8 +131,9 @@ public class BankTagsPlugin extends Plugin
 	{
 		List<String> extraKeys = Lists.newArrayList(
 			CONFIG_GROUP + "." + TagManager.ITEM_KEY_PREFIX,
-			CONFIG_GROUP + "." + ICON_SEARCH,
-			CONFIG_GROUP + "." + TAG_TABS_CONFIG
+			CONFIG_GROUP + "." + TAG_ICON_PREFIX,
+			CONFIG_GROUP + "." + TAG_TABS_CONFIG,
+			CONFIG_GROUP + "." + TAG_LAYOUT_PREFIX
 		);
 
 		for (String prefix : extraKeys)
@@ -154,6 +158,7 @@ public class BankTagsPlugin extends Plugin
 		cleanConfig();
 		spriteManager.addSpriteOverrides(TabSprites.values());
 		eventBus.register(tabInterface);
+		eventBus.register(layoutManager);
 		clientThread.invokeLater(this::reinitBank);
 	}
 
@@ -161,6 +166,7 @@ public class BankTagsPlugin extends Plugin
 	public void shutDown()
 	{
 		eventBus.unregister(tabInterface);
+		eventBus.unregister(layoutManager);
 		clientThread.invokeLater(() ->
 		{
 			// since the tab interface is unregistered from the eventbus, manually deinit it
@@ -288,6 +294,12 @@ public class BankTagsPlugin extends Plugin
 				final int itemId = intStack[intStackSize - 1];
 				final String searchfilter = stringStack[stringStackSize - 1];
 
+				if (itemId == -1 && tabInterface.isActive() && tabInterface.getActiveTab().hasLayout())
+				{
+					// item -1 always passes on a laid out tab so items can be dragged to it
+					return;
+				}
+
 				// This event only fires when the bank is in search mode. It will fire even if there is no search
 				// input. We prevent having a tag tab open while also performing a normal search, so if a tag tab
 				// is active here it must mean we have placed the bank into search mode. See onScriptPostFired().
@@ -308,7 +320,7 @@ public class BankTagsPlugin extends Plugin
 					search = search.substring(TAG_SEARCH.length()).trim();
 				}
 
-				if (tagManager.findTag(itemId, search))
+				if (itemId > -1 && tagManager.findTag(itemId, search))
 				{
 					// return true
 					intStack[intStackSize - 2] = 1;
@@ -350,6 +362,7 @@ public class BankTagsPlugin extends Plugin
 				.setOption(text)
 				.setType(MenuAction.RUNELITE)
 				.setIdentifier(event.getIdentifier())
+				.setItemId(event.getItemId())
 				.onClick(this::editTags);
 		}
 
@@ -358,26 +371,7 @@ public class BankTagsPlugin extends Plugin
 
 	private void editTags(MenuEntry entry)
 	{
-		int inventoryIndex = entry.getParam0();
-		ItemContainer bankContainer = client.getItemContainer(InventoryID.BANK);
-		if (bankContainer == null)
-		{
-			return;
-		}
-
-		Item[] items = bankContainer.getItems();
-		if (inventoryIndex < 0 || inventoryIndex >= items.length)
-		{
-			return;
-		}
-
-		Item item = items[inventoryIndex];
-		if (item == null)
-		{
-			return;
-		}
-
-		int itemId = item.getId();
+		int itemId = entry.getItemId();
 		ItemComposition itemComposition = itemManager.getItemComposition(itemId);
 		String name = itemComposition.getName();
 

@@ -34,10 +34,16 @@ public class TagTab
 {
 	private String tag;
 	private int iconItemId;
+	private Layout layout;
 
 	TagTab(int iconItemId, String tag)
 	{
 		this.iconItemId = iconItemId;
 		this.tag = tag;
+	}
+
+	public boolean hasLayout()
+	{
+		return layout != null;
 	}
 }
