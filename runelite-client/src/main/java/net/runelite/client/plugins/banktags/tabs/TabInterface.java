@@ -336,13 +336,12 @@ public class TabInterface
 	{
 		if (event.getEventName().equals("bankBuildTab"))
 		{
-			var stack = client.getIntStack();
-			var sz = client.getIntStackSize();
-
 			// Use the per-tab view when we want to hide the separators to avoid having to reposition items &
 			// recomputing the scroll height.
 			if (activeTab != null && (tagTabActive || config.removeSeparators() || activeTab.hasLayout()))
 			{
+				var stack = client.getIntStack(); // NOPMD: UnusedLocalVariable
+				var sz = client.getIntStackSize();
 				stack[sz - 1] = 1; // use single tab view mode
 			}
 		}

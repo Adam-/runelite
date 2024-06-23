@@ -140,9 +140,9 @@ public class LayoutManager
 
 		for (ItemMatcher matcher : matchers)
 		{
-			for (int pos = 0; pos < layoutScratch.length; ++pos)
+			// tagged item id
+			for (int itemId : layoutScratch)
 			{
-				int itemId = layoutScratch[pos]; // tagged item id
 				if (itemId == -1 || layoutToBank.containsKey(itemId))
 				{
 					continue;

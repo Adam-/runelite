@@ -175,9 +175,9 @@ public class Layout
 	public int count(int itemId)
 	{
 		int c = 0;
-		for (int i = 0; i < layout.length; ++i)
+		for (int value : layout)
 		{
-			if (layout[i] == itemId)
+			if (value == itemId)
 			{
 				++c;
 			}
