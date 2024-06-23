@@ -39,6 +39,8 @@ import lombok.NonNull;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
+import net.runelite.api.EnumComposition;
+import net.runelite.api.EnumID;
 import net.runelite.api.EquipmentInventorySlot;
 import net.runelite.api.InventoryID;
 import net.runelite.api.Item;
@@ -616,6 +618,32 @@ public class LayoutManager
 					else
 					{
 						l.setItemAtPos(-1, lpos);
+					}
+				}
+			}
+
+			// Rune pouch
+			{
+				final int[] RUNEPOUCH_RUNES = {
+					Varbits.RUNE_POUCH_RUNE1, Varbits.RUNE_POUCH_RUNE2, Varbits.RUNE_POUCH_RUNE3, Varbits.RUNE_POUCH_RUNE4
+				};
+				final EnumComposition runepouchEnum = client.getEnum(EnumID.RUNEPOUCH_RUNE);
+
+				int lpos = 40;
+				for (int idx = 0; idx < RUNEPOUCH_RUNES.length; ++idx, ++lpos)
+				{
+					int runeId = client.getVarbitValue(RUNEPOUCH_RUNES[idx]);
+					if (runeId > 0)
+					{
+						int itemId = runepouchEnum.getIntValue(runeId);
+
+						int old = l.getItemAtPos(lpos);
+						if (old != -1)
+						{
+							removed.add(old);
+						}
+
+						l.setItemAtPos(itemId, lpos);
 					}
 				}
 			}
