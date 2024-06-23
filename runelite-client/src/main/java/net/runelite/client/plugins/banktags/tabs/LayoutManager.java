@@ -624,7 +624,7 @@ public class LayoutManager
 			}
 
 			// Rune pouch
-			if (hasRunePouch(i))
+			if (i != null && hasRunePouch(i))
 			{
 				final int[] RUNEPOUCH_RUNES = {
 					Varbits.RUNE_POUCH_RUNE1, Varbits.RUNE_POUCH_RUNE2, Varbits.RUNE_POUCH_RUNE3, Varbits.RUNE_POUCH_RUNE4
