@@ -159,8 +159,8 @@ public class LayoutManager
 						var from = itemManager.getItemComposition(itemId);
 						var to = itemManager.getItemComposition(matchedId);
 						log.debug("Matched {}{} -> {}{}",
-							from.getName(), from.getPlaceholderId() > -1 && from.getPlaceholderTemplateId() > -1?" (placeholder)":"",
-							to.getName(), to.getPlaceholderId() > -1 && to.getPlaceholderTemplateId() > -1?" (placeholder)":""
+							from.getName(), from.getPlaceholderId() > -1 && from.getPlaceholderTemplateId() > -1 ? " (placeholder)" : "",
+							to.getName(), to.getPlaceholderId() > -1 && to.getPlaceholderTemplateId() > -1 ? " (placeholder)" : ""
 						);
 					}
 				}
