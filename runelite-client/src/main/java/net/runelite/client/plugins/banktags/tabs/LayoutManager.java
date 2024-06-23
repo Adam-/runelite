@@ -27,6 +27,7 @@ package net.runelite.client.plugins.banktags.tabs;
 
 import com.google.common.util.concurrent.Runnables;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -623,6 +624,7 @@ public class LayoutManager
 			}
 
 			// Rune pouch
+			if (hasRunePouch(i))
 			{
 				final int[] RUNEPOUCH_RUNES = {
 					Varbits.RUNE_POUCH_RUNE1, Varbits.RUNE_POUCH_RUNE2, Varbits.RUNE_POUCH_RUNE3, Varbits.RUNE_POUCH_RUNE4
@@ -675,6 +677,13 @@ public class LayoutManager
 			}
 
 			return l;
+		}
+
+		private boolean hasRunePouch(ItemContainer inv)
+		{
+			Collection<Integer> runePouchVariations = ItemVariationMapping.getVariations(ItemID.RUNE_POUCH);
+			Collection<Integer> divineRunePouchVariations = ItemVariationMapping.getVariations(ItemID.DIVINE_RUNE_POUCH);
+			return runePouchVariations.stream().anyMatch(inv::contains) || divineRunePouchVariations.stream().anyMatch(inv::contains);
 		}
 	}
 }
