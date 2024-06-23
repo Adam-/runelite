@@ -63,6 +63,7 @@ import net.runelite.api.MenuEntry;
 import net.runelite.api.ScriptEvent;
 import net.runelite.api.ScriptID;
 import net.runelite.api.SoundEffectID;
+import net.runelite.api.VarClientInt;
 import net.runelite.api.Varbits;
 import net.runelite.api.events.DraggingWidgetChanged;
 import net.runelite.api.events.MenuEntryAdded;
@@ -692,10 +693,6 @@ public class TabInterface
 				else
 				{
 					openTag(tab, true);
-					// If the bank scroll position is below all of the items in the layout, force scroll back up
-					// to avoid showing no items. This is only required for layouts because the layout includes
-					// all of the blank items at the end of the bank so that items can be repositioned there.
-//					scrollLayout(tab);
 				}
 
 				client.playSoundEffect(SoundEffectID.UI_BOOP);
@@ -798,6 +795,7 @@ public class TabInterface
 		}
 	}
 
+	// adjust the scroll position so that some items are always in view
 	private void scrollLayout(TagTab tab)
 	{
 		Layout l = tab.getLayout();
@@ -814,16 +812,15 @@ public class TabInterface
 			{
 				int bankHeight = w.getHeight() / (BANK_ITEM_HEIGHT + BANK_ITEM_Y_PADDING);
 				rows -= bankHeight;
-				if (rows < 0) rows=0;
-//				if (rows >= 6)
-//				{
-//					rows -= 6; // smallest bank shows 6 rows
-					scrollY = rows * (BANK_ITEM_HEIGHT + BANK_ITEM_Y_PADDING);
-//				}
+				if (rows < 0)
+				{
+					rows = 0;
+				}
+				scrollY = rows * (BANK_ITEM_HEIGHT + BANK_ITEM_Y_PADDING);
 
 				log.debug("Adjusting tab scroll to {} from {}", scrollY, w.getScrollY());
 				w.setScrollY(scrollY);
-				client.setVarcIntValue(51, scrollY);
+				client.setVarcIntValue(VarClientInt.BANK_SCROLL, scrollY);
 			}
 		}
 	}

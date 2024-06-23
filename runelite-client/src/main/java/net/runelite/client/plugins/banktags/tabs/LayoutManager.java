@@ -191,8 +191,11 @@ public class LayoutManager
 				continue;
 			}
 
-			ItemComposition def = itemManager.getItemComposition(itemId);
-			log.debug("Layout contains {}{} with no matching item", def.getName(), def.getPlaceholderTemplateId() > -1 && def.getPlaceholderId() > -1 ? " (placeholder)" : "");
+			if (log.isDebugEnabled())
+			{
+				ItemComposition def = itemManager.getItemComposition(itemId);
+				log.debug("Layout contains {}{} with no matching item", def.getName(), def.getPlaceholderTemplateId() > -1 && def.getPlaceholderId() > -1 ? " (placeholder)" : "");
+			}
 
 			Widget c = itemContainer.getChild(pos);
 			drawItem(l, c, itemId, bank.count(itemId), pos);
@@ -203,38 +206,34 @@ public class LayoutManager
 		// Items in the bank but not in the layout.
 		for (int itemId : bankItems)
 		{
-			while (++lastEmptySlot < layout.length && layout[lastEmptySlot] > -1)
-			{
-				;
-			}
+			while (++lastEmptySlot < layout.length && layout[lastEmptySlot] > -1);
 
 			Widget c = itemContainer.getChild(lastEmptySlot);
-			if (c == null || c.getOriginalHeight() != BANK_ITEM_HEIGHT)
+			if (c == null || c.getOriginalHeight() != BANK_ITEM_HEIGHT) // check for tabs
 			{
-				break; // check for tabs
+				break;
 			}
 
 			drawItem(l, c, itemId, bank.count(itemId), lastEmptySlot);
 
-		//	itemManager.canonicalize(itemId);
 			int layoutItemId = itemManager.canonicalize(itemId);
-			log.debug("Adding {} to layout", itemManager.getItemComposition(layoutItemId).getName());
-			l.addItem(itemManager.canonicalize(layoutItemId));
+			if (log.isDebugEnabled())
+			{
+				log.debug("Adding {} to layout", itemManager.getItemComposition(layoutItemId).getName());
+			}
+			l.addItem(layoutItemId);
 			modified = true;
 		}
 
 		// Fill the remaining slots with -1 so that items can be dragged to them
 		while (true)
 		{
-			while (++lastEmptySlot < layout.length && layout[lastEmptySlot] > -1)
-			{
-				;
-			}
+			while (++lastEmptySlot < layout.length && layout[lastEmptySlot] > -1);
 
 			Widget c = itemContainer.getChild(lastEmptySlot);
-			if (c == null || c.getOriginalHeight() != BANK_ITEM_HEIGHT)
+			if (c == null || c.getOriginalHeight() != BANK_ITEM_HEIGHT)  // check for tabs
 			{
-				break; // check for tabs
+				break;
 			}
 
 			drawItem(l, c, -1, 0, lastEmptySlot);
@@ -570,8 +569,12 @@ public class LayoutManager
 
 					int lpos = base + (pos % 3);
 					int old = l.getItemAtPos(lpos);
-					if (old != -1) {
-						log.debug("Moving {}", itemManager.getItemComposition(old).getName());
+					if (old != -1)
+					{
+						if (log.isDebugEnabled())
+						{
+							log.debug("Moving {}", itemManager.getItemComposition(old).getName());
+						}
 						removed.add(old);
 					}
 
@@ -600,7 +603,10 @@ public class LayoutManager
 
 					int lpos = base + (pos % 4);
 					int old = l.getItemAtPos(lpos);
-					if (old != -1) removed.add(old);
+					if (old != -1)
+					{
+						removed.add(old);
+					}
 
 					Item item = i.getItem(pos);
 					if (item != null)
@@ -617,7 +623,7 @@ public class LayoutManager
 			// Middle column
 			for (int j = 0; j < 5; ++j)
 			{
-				int idx = j*8 + 3;
+				int idx = j * 8 + 3;
 
 				int old = l.getItemAtPos(idx);
 				if (old != -1)
@@ -628,9 +634,14 @@ public class LayoutManager
 			}
 
 			int pos = 56;
-			for (int itemId : removed) {
-				if (l.count(itemId) == 0) {
-					log.debug("Adding {} at {}", itemManager.getItemComposition(itemId).getName(), pos);
+			for (int itemId : removed)
+			{
+				if (l.count(itemId) == 0)
+				{
+					if (log.isDebugEnabled())
+					{
+						log.debug("Adding {} at {}", itemManager.getItemComposition(itemId).getName(), pos);
+					}
 					l.addItemAfter(itemId, pos++);
 				}
 			}
