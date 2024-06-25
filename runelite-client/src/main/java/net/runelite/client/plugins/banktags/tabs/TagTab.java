@@ -27,9 +27,11 @@ package net.runelite.client.plugins.banktags.tabs;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Data
 @EqualsAndHashCode(of = "tag")
+@NoArgsConstructor
 public class TagTab
 {
 	private String tag;
