@@ -328,6 +328,7 @@ public class LayoutManager
 		}
 		else
 		{
+			// pad size to not leave a gap between items
 			c.setOriginalWidth(BANK_ITEM_WIDTH + BANK_ITEM_X_PADDING);
 			c.setOriginalHeight(BANK_ITEM_HEIGHT + BANK_ITEM_Y_PADDING);
 			c.clearActions();
@@ -485,6 +486,8 @@ public class LayoutManager
 	{
 		if (event.getScriptId() == ScriptID.BANKMAIN_FINISHBUILDING)
 		{
+			resetWidgets();
+
 			BankTag activeTag = plugin.activeTag;
 			if (activeTag != null)
 			{
@@ -494,6 +497,29 @@ public class LayoutManager
 					layout(layout);
 					scrollLayout(layout);
 				}
+			}
+		}
+	}
+
+	private void resetWidgets()
+	{
+		// We adjust the bank item container children's sizes in layouts,
+		// however they are only initially set when the bank is opened,
+		// so we have to reset them each time the bank is built.
+		Widget w = client.getWidget(ComponentID.BANK_ITEM_CONTAINER);
+
+		for (Widget c : w.getChildren())
+		{
+			if (c.getOriginalHeight() < BANK_ITEM_HEIGHT)
+			{
+				break;
+			}
+
+			if (c.getOriginalWidth() != BANK_ITEM_WIDTH || c.getOriginalHeight() != BANK_ITEM_HEIGHT)
+			{
+				c.setOriginalWidth(BANK_ITEM_WIDTH);
+				c.setOriginalHeight(BANK_ITEM_HEIGHT);
+				c.revalidate();
 			}
 		}
 	}
@@ -559,7 +585,7 @@ public class LayoutManager
 	private void scrollLayout(Layout l)
 	{
 		int pos;
-		for (pos = l.size() - 1; pos >= 0 && l.getItemAtPos(pos) == -1; --pos) ;
+		for (pos = l.size() - 1; pos >= 0 && l.getItemAtPos(pos) == -1; --pos);
 
 		int rows = (pos + BANK_ITEMS_PER_ROW - 1) / BANK_ITEMS_PER_ROW;
 		int scrollY = rows * (BANK_ITEM_HEIGHT + BANK_ITEM_Y_PADDING);

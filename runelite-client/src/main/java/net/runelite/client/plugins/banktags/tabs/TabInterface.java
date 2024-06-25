@@ -252,8 +252,6 @@ public class TabInterface
 		}
 		else if (event.getScriptId() == ScriptID.BANKMAIN_FINISHBUILDING && enabled)
 		{
-			resetWidgets();
-
 			if (tagTabActive)
 			{
 				hideBank();
@@ -284,29 +282,6 @@ public class TabInterface
 				final int[] intStack = client.getIntStack();
 				final int intStackSize = client.getIntStackSize();
 				intStack[intStackSize - 7] = tagTabHeight;
-			}
-		}
-	}
-
-	private void resetWidgets()
-	{
-		// We adjust the bank item container children's sizes in layouts,
-		// however they are only initially set when the bank is opened,
-		// so we have to reset them each time the bank is built.
-		Widget w = client.getWidget(ComponentID.BANK_ITEM_CONTAINER);
-
-		for (Widget c : w.getChildren())
-		{
-			if (c.getOriginalHeight() < BANK_ITEM_HEIGHT)
-			{
-				break;
-			}
-
-			if (c.getOriginalWidth() != BANK_ITEM_WIDTH || c.getOriginalHeight() != BANK_ITEM_HEIGHT)
-			{
-				c.setOriginalWidth(BANK_ITEM_WIDTH);
-				c.setOriginalHeight(BANK_ITEM_HEIGHT);
-				c.revalidate();
 			}
 		}
 	}
