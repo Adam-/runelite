@@ -961,6 +961,14 @@ LABEL849:
    istore                 20
    jump                   LABEL770
 LABEL854:
+   iload 36                                      ; overriding single tab building mode?
+   iconst 1                                      ;
+   if_icmpne              tabtitle               ; set normal "Tab" title
+   sconst                 "The Bank of Gielinor" ; bank title
+   iload                  5                      ; bank title component
+   if_settext                                    ;
+   jump FinishBuilding                           ;
+tabtitle:                                        ;
    get_varbit             4170
    iconst                 2
    if_icmpeq              LABEL858

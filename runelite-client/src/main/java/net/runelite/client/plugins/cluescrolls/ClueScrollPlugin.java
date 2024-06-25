@@ -103,8 +103,11 @@ import net.runelite.client.game.chatbox.ChatboxPanelManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDependency;
 import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.plugins.banktags.BankTag;
 import net.runelite.client.plugins.banktags.BankTagsPlugin;
+import net.runelite.client.plugins.banktags.BankTagsService;
 import net.runelite.client.plugins.banktags.TagManager;
+import net.runelite.client.plugins.banktags.tabs.Layout;
 import net.runelite.client.plugins.cluescrolls.clues.AnagramClue;
 import net.runelite.client.plugins.cluescrolls.clues.BeginnerMapClue;
 import net.runelite.client.plugins.cluescrolls.clues.CipherClue;
@@ -216,6 +219,9 @@ public class ClueScrollPlugin extends Plugin
 
 	@Inject
 	private TagManager tagManager;
+
+	@Inject
+	private BankTagsService bankTagsService;
 
 	@Inject
 	@Named("developerMode")
@@ -693,6 +699,31 @@ public class ClueScrollPlugin extends Plugin
 	@Subscribe
 	public void onCommandExecuted(CommandExecuted commandExecuted)
 	{
+		if (commandExecuted.getCommand().equals("bt"))
+		{
+			Layout l = new Layout();
+			for (int i = 0; i < 5; ++i)
+			{
+				l.setItemAtPos(ItemID.ROBIN_HOOD_HAT + i, i * 4);
+			}
+			BankTag bt = new BankTag()
+			{
+				@Override
+				public boolean contains(int itemId)
+				{
+					return l.count(itemId) > 0;
+				}
+
+				@Override
+				public Layout layout()
+				{
+					return l;
+				}
+			};
+			clientThread.invokeLater(() -> {
+				bankTagsService.openBankTag(bt);
+			});
+		}
 		if (developerMode && commandExecuted.getCommand().equalsIgnoreCase("clue"))
 		{
 			var text = String.join(" ", commandExecuted.getArguments());

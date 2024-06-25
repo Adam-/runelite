@@ -28,6 +28,7 @@ package net.runelite.client.plugins.banktags;
 
 import com.google.common.collect.Lists;
 import com.google.common.primitives.Shorts;
+import com.google.inject.Binder;
 import com.google.inject.Provides;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -37,6 +38,7 @@ import java.util.TreeSet;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
+import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.InventoryID;
 import net.runelite.api.ItemComposition;
@@ -59,6 +61,8 @@ import net.runelite.client.game.SpriteManager;
 import net.runelite.client.game.chatbox.ChatboxPanelManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.plugins.bank.BankSearch;
+import net.runelite.client.plugins.banktags.tabs.Layout;
 import net.runelite.client.plugins.banktags.tabs.LayoutManager;
 import net.runelite.client.plugins.banktags.tabs.TabInterface;
 import static net.runelite.client.plugins.banktags.tabs.TabInterface.FILTERED_CHARS;
@@ -71,7 +75,8 @@ import net.runelite.client.util.Text;
 	description = "Enable tagging of bank items and searching of bank tags",
 	tags = {"searching", "tagging"}
 )
-public class BankTagsPlugin extends Plugin
+@Slf4j
+public class BankTagsPlugin extends Plugin implements BankTagsService
 {
 	public static final String CONFIG_GROUP = "banktags";
 	public static final String TAG_SEARCH = "tag:";
@@ -89,6 +94,14 @@ public class BankTagsPlugin extends Plugin
 	private static final String SEARCH_BANK_INPUT_TEXT_FOUND =
 		"Show items whose names or tags contain the following text: (%d found)<br>" +
 			"(To show only tagged items, start your search with 'tag:')";
+
+	public static final int BANK_ITEM_WIDTH = 36;
+	public static final int BANK_ITEM_HEIGHT = 32;
+	public static final int BANK_ITEM_X_PADDING = 12;
+	public static final int BANK_ITEM_Y_PADDING = 4;
+	public static final int BANK_ITEMS_PER_ROW = 8;
+	public static final int BANK_ITEM_START_X = 51;
+	public static final int BANK_ITEM_START_Y = 0;
 
 	@Inject
 	private ItemManager itemManager;
@@ -119,6 +132,20 @@ public class BankTagsPlugin extends Plugin
 
 	@Inject
 	private EventBus eventBus;
+
+	@Inject
+	private BankSearch bankSearch;
+
+	@Inject
+	private BankTagsConfig config;
+
+	public BankTag activeTag;
+
+	@Override
+	public void configure(Binder binder)
+	{
+		binder.bind(BankTagsService.class).toInstance(this);
+	}
 
 	@Provides
 	BankTagsConfig getConfig(ConfigManager configManager)
@@ -292,35 +319,37 @@ public class BankTagsPlugin extends Plugin
 			}
 			case "bankSearchFilter":
 				final int itemId = intStack[intStackSize - 1];
-				final String searchfilter = stringStack[stringStackSize - 1];
+				String searchfilter = stringStack[stringStackSize - 1];
 
-				if (itemId == -1 && tabInterface.isActive() && tabInterface.getActiveTab().hasLayout())
+				BankTag tag = activeTag;
+				boolean tagSearch = true;
+				// Shared storage uses ~bankmain_filteritem too. Allow using tag searches in it but don't
+				// apply the tag search from the active tab.
+				final boolean bankOpen = client.getItemContainer(InventoryID.BANK) != null;
+				if (tag == null || !bankOpen)
+				{
+					if (searchfilter.isEmpty())
+					{
+						return;
+					}
+
+					tagSearch = searchfilter.startsWith(TAG_SEARCH);
+					if (tagSearch)
+					{
+						searchfilter = searchfilter.substring(TAG_SEARCH.length()).trim();
+					}
+
+					// Build a temporary BankTag using the search filter
+					tag = buildSearchFilterBankTag(searchfilter);
+				}
+
+				if (itemId == -1 && tag.layout() != null)
 				{
 					// item -1 always passes on a laid out tab so items can be dragged to it
 					return;
 				}
 
-				// This event only fires when the bank is in search mode. It will fire even if there is no search
-				// input. We prevent having a tag tab open while also performing a normal search, so if a tag tab
-				// is active here it must mean we have placed the bank into search mode. See onScriptPostFired().
-				TagTab activeTab = tabInterface.getActiveTab();
-				// Shared storage uses the bankmain filter scripts too. Allow using tag searches in it but don't
-				// apply the tag search from the active tab.
-				final boolean bankOpen = client.getItemContainer(InventoryID.BANK) != null;
-				String search = activeTab != null && bankOpen ? TAG_SEARCH + activeTab.getTag() : searchfilter;
-
-				if (search.isEmpty())
-				{
-					return;
-				}
-
-				boolean tagSearch = search.startsWith(TAG_SEARCH);
-				if (tagSearch)
-				{
-					search = search.substring(TAG_SEARCH.length()).trim();
-				}
-
-				if (itemId > -1 && tagManager.findTag(itemId, search))
+				if (itemId > -1 && tag.contains(itemId))
 				{
 					// return true
 					intStack[intStackSize - 2] = 1;
@@ -333,7 +362,17 @@ public class BankTagsPlugin extends Plugin
 				}
 				break;
 			case "getSearchingTagTab":
-				intStack[intStackSize - 1] = tabInterface.isActive() ? 1 : 0;
+				intStack[intStackSize - 1] = activeTag != null ? 1 : 0;
+				break;
+			case "bankBuildTab":
+				// Use the per-tab view when we want to hide the separators to avoid having to reposition items &
+				// recomputing the scroll height.
+				if (activeTag != null && (tabInterface.isTagTabActive() || config.removeSeparators() || activeTag.layout() != null))
+				{
+					var stack = client.getIntStack(); // NOPMD: UnusedLocalVariable
+					var sz = client.getIntStackSize();
+					stack[sz - 1] = 1; // use single tab view mode
+				}
 				break;
 		}
 	}
@@ -365,8 +404,6 @@ public class BankTagsPlugin extends Plugin
 				.setItemId(event.getItemId())
 				.onClick(this::editTags);
 		}
-
-		tabInterface.handleAdd(event);
 	}
 
 	private void editTags(MenuEntry entry)
@@ -414,5 +451,57 @@ public class BankTagsPlugin extends Plugin
 		{
 			clientThread.invokeLater(this::reinitBank);
 		}
+	}
+
+	public void open(TagTab tab)
+	{
+		if (tab == null)
+		{
+			activeTag = null;
+			return;
+		}
+
+		// custom tags are combined with the tab
+		final BankTag custom = tagManager.findTag(tab.getTag());
+
+		activeTag = new BankTag()
+		{
+			@Override
+			public boolean contains(int itemId)
+			{
+				return tagManager.findTag(itemId, tab.getTag())
+					|| (custom != null && custom.contains(itemId));
+			}
+
+			@Override
+			public Layout layout()
+			{
+				return tab.getLayout();
+			}
+		};
+	}
+
+	private BankTag buildSearchFilterBankTag(String tag)
+	{
+		// custom tags are combined with the tab
+		final BankTag custom = tagManager.findTag(tag);
+		return itemId -> tagManager.findTag(itemId, tag)
+			|| (custom != null && custom.contains(itemId));
+	}
+
+	@Override
+	public void openTagTab(TagTab tagTab)
+	{
+		tabInterface.closeTag(false);
+		open(tagTab);
+		bankSearch.layoutBank();
+	}
+
+	@Override
+	public void openBankTag(BankTag bankTag)
+	{
+		tabInterface.closeTag(false);
+		activeTag = bankTag;
+		bankSearch.layoutBank();
 	}
 }

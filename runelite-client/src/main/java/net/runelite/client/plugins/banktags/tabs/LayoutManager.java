@@ -49,29 +49,32 @@ import net.runelite.api.ItemComposition;
 import net.runelite.api.ItemContainer;
 import net.runelite.api.ItemID;
 import net.runelite.api.MenuAction;
+import net.runelite.api.MenuEntry;
 import net.runelite.api.NullItemID;
 import net.runelite.api.ScriptEvent;
 import net.runelite.api.ScriptID;
+import net.runelite.api.VarClientInt;
 import net.runelite.api.Varbits;
 import net.runelite.api.events.MenuEntryAdded;
+import net.runelite.api.events.ScriptPreFired;
 import net.runelite.api.widgets.ComponentID;
 import net.runelite.api.widgets.ItemQuantityMode;
 import net.runelite.api.widgets.JavaScriptCallback;
 import net.runelite.api.widgets.Widget;
-import net.runelite.api.widgets.WidgetConfig;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.game.ItemManager;
 import net.runelite.client.game.ItemVariationMapping;
 import net.runelite.client.game.chatbox.ChatboxPanelManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.bank.BankSearch;
+import net.runelite.client.plugins.banktags.BankTag;
 import net.runelite.client.plugins.banktags.BankTagsPlugin;
-import static net.runelite.client.plugins.banktags.tabs.TabInterface.BANK_ITEMS_PER_ROW;
-import static net.runelite.client.plugins.banktags.tabs.TabInterface.BANK_ITEM_HEIGHT;
-import static net.runelite.client.plugins.banktags.tabs.TabInterface.BANK_ITEM_START_X;
-import static net.runelite.client.plugins.banktags.tabs.TabInterface.BANK_ITEM_WIDTH;
-import static net.runelite.client.plugins.banktags.tabs.TabInterface.BANK_ITEM_X_PADDING;
-import static net.runelite.client.plugins.banktags.tabs.TabInterface.BANK_ITEM_Y_PADDING;
+import static net.runelite.client.plugins.banktags.BankTagsPlugin.BANK_ITEMS_PER_ROW;
+import static net.runelite.client.plugins.banktags.BankTagsPlugin.BANK_ITEM_HEIGHT;
+import static net.runelite.client.plugins.banktags.BankTagsPlugin.BANK_ITEM_START_X;
+import static net.runelite.client.plugins.banktags.BankTagsPlugin.BANK_ITEM_WIDTH;
+import static net.runelite.client.plugins.banktags.BankTagsPlugin.BANK_ITEM_X_PADDING;
+import static net.runelite.client.plugins.banktags.BankTagsPlugin.BANK_ITEM_Y_PADDING;
 import static net.runelite.client.plugins.banktags.tabs.TabInterface.DUPLICATE_ITEM;
 import static net.runelite.client.plugins.banktags.tabs.TabInterface.REMOVE_LAYOUT;
 import net.runelite.client.util.Text;
@@ -82,25 +85,29 @@ public class LayoutManager
 {
 	private final Client client;
 	private final ItemManager itemManager;
+	private final BankTagsPlugin plugin;
 	private final ChatboxPanelManager chatboxPanelManager;
 	private final BankSearch bankSearch;
 	private final TabManager tabManager;
+	private final TabInterface tabInterface;
 
 	private final List<PluginAutoLayout> autoLayouts = new ArrayList<>();
 
 	@Inject
-	LayoutManager(Client client, ItemManager itemManager, ChatboxPanelManager chatboxPanelManager, BankSearch bankSearch, TabManager tabManager, BankTagsPlugin plugin)
+	LayoutManager(Client client, ItemManager itemManager, BankTagsPlugin plugin, ChatboxPanelManager chatboxPanelManager, BankSearch bankSearch, TabManager tabManager, TabInterface tabInterface)
 	{
 		this.client = client;
 		this.itemManager = itemManager;
+		this.plugin = plugin;
 		this.chatboxPanelManager = chatboxPanelManager;
 		this.bankSearch = bankSearch;
 		this.tabManager = tabManager;
+		this.tabInterface = tabInterface;
 
 		registerAutoLayout(plugin, "Default", new DefaultLayout());
 	}
 
-	void layout(Layout l)
+	private void layout(Layout l)
 	{
 		ItemContainer bank = client.getItemContainer(InventoryID.BANK);
 		Widget itemContainer = client.getWidget(ComponentID.BANK_ITEM_CONTAINER);
@@ -265,31 +272,9 @@ public class LayoutManager
 				c.setItemQuantity(Integer.MAX_VALUE);
 				c.setItemQuantityMode(ItemQuantityMode.NEVER);
 
+				// TabInterface rewrites these to RUNELITE types and adds handlers
 				c.setAction(7 - 1, DUPLICATE_ITEM);
 				c.setAction(8 - 1, REMOVE_LAYOUT);
-				c.setHasListener(true);
-				c.setOnOpListener((JavaScriptCallback) ev ->
-				{
-					if (ev.getOp() == 7)
-					{
-						l.addItemAfter(ev.getSource().getItemId(), ev.getSource().getIndex());
-						tabManager.save();
-						bankSearch.layoutBank();
-					}
-					else if (ev.getOp() == 8)
-					{
-						l.removeItemAtPos(ev.getSource().getIndex());
-						tabManager.save();
-						bankSearch.layoutBank();
-					}
-				});
-
-				// Avoid op 7/8 from triggering the normal server action (Withdraw-All/Withdraw-All-but-1)
-				var n = client.getWidgetFlags().get((long) c.getId() << 32 | c.getIndex());
-				if (n != null)
-				{
-					n.setValue((WidgetConfig.DRAG << 1) | WidgetConfig.DRAG_ON);
-				}
 			}
 			else
 			{
@@ -496,6 +481,24 @@ public class LayoutManager
 	}
 
 	@Subscribe
+	public void onScriptPreFired(ScriptPreFired event)
+	{
+		if (event.getScriptId() == ScriptID.BANKMAIN_FINISHBUILDING)
+		{
+			BankTag activeTag = plugin.activeTag;
+			if (activeTag != null)
+			{
+				Layout layout = activeTag.layout();
+				if (layout != null)
+				{
+					layout(layout);
+					scrollLayout(layout);
+				}
+			}
+		}
+	}
+
+	@Subscribe
 	private void onMenuEntryAdded(MenuEntryAdded event)
 	{
 		if (event.getActionParam1() == ComponentID.BANK_CONTENT_CONTAINER && event.getOption().equals(TabInterface.DISABLE_LAYOUT))
@@ -529,6 +532,52 @@ public class LayoutManager
 							.build();
 					});
 			}
+		}
+
+		// Update widget index of the menu so withdraws work in laid out tabs.
+		BankTag activeTag = plugin.activeTag;
+		if (event.getActionParam1()  == ComponentID.BANK_ITEM_CONTAINER
+			&& activeTag != null && !tabInterface.isTagTabActive() && activeTag.layout() != null)
+		{
+
+			MenuEntry menu = event.getMenuEntry();
+			Widget w = menu.getWidget();
+			int itemId = w.getItemId();
+			if (itemId > -1)
+			{
+				ItemContainer bank = client.getItemContainer(InventoryID.BANK);
+				int idx = bank.find(itemId);
+				if (idx > -1 && menu.getParam0() != idx)
+				{
+					menu.setParam0(idx);
+				}
+			}
+		}
+	}
+
+	// adjust the bank scroll position so that some items are always in view
+	private void scrollLayout(Layout l)
+	{
+		int pos;
+		for (pos = l.size() - 1; pos >= 0 && l.getItemAtPos(pos) == -1; --pos) ;
+
+		int rows = (pos + BANK_ITEMS_PER_ROW - 1) / BANK_ITEMS_PER_ROW;
+		int scrollY = rows * (BANK_ITEM_HEIGHT + BANK_ITEM_Y_PADDING);
+
+		Widget w = client.getWidget(ComponentID.BANK_ITEM_CONTAINER);
+		if (scrollY < w.getScrollY())
+		{
+			int bankHeight = w.getHeight() / (BANK_ITEM_HEIGHT + BANK_ITEM_Y_PADDING);
+			rows -= bankHeight;
+			if (rows < 0)
+			{
+				rows = 0;
+			}
+			scrollY = rows * (BANK_ITEM_HEIGHT + BANK_ITEM_Y_PADDING);
+
+			log.debug("Adjusting tab scroll to {} from {}", scrollY, w.getScrollY());
+			w.setScrollY(scrollY);
+			client.setVarcIntValue(VarClientInt.BANK_SCROLL, scrollY);
 		}
 	}
 

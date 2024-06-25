@@ -29,6 +29,12 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+/**
+ * A bank tag tab.
+ *
+ * @see TabManager#add(TagTab)
+ * @see TabManager#remove(String)
+ */
 @Data
 @EqualsAndHashCode(of = "tag")
 @NoArgsConstructor
