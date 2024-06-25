@@ -128,7 +128,6 @@ public class LayoutManager
 		// bank get added to the layout.
 
 		int[] layout = l.getLayout();
-		int[] layoutScratch = layout.clone();
 
 		ItemMatcher[] matchers = {
 			this::matchExact,
@@ -141,7 +140,7 @@ public class LayoutManager
 		for (ItemMatcher matcher : matchers)
 		{
 			// tagged item id
-			for (int itemId : layoutScratch)
+			for (int itemId : layout)
 			{
 				if (itemId == -1 || layoutToBank.containsKey(itemId))
 				{
@@ -167,46 +166,35 @@ public class LayoutManager
 			}
 		}
 
-		// Items from the layout and in the bank.
-		for (int pos = 0; pos < layoutScratch.length; ++pos)
+		// Items from the layout
+		for (int pos = 0; pos < layout.length; ++pos)
 		{
-			int itemId = layoutScratch[pos]; // tagged item id
+			int itemId = layout[pos]; // tagged item id
 			if (itemId == -1)
 			{
 				continue;
 			}
 
 			Integer bankItemId = layoutToBank.get(itemId);
-			if (bankItemId != null)
+			if (bankItemId == null)
 			{
-				layoutScratch[pos] = -1;
-				Widget c = itemContainer.getChild(pos);
-				drawItem(l, c, bankItemId, bank.count(bankItemId), pos);
-			}
-		}
+				// Item is in the layout but doesn't match an item in the bank.
+				if (log.isDebugEnabled())
+				{
+					ItemComposition def = itemManager.getItemComposition(itemId);
+					log.debug("Layout contains {}{} with no matching item", def.getName(), def.getPlaceholderTemplateId() > -1 && def.getPlaceholderId() > -1 ? " (placeholder)" : "");
+				}
 
-		// Items from the layout but doesn't match an item in the bank.
-		for (int pos = 0; pos < layoutScratch.length; ++pos)
-		{
-			int itemId = layoutScratch[pos]; // tagged item id
-			if (itemId == -1)
-			{
-				continue;
-			}
-
-			if (log.isDebugEnabled())
-			{
-				ItemComposition def = itemManager.getItemComposition(itemId);
-				log.debug("Layout contains {}{} with no matching item", def.getName(), def.getPlaceholderTemplateId() > -1 && def.getPlaceholderId() > -1 ? " (placeholder)" : "");
+				bankItemId = itemId;
 			}
 
 			Widget c = itemContainer.getChild(pos);
-			drawItem(l, c, itemId, bank.count(itemId), pos);
+			drawItem(l, c, bankItemId, bank.count(bankItemId), pos);
 		}
 
 		int lastEmptySlot = -1;
 		boolean modified = false;
-		// Items in the bank but not in the layout.
+		// Items from the bank but not in the layout.
 		for (int itemId : bankItems)
 		{
 			while (++lastEmptySlot < layout.length && layout[lastEmptySlot] > -1);
