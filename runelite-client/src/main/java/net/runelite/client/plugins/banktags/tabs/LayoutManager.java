@@ -273,8 +273,11 @@ public class LayoutManager
 				c.setItemQuantityMode(ItemQuantityMode.NEVER);
 
 				// TabInterface rewrites these to RUNELITE types and adds handlers
-				c.setAction(7 - 1, DUPLICATE_ITEM);
-				c.setAction(8 - 1, REMOVE_LAYOUT);
+				if (tabInterface.isActive())
+				{
+					c.setAction(7 - 1, DUPLICATE_ITEM);
+					c.setAction(8 - 1, REMOVE_LAYOUT);
+				}
 			}
 			else
 			{
