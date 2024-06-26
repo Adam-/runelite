@@ -156,6 +156,7 @@ public class TabInterface
 	private final ChatMessageManager chatMessageManager;
 
 	private boolean enabled;
+	@Getter
 	private TagTab activeTab;
 	@Getter
 	private boolean tagTabActive;

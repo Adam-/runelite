@@ -367,7 +367,7 @@ public class BankTagsPlugin extends Plugin implements BankTagsService
 			case "bankBuildTab":
 				// Use the per-tab view when we want to hide the separators to avoid having to reposition items &
 				// recomputing the scroll height.
-				if (tabInterface.isTagTabActive() || config.removeSeparators() || (activeTag != null && activeTag.layout() != null))
+				if (activeTag != null && (tabInterface.isTagTabActive() || config.removeSeparators() || activeTag.layout() != null))
 				{
 					var stack = client.getIntStack();
 					var sz = client.getIntStackSize();
