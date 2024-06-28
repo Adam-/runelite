@@ -527,7 +527,7 @@ public class LayoutManager
 		}
 	}
 
-	@Subscribe
+	@Subscribe(priority = -1) // run after TabInterface sets up the Duplicate/Remove layout menus
 	private void onMenuEntryAdded(MenuEntryAdded event)
 	{
 		if (event.getActionParam1() == ComponentID.BANK_CONTENT_CONTAINER && event.getOption().equals(TabInterface.DISABLE_LAYOUT))

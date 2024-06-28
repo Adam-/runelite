@@ -830,7 +830,7 @@ public class TabInterface
 
 	private void opDuplicateItem(MenuEntry e) {
 		int id = itemManager.canonicalize(e.getItemId());
-		log.debug("Duplicate item {}", itemManager.getItemComposition(id).getName());
+		log.debug("Duplicate item {} at {}", itemManager.getItemComposition(id).getName(), e.getParam0());
 		activeTab.getLayout().addItemAfter(id, e.getParam0());
 		tabManager.save();
 		bankSearch.layoutBank();
