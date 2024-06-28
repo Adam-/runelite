@@ -39,6 +39,7 @@ import javax.inject.Singleton;
 import lombok.NonNull;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
+import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
 import net.runelite.api.EnumComposition;
 import net.runelite.api.EnumID;
@@ -61,6 +62,8 @@ import net.runelite.api.widgets.ComponentID;
 import net.runelite.api.widgets.ItemQuantityMode;
 import net.runelite.api.widgets.JavaScriptCallback;
 import net.runelite.api.widgets.Widget;
+import net.runelite.client.chat.ChatMessageManager;
+import net.runelite.client.chat.QueuedMessage;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.game.ItemManager;
 import net.runelite.client.game.ItemVariationMapping;
@@ -90,11 +93,12 @@ public class LayoutManager
 	private final BankSearch bankSearch;
 	private final TabManager tabManager;
 	private final TabInterface tabInterface;
+	private final ChatMessageManager chatMessageManager;
 
 	private final List<PluginAutoLayout> autoLayouts = new ArrayList<>();
 
 	@Inject
-	LayoutManager(Client client, ItemManager itemManager, BankTagsPlugin plugin, ChatboxPanelManager chatboxPanelManager, BankSearch bankSearch, TabManager tabManager, TabInterface tabInterface)
+	LayoutManager(Client client, ItemManager itemManager, BankTagsPlugin plugin, ChatboxPanelManager chatboxPanelManager, BankSearch bankSearch, TabManager tabManager, TabInterface tabInterface, ChatMessageManager chatMessageManager)
 	{
 		this.client = client;
 		this.itemManager = itemManager;
@@ -103,6 +107,7 @@ public class LayoutManager
 		this.bankSearch = bankSearch;
 		this.tabManager = tabManager;
 		this.tabInterface = tabInterface;
+		this.chatMessageManager = chatMessageManager;
 
 		registerAutoLayout(plugin, "Default", new DefaultLayout());
 	}
@@ -542,6 +547,14 @@ public class LayoutManager
 					.onClick(e ->
 					{
 						TagTab tab = tabManager.find(Text.removeTags(e.getTarget()));
+						if (tab != tabInterface.getActiveTab())
+						{
+							chatMessageManager.queue(QueuedMessage.builder()
+								.type(ChatMessageType.CONSOLE)
+								.runeLiteFormattedMessage("The tag tab must be open first before performing an auto layout.")
+								.build());
+							return;
+						}
 
 						Layout old = tab.getLayout();
 						Layout new_ = autoLayout.autoLayout.generateLayout(tab);
@@ -570,11 +583,10 @@ public class LayoutManager
 		{
 			MenuEntry menu = event.getMenuEntry();
 			Widget w = menu.getWidget();
-			int itemId = w.getItemId();
-			if (itemId > -1)
+			if (w != null && w.getItemId() > -1)
 			{
 				ItemContainer bank = client.getItemContainer(InventoryID.BANK);
-				int idx = bank.find(itemId);
+				int idx = bank.find(w.getItemId());
 				if (idx > -1 && menu.getParam0() != idx)
 				{
 					menu.setParam0(idx);
