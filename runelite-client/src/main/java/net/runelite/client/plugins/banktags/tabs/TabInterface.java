@@ -757,7 +757,7 @@ public class TabInterface
 					.onClick(this::opDuplicateItem);
 			}
 
-			if (activeTab.hasLayout() && activeTab.getLayout().count(event.getItemId()) > 1)
+			if (activeTab.hasLayout() && activeTab.getLayout().count(itemManager.canonicalize(event.getItemId())) > 1)
 			{
 				client.createMenuEntry(-1)
 					.setParam0(event.getActionParam0())

@@ -568,7 +568,6 @@ public class LayoutManager
 		if (event.getActionParam1()  == ComponentID.BANK_ITEM_CONTAINER
 			&& activeTag != null && !tabInterface.isTagTabActive() && activeTag.layout() != null)
 		{
-
 			MenuEntry menu = event.getMenuEntry();
 			Widget w = menu.getWidget();
 			int itemId = w.getItemId();
