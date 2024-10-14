@@ -68,7 +68,6 @@ import net.runelite.client.plugins.banktags.tabs.LayoutManager;
 import net.runelite.client.plugins.banktags.tabs.TabInterface;
 import static net.runelite.client.plugins.banktags.tabs.TabInterface.FILTERED_CHARS;
 import net.runelite.client.plugins.banktags.tabs.TabSprites;
-import net.runelite.client.plugins.banktags.tabs.TagTab;
 import net.runelite.client.util.Text;
 
 @PluginDescriptor(
@@ -455,30 +454,30 @@ public class BankTagsPlugin extends Plugin implements BankTagsService
 		}
 	}
 
-	public void open(TagTab tab)
+	public void open(String tag, Layout layout)
 	{
-		if (tab == null)
+		if (tag == null)
 		{
 			activeTag = null;
 			return;
 		}
 
 		// custom tags are combined with the tab
-		final BankTag custom = tagManager.findTag(tab.getTag());
+		final BankTag custom = tagManager.findTag(tag);
 
 		activeTag = new BankTag()
 		{
 			@Override
 			public boolean contains(int itemId)
 			{
-				return tagManager.findTag(itemId, tab.getTag())
+				return tagManager.findTag(itemId, tag)
 					|| (custom != null && custom.contains(itemId));
 			}
 
 			@Override
 			public Layout layout()
 			{
-				return tab.getLayout();
+				return layout;
 			}
 		};
 	}
@@ -492,18 +491,25 @@ public class BankTagsPlugin extends Plugin implements BankTagsService
 	}
 
 	@Override
-	public void openTagTab(TagTab tagTab)
-	{
-		tabInterface.closeTag(false);
-		open(tagTab);
-		bankSearch.layoutBank();
-	}
-
-	@Override
 	public void openBankTag(BankTag bankTag)
 	{
 		tabInterface.closeTag(false);
 		activeTag = bankTag;
+		bankSearch.layoutBank();
+	}
+
+	@Override
+	public void openBankTag(String name)
+	{
+		Layout layout = layoutManager.loadLayout(name);
+		tabInterface.openTag(name, layout, true);
+	}
+
+	@Override
+	public void closeBankTag()
+	{
+		tabInterface.closeTag(false);
+		activeTag = null;
 		bankSearch.layoutBank();
 	}
 }

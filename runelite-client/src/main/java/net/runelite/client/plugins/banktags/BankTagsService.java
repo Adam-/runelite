@@ -25,19 +25,35 @@
  */
 package net.runelite.client.plugins.banktags;
 
-import net.runelite.client.plugins.banktags.tabs.TagTab;
-
+/**
+ * API for the bank tags plugin
+ *
+ * @see TagManager
+ * @see net.runelite.client.plugins.banktags.tabs.TabManager
+ * @see net.runelite.client.plugins.banktags.tabs.LayoutManager
+ */
 public interface BankTagsService
 {
 	/**
-	 * Open the given tag tab.
-	 * @param tagTab
+	 * Open the given bank tag. The tag may have an associated {@link net.runelite.client.plugins.banktags.tabs.TagTab},
+	 * but this isn't required. If the tag has an associated {@link net.runelite.client.plugins.banktags.tabs.Layout},
+	 * the layout will be applied.
+	 *
+	 * @param tag the tag name
 	 */
-	void openTagTab(TagTab tagTab);
+	void openBankTag(String tag);
 
 	/**
-	 * Open the given bank tag.
+	 * Open the given {@link BankTag}. The bank tag is ephemeral and is implemented by the caller. The tags may not
+	 * be modified by the end user, and changes to the tag are not persisted. No part of the bank tag is saved by the
+	 * Bank tag plugin. If the {@link BankTag} has an associated {@link net.runelite.client.plugins.banktags.tabs.Layout},
+	 * the layout will be applied.
 	 * @param bankTag
 	 */
 	void openBankTag(BankTag bankTag);
+
+	/**
+	 * Close the currently open {@link BankTag}.
+	 */
+	void closeBankTag();
 }
