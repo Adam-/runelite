@@ -25,6 +25,8 @@
  */
 package net.runelite.client.plugins.banktags;
 
+import javax.annotation.Nullable;
+
 /**
  * API for the bank tags plugin
  *
@@ -56,4 +58,11 @@ public interface BankTagsService
 	 * Close the currently open {@link BankTag}.
 	 */
 	void closeBankTag();
+
+	/**
+	 * Get the currently open {@link BankTag}
+	 * @return
+	 */
+	@Nullable
+	BankTag getActiveTag();
 }
