@@ -297,7 +297,7 @@ public class TabInterface
 			upButton = downButton = newTab = scrollComponent = parent = null;
 			activeTag = null;
 			activeLayout = null;
-			plugin.open(null, null);
+			plugin.setActiveTag(null, null);
 			tagTabActive = false;
 			tagTabFirstChildIdx = -1;
 		}
@@ -350,7 +350,7 @@ public class TabInterface
 			activeTag = tab;
 			activeLayout = layoutManager.loadLayout(tab);
 			tagTabActive = TAGTABS.equals(tab);
-			plugin.open(tab, activeLayout);
+			plugin.setActiveTag(tab, activeLayout);
 		}
 
 		// Move equipment button to the titlebar
@@ -395,7 +395,7 @@ public class TabInterface
 		enabled = false;
 		activeTag = null;
 		activeLayout = null;
-		plugin.open(null, null);
+		plugin.setActiveTag(null, null);
 
 		upButton = downButton = newTab = scrollComponent = null;
 
@@ -1159,7 +1159,7 @@ public class TabInterface
 		activeTag = tag;
 		activeLayout = layout;
 		tagTabActive = TAGTABS.equals(tag);
-		plugin.open(tag, activeLayout);
+		plugin.setActiveTag(tag, activeLayout);
 		config.tab(tag);
 
 		if (relayout)
@@ -1173,7 +1173,7 @@ public class TabInterface
 		activeTag = null;
 		activeLayout = null;
 		tagTabActive = false;
-		plugin.open(null, null);
+		plugin.setActiveTag(null, null);
 		config.tab("");
 
 		if (relayout)
