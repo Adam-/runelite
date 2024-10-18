@@ -800,7 +800,7 @@ public class TabInterface
 					.setParam0(event.getActionParam0())
 					.setParam1(event.getActionParam1())
 					.setTarget(event.getTarget())
-					.setOption(REMOVE_TAG + " (" + activeTag + ")")
+					.setOption((activeBankTag.options() & BankTag.OPTION_HIDE_REMOVE_TAG_NAME) == 0 ? REMOVE_TAG + " (" + activeTag + ")" : REMOVE_TAG)
 					.setType(MenuAction.RUNELITE)
 					.setIdentifier(event.getIdentifier())
 					.setItemId(event.getItemId())

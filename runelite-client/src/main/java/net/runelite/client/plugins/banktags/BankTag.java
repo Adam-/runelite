@@ -40,6 +40,11 @@ import net.runelite.client.plugins.banktags.tabs.Layout;
 public interface BankTag
 {
 	/**
+	 * Option to hide the tag name from the "Remove-tag" menu option.
+	 */
+	int OPTION_HIDE_REMOVE_TAG_NAME = 1;
+
+	/**
 	 * Test if an item is in the tag
 	 * @param itemId
 	 * @return
@@ -53,5 +58,10 @@ public interface BankTag
 	default Layout layout()
 	{
 		return null;
+	}
+
+	default int options()
+	{
+		return 0;
 	}
 }
