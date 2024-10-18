@@ -480,6 +480,8 @@ public class BankTagsPlugin extends Plugin implements BankTagsService
 				return layout;
 			}
 		};
+
+		tabInterface.openTag(tag, activeTag, true);
 	}
 
 	private BankTag buildSearchFilterBankTag(String tag)
@@ -502,7 +504,7 @@ public class BankTagsPlugin extends Plugin implements BankTagsService
 	public void openBankTag(String name)
 	{
 		Layout layout = layoutManager.loadLayout(name);
-		tabInterface.openTag(name, layout, true);
+		setActiveTag(name, layout);
 	}
 
 	@Override

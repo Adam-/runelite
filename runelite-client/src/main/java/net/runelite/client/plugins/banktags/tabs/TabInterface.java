@@ -84,6 +84,7 @@ import net.runelite.client.game.ItemManager;
 import net.runelite.client.game.chatbox.ChatboxItemSearch;
 import net.runelite.client.game.chatbox.ChatboxPanelManager;
 import net.runelite.client.plugins.bank.BankSearch;
+import net.runelite.client.plugins.banktags.BankTag;
 import net.runelite.client.plugins.banktags.BankTagsConfig;
 import net.runelite.client.plugins.banktags.BankTagsPlugin;
 import static net.runelite.client.plugins.banktags.BankTagsPlugin.TAG_SEARCH;
@@ -161,7 +162,7 @@ public class TabInterface
 	@Getter
 	private String activeTag;
 	@Getter
-	private Layout activeLayout;
+	private BankTag activeBankTag;
 	@Getter
 	private boolean tagTabActive;
 	private int tagTabFirstChildIdx = -1;
@@ -295,8 +296,6 @@ public class TabInterface
 		{
 			enabled = false;
 			upButton = downButton = newTab = scrollComponent = parent = null;
-			activeTag = null;
-			activeLayout = null;
 			plugin.setActiveTag(null, null);
 			tagTabActive = false;
 			tagTabFirstChildIdx = -1;
@@ -347,10 +346,8 @@ public class TabInterface
 			// the server will resync the last opened vanilla tab when the bank is opened
 			client.setVarbit(Varbits.CURRENT_BANK_TAB, 0);
 			var tab = config.tab();
-			activeTag = tab;
-			activeLayout = layoutManager.loadLayout(tab);
-			tagTabActive = TAGTABS.equals(tab);
-			plugin.setActiveTag(tab, activeLayout);
+			var layout = layoutManager.loadLayout(tab);
+			plugin.setActiveTag(tab, layout);
 		}
 
 		// Move equipment button to the titlebar
@@ -394,7 +391,7 @@ public class TabInterface
 	{
 		enabled = false;
 		activeTag = null;
-		activeLayout = null;
+		activeBankTag = null;
 		plugin.setActiveTag(null, null);
 
 		upButton = downButton = newTab = scrollComponent = null;
@@ -655,7 +652,7 @@ public class TabInterface
 				else
 				{
 					Layout layout = layoutManager.loadLayout(tag);
-					openTag(tag, layout, true);
+					plugin.setActiveTag(tag, layout);
 				}
 
 				client.playSoundEffect(SoundEffectID.UI_BOOP);
@@ -700,7 +697,7 @@ public class TabInterface
 
 				if (tag.equals(activeTag))
 				{
-					activeLayout = layout;
+					plugin.setActiveTag(tag, layout);
 				}
 
 				bankSearch.layoutBank();
@@ -766,10 +763,11 @@ public class TabInterface
 	@Subscribe
 	private void onMenuEntryAdded(MenuEntryAdded event)
 	{
-		if (activeTag != null
+		if (activeBankTag != null
 			&& event.getActionParam1() == ComponentID.BANK_ITEM_CONTAINER
 			&& event.getOption().equals("Examine"))
 		{
+			Layout activeLayout = activeBankTag.layout();
 			if (activeLayout != null)
 			{
 				client.createMenuEntry(-1)
@@ -861,6 +859,7 @@ public class TabInterface
 	{
 		int id = itemManager.canonicalize(e.getItemId());
 		log.debug("Duplicate item {} at {}", itemManager.getItemComposition(id).getName(), e.getParam0());
+		Layout activeLayout = activeBankTag.layout();
 		activeLayout.addItemAfter(id, e.getParam0());
 		layoutManager.saveLayout(activeLayout);
 		bankSearch.layoutBank();
@@ -868,6 +867,7 @@ public class TabInterface
 
 	private void opRemoveLayout(MenuEntry e)
 	{
+		Layout activeLayout = activeBankTag.layout();
 		activeLayout.removeItemAtPos(e.getParam0());
 		layoutManager.saveLayout(activeLayout);
 		bankSearch.layoutBank();
@@ -917,7 +917,7 @@ public class TabInterface
 
 		// Returning early or nulling the drag release listener has no effect. Hence, we need to
 		// null the draggedOnWidget instead.
-		if (draggedWidget.getId() == ComponentID.BANK_ITEM_CONTAINER && activeTag != null && activeLayout == null
+		if (draggedWidget.getId() == ComponentID.BANK_ITEM_CONTAINER && activeBankTag != null && activeBankTag.layout() == null
 			&& config.preventTagTabDrags())
 		{
 			client.setDraggedOnWidget(null);
@@ -1010,7 +1010,7 @@ public class TabInterface
 		w.setAction(TAB_OP_CHANGE_ICON, CHANGE_ICON);
 		if (!TAGTABS.equals(tab.getTag()))
 		{
-			w.setAction(TAB_OP_LAYOUT, activeLayout != null ? DISABLE_LAYOUT : ENABLE_LAYOUT);
+			w.setAction(TAB_OP_LAYOUT, activeBankTag != null && activeBankTag.layout() != null ? DISABLE_LAYOUT : ENABLE_LAYOUT);
 		}
 		w.setAction(TAB_OP_EXPORT_TAB, EXPORT_TAB);
 		w.setAction(TAB_OP_RENAME_TAB, RENAME_TAB);
@@ -1105,7 +1105,7 @@ public class TabInterface
 
 									if (oldTag.equals(activeTag))
 									{
-										openTag(newTag, activeLayout, true);
+										plugin.openBankTag(newTag);
 									}
 									else
 									{
@@ -1154,12 +1154,11 @@ public class TabInterface
 		layoutTabs();
 	}
 
-	public void openTag(String tag, Layout layout, boolean relayout)
+	public void openTag(String tag, BankTag bankTag, boolean relayout)
 	{
 		activeTag = tag;
-		activeLayout = layout;
+		activeBankTag = bankTag;
 		tagTabActive = TAGTABS.equals(tag);
-		plugin.setActiveTag(tag, activeLayout);
 		config.tab(tag);
 
 		if (relayout)
@@ -1171,7 +1170,7 @@ public class TabInterface
 	public void closeTag(boolean relayout)
 	{
 		activeTag = null;
-		activeLayout = null;
+		activeBankTag = null;
 		tagTabActive = false;
 		plugin.setActiveTag(null, null);
 		config.tab("");
@@ -1186,8 +1185,7 @@ public class TabInterface
 	{
 		if (activeTag != null)
 		{
-			bankSearch.reset(true);
-			activeLayout = layoutManager.loadLayout(activeLayout.getTag());
+			plugin.openBankTag(activeTag);
 		}
 	}
 
