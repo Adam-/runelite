@@ -298,7 +298,7 @@ public class TabInterface
 			upButton = downButton = newTab = scrollComponent = parent = null;
 			activeTag = null;
 			activeBankTag = null;
-			plugin.setActiveTag(null, null);
+			plugin.openTag(null, null);
 			tagTabActive = false;
 			tagTabFirstChildIdx = -1;
 		}
@@ -349,7 +349,7 @@ public class TabInterface
 			client.setVarbit(Varbits.CURRENT_BANK_TAB, 0);
 			var tab = config.tab();
 			var layout = layoutManager.loadLayout(tab);
-			plugin.setActiveTag(tab, layout);
+			plugin.openTag(tab, layout);
 		}
 
 		// Move equipment button to the titlebar
@@ -394,7 +394,7 @@ public class TabInterface
 		enabled = false;
 		activeTag = null;
 		activeBankTag = null;
-		plugin.setActiveTag(null, null);
+		plugin.openTag(null, null);
 
 		upButton = downButton = newTab = scrollComponent = null;
 
@@ -654,7 +654,7 @@ public class TabInterface
 				else
 				{
 					Layout layout = layoutManager.loadLayout(tag);
-					plugin.setActiveTag(tag, layout);
+					plugin.openTag(tag, layout);
 				}
 
 				client.playSoundEffect(SoundEffectID.UI_BOOP);
@@ -699,7 +699,7 @@ public class TabInterface
 
 				if (tag.equals(activeTag))
 				{
-					plugin.setActiveTag(tag, layout);
+					plugin.openTag(tag, layout);
 				}
 
 				bankSearch.layoutBank();
@@ -1174,7 +1174,7 @@ public class TabInterface
 		activeTag = null;
 		activeBankTag = null;
 		tagTabActive = false;
-		plugin.setActiveTag(null, null);
+		plugin.openTag(null, null);
 		config.tab("");
 
 		if (relayout)

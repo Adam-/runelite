@@ -454,7 +454,7 @@ public class BankTagsPlugin extends Plugin implements BankTagsService
 		}
 	}
 
-	public void setActiveTag(String tag, Layout layout)
+	public void openTag(String tag, Layout layout)
 	{
 		if (tag == null)
 		{
@@ -504,7 +504,7 @@ public class BankTagsPlugin extends Plugin implements BankTagsService
 	public void openBankTag(String name)
 	{
 		Layout layout = layoutManager.loadLayout(name);
-		setActiveTag(name, layout);
+		openTag(name, layout);
 	}
 
 	@Override

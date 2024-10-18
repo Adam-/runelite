@@ -650,13 +650,13 @@ public class LayoutManager
 						BankTag activeBankTag = tabInterface.getActiveBankTag();
 						Layout old = activeBankTag.layout();
 						Layout new_ = autoLayout.autoLayout.generateLayout(old);
-						plugin.setActiveTag(tag, new_);
+						plugin.openTag(tag, new_);
 
 						chatboxPanelManager.openTextMenuInput("Tab laid out using the '" + autoLayout.getName() + "' layout.")
 							.option("1. Keep", () ->
 								saveLayout(new_))
 							.option("2. Undo", () ->
-								plugin.setActiveTag(tag, old))
+								plugin.openTag(tag, old))
 							.onClose(bankSearch::layoutBank)
 							.build();
 					});
