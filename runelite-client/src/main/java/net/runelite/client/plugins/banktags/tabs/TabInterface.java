@@ -296,6 +296,8 @@ public class TabInterface
 		{
 			enabled = false;
 			upButton = downButton = newTab = scrollComponent = parent = null;
+			activeTag = null;
+			activeBankTag = null;
 			plugin.setActiveTag(null, null);
 			tagTabActive = false;
 			tagTabFirstChildIdx = -1;
