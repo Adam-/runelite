@@ -46,13 +46,15 @@ public interface BankTagsService
 	void openBankTag(String tag);
 
 	/**
-	 * Open the given {@link BankTag}. The bank tag is ephemeral and is implemented by the caller. The tags may not
-	 * be modified by the end user, and changes to the tag are not persisted. No part of the bank tag is saved by the
-	 * Bank tag plugin. If the {@link BankTag} has an associated {@link net.runelite.client.plugins.banktags.tabs.Layout},
+	 * Open the given {@link BankTag}. The bank tag is implemented by the caller.
+	 * The tag may have an associated {@link net.runelite.client.plugins.banktags.tabs.TagTab},
+	 * but this isn't required. If the tag has an associated {@link net.runelite.client.plugins.banktags.tabs.Layout},
 	 * the layout will be applied.
-	 * @param bankTag
+	 *
+	 * @param name the tag name
+	 * @param bankTag the bank tag
 	 */
-	void openBankTag(BankTag bankTag);
+	void openBankTag(String name, BankTag bankTag);
 
 	/**
 	 * Close the currently open {@link BankTag}.

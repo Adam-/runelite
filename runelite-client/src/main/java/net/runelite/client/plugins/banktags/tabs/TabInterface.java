@@ -765,6 +765,11 @@ public class TabInterface
 	@Subscribe
 	private void onMenuEntryAdded(MenuEntryAdded event)
 	{
+		if (activeBankTag != null && (activeBankTag.options() & BankTag.OPTION_ALLOW_MODIFICATIONS) == 0)
+		{
+			return;
+		}
+
 		if (activeBankTag != null
 			&& event.getActionParam1() == ComponentID.BANK_ITEM_CONTAINER
 			&& event.getOption().equals("Examine"))
@@ -919,8 +924,9 @@ public class TabInterface
 
 		// Returning early or nulling the drag release listener has no effect. Hence, we need to
 		// null the draggedOnWidget instead.
-		if (draggedWidget.getId() == ComponentID.BANK_ITEM_CONTAINER && activeBankTag != null && activeBankTag.layout() == null
-			&& config.preventTagTabDrags())
+		if (draggedWidget.getId() == ComponentID.BANK_ITEM_CONTAINER && activeBankTag != null
+			&& (activeBankTag.layout() == null && config.preventTagTabDrags()
+			|| (activeBankTag.options() & BankTag.OPTION_ALLOW_MODIFICATIONS) == 0))
 		{
 			client.setDraggedOnWidget(null);
 		}

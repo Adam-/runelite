@@ -31,18 +31,22 @@ import net.runelite.client.plugins.banktags.tabs.Layout;
  * A bank tag. Plugins may implement this interface to define custom bank tags.
  * You may register a BankTag with {@link TagManager#registerTag(String, BankTag)} to
  * make it searchable in the bank UI and tab interface. You may also set the active bank tag
- * via {@link BankTagsService#openBankTag(BankTag)}, regardless of if the banktag is registered.
+ * via {@link BankTagsService#openBankTag(String, BankTag)}, regardless of if the banktag is registered.
  *
  * @see TagManager#registerTag(String, BankTag)
  * @see TagManager#unregisterTag(String)
- * @see BankTagsService#openBankTag(BankTag)
+ * @see BankTagsService#openBankTag(String, BankTag)
  */
 public interface BankTag
 {
 	/**
+	 * Bank tag is allowed to be modified
+	 */
+	int OPTION_ALLOW_MODIFICATIONS = 1;
+	/**
 	 * Option to hide the tag name from the "Remove-tag" menu option.
 	 */
-	int OPTION_HIDE_REMOVE_TAG_NAME = 1;
+	int OPTION_HIDE_REMOVE_TAG_NAME = 2;
 
 	/**
 	 * Test if an item is in the tag

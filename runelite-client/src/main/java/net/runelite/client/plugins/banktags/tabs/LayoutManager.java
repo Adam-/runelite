@@ -366,9 +366,12 @@ public class LayoutManager
 				c.setItemQuantity(Integer.MAX_VALUE);
 				c.setItemQuantityMode(ItemQuantityMode.NEVER);
 
-				// TabInterface rewrites these to RUNELITE types and adds handlers
-				c.setAction(7 - 1, DUPLICATE_ITEM);
-				c.setAction(8 - 1, REMOVE_LAYOUT);
+				if ((plugin.getActiveTag().options() & BankTag.OPTION_ALLOW_MODIFICATIONS) != 0)
+				{
+					// TabInterface rewrites these to RUNELITE types and adds handlers
+					c.setAction(7 - 1, DUPLICATE_ITEM);
+					c.setAction(8 - 1, REMOVE_LAYOUT);
+				}
 			}
 			else
 			{

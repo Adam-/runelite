@@ -479,6 +479,12 @@ public class BankTagsPlugin extends Plugin implements BankTagsService
 			{
 				return layout;
 			}
+
+			@Override
+			public int options()
+			{
+				return BankTag.OPTION_ALLOW_MODIFICATIONS;
+			}
 		};
 
 		tabInterface.openTag(tag, activeTag, true);
@@ -493,11 +499,10 @@ public class BankTagsPlugin extends Plugin implements BankTagsService
 	}
 
 	@Override
-	public void openBankTag(BankTag bankTag)
+	public void openBankTag(String name, BankTag bankTag)
 	{
-		tabInterface.closeTag(false);
 		activeTag = bankTag;
-		bankSearch.layoutBank();
+		tabInterface.openTag(name, activeTag, true);
 	}
 
 	@Override

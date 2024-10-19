@@ -112,7 +112,7 @@ public class TagManager
 		setTagString(itemId, Text.toCSV(tags), variation);
 	}
 
-	boolean findTag(int itemId, String search)
+	public boolean findTag(int itemId, String search)
 	{
 		Collection<String> tags = getTags(itemId, false);
 		tags.addAll(getTags(itemId, true));
