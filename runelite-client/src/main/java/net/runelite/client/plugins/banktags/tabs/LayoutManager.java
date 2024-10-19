@@ -83,6 +83,7 @@ import static net.runelite.client.plugins.banktags.BankTagsPlugin.BANK_ITEM_X_PA
 import static net.runelite.client.plugins.banktags.BankTagsPlugin.BANK_ITEM_Y_PADDING;
 import static net.runelite.client.plugins.banktags.BankTagsPlugin.CONFIG_GROUP;
 import static net.runelite.client.plugins.banktags.BankTagsPlugin.TAG_LAYOUT_PREFIX;
+import net.runelite.client.plugins.banktags.BankTagsService;
 import static net.runelite.client.plugins.banktags.tabs.TabInterface.DUPLICATE_ITEM;
 import static net.runelite.client.plugins.banktags.tabs.TabInterface.REMOVE_LAYOUT;
 import net.runelite.client.util.Text;
@@ -366,7 +367,7 @@ public class LayoutManager
 				c.setItemQuantity(Integer.MAX_VALUE);
 				c.setItemQuantityMode(ItemQuantityMode.NEVER);
 
-				if ((plugin.getActiveTag().options() & BankTag.OPTION_ALLOW_MODIFICATIONS) != 0)
+				if ((plugin.getOptions() & BankTagsService.OPTION_ALLOW_MODIFICATIONS) != 0)
 				{
 					// TabInterface rewrites these to RUNELITE types and adds handlers
 					c.setAction(7 - 1, DUPLICATE_ITEM);
@@ -585,7 +586,7 @@ public class LayoutManager
 		{
 			resetWidgets();
 
-			BankTag activeTag = plugin.getActiveTag();
+			BankTag activeTag = plugin.getActiveBankTag();
 			if (activeTag != null)
 			{
 				// Since the script vm isn't reentrant, we can't call into POTIONSTORE_DOSES/POTIONSTORE_WITHDRAW_DOSES
@@ -594,7 +595,7 @@ public class LayoutManager
 				// them by the time the inv transmit listener runs.
 				potionStorage.cachePotions = true;
 
-				Layout layout = activeTag.layout();
+				Layout layout = plugin.getActiveLayout();
 				if (layout != null)
 				{
 					layout(layout);
@@ -650,8 +651,7 @@ public class LayoutManager
 							return;
 						}
 
-						BankTag activeBankTag = tabInterface.getActiveBankTag();
-						Layout old = activeBankTag.layout();
+						Layout old = plugin.getActiveLayout();
 						Layout new_ = autoLayout.autoLayout.generateLayout(old);
 						plugin.openTag(tag, new_);
 
@@ -667,12 +667,10 @@ public class LayoutManager
 		}
 	}
 
-	void onMenuOptionClicked(MenuOptionClicked event, TabInterface tabInterface)
+	void onMenuOptionClicked(MenuOptionClicked event)
 	{
 		// Update widget index of the menu so withdraws work in laid out tabs.
-		BankTag activeTag = plugin.getActiveTag();
-		if (event.getParam1() == ComponentID.BANK_ITEM_CONTAINER
-			&& activeTag != null && !tabInterface.isTagTabActive() && activeTag.layout() != null)
+		if (event.getParam1() == ComponentID.BANK_ITEM_CONTAINER && plugin.getActiveLayout() != null)
 		{
 			MenuEntry menu = event.getMenuEntry();
 			Widget w = menu.getWidget();

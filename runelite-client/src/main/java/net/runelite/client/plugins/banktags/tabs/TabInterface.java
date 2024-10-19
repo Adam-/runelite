@@ -84,11 +84,11 @@ import net.runelite.client.game.ItemManager;
 import net.runelite.client.game.chatbox.ChatboxItemSearch;
 import net.runelite.client.game.chatbox.ChatboxPanelManager;
 import net.runelite.client.plugins.bank.BankSearch;
-import net.runelite.client.plugins.banktags.BankTag;
 import net.runelite.client.plugins.banktags.BankTagsConfig;
 import net.runelite.client.plugins.banktags.BankTagsPlugin;
 import static net.runelite.client.plugins.banktags.BankTagsPlugin.TAG_SEARCH;
 import static net.runelite.client.plugins.banktags.BankTagsPlugin.VAR_TAG_SUFFIX;
+import net.runelite.client.plugins.banktags.BankTagsService;
 import net.runelite.client.plugins.banktags.TagManager;
 import net.runelite.client.ui.JagexColors;
 import net.runelite.client.util.ColorUtil;
@@ -161,8 +161,10 @@ public class TabInterface
 	private boolean enabled;
 	@Getter
 	private String activeTag;
-	@Getter
-	private BankTag activeBankTag;
+	private Layout activeLayout;
+	private int activeOptions;
+//	@Getter
+//	private BankTag activeBankTag;
 	@Getter
 	private boolean tagTabActive;
 	private int tagTabFirstChildIdx = -1;
@@ -297,7 +299,8 @@ public class TabInterface
 			enabled = false;
 			upButton = downButton = newTab = scrollComponent = parent = null;
 			activeTag = null;
-			activeBankTag = null;
+			activeLayout = null;
+			activeOptions = 0;
 			plugin.openTag(null, null);
 			tagTabActive = false;
 			tagTabFirstChildIdx = -1;
@@ -393,7 +396,8 @@ public class TabInterface
 	{
 		enabled = false;
 		activeTag = null;
-		activeBankTag = null;
+		activeLayout = null;
+		activeOptions = 0;
 		plugin.openTag(null, null);
 
 		upButton = downButton = newTab = scrollComponent = null;
@@ -515,7 +519,7 @@ public class TabInterface
 				break;
 			case NEWTAB_OP_OPEN_TAB_MENU:
 				client.setVarbit(Varbits.CURRENT_BANK_TAB, 0);
-				openTag(TAGTABS, null, true);
+				openTag(TAGTABS, null, 0, true);
 				break;
 		}
 	}
@@ -765,12 +769,10 @@ public class TabInterface
 	@Subscribe
 	private void onMenuEntryAdded(MenuEntryAdded event)
 	{
-		if (activeBankTag != null
-			&& (activeBankTag.options() & BankTag.OPTION_ALLOW_MODIFICATIONS) != 0
+		if ((activeOptions & BankTagsService.OPTION_ALLOW_MODIFICATIONS) != 0
 			&& event.getActionParam1() == ComponentID.BANK_ITEM_CONTAINER
 			&& event.getOption().equals("Examine"))
 		{
-			Layout activeLayout = activeBankTag.layout();
 			if (activeLayout != null)
 			{
 				client.createMenuEntry(-1)
@@ -801,7 +803,7 @@ public class TabInterface
 					.setParam0(event.getActionParam0())
 					.setParam1(event.getActionParam1())
 					.setTarget(event.getTarget())
-					.setOption((activeBankTag.options() & BankTag.OPTION_HIDE_REMOVE_TAG_NAME) == 0 ? REMOVE_TAG + " (" + activeTag + ")" : REMOVE_TAG)
+					.setOption((activeOptions & BankTagsService.OPTION_HIDE_REMOVE_TAG_NAME) == 0 ? REMOVE_TAG + " (" + activeTag + ")" : REMOVE_TAG)
 					.setType(MenuAction.RUNELITE)
 					.setIdentifier(event.getIdentifier())
 					.setItemId(event.getItemId())
@@ -839,7 +841,7 @@ public class TabInterface
 		{
 			createMenuEntry(event, TAG_INVENTORY, event.getTarget());
 
-			if (activeTag != null && activeBankTag != null && (activeBankTag.options() & BankTag.OPTION_ALLOW_MODIFICATIONS) != 0)
+			if (activeTag != null && (activeOptions & BankTagsService.OPTION_ALLOW_MODIFICATIONS) != 0)
 			{
 				createMenuEntry(event, TAG_INVENTORY, ColorUtil.wrapWithColorTag(activeTag, HILIGHT_COLOR));
 			}
@@ -849,7 +851,7 @@ public class TabInterface
 		{
 			createMenuEntry(event, TAG_GEAR, event.getTarget());
 
-			if (activeTag != null && activeBankTag != null && (activeBankTag.options() & BankTag.OPTION_ALLOW_MODIFICATIONS) != 0)
+			if (activeTag != null && (activeOptions & BankTagsService.OPTION_ALLOW_MODIFICATIONS) != 0)
 			{
 				createMenuEntry(event, TAG_GEAR, ColorUtil.wrapWithColorTag(activeTag, HILIGHT_COLOR));
 			}
@@ -862,7 +864,6 @@ public class TabInterface
 	{
 		int id = itemManager.canonicalize(e.getItemId());
 		log.debug("Duplicate item {} at {}", itemManager.getItemComposition(id).getName(), e.getParam0());
-		Layout activeLayout = activeBankTag.layout();
 		activeLayout.addItemAfter(id, e.getParam0());
 		layoutManager.saveLayout(activeLayout);
 		bankSearch.layoutBank();
@@ -870,7 +871,6 @@ public class TabInterface
 
 	private void opRemoveLayout(MenuEntry e)
 	{
-		Layout activeLayout = activeBankTag.layout();
 		activeLayout.removeItemAtPos(e.getParam0());
 		layoutManager.saveLayout(activeLayout);
 		bankSearch.layoutBank();
@@ -904,7 +904,7 @@ public class TabInterface
 			handleDeposit(event, event.getParam1() == ComponentID.BANK_DEPOSIT_INVENTORY);
 		}
 
-		layoutManager.onMenuOptionClicked(event, this);
+		layoutManager.onMenuOptionClicked(event);
 	}
 
 	@Subscribe
@@ -920,9 +920,9 @@ public class TabInterface
 
 		// Returning early or nulling the drag release listener has no effect. Hence, we need to
 		// null the draggedOnWidget instead.
-		if (draggedWidget.getId() == ComponentID.BANK_ITEM_CONTAINER && activeBankTag != null
-			&& (activeBankTag.layout() == null && config.preventTagTabDrags()
-			|| (activeBankTag.options() & BankTag.OPTION_ALLOW_MODIFICATIONS) == 0))
+		if (draggedWidget.getId() == ComponentID.BANK_ITEM_CONTAINER && activeTag != null
+			&& (activeLayout == null && config.preventTagTabDrags()
+			|| (activeOptions & BankTagsService.OPTION_ALLOW_MODIFICATIONS) == 0))
 		{
 			client.setDraggedOnWidget(null);
 		}
@@ -1014,7 +1014,7 @@ public class TabInterface
 		w.setAction(TAB_OP_CHANGE_ICON, CHANGE_ICON);
 		if (!TAGTABS.equals(tab.getTag()))
 		{
-			w.setAction(TAB_OP_LAYOUT, activeBankTag != null && activeBankTag.layout() != null ? DISABLE_LAYOUT : ENABLE_LAYOUT);
+			w.setAction(TAB_OP_LAYOUT, activeLayout != null ? DISABLE_LAYOUT : ENABLE_LAYOUT);
 		}
 		w.setAction(TAB_OP_EXPORT_TAB, EXPORT_TAB);
 		w.setAction(TAB_OP_RENAME_TAB, RENAME_TAB);
@@ -1158,10 +1158,11 @@ public class TabInterface
 		layoutTabs();
 	}
 
-	public void openTag(String tag, BankTag bankTag, boolean relayout)
+	public void openTag(String tag, Layout layout, int options, boolean relayout)
 	{
 		activeTag = tag;
-		activeBankTag = bankTag;
+		activeLayout = layout;
+		activeOptions = options;
 		tagTabActive = TAGTABS.equals(tag);
 		config.tab(tag);
 
@@ -1174,7 +1175,8 @@ public class TabInterface
 	public void closeTag(boolean relayout)
 	{
 		activeTag = null;
-		activeBankTag = null;
+		activeLayout = null;
+		activeOptions = 0;
 		tagTabActive = false;
 		plugin.openTag(null, null);
 		config.tab("");
