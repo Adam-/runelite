@@ -765,12 +765,8 @@ public class TabInterface
 	@Subscribe
 	private void onMenuEntryAdded(MenuEntryAdded event)
 	{
-		if (activeBankTag != null && (activeBankTag.options() & BankTag.OPTION_ALLOW_MODIFICATIONS) == 0)
-		{
-			return;
-		}
-
 		if (activeBankTag != null
+			&& (activeBankTag.options() & BankTag.OPTION_ALLOW_MODIFICATIONS) != 0
 			&& event.getActionParam1() == ComponentID.BANK_ITEM_CONTAINER
 			&& event.getOption().equals("Examine"))
 		{
@@ -843,7 +839,7 @@ public class TabInterface
 		{
 			createMenuEntry(event, TAG_INVENTORY, event.getTarget());
 
-			if (activeTag != null)
+			if (activeTag != null && activeBankTag != null && (activeBankTag.options() & BankTag.OPTION_ALLOW_MODIFICATIONS) != 0)
 			{
 				createMenuEntry(event, TAG_INVENTORY, ColorUtil.wrapWithColorTag(activeTag, HILIGHT_COLOR));
 			}
@@ -853,7 +849,7 @@ public class TabInterface
 		{
 			createMenuEntry(event, TAG_GEAR, event.getTarget());
 
-			if (activeTag != null)
+			if (activeTag != null && activeBankTag != null && (activeBankTag.options() & BankTag.OPTION_ALLOW_MODIFICATIONS) != 0)
 			{
 				createMenuEntry(event, TAG_GEAR, ColorUtil.wrapWithColorTag(activeTag, HILIGHT_COLOR));
 			}
