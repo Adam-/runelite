@@ -479,12 +479,6 @@ public class BankTagsPlugin extends Plugin implements BankTagsService
 			{
 				return layout;
 			}
-
-			@Override
-			public int options()
-			{
-				return BankTag.OPTION_ALLOW_MODIFICATIONS;
-			}
 		};
 
 		tabInterface.openTag(tag, activeTag, true);

@@ -66,6 +66,6 @@ public interface BankTag
 
 	default int options()
 	{
-		return 0;
+		return OPTION_ALLOW_MODIFICATIONS;
 	}
 }
