@@ -300,7 +300,7 @@ public class LayoutManager
 			}
 
 			int layoutItemId = itemManager.canonicalize(itemId);
-			l.addItem(layoutItemId);
+			l.addItemAfter(layoutItemId, l.lastItemIndex());
 			modified = true;
 		}
 
