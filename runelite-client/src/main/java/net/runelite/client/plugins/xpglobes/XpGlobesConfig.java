@@ -69,7 +69,7 @@ public interface XpGlobesConfig extends Config
 
 	@ConfigItem(
 		keyName = "showXpHour",
-		name = "Show xp/hr",
+		name = "Show XP/hr",
 		description = "Shows XP per hour inside the globe tooltip box",
 		position = 3
 	)
