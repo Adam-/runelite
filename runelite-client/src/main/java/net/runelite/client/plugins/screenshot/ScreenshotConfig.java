@@ -122,7 +122,7 @@ public interface ScreenshotConfig extends Config
 	@ConfigItem(
 		keyName = "kingdom",
 		name = "Screenshot kingdom reward",
-		description = "Configures whether screenshots are taken of Kingdom Reward.",
+		description = "Configures whether screenshots are taken of kingdom reward.",
 		position = 5,
 		section = whatSection
 	)
@@ -218,7 +218,7 @@ public interface ScreenshotConfig extends Config
 	@ConfigItem(
 		keyName = "valuableDrop",
 		name = "Screenshot valuable drops",
-		description = "Configures whether or not screenshots are automatically taken when you receive a valuable drop.<br>"
+		description = "Configures whether screenshots are automatically taken when you receive a valuable drop.<br>"
 			+ "Requires 'Loot drop notifications' to be enabled in the RuneScape settings.",
 		position = 14,
 		section = whatSection
@@ -244,7 +244,7 @@ public interface ScreenshotConfig extends Config
 	@ConfigItem(
 		keyName = "untradeableDrop",
 		name = "Screenshot untradeable drops",
-		description = "Configures whether or not screenshots are automatically taken when you receive an untradeable drop.<br>"
+		description = "Configures whether screenshots are automatically taken when you receive an untradeable drop.<br>"
 			+ "Requires 'Untradeable loot notifications' to be enabled in the RuneScape settings.",
 		position = 16,
 		section = whatSection
@@ -269,7 +269,7 @@ public interface ScreenshotConfig extends Config
 	@ConfigItem(
 		keyName = "baHighGamble",
 		name = "Screenshot BA high gambles",
-		description = "Take a screenshot of your reward from a high gamble at Barbarian Assault.",
+		description = "Take a screenshot of your reward from a high gamble at barbarian assault.",
 		position = 18,
 		section = whatSection
 	)
