@@ -160,8 +160,8 @@ public interface MenuEntrySwapperConfig extends Config
 	@ConfigItem(
 		position = -2,
 		keyName = "objectShiftClickWalkHere",
-		name = "Shift click Walk here",
-		description = "Swaps Walk here on shift click on all objects.",
+		name = "Shift-click Walk here",
+		description = "Swaps Walk here on shift-click on all objects.",
 		section = objectSection
 	)
 	default boolean objectShiftClickWalkHere()
@@ -184,8 +184,8 @@ public interface MenuEntrySwapperConfig extends Config
 	@ConfigItem(
 		position = -2,
 		keyName = "npcShiftClickWalkHere",
-		name = "Shift click Walk here",
-		description = "Swaps Walk here on shift click on all NPCs.",
+		name = "Shift-click Walk here",
+		description = "Swaps Walk here on shift-click on all NPCs.",
 		section = npcSection
 	)
 	default boolean npcShiftClickWalkHere()
@@ -262,7 +262,7 @@ public interface MenuEntrySwapperConfig extends Config
 	@ConfigItem(
 		keyName = "swapChase",
 		name = "Chase",
-		description = "Allows to left click your cat to Chase.",
+		description = "Allows to left-click your cat to Chase.",
 		section = npcSection
 	)
 	default boolean swapChase()
@@ -687,7 +687,7 @@ public interface MenuEntrySwapperConfig extends Config
 	@ConfigItem(
 		position = -1,
 		keyName = "groundItemShiftClickWalkHere",
-		name = "Shift click Walk here",
+		name = "Shift-click Walk here",
 		description = "Swaps Walk here on shift click on all ground items.",
 		section = groundItemSection
 	)
