@@ -116,9 +116,9 @@ public interface WoodcuttingConfig extends Config
 		description = "Configures whether to notify you of a leprechaun event.",
 		section = forestrySection
 	)
-	default boolean forestryLeprechaunNotification()
+	default Notification forestryLeprechaunNotification()
 	{
-		return true;
+		return Notification.ON;
 	}
 
 	@ConfigItem(
