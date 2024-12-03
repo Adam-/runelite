@@ -31,7 +31,7 @@ public interface ChatColorConfig extends Config
 {
 	@ConfigSection(
 		name = "Opaque",
-		description = "The options that control the colours for the Opaque Chatbox",
+		description = "The options that control the colors for the Opaque Chatbox",
 		position = 0,
 		closedByDefault = true
 	)
@@ -39,7 +39,7 @@ public interface ChatColorConfig extends Config
 
 	@ConfigSection(
 		name = "Transparent",
-		description = "The options that control the colours for the Transparent Chatbox",
+		description = "The options that control the colors for the Transparent Chatbox",
 		position = 50,
 		closedByDefault = true
 	)
