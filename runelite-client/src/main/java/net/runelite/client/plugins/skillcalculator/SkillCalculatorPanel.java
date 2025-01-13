@@ -25,6 +25,7 @@
  */
 package net.runelite.client.plugins.skillcalculator;
 
+import com.google.inject.Singleton;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -33,7 +34,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
-import com.google.inject.Singleton;
 import net.runelite.client.game.SkillIconManager;
 import net.runelite.client.ui.ColorScheme;
 import net.runelite.client.ui.PluginPanel;
@@ -47,8 +47,7 @@ class SkillCalculatorPanel extends PluginPanel
 	private final SkillIconManager iconManager;
 	private final MaterialTabGroup tabGroup;
 
-	private MaterialTab currentTab;
-	private boolean shouldForceReload;
+	private CalculatorType currentCalculator;
 
 	@Inject
 	SkillCalculatorPanel(SkillCalculator skillCalculator, SkillIconManager iconManager, UICalculatorInputArea uiInput)
@@ -94,9 +93,8 @@ class SkillCalculatorPanel extends PluginPanel
 			MaterialTab tab = new MaterialTab(icon, tabGroup, null);
 			tab.setOnSelectEvent(() ->
 			{
-				uiCalculator.openCalculator(calculatorType, shouldForceReload);
-				currentTab = tab;
-				shouldForceReload = false;
+				uiCalculator.openCalculator(calculatorType);
+				currentCalculator = calculatorType;
 				return true;
 			});
 
@@ -106,10 +104,9 @@ class SkillCalculatorPanel extends PluginPanel
 
 	void reloadCurrentCalculator()
 	{
-		if (currentTab != null)
+		if (currentCalculator != null)
 		{
-			shouldForceReload = true;
-			SwingUtilities.invokeLater(() -> tabGroup.select(currentTab));
+			SwingUtilities.invokeLater(() -> uiCalculator.openCalculator(currentCalculator));
 		}
 	}
 }

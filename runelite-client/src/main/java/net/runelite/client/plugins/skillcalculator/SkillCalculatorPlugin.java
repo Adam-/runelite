@@ -85,7 +85,7 @@ public class SkillCalculatorPlugin extends Plugin
 		if (currentWorldIsMembers != lastWorldWasMembers)
 		{
 			uiPanel.get().reloadCurrentCalculator();
+			lastWorldWasMembers = currentWorldIsMembers;
 		}
-		lastWorldWasMembers = currentWorldIsMembers;
 	}
 }

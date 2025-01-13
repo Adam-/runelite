@@ -92,7 +92,6 @@ class SkillCalculator extends JPanel
 	private final Map<SkillBonus, JCheckBox> bonusCheckBoxes = new HashMap<>();
 	private final IconTextField searchBar = new IconTextField();
 
-	private CalculatorType currentCalculator;
 	private int currentLevel = 1;
 	private int currentXP = Experience.getXpForLevel(currentLevel);
 	private int targetLevel = currentLevel + 1;
@@ -152,15 +151,15 @@ class SkillCalculator extends JPanel
 		uiInput.getUiFieldXPMultiplier().addFocusListener(buildFocusAdapter(e -> onFieldXPMultiplierUpdated()));
 	}
 
-	void openCalculator(CalculatorType calculatorType, boolean forceReload)
+	void openCalculator(CalculatorType calculatorType)
 	{
 		// Update internal skill/XP values.
 		currentXP = client.getSkillExperience(calculatorType.getSkill());
 		currentLevel = Experience.getLevelForXp(currentXP);
 
-		if (forceReload || currentCalculator != calculatorType)
+//		if (forceReload || currentCalculator != calculatorType)
 		{
-			currentCalculator = calculatorType;
+//			currentCalculator = calculatorType;
 			currentBonuses.clear();
 
 			@Varp int endGoalVarp = endGoalVarpForSkill(calculatorType.getSkill());
@@ -188,7 +187,7 @@ class SkillCalculator extends JPanel
 			// Add in checkboxes for available skill bonuses if we're not on a F2P world.
 			if (client.getWorldType().contains(WorldType.MEMBERS))
 			{
-				renderBonusOptions();
+				renderBonusOptions(calculatorType);
 			}
 
 			// Add the combined action slot.
@@ -198,7 +197,7 @@ class SkillCalculator extends JPanel
 			add(searchBar);
 
 			// Create action slots for the skill actions.
-			renderActionSlots();
+			renderActionSlots(calculatorType);
 		}
 
 		// Update the input fields.
@@ -252,9 +251,9 @@ class SkillCalculator extends JPanel
 		combinedActionSlots.clear();
 	}
 
-	private void renderBonusOptions()
+	private void renderBonusOptions(CalculatorType calculatorType)
 	{
-		final SkillBonus[] skillBonuses = currentCalculator.getSkillBonuses();
+		final SkillBonus[] skillBonuses = calculatorType.getSkillBonuses();
 		if (skillBonuses == null)
 		{
 			return;
@@ -339,13 +338,13 @@ class SkillCalculator extends JPanel
 		calculate();
 	}
 
-	private void renderActionSlots()
+	private void renderActionSlots(CalculatorType calculatorType)
 	{
 		// Wipe the list of references to the slot components.
 		uiActionSlots.clear();
 
 		// Create new components for the action slots.
-		for (SkillAction action : currentCalculator.getSkillActions())
+		for (SkillAction action : calculatorType.getSkillActions())
 		{
 			JLabel uiIcon = new JLabel();
 
