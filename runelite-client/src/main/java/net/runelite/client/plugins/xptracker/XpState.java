@@ -268,6 +268,7 @@ class XpState
 			XpStateSingle state = new XpStateSingle(s.startXp);
 			state.restore(s);
 			xpSkills.put(skill, state);
+			order.add(skill);
 		}
 		overall.restore(save.overall);
 	}
