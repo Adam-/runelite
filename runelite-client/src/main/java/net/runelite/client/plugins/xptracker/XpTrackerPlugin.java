@@ -417,9 +417,9 @@ public class XpTrackerPlugin extends Plugin
 	{
 		if (initializeTracker > 0 && --initializeTracker == 0)
 		{
+			XpSave save;
 			// Restore from saved state
-			XpSave save = loadSaveState(configManager.getRSProfileKey());
-			if (xpTrackerConfig.saveState() && save != null)
+			if (!xpState.isOverallInitialized() && xpTrackerConfig.saveState() && (save = loadSaveState(configManager.getRSProfileKey())) != null)
 			{
 				log.debug("Loading xp state from save");
 				xpState.restore(save);
