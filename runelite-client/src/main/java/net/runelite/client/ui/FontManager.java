@@ -32,9 +32,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.LinkedHashSet;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Stream;
 import javax.swing.text.StyleContext;
 import lombok.Getter;
@@ -44,10 +46,7 @@ import net.runelite.client.RuneLite;
 @Slf4j
 public class FontManager
 {
-	public static final ImmutableList<String> RUNESCAPE_FONTS;
-	public static final ImmutableList<String> SYSTEM_FONTS;
-
-	private static final Set<String> customFontFamilies = new LinkedHashSet<>();
+	private static final List<String> customFontFamilies = new ArrayList<>();
 
 	@Getter
 	private static final Font runescapeFont;
@@ -64,11 +63,9 @@ public class FontManager
 	{
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 
-		SYSTEM_FONTS = ImmutableList.copyOf(ge.getAvailableFontFamilyNames());
-
 		try (InputStream inRunescape = FontManager.class.getResourceAsStream("runescape.ttf");
-			InputStream inRunescapeBold = FontManager.class.getResourceAsStream("runescape_bold.ttf");
-			InputStream inRunescapeSmall = FontManager.class.getResourceAsStream("runescape_small.ttf"))
+			 InputStream inRunescapeBold = FontManager.class.getResourceAsStream("runescape_bold.ttf");
+			 InputStream inRunescapeSmall = FontManager.class.getResourceAsStream("runescape_small.ttf"))
 		{
 			Font font = Font.createFont(Font.TRUETYPE_FONT, inRunescape);
 			Font boldFont = Font.createFont(Font.TRUETYPE_FONT, inRunescapeBold);
@@ -81,9 +78,6 @@ public class FontManager
 			runescapeFont = getFallbackFont(font.getFamily(), Font.PLAIN, 16);
 			runescapeBoldFont = getFallbackFont(boldFont.getFamily(), Font.BOLD, 16);
 			runescapeSmallFont = getFallbackFont(smallFont.getFamily(), Font.PLAIN, 16);
-
-			// Note: font and boldFont share the same font family name
-			RUNESCAPE_FONTS = ImmutableList.of(font.getFamily(), smallFont.getFamily());
 		}
 		catch (FontFormatException ex)
 		{
@@ -146,13 +140,26 @@ public class FontManager
 		}
 	}
 
-	public static ImmutableList<String> getCustomFonts()
+	public static List<String> getBuiltInFonts()
+	{
+		// Note: font and boldFont share the same font family name
+		return ImmutableList.of(
+			runescapeFont.getFamily(),
+			runescapeSmallFont.getFamily()
+		);
+	}
+
+	public static List<String> getSystemFonts()
+	{
+		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		return Arrays.asList(ge.getAvailableFontFamilyNames());
+	}
+
+	public static List<String> getCustomFonts()
 	{
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		loadCustomFonts(ge);
-
-		return ImmutableList.copyOf(customFontFamilies);
-
+		return Collections.unmodifiableList(customFontFamilies);
 	}
 
 	// https://stackoverflow.com/a/64667581

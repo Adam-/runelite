@@ -219,11 +219,11 @@ class FontPanel extends PluginPanel
 		mainPanel.removeAll();
 
 		List<String> fontOptions = new ArrayList<>();
-		fontOptions.addAll(FontManager.RUNESCAPE_FONTS);
+		fontOptions.addAll(FontManager.getBuiltInFonts());
 		fontOptions.add("---");
 		fontOptions.addAll(FontManager.getCustomFonts());
 		fontOptions.add("---");
-		fontOptions.addAll(FontManager.SYSTEM_FONTS);
+		fontOptions.addAll(FontManager.getSystemFonts());
 
 		var comboboxFont = combobox(fontOptions.toArray(), fontType.getFamily());
 		comboboxFont.addItemListener(e ->
