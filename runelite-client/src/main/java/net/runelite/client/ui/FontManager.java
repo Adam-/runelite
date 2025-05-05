@@ -152,7 +152,11 @@ public class FontManager
 	public static List<String> getSystemFonts()
 	{
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		return Arrays.asList(ge.getAvailableFontFamilyNames());
+		List<String> families = new ArrayList<>(Arrays.asList(ge.getAvailableFontFamilyNames()));
+		families.remove(runescapeFont.getFamily());
+		families.remove(runescapeSmallFont.getFamily());
+		families.removeAll(customFontFamilies);
+		return families;
 	}
 
 	public static List<String> getCustomFonts()
