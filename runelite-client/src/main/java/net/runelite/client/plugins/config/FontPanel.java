@@ -53,7 +53,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.runelite.client.config.ConfigDescriptor;
 import net.runelite.client.config.ConfigItemDescriptor;
 import net.runelite.client.config.ConfigManager;
-import net.runelite.client.config.RuneLiteFont;
+import net.runelite.client.config.FontType;
 import net.runelite.client.ui.ColorScheme;
 import net.runelite.client.ui.DynamicGridLayout;
 import net.runelite.client.ui.FontManager;
@@ -210,11 +210,11 @@ class FontPanel extends PluginPanel
 		configDescriptor = cd;
 		configItemDescriptor = cid;
 
-		RuneLiteFont runeLiteFont = loadRuneLiteFont();
-		rebuild(runeLiteFont);
+		FontType fontType = loadRuneLiteFont();
+		rebuild(fontType);
 	}
 
-	private void rebuild(RuneLiteFont runeLiteFont)
+	private void rebuild(FontType fontType)
 	{
 		mainPanel.removeAll();
 
@@ -225,7 +225,7 @@ class FontPanel extends PluginPanel
 		fontOptions.add("---");
 		fontOptions.addAll(FontManager.SYSTEM_FONTS);
 
-		var comboboxFont = combobox(fontOptions.toArray(), runeLiteFont.getFamily());
+		var comboboxFont = combobox(fontOptions.toArray(), fontType.getFamily());
 		comboboxFont.addItemListener(e ->
 		{
 			if (e.getStateChange() == ItemEvent.SELECTED)
@@ -236,7 +236,7 @@ class FontPanel extends PluginPanel
 		});
 		item("Font", "Configures the font.", comboboxFont);
 
-		var spinnerSize = createIntSpinner(1, Integer.MAX_VALUE, runeLiteFont.getSize(), "pt");
+		var spinnerSize = createIntSpinner(1, Integer.MAX_VALUE, fontType.getSize(), "pt");
 		spinnerSize.addChangeListener(ce ->
 		{
 			var f = loadRuneLiteFont();
@@ -244,7 +244,7 @@ class FontPanel extends PluginPanel
 		});
 		item("Size", "Configures the font size.", spinnerSize);
 
-		var checkboxBold = checkbox(runeLiteFont.isBold());
+		var checkboxBold = checkbox(fontType.isBold());
 		checkboxBold.addActionListener(ae ->
 		{
 			var f = loadRuneLiteFont();
@@ -252,7 +252,7 @@ class FontPanel extends PluginPanel
 		});
 		item("Bold", "Toggle bold styling for the font.", checkboxBold);
 
-		var checkboxItalic = checkbox(runeLiteFont.isItalic());
+		var checkboxItalic = checkbox(fontType.isItalic());
 		checkboxItalic.addActionListener(ae ->
 		{
 			var f = loadRuneLiteFont();
@@ -261,13 +261,13 @@ class FontPanel extends PluginPanel
 		item("Italic", "Toggle italic styling for the font.", checkboxItalic);
 	}
 
-	private RuneLiteFont loadRuneLiteFont()
+	private FontType loadRuneLiteFont()
 	{
-		return configManager.getConfiguration(configDescriptor.getGroup().value(), configItemDescriptor.getItem().keyName(), RuneLiteFont.class);
+		return configManager.getConfiguration(configDescriptor.getGroup().value(), configItemDescriptor.getItem().keyName(), FontType.class);
 	}
 
-	private void saveRuneLiteFont(RuneLiteFont runeLiteFont)
+	private void saveRuneLiteFont(FontType fontType)
 	{
-		configManager.setConfiguration(configDescriptor.getGroup().value(), configItemDescriptor.getItem().keyName(), runeLiteFont);
+		configManager.setConfiguration(configDescriptor.getGroup().value(), configItemDescriptor.getItem().keyName(), fontType);
 	}
 }

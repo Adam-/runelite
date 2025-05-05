@@ -83,7 +83,7 @@ import net.runelite.client.config.ConfigManager;
 import net.runelite.client.config.ConfigObject;
 import net.runelite.client.config.ConfigSection;
 import net.runelite.client.config.ConfigSectionDescriptor;
-import net.runelite.client.config.RuneLiteFont;
+import net.runelite.client.config.FontType;
 import net.runelite.client.config.Keybind;
 import net.runelite.client.config.ModifierlessKeybind;
 import net.runelite.client.config.Notification;
@@ -394,7 +394,7 @@ class ConfigPanel extends PluginPanel
 			{
 				item.add(createNotification(cd, cid), BorderLayout.EAST);
 			}
-			else if (cid.getType() == RuneLiteFont.class)
+			else if (cid.getType() == FontType.class)
 			{
 				item.add(createRuneLiteFont(cd, cid), BorderLayout.EAST);
 			}
@@ -713,8 +713,8 @@ class ConfigPanel extends PluginPanel
 
 	private JPanel createRuneLiteFont(ConfigDescriptor cd, ConfigItemDescriptor cid)
 	{
-		RuneLiteFont runeLiteFont = configManager.getConfiguration(cd.getGroup().value(), cid.getItem().keyName(), RuneLiteFont.class);
-		configManager.setConfiguration(cd.getGroup().value(), cid.getItem().keyName(), runeLiteFont);
+//		FontType fontType = configManager.getConfiguration(cd.getGroup().value(), cid.getItem().keyName(), FontType.class);
+//		configManager.setConfiguration(cd.getGroup().value(), cid.getItem().keyName(), fontType);
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());

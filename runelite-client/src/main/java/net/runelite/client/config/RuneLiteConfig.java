@@ -319,9 +319,9 @@ public interface RuneLiteConfig extends Config
 		position = 30,
 		section = overlaySettings
 	)
-	default RuneLiteFont dynamicOverlayFont()
+	default FontType dynamicOverlayFont()
 	{
-		return RuneLiteFont.SMALL;
+		return FontType.SMALL;
 	}
 
 	@ConfigItem(
@@ -331,9 +331,9 @@ public interface RuneLiteConfig extends Config
 		position = 31,
 		section = overlaySettings
 	)
-	default RuneLiteFont tooltipFont()
+	default FontType tooltipFont()
 	{
-		return RuneLiteFont.SMALL;
+		return FontType.SMALL;
 	}
 
 	@ConfigItem(
@@ -343,9 +343,9 @@ public interface RuneLiteConfig extends Config
 		position = 32,
 		section = overlaySettings
 	)
-	default RuneLiteFont interfaceFont()
+	default FontType interfaceFont()
 	{
-		return RuneLiteFont.REGULAR;
+		return FontType.REGULAR;
 	}
 
 	@ConfigItem(
@@ -355,9 +355,9 @@ public interface RuneLiteConfig extends Config
 		position = 33,
 		section = overlaySettings
 	)
-	default RuneLiteFont infoboxFont()
+	default FontType infoboxFont()
 	{
-		return RuneLiteFont.REGULAR;
+		return FontType.REGULAR;
 	}
 
 	@ConfigItem(

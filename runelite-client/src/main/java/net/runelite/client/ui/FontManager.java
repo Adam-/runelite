@@ -78,13 +78,12 @@ public class FontManager
 			ge.registerFont(boldFont);
 			ge.registerFont(smallFont);
 
-			runescapeFont = getFont(font.getFamily(), Font.PLAIN, 16);
-			runescapeBoldFont = getFont(boldFont.getFamily(), Font.BOLD, 16);
-			runescapeSmallFont = getFont(smallFont.getFamily(), Font.PLAIN, 16);
+			runescapeFont = getFallbackFont(font.getFamily(), Font.PLAIN, 16);
+			runescapeBoldFont = getFallbackFont(boldFont.getFamily(), Font.BOLD, 16);
+			runescapeSmallFont = getFallbackFont(smallFont.getFamily(), Font.PLAIN, 16);
 
 			// Note: font and boldFont share the same font family name
 			RUNESCAPE_FONTS = ImmutableList.of(font.getFamily(), smallFont.getFamily());
-
 		}
 		catch (FontFormatException ex)
 		{
@@ -156,7 +155,8 @@ public class FontManager
 
 	}
 
-	public static Font getFont(String family, int style, int size)
+	// https://stackoverflow.com/a/64667581
+	public static Font getFallbackFont(String family, int style, int size)
 	{
 		return StyleContext.getDefaultStyleContext().getFont(family, style, size);
 	}
