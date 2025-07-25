@@ -32,6 +32,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import javax.inject.Inject;
+import lombok.AllArgsConstructor;
 import net.runelite.api.Client;
 import net.runelite.api.VarClientStr;
 import net.runelite.client.callback.ClientThread;
@@ -51,8 +52,16 @@ class KeyRemappingListener implements KeyListener
 	@Inject
 	private ClientThread clientThread;
 
-	private final Map<Integer, Integer> modified = new HashMap<>();
+	@AllArgsConstructor
+	private static class MappedKey
+	{
+		final int keycode;
+		final int modifiers;
+	}
+
+	private final Map<Integer, MappedKey> modified = new HashMap<>();
 	private final Set<Character> blockedChars = new HashSet<>();
+	private int modifierMask;
 
 	@Override
 	public void keyTyped(KeyEvent e)
@@ -166,6 +175,7 @@ class KeyRemappingListener implements KeyListener
 			if (!plugin.isOptionsDialogOpen() && config.control().matches(e))
 			{
 				mappedKeyCode = KeyEvent.VK_CONTROL;
+				mappedModifiers = KeyEvent.CTRL_DOWN_MASK;
 			}
 
 			if (!plugin.isDialogOpen() && config.worldmap().matches(e))
@@ -178,12 +188,10 @@ class KeyRemappingListener implements KeyListener
 			if (mappedKeyCode != KeyEvent.VK_UNDEFINED)
 			{
 				final char keyChar = e.getKeyChar();
-				modified.put(e.getKeyCode(), mappedKeyCode);
+				modified.put(e.getKeyCode(), new MappedKey(mappedKeyCode, mappedModifiers));
+				modifierMask |= mappedModifiers;
 				e.setKeyCode(mappedKeyCode);
-				if (mappedModifiers != 0)
-				{
-					e.setModifiers(mappedModifiers);
-				}
+				e.setModifiers(modifierMask);
 				// arrow keys and fkeys do not have a character
 				e.setKeyChar(KeyEvent.CHAR_UNDEFINED);
 				if (keyChar != KeyEvent.CHAR_UNDEFINED)
@@ -192,6 +200,10 @@ class KeyRemappingListener implements KeyListener
 					// we must block it
 					blockedChars.add(keyChar);
 				}
+			}
+			else
+			{
+				e.setModifiers(e.getModifiers() | modifierMask);
 			}
 
 			switch (e.getKeyCode())
@@ -248,11 +260,14 @@ class KeyRemappingListener implements KeyListener
 			blockedChars.remove(keyChar);
 		}
 
-		final Integer mappedKeyCode = modified.remove(keyCode);
-		if (mappedKeyCode != null)
+		final MappedKey mappedKey = modified.remove(keyCode);
+		if (mappedKey != null)
 		{
-			e.setKeyCode(mappedKeyCode);
+			e.setKeyCode(mappedKey.keycode);
 			e.setKeyChar(KeyEvent.CHAR_UNDEFINED);
+			modifierMask &= ~mappedKey.modifiers;
 		}
+
+		e.setModifiers(e.getModifiers() | modifierMask);
 	}
 }
