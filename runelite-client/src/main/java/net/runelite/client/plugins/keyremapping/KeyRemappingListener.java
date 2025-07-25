@@ -270,4 +270,10 @@ class KeyRemappingListener implements KeyListener
 
 		e.setModifiers(e.getModifiers() | modifierMask);
 	}
+
+	@Override
+	public void focusLost()
+	{
+		modifierMask = 0;
+	}
 }
