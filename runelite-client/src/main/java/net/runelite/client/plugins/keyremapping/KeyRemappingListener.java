@@ -201,7 +201,7 @@ class KeyRemappingListener implements KeyListener
 					blockedChars.add(keyChar);
 				}
 			}
-			else
+			else if (modifierMask != 0)
 			{
 				e.setModifiers(e.getModifiers() | modifierMask);
 			}
@@ -268,7 +268,10 @@ class KeyRemappingListener implements KeyListener
 			modifierMask &= ~mappedKey.modifiers;
 		}
 
-		e.setModifiers(e.getModifiers() | modifierMask);
+		if (modifierMask != 0)
+		{
+			e.setModifiers(e.getModifiers() | modifierMask);
+		}
 	}
 
 	@Override
