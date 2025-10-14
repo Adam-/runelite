@@ -392,6 +392,7 @@ class LootTrackerPanel extends PluginPanel
 		LootTrackerRecord aggRecord = aggregateRecords.get(sessRecord);
 		if (aggRecord != null)
 		{
+			aggregateRecords.put(aggRecord, aggRecord);
 			aggRecord.merge(sessRecord);
 		}
 		else
