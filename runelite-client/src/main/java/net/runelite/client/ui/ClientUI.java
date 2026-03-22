@@ -28,7 +28,6 @@ import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatNativeWindowBorder;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.google.common.base.Strings;
-import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
 import java.awt.AWTException;
 import java.awt.Canvas;
@@ -66,12 +65,11 @@ import java.time.Duration;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Deque;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
@@ -119,7 +117,6 @@ import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ClientShutdown;
 import net.runelite.client.events.ConfigChanged;
-import net.runelite.client.events.ProfileChanged;
 import net.runelite.client.input.KeyListener;
 import net.runelite.client.input.MouseAdapter;
 import net.runelite.client.input.MouseListener;
@@ -141,7 +138,7 @@ public class ClientUI
 	private static final String CONFIG_CLIENT_BOUNDS = "clientBounds";
 	private static final String CONFIG_CLIENT_MAXIMIZED = "clientMaximized";
 	private static final String CONFIG_CLIENT_SIDEBAR_CLOSED = "clientSidebarClosed";
-	private static final String CONFIG_SIDEBAR_PLUGIN_ORDER = "sidebarPluginsOrder";
+	private static final String CONFIG_CLIENT_SIDEBAR_ORDER = "clientSidebarOrder";
 	public static final BufferedImage ICON_128 = ImageUtil.loadImageResource(ClientUI.class, "runelite_128.png");
 	public static final BufferedImage ICON_16 = ImageUtil.loadImageResource(ClientUI.class, "runelite_16.png");
 
@@ -162,9 +159,11 @@ public class ClientUI
 	private BufferedImage sidebarCloseIcon;
 
 	private JTabbedPane sidebar;
-	private final TreeSet<NavigationButton> sidebarEntries = new TreeSet<>(NavigationButton.COMPARATOR);
-	private List<String> sidebarPluginsOrder = new ArrayList<>();
-	private List<NavigationButton> activeSidebarOrder;
+//	private final TreeSet<NavigationButton> sidebarEntries = new TreeSet<>(NavigationButton.COMPARATOR);
+//	private List<String> sidebarPluginsOrder = new ArrayList<>();
+	private final List<NavigationButton> navButtons = new ArrayList<>();
+//	static Comparator<NavigationButton> TMP; //XXX
+//	private List<NavigationButton> activeSidebarOrder;
 	private final Deque<HistoryEntry> selectedTabHistory = new ArrayDeque<>();
 	private NavigationButton selectedTab;
 	private NavigationButton selectedSidebarItem;
@@ -228,15 +227,15 @@ public class ClientUI
 		normalBoundsTimer.setRepeats(false);
 	}
 
-	@Subscribe
-	private void onProfileChanged(ProfileChanged event)
-	{
-		SwingUtilities.invokeLater(() ->
-		{
-			loadSidebarPluginOrder();
-			rebuildSidebar(0);
-		});
-	}
+//	@Subscribe
+//	private void onProfileChanged(ProfileChanged event)
+//	{
+//		SwingUtilities.invokeLater(() ->
+//		{
+//			loadSidebarPluginOrder();
+//			rebuildSidebar(0);
+//		});
+//	}
 
 	@Subscribe
 	private void onConfigChanged(ConfigChanged event)
@@ -259,22 +258,24 @@ public class ClientUI
 			return;
 		}
 
-		if (!sidebarEntries.add(navBtn))
-		{
-			return;
-		}
+//		int index = Collections.binarySearch(navButtons, navBtn, TMP);
+//		if (index >= 0)
+//		{
+//			return;
+//		}
+//		index = -index - 1;
 
-		if (sidebarPluginsOrder.isEmpty())
-		{
-			loadSidebarPluginOrder();
-		}
+//		navButtons.add(index, navBtn);
+
+		navButtons.add(navBtn);
+		navButtons.sort(navButtonComparator());
 
 		final int TAB_SIZE = 16;
 		Icon icon = new ImageIcon(ImageUtil.resizeImage(navBtn.getIcon(), TAB_SIZE, TAB_SIZE));
-		activeSidebarOrder = getNavButtonOrder();
-		final int insertIndex = activeSidebarOrder.indexOf(navBtn);
 
-		sidebar.insertTab(null, icon, navBtn.getPanel().getWrappedPanel(), navBtn.getTooltip(), insertIndex);
+		int index = navButtons.indexOf(navBtn);
+		sidebar.insertTab(null, icon, navBtn.getPanel().getWrappedPanel(), navBtn.getTooltip(), index);
+
 		// insertTab changes the selected index when the first tab is inserted, avoid this
 		if (sidebar.getTabCount() == 1)
 		{
@@ -290,14 +291,6 @@ public class ClientUI
 		}
 		else
 		{
-			if (sidebarPluginsOrder.isEmpty())
-			{
-				sidebarPluginsOrder = getNavButtonOrder()
-					.stream()
-					.map(NavigationButton::getId).collect(Collectors.toList());
-				savePluginPrioritiesConfig();
-			}
-
 			boolean closingOpenTab = !selectedTabHistory.isEmpty() && selectedTabHistory.getLast().navBtn == navBtn;
 			selectedTabHistory.removeIf(it -> it.navBtn == navBtn);
 			sidebar.remove(navBtn.getPanel().getWrappedPanel());
@@ -311,23 +304,35 @@ public class ClientUI
 			}
 		}
 
-		sidebarEntries.remove(navBtn);
-		activeSidebarOrder = getNavButtonOrder();
+		navButtons.remove(navBtn);
 	}
 
-	private void rebuildSidebar(int indexToFocus)
+	private Comparator<NavigationButton> navButtonComparator()
 	{
-		activeSidebarOrder = getNavButtonOrder();
+		var order = loadSidebarOrder();
+		return (n1, n2) ->
+		{
+			int i1 = order.indexOf(n1.getId()), i2 = order.indexOf(n2.getId());
+			return Integer.compare(i1, i2);
+		};
+	}
+
+	private void rebuildSidebar()
+	{
+//		activeSidebarOrder = getNavButtonOrder();
+		navButtons.sort(navButtonComparator());
+
 		sidebar.removeAll();
 		final int TAB_SIZE = 16;
 
-		for (var navButton : activeSidebarOrder)
+		for (var navButton : navButtons)
 		{
 			Icon icon = new ImageIcon(ImageUtil.resizeImage(navButton.getIcon(), TAB_SIZE, TAB_SIZE));
 			sidebar.insertTab(null, icon, navButton.getPanel().getWrappedPanel(), navButton.getTooltip(),
 				sidebar.getTabCount());
 		}
-		sidebar.setSelectedIndex(indexToFocus);
+//		sidebar.setSelectedIndex(indexToFocus);
+		sidebar.setSelectedComponent(selectedTab.getPanel().getWrappedPanel());
 	}
 
 	@Subscribe
@@ -468,8 +473,7 @@ public class ClientUI
 				}
 				else
 				{
-					// maybe just include a map component -> navbtn?
-					newSelectedTab = Iterables.get(sidebarEntries, index);
+					newSelectedTab = navButtons.get(0);
 				}
 
 				if (oldSelectedTab == newSelectedTab)
@@ -512,7 +516,7 @@ public class ClientUI
 						}
 						else
 						{
-							selectedSidebarItem = activeSidebarOrder.get(dragStartIndex);
+							selectedSidebarItem = navButtons.get(dragStartIndex);
 							previousSelectedSidebarIndex = sidebar.getSelectedIndex();
 							sidebar.setSelectedIndex(previousSelectedSidebarIndex == -1 ? -1 : dragStartIndex);
 						}
@@ -535,12 +539,15 @@ public class ClientUI
 
 						if (isSelectedItemMoveable)
 						{
-							changeNavButtonOrder(selectedSidebarItem, dragEndIndex);
-							rebuildSidebar(activePanelIndex == -1 ? -1 : dragEndIndex);
-							savePluginPrioritiesConfig();
+							System.out.println("reorder sidebar " + navButtons.indexOf(selectedSidebarItem) + " to " + dragEndIndex);
+							reorderNavButton(navButtons.indexOf(selectedSidebarItem), dragEndIndex);
+							saveSidebarOrder();
+							rebuildSidebar();
+//							saveSidebarOrder();
 						}
 						else
 						{
+							// what is this?
 							if (activePanelIndex == -1)
 							{
 								boolean shouldOpen = (dragStartIndex == 0 && dragEndIndex == 0)
@@ -569,7 +576,7 @@ public class ClientUI
 					if (e.getButton() == MouseEvent.BUTTON3)
 					{
 						int index = 0;
-						for (var navBtn : sidebarEntries)
+						for (var navBtn : navButtons)
 						{
 							Rectangle bounds = sidebar.getBoundsAt(index++);
 							if (bounds != null && bounds.contains(e.getX(), e.getY()))
@@ -835,12 +842,12 @@ public class ClientUI
 			});
 		}
 
-		loadSidebarPluginOrder();
-		if (configManager.getConfiguration(CONFIG_GROUP, CONFIG_SIDEBAR_PLUGIN_ORDER) == null)
-		{
-			sidebarPluginsOrder = getNavButtonOrder().stream().map(NavigationButton::getId).collect(Collectors.toList());
-			savePluginPrioritiesConfig();
-		}
+//		loadSidebarPluginOrder();
+//		if (configManager.getConfiguration(CONFIG_GROUP, CONFIG_CLIENT_SIDEBAR_ORDER) == null)
+//		{
+//			sidebarPluginsOrder = getNavButtonOrder().stream().map(NavigationButton::getId).collect(Collectors.toList());
+//			savePluginPrioritiesConfig();
+//		}
 	}
 
 	private boolean dispatchWindowKeyEvent(KeyEvent ev)
@@ -919,7 +926,7 @@ public class ClientUI
 
 	private void shutdownClient()
 	{
-		savePluginPrioritiesConfig();
+//		savePluginPrioritiesConfig();//this should already be saved?
 		saveClientBoundsConfig();
 		ClientShutdown csev = new ClientShutdown();
 		eventBus.post(csev);
@@ -1177,12 +1184,12 @@ public class ClientUI
 
 	void openPanel(NavigationButton navBtn, boolean showSidebar)
 	{
-		if (navBtn != null && !sidebarEntries.contains(navBtn))
+		if (navBtn != null && !navButtons.contains(navBtn))
 		{
 			return;
 		}
 
-		int index = navBtn == null ? -1 : sidebarEntries.headSet(navBtn).size();
+		int index = navBtn == null ? -1 : navButtons.indexOf(navBtn);
 		sidebar.setSelectedIndex(index);
 
 		toggleSidebar(showSidebar, false);
@@ -1260,9 +1267,9 @@ public class ClientUI
 				}
 			}
 
-			if (open == null)
+			if (open == null && !navButtons.isEmpty())
 			{
-				open = sidebarEntries.first();
+				open = navButtons.get(0);
 			}
 
 			openPanel(open, true);
@@ -1477,83 +1484,99 @@ public class ClientUI
 		}
 	}
 
-	private void changeNavButtonOrder(NavigationButton toMove, int newPriority)
+	private void reorderNavButton(int from, int to)
 	{
-		sidebarPluginsOrder.remove(toMove.getId());
-		int numActiveSeen = 0;
-		Set<String> activeNavIds = sidebarEntries.stream().map(NavigationButton::getId).collect(Collectors.toSet());
-		int trueInsertIndex = 0;
-		for (String navBtnId : sidebarPluginsOrder)
-		{
-			if (activeNavIds.contains(navBtnId))
-			{
-				if (numActiveSeen == newPriority)
-				{
-					break;
-				}
-				numActiveSeen++;
-			}
-			trueInsertIndex++;
-		}
-		sidebarPluginsOrder.add(trueInsertIndex, toMove.getId());
+		var n = navButtons.remove(from);
+		if (from < to) --to;
+		navButtons.add(to, n);
 	}
 
-	private List<NavigationButton> getNavButtonOrder()
+//	private void reorderNavButton(NavigationButton toMove, int newPriority)
+//	{
+//		sidebarPluginsOrder.remove(toMove.getId());
+//		int numActiveSeen = 0;
+//		Set<String> activeNavIds = sidebarEntries.stream().map(NavigationButton::getId).collect(Collectors.toSet());
+//		int trueInsertIndex = 0;
+//		for (String navBtnId : sidebarPluginsOrder)
+//		{
+//			if (activeNavIds.contains(navBtnId))
+//			{
+//				if (numActiveSeen == newPriority)
+//				{
+//					break;
+//				}
+//				numActiveSeen++;
+//			}
+//			trueInsertIndex++;
+//		}
+//		sidebarPluginsOrder.add(trueInsertIndex, toMove.getId());
+//	}
+
+//	private List<NavigationButton> getNavButtonOrder()
+//	{
+//		if (sidebarPluginsOrder.isEmpty())
+//		{
+//			return new ArrayList<>(sidebarEntries);
+//		}
+//		Map<String, NavigationButton> navIdToButtonMap = new HashMap<>();
+//		for (NavigationButton navBtn : sidebarEntries)
+//		{
+//			navIdToButtonMap.put(navBtn.getId(), navBtn);
+//		}
+//		List<NavigationButton> ordered = new ArrayList<>();
+//		for (String navBtnId : sidebarPluginsOrder)
+//		{
+//			if (navIdToButtonMap.containsKey(navBtnId))
+//			{
+//				ordered.add(navIdToButtonMap.get(navBtnId));
+//				navIdToButtonMap.remove(navBtnId);
+//			}
+//		}
+//		ordered.addAll(navIdToButtonMap.values());
+//		return ordered;
+//	}
+
+//	private void savePluginPrioritiesConfig()
+//	{
+//		List<String> toSerialize = new ArrayList<>();
+//
+//		if (sidebarPluginsOrder.isEmpty())
+//		{
+//			for (var navButton : sidebarEntries)
+//			{
+//				toSerialize.add(navButton.getId());
+//			}
+//		}
+//		else
+//		{
+//			toSerialize = sidebarPluginsOrder;
+//		}
+//
+//		configManager.setConfiguration(
+//			CONFIG_GROUP,
+//			CONFIG_CLIENT_SIDEBAR_ORDER,
+//			String.join(",", toSerialize));
+//	}
+
+	private void saveSidebarOrder()
 	{
-		if (sidebarPluginsOrder.isEmpty())
-		{
-			return new ArrayList<>(sidebarEntries);
-		}
-		Map<String, NavigationButton> navIdToButtonMap = new HashMap<>();
-		for (NavigationButton navBtn : sidebarEntries)
-		{
-			navIdToButtonMap.put(navBtn.getId(), navBtn);
-		}
-		List<NavigationButton> ordered = new ArrayList<>();
-		for (String navBtnId : sidebarPluginsOrder)
-		{
-			if (navIdToButtonMap.containsKey(navBtnId))
-			{
-				ordered.add(navIdToButtonMap.get(navBtnId));
-				navIdToButtonMap.remove(navBtnId);
-			}
-		}
-		ordered.addAll(navIdToButtonMap.values());
-		return ordered;
+		var s = navButtons.stream()
+			.map(NavigationButton::getId)
+			.collect(Collectors.joining(","));
+		configManager.setConfiguration(CONFIG_GROUP, CONFIG_CLIENT_SIDEBAR_ORDER, s);
 	}
 
-	private void savePluginPrioritiesConfig()
+	private List<String> loadSidebarOrder()
 	{
-		List<String> toSerialize = new ArrayList<>();
-
-		if (sidebarPluginsOrder.isEmpty())
+		final String s = configManager.getConfiguration(CONFIG_GROUP, CONFIG_CLIENT_SIDEBAR_ORDER);
+//		sidebarPluginsOrder.clear();
+		if (s == null)
 		{
-			for (var navButton : sidebarEntries)
-			{
-				toSerialize.add(navButton.getId());
-			}
+			return Collections.emptyList();
 		}
-		else
-		{
-			toSerialize = sidebarPluginsOrder;
-		}
-
-		configManager.setConfiguration(
-			CONFIG_GROUP,
-			CONFIG_SIDEBAR_PLUGIN_ORDER,
-			String.join(",", toSerialize));
-	}
-
-	private void loadSidebarPluginOrder()
-	{
-		final String serializedPriorities = configManager.getConfiguration(CONFIG_GROUP, CONFIG_SIDEBAR_PLUGIN_ORDER);
-		sidebarPluginsOrder.clear();
-		if (serializedPriorities == null)
-		{
-			return;
-		}
-		final String[] navButtonIds = serializedPriorities.split(",");
-		sidebarPluginsOrder.addAll(List.of(navButtonIds));
+		final String[] navButtonIds = s.split(",");
+//		sidebarPluginsOrder.addAll(List.of(navButtonIds));
+		return Arrays.asList(navButtonIds);
 	}
 
 	private static void setupDefaults()

@@ -88,8 +88,6 @@ public class NavigationButton
 		{
 			return null;
 		}
-		final String classPath = panel.getClass().toString();
-		// example path: "class some.path.to.PluginPanel"
-		return classPath.substring(classPath.indexOf(" ") + 1);
+		return panel.getClass().getName();
 	}
 }
