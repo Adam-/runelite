@@ -310,6 +310,10 @@ public class ClientUI
 	private Comparator<NavigationButton> navButtonComparator()
 	{
 		var order = loadSidebarOrder();
+		if (order.isEmpty())
+		{
+			return NavigationButton.COMPARATOR;
+		}
 		return (n1, n2) ->
 		{
 			int i1 = order.indexOf(n1.getId()), i2 = order.indexOf(n2.getId());
