@@ -159,11 +159,7 @@ public class ClientUI
 	private BufferedImage sidebarCloseIcon;
 
 	private JTabbedPane sidebar;
-//	private final TreeSet<NavigationButton> sidebarEntries = new TreeSet<>(NavigationButton.COMPARATOR);
-//	private List<String> sidebarPluginsOrder = new ArrayList<>();
 	private final List<NavigationButton> navButtons = new ArrayList<>();
-//	static Comparator<NavigationButton> TMP; //XXX
-//	private List<NavigationButton> activeSidebarOrder;
 	private final Deque<HistoryEntry> selectedTabHistory = new ArrayDeque<>();
 	private NavigationButton selectedTab;
 	private NavigationButton selectedSidebarItem;
@@ -227,27 +223,25 @@ public class ClientUI
 		normalBoundsTimer.setRepeats(false);
 	}
 
-//	@Subscribe
-//	private void onProfileChanged(ProfileChanged event)
-//	{
-//		SwingUtilities.invokeLater(() ->
-//		{
-//			loadSidebarPluginOrder();
-//			rebuildSidebar(0);
-//		});
-//	}
-
 	@Subscribe
 	private void onConfigChanged(ConfigChanged event)
 	{
-		if (!event.getGroup().equals(CONFIG_GROUP) ||
-			event.getKey().equals(CONFIG_CLIENT_MAXIMIZED) ||
-			event.getKey().equals(CONFIG_CLIENT_BOUNDS))
+		if (!event.getGroup().equals(CONFIG_GROUP))
 		{
 			return;
 		}
 
-		SwingUtilities.invokeLater(() -> updateFrameConfig(event.getKey().equals("lockWindowSize")));
+		var key = event.getKey();
+		switch (key)
+		{
+			case CONFIG_CLIENT_MAXIMIZED:
+			case CONFIG_CLIENT_BOUNDS:
+				SwingUtilities.invokeLater(() -> updateFrameConfig(event.getKey().equals("lockWindowSize")));
+				break;
+			case CONFIG_CLIENT_SIDEBAR_ORDER:
+				SwingUtilities.invokeLater(this::rebuildSidebar);
+				break;
+		}
 	}
 
 	void addNavigation(NavigationButton navBtn)
@@ -257,15 +251,6 @@ public class ClientUI
 			toolbarPanel.add(navBtn, true);
 			return;
 		}
-
-//		int index = Collections.binarySearch(navButtons, navBtn, TMP);
-//		if (index >= 0)
-//		{
-//			return;
-//		}
-//		index = -index - 1;
-
-//		navButtons.add(index, navBtn);
 
 		navButtons.add(navBtn);
 		navButtons.sort(navButtonComparator());
@@ -323,7 +308,6 @@ public class ClientUI
 
 	private void rebuildSidebar()
 	{
-//		activeSidebarOrder = getNavButtonOrder();
 		navButtons.sort(navButtonComparator());
 
 		sidebar.removeAll();
@@ -335,7 +319,6 @@ public class ClientUI
 			sidebar.insertTab(null, icon, navButton.getPanel().getWrappedPanel(), navButton.getTooltip(),
 				sidebar.getTabCount());
 		}
-//		sidebar.setSelectedIndex(indexToFocus);
 		sidebar.setSelectedComponent(selectedTab.getPanel().getWrappedPanel());
 	}
 
@@ -845,13 +828,6 @@ public class ClientUI
 					ep, "Max memory limit low", JOptionPane.WARNING_MESSAGE);
 			});
 		}
-
-//		loadSidebarPluginOrder();
-//		if (configManager.getConfiguration(CONFIG_GROUP, CONFIG_CLIENT_SIDEBAR_ORDER) == null)
-//		{
-//			sidebarPluginsOrder = getNavButtonOrder().stream().map(NavigationButton::getId).collect(Collectors.toList());
-//			savePluginPrioritiesConfig();
-//		}
 	}
 
 	private boolean dispatchWindowKeyEvent(KeyEvent ev)
@@ -930,7 +906,6 @@ public class ClientUI
 
 	private void shutdownClient()
 	{
-//		savePluginPrioritiesConfig();//this should already be saved?
 		saveClientBoundsConfig();
 		ClientShutdown csev = new ClientShutdown();
 		eventBus.post(csev);
@@ -1491,76 +1466,12 @@ public class ClientUI
 	private void reorderNavButton(int from, int to)
 	{
 		var n = navButtons.remove(from);
-		if (from < to) --to;
+		if (from < to)
+		{
+			--to;
+		}
 		navButtons.add(to, n);
 	}
-
-//	private void reorderNavButton(NavigationButton toMove, int newPriority)
-//	{
-//		sidebarPluginsOrder.remove(toMove.getId());
-//		int numActiveSeen = 0;
-//		Set<String> activeNavIds = sidebarEntries.stream().map(NavigationButton::getId).collect(Collectors.toSet());
-//		int trueInsertIndex = 0;
-//		for (String navBtnId : sidebarPluginsOrder)
-//		{
-//			if (activeNavIds.contains(navBtnId))
-//			{
-//				if (numActiveSeen == newPriority)
-//				{
-//					break;
-//				}
-//				numActiveSeen++;
-//			}
-//			trueInsertIndex++;
-//		}
-//		sidebarPluginsOrder.add(trueInsertIndex, toMove.getId());
-//	}
-
-//	private List<NavigationButton> getNavButtonOrder()
-//	{
-//		if (sidebarPluginsOrder.isEmpty())
-//		{
-//			return new ArrayList<>(sidebarEntries);
-//		}
-//		Map<String, NavigationButton> navIdToButtonMap = new HashMap<>();
-//		for (NavigationButton navBtn : sidebarEntries)
-//		{
-//			navIdToButtonMap.put(navBtn.getId(), navBtn);
-//		}
-//		List<NavigationButton> ordered = new ArrayList<>();
-//		for (String navBtnId : sidebarPluginsOrder)
-//		{
-//			if (navIdToButtonMap.containsKey(navBtnId))
-//			{
-//				ordered.add(navIdToButtonMap.get(navBtnId));
-//				navIdToButtonMap.remove(navBtnId);
-//			}
-//		}
-//		ordered.addAll(navIdToButtonMap.values());
-//		return ordered;
-//	}
-
-//	private void savePluginPrioritiesConfig()
-//	{
-//		List<String> toSerialize = new ArrayList<>();
-//
-//		if (sidebarPluginsOrder.isEmpty())
-//		{
-//			for (var navButton : sidebarEntries)
-//			{
-//				toSerialize.add(navButton.getId());
-//			}
-//		}
-//		else
-//		{
-//			toSerialize = sidebarPluginsOrder;
-//		}
-//
-//		configManager.setConfiguration(
-//			CONFIG_GROUP,
-//			CONFIG_CLIENT_SIDEBAR_ORDER,
-//			String.join(",", toSerialize));
-//	}
 
 	private void saveSidebarOrder()
 	{
@@ -1573,13 +1484,11 @@ public class ClientUI
 	private List<String> loadSidebarOrder()
 	{
 		final String s = configManager.getConfiguration(CONFIG_GROUP, CONFIG_CLIENT_SIDEBAR_ORDER);
-//		sidebarPluginsOrder.clear();
 		if (s == null)
 		{
 			return Collections.emptyList();
 		}
 		final String[] navButtonIds = s.split(",");
-//		sidebarPluginsOrder.addAll(List.of(navButtonIds));
 		return Arrays.asList(navButtonIds);
 	}
 
