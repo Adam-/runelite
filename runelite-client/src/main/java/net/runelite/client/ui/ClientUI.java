@@ -307,16 +307,22 @@ public class ClientUI
 	{
 		navButtons.sort(navButtonComparator());
 
+		var component = sidebar.getSelectedComponent();
 		sidebar.removeAll();
-		final int TAB_SIZE = 16;
 
+		final int TAB_SIZE = 16;
 		for (var navButton : navButtons)
 		{
 			Icon icon = new ImageIcon(ImageUtil.resizeImage(navButton.getIcon(), TAB_SIZE, TAB_SIZE));
 			sidebar.insertTab(null, icon, navButton.getPanel().getWrappedPanel(), navButton.getTooltip(),
 				sidebar.getTabCount());
 		}
-		sidebar.setSelectedComponent(selectedTab.getPanel().getWrappedPanel());
+
+		if (component != null) {
+			sidebar.setSelectedComponent(component);
+		} else {
+			sidebar.setSelectedIndex(-1);
+		}
 	}
 
 	@Subscribe
