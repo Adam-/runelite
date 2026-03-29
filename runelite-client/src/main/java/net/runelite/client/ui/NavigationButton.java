@@ -78,7 +78,7 @@ public class NavigationButton
 	 */
 	private final Map<String, Runnable> popup;
 
-	public String getId()
+	String getId()
 	{
 		if (id != null)
 		{
