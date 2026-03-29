@@ -294,15 +294,22 @@ public class ClientUI
 	private Comparator<NavigationButton> navButtonComparator()
 	{
 		var order = loadSidebarOrder();
-		if (order.isEmpty())
-		{
-			return NavigationButton.COMPARATOR;
-		}
-		return (n1, n2) ->
-		{
-			int i1 = order.indexOf(n1.getId()), i2 = order.indexOf(n2.getId());
-			return Integer.compare(i1, i2);
-		};
+//		if (order.isEmpty())
+//		{
+//			return NavigationButton.COMPARATOR;
+//		}
+		return Comparator.<NavigationButton>comparingInt(n -> {
+			int i = order.indexOf(n.getId());
+			if (i == -1) i = Integer.MAX_VALUE; // unknown panels go to the end
+			return i;
+		}).thenComparing(NavigationButton.COMPARATOR);
+//		return (n1, n2) ->
+//		{
+//			int i1 = order.indexOf(n1.getId()), i2 = order.indexOf(n2.getId());
+//			if (i1 == -1) i1 = Integer.MAX_VALUE;
+//			if (i2 == -1) i2 = Integer.MAX_VALUE;
+//			return Integer.compare(i1, i2);
+//		};
 	}
 
 	private void rebuildSidebar()
