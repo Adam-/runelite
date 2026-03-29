@@ -1092,7 +1092,6 @@ public class ClientUI
 
 	/**
 	 * Returns current cursor set on game container
-	 *
 	 * @return awt cursor
 	 */
 	public Cursor getCurrentCursor()
@@ -1102,7 +1101,6 @@ public class ClientUI
 
 	/**
 	 * Returns current custom cursor or default system cursor if cursor is not set
-	 *
 	 * @return awt cursor
 	 */
 	public Cursor getDefaultCursor()
@@ -1113,7 +1111,6 @@ public class ClientUI
 	/**
 	 * Changes cursor for client window. Requires ${@link ClientUI#init()} to be called first.
 	 * FIXME: This is working properly only on Windows, Linux and Mac are displaying cursor incorrectly
-	 *
 	 * @param image cursor image
 	 * @param name  cursor name
 	 */
@@ -1132,7 +1129,6 @@ public class ClientUI
 
 	/**
 	 * Changes cursor for client window. Requires ${@link ClientUI#init()} to be called first.
-	 *
 	 * @param cursor awt cursor
 	 */
 	public void setCursor(final Cursor cursor)
@@ -1142,7 +1138,6 @@ public class ClientUI
 
 	/**
 	 * Resets client window cursor to default one.
-	 *
 	 * @see ClientUI#setCursor(BufferedImage, String)
 	 */
 	public void resetCursor()
@@ -1179,7 +1174,6 @@ public class ClientUI
 
 	/**
 	 * Paint UI related overlays to target graphics
-	 *
 	 * @param graphics target graphics
 	 */
 	public void paintOverlays(final Graphics2D graphics)
