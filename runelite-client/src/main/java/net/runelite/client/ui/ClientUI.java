@@ -294,22 +294,15 @@ public class ClientUI
 	private Comparator<NavigationButton> navButtonComparator()
 	{
 		var order = loadSidebarOrder();
-//		if (order.isEmpty())
-//		{
-//			return NavigationButton.COMPARATOR;
-//		}
-		return Comparator.<NavigationButton>comparingInt(n -> {
+		return Comparator.<NavigationButton>comparingInt(n ->
+		{
 			int i = order.indexOf(n.getId());
-			if (i == -1) i = Integer.MAX_VALUE; // unknown panels go to the end
+			if (i == -1)
+			{
+				i = Integer.MAX_VALUE; // unknown panels go to the end
+			}
 			return i;
 		}).thenComparing(NavigationButton.COMPARATOR);
-//		return (n1, n2) ->
-//		{
-//			int i1 = order.indexOf(n1.getId()), i2 = order.indexOf(n2.getId());
-//			if (i1 == -1) i1 = Integer.MAX_VALUE;
-//			if (i2 == -1) i2 = Integer.MAX_VALUE;
-//			return Integer.compare(i1, i2);
-//		};
 	}
 
 	private void rebuildSidebar()
@@ -327,9 +320,12 @@ public class ClientUI
 				sidebar.getTabCount());
 		}
 
-		if (component != null) {
+		if (component != null)
+		{
 			sidebar.setSelectedComponent(component);
-		} else {
+		}
+		else
+		{
 			sidebar.setSelectedIndex(-1);
 		}
 	}
@@ -501,148 +497,105 @@ public class ClientUI
 					}
 				}
 			});
+			sidebar.addMouseMotionListener(new MouseMotionListener()
+			{
+				@Override
+				public void mouseDragged(MouseEvent e)
+				{
+					if (dragStartIndex > -1)
+					{
+						int dragEndIndex = sidebar.indexAtLocation(e.getX(), e.getY());
+						if (dragEndIndex > -1 && dragStartIndex != dragEndIndex)
+						{
+							System.out.println("mouse drag rebuild " + dragStartIndex + " to " + dragEndIndex);
+							reorderNavButton(dragStartIndex, dragEndIndex);
+							saveSidebarOrder();
+							rebuildSidebar();
+							dragStartIndex = dragEndIndex;
+						}
+					}
+				}
+
+				@Override
+				public void mouseMoved(MouseEvent e)
+				{
+				}
+			});
 			final var defaultMouseListener = sidebar.getMouseListeners()[0];
 			sidebar.removeMouseListener(defaultMouseListener);
-			sidebar.addMouseMotionListener(new MouseMotionListener()
-										   {
-											   @Override
-											   public void mouseDragged(MouseEvent e)
-											   {
-												   if (dragStartIndex>-1) {
-													   int dragEndIndex = sidebar.indexAtLocation(e.getX(), e.getY());
-													   if (dragEndIndex > -1 && dragStartIndex != dragEndIndex)
-													   {
-														   System.out.println("mouse drag rebuild " + dragStartIndex + " to " + dragEndIndex);
-														   reorderNavButton(dragStartIndex, dragEndIndex);
-														   saveSidebarOrder();
-														   rebuildSidebar();
-														   dragStartIndex=dragEndIndex;
-													   }
-												   }
-//												   System.out.println("mml drag");
-											   }
-
-											   @Override
-											   public void mouseMoved(MouseEvent e)
-											   {
-//												   System.out.println("mml move");
-											   }
-										   });
-				sidebar.addMouseListener(new java.awt.event.MouseListener()
+			sidebar.addMouseListener(new java.awt.event.MouseListener()
+			{
+				@Override
+				public void mouseClicked(MouseEvent e)
 				{
-					//				private NavigationButton selectedSidebarItem;
-//					private int dragStartIndex = -1;
-//				private int previousSelectedSidebarIndex;
+					defaultMouseListener.mouseClicked(e);
 
-					@Override
-					public void mouseClicked(MouseEvent e)
+					if (e.getButton() == MouseEvent.BUTTON3)
 					{
-						defaultMouseListener.mouseClicked(e);
-
-						if (e.getButton() == MouseEvent.BUTTON3)
+						int index = 0;
+						for (var navBtn : navButtons)
 						{
-							int index = 0;
-							for (var navBtn : navButtons)
+							Rectangle bounds = sidebar.getBoundsAt(index++);
+							if (bounds != null && bounds.contains(e.getX(), e.getY()))
 							{
-								Rectangle bounds = sidebar.getBoundsAt(index++);
-								if (bounds != null && bounds.contains(e.getX(), e.getY()))
+								if (navBtn.getPopup() != null)
 								{
-									if (navBtn.getPopup() != null)
+									var menu = new JPopupMenu();
+									navBtn.getPopup().forEach((name, cb) ->
 									{
-										var menu = new JPopupMenu();
-										navBtn.getPopup().forEach((name, cb) ->
-										{
-											var menuItem = new JMenuItem(name);
-											menuItem.addActionListener(ev -> cb.run());
-											menu.add(menuItem);
-										});
-										menu.show(sidebar, e.getX(), e.getY());
-									}
-									return;
+										var menuItem = new JMenuItem(name);
+										menuItem.addActionListener(ev -> cb.run());
+										menu.add(menuItem);
+									});
+									menu.show(sidebar, e.getX(), e.getY());
 								}
+								return;
 							}
 						}
 					}
+				}
 
-					@Override
-					public void mousePressed(MouseEvent e)
+				@Override
+				public void mousePressed(MouseEvent e)
+				{
+					if (SwingUtilities.isLeftMouseButton(e) && (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0)
 					{
-						if (SwingUtilities.isLeftMouseButton(e) && (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0)
-						{
-							dragStartIndex = sidebar.indexAtLocation(e.getX(), e.getY());
-							System.out.println("Drag start at "+ dragStartIndex);
-//						if (dragStartIndex == -1)
-//						{
-//							selectedSidebarItem = null;
-//						}
-//						else
-//						{
-//							selectedSidebarItem = navButtons.get(dragStartIndex);
-//							previousSelectedSidebarIndex = sidebar.getSelectedIndex();
-////							sidebar.setSelectedIndex(previousSelectedSidebarIndex == -1 ? -1 : dragStartIndex);
-//						}
-							return;
-						}
-						defaultMouseListener.mousePressed(e);
+						dragStartIndex = sidebar.indexAtLocation(e.getX(), e.getY());
+						System.out.println("Drag start at " + dragStartIndex);
+						return;
+					}
+					defaultMouseListener.mousePressed(e);
+				}
+
+				@Override
+				public void mouseReleased(MouseEvent e)
+				{
+					if (dragStartIndex > -1)
+					{
+						dragStartIndex = -1;
+						return;
 					}
 
-					@Override
-					public void mouseReleased(MouseEvent e)
-					{
-//					if (SwingUtilities.isLeftMouseButton(e))
-						if (dragStartIndex > -1)
-						{
-//							int dragEndIndex = sidebar.indexAtLocation(e.getX(), e.getY());
-//							if (dragEndIndex == -1)
-//							{
-//								return;
-//							}
-//
-//							if (dragStartIndex != dragEndIndex)
-//							{
-//								System.out.println("reorder sidebar " + dragStartIndex + " to " + dragEndIndex);
-//								reorderNavButton(dragStartIndex, dragEndIndex);
-//								saveSidebarOrder();
-//								rebuildSidebar();
-//							}
+					defaultMouseListener.mouseReleased(e);
+				}
 
-							dragStartIndex = -1;
-							return;
-						}
+				@Override
+				public void mouseEntered(MouseEvent e)
+				{
+					defaultMouseListener.mouseEntered(e);
+				}
 
-						defaultMouseListener.mouseReleased(e);
-					}
-//
-//				@Override
-//				public void mousePressed(MouseEvent e)
-//				{
-//					defaultMouseListener.mousePressed(e);
-//				}
-//
-//				@Override
-//				public void mouseReleased(MouseEvent e)
-//				{
-//					defaultMouseListener.mouseReleased(e);
-//				}
-
-					@Override
-					public void mouseEntered(MouseEvent e)
-					{
-						defaultMouseListener.mouseEntered(e);
-					}
-
-					@Override
-					public void mouseExited(MouseEvent e)
-					{
-						defaultMouseListener.mouseExited(e);
-					}
-				});
-				JPopupMenu menu = new JPopupMenu();
-				JMenuItem item = new JMenuItem("Reset order");
-				item.addActionListener(l -> unsetSidebarOrder());
-				menu.add(item);
-//				item = new JMenuItem("test 2"); menu.add(item);
-				sidebar.setComponentPopupMenu(menu);
+				@Override
+				public void mouseExited(MouseEvent e)
+				{
+					defaultMouseListener.mouseExited(e);
+				}
+			});
+			JPopupMenu menu = new JPopupMenu();
+			JMenuItem item = new JMenuItem("Reset order");
+			item.addActionListener(l -> unsetSidebarOrder());
+			menu.add(item);
+			sidebar.setComponentPopupMenu(menu);
 
 			content.add(sidebar);
 
