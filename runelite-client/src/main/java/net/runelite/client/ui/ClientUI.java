@@ -656,6 +656,12 @@ public class ClientUI
 						defaultMouseListener.mouseExited(e);
 					}
 				});
+				JPopupMenu menu = new JPopupMenu();
+				JMenuItem item = new JMenuItem("Reset order");
+				item.addActionListener(l -> unsetSidebarOrder());
+				menu.add(item);
+//				item = new JMenuItem("test 2"); menu.add(item);
+				sidebar.setComponentPopupMenu(menu);
 
 			content.add(sidebar);
 
@@ -1542,6 +1548,11 @@ public class ClientUI
 //			--to;
 		}
 		navButtons.add(to, n);
+	}
+
+	private void unsetSidebarOrder()
+	{
+		configManager.unsetConfiguration(CONFIG_GROUP, CONFIG_CLIENT_SIDEBAR_ORDER);
 	}
 
 	private void saveSidebarOrder()
