@@ -503,7 +503,7 @@ public class ClientUI
 											   {
 												   if (dragStartIndex>-1) {
 													   int dragEndIndex = sidebar.indexAtLocation(e.getX(), e.getY());
-													   if (dragStartIndex != dragEndIndex)
+													   if (dragEndIndex > -1 && dragStartIndex != dragEndIndex)
 													   {
 														   System.out.println("mouse drag rebuild " + dragStartIndex + " to " + dragEndIndex);
 														   reorderNavButton(dragStartIndex, dragEndIndex);
@@ -585,46 +585,20 @@ public class ClientUI
 //					if (SwingUtilities.isLeftMouseButton(e))
 						if (dragStartIndex > -1)
 						{
-							int dragEndIndex = sidebar.indexAtLocation(e.getX(), e.getY());
-//						if (dragStartIndex == -1 || dragEndIndex == -1)
-							if (dragEndIndex == -1)
-							{
-								return;
-							}
-							int activePanelIndex = sidebar.getSelectedIndex();
-							boolean isSelectedItemMoveable = dragStartIndex != dragEndIndex
-								&& dragStartIndex != 0 && dragEndIndex != 0;
-
-//						if (isSelectedItemMoveable)
-							if (dragStartIndex != dragEndIndex)
-							{
-								System.out.println("reorder sidebar " + dragStartIndex + " to " + dragEndIndex);
-								reorderNavButton(dragStartIndex, dragEndIndex);
-								saveSidebarOrder();
-								rebuildSidebar();
-//							saveSidebarOrder();
-							}
-//						else
-							{
-								// what is this?
-//							if (activePanelIndex == -1)
+//							int dragEndIndex = sidebar.indexAtLocation(e.getX(), e.getY());
+//							if (dragEndIndex == -1)
 //							{
-//								boolean shouldOpen = (dragStartIndex == 0 && dragEndIndex == 0)
-//									|| (dragStartIndex != 0 && dragEndIndex != 0);
-//								sidebar.setSelectedIndex(shouldOpen ? dragEndIndex : -1);
+//								return;
 //							}
-//							else
+//
+//							if (dragStartIndex != dragEndIndex)
 //							{
-//								boolean shouldCollapse = previousSelectedSidebarIndex == dragEndIndex
-//									&& dragStartIndex == dragEndIndex;
-//								int selectedIndex = dragStartIndex == 0 || dragEndIndex == 0
-//									? dragStartIndex
-//									: dragEndIndex;
-//								sidebar.setSelectedIndex(shouldCollapse ? -1 : selectedIndex);
+//								System.out.println("reorder sidebar " + dragStartIndex + " to " + dragEndIndex);
+//								reorderNavButton(dragStartIndex, dragEndIndex);
+//								saveSidebarOrder();
+//								rebuildSidebar();
 //							}
-							}
 
-//						selectedSidebarItem = null;
 							dragStartIndex = -1;
 							return;
 						}
