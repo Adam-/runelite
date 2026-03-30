@@ -251,6 +251,13 @@ public class ClientUI
 			return;
 		}
 
+		if (navButtons.contains(navBtn))
+		{
+			return;
+		}
+
+		log.debug("Add nav button: {}", navBtn);
+
 		navButtons.add(navBtn);
 		navButtons.sort(navButtonComparator());
 
@@ -288,7 +295,13 @@ public class ClientUI
 			}
 		}
 
-		navButtons.remove(navBtn);
+		if (!navButtons.remove(navBtn))
+		{
+			log.debug("Unable to find nav button to remove: {}", navBtn);
+			return;
+		}
+
+		log.debug("Remove nav button: {}", navBtn);
 	}
 
 	private Comparator<NavigationButton> navButtonComparator()

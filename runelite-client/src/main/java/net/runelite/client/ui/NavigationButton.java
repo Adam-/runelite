@@ -42,6 +42,7 @@ public class NavigationButton
 {
 	static final Comparator<NavigationButton> COMPARATOR = Comparator.comparing(NavigationButton::getPriority)
 		.thenComparing(NavigationButton::getTooltip);
+
 	/**
 	 * Id of the button
 	 */
