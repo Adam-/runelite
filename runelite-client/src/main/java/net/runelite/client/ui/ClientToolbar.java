@@ -150,7 +150,7 @@ public class ClientToolbar
 						System.out.println("mouse drag rebuild " + dragCurIndex + " to " + dragEndIndex);
 						reorderNavButton(dragCurIndex, dragEndIndex);
 						saveSidebarOrder();
-						rebuildSidebar();
+//						rebuildSidebar();
 						dragCurIndex = dragEndIndex;
 					}
 				}
