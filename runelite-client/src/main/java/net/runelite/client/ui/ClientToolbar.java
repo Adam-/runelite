@@ -65,6 +65,8 @@ import net.runelite.client.util.SwingUtil;
 @RequiredArgsConstructor(onConstructor = @__(@Inject))
 public class ClientToolbar
 {
+	private static final int TAB_IMAGE_SIZE = 16;
+
 	private final Provider<ClientUI> clientUI;
 	private final ConfigManager configManager;
 
@@ -287,8 +289,7 @@ public class ClientToolbar
 		navButtons.add(navBtn);
 		navButtons.sort(navButtonComparator());
 
-		final int TAB_SIZE = 16;
-		Icon icon = new ImageIcon(ImageUtil.resizeImage(navBtn.getIcon(), TAB_SIZE, TAB_SIZE));
+		Icon icon = new ImageIcon(ImageUtil.resizeImage(navBtn.getIcon(), TAB_IMAGE_SIZE, TAB_IMAGE_SIZE));
 
 		int index = navButtons.indexOf(navBtn);
 		sidebar.insertTab(null, icon, navBtn.getPanel().getWrappedPanel(), navBtn.getTooltip(), index);
@@ -331,10 +332,9 @@ public class ClientToolbar
 		var component = sidebar.getSelectedComponent();
 		sidebar.removeAll();
 
-		final int TAB_SIZE = 16;
 		for (var navButton : navButtons)
 		{
-			Icon icon = new ImageIcon(ImageUtil.resizeImage(navButton.getIcon(), TAB_SIZE, TAB_SIZE));
+			Icon icon = new ImageIcon(ImageUtil.resizeImage(navButton.getIcon(), TAB_IMAGE_SIZE, TAB_IMAGE_SIZE));
 			sidebar.insertTab(null, icon, navButton.getPanel().getWrappedPanel(), navButton.getTooltip(),
 				sidebar.getTabCount());
 		}
