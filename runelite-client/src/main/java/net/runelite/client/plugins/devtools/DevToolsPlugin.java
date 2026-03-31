@@ -295,6 +295,7 @@ public class DevToolsPlugin extends Plugin
 			.icon(icon)
 			.priority(1)
 			.panel(panel)
+			.popup(Map.of("test", () -> log.debug("test")))
 			.build();
 
 		clientToolbar.addNavigation(navButton);

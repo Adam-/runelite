@@ -122,10 +122,11 @@ import net.runelite.client.util.WinUtil;
 @Singleton
 public class ClientUI
 {
-	private static final String CONFIG_GROUP = "runelite";
+	static final String CONFIG_GROUP = "runelite";
 	private static final String CONFIG_CLIENT_BOUNDS = "clientBounds";
 	private static final String CONFIG_CLIENT_MAXIMIZED = "clientMaximized";
 	private static final String CONFIG_CLIENT_SIDEBAR_CLOSED = "clientSidebarClosed";
+	static final String CONFIG_CLIENT_SIDEBAR_ORDER = "clientSidebarOrder";
 	public static final BufferedImage ICON_128 = ImageUtil.loadImageResource(ClientUI.class, "runelite_128.png");
 	public static final BufferedImage ICON_16 = ImageUtil.loadImageResource(ClientUI.class, "runelite_16.png");
 
@@ -212,6 +213,9 @@ public class ClientUI
 			case CONFIG_CLIENT_MAXIMIZED:
 			case CONFIG_CLIENT_BOUNDS:
 				SwingUtilities.invokeLater(() -> updateFrameConfig(event.getKey().equals("lockWindowSize")));
+				break;
+			case CONFIG_CLIENT_SIDEBAR_ORDER:
+				SwingUtilities.invokeLater(toolbar::rebuildSidebar);
 				break;
 		}
 	}
