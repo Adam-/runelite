@@ -30,10 +30,12 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.LayoutManager;
+import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.JComponent;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 
@@ -61,6 +63,11 @@ public class RuneLiteTabbedPaneUI extends FlatTabbedPaneUI
 	 */
 	@FlatStylingSupport.Styleable
 	protected boolean deselectable = false;
+
+	@FlatStylingSupport.Styleable
+	protected boolean draggable = false;
+
+	private boolean dragging;
 
 	@Override
 	protected LayoutManager createLayoutManager()
@@ -189,6 +196,16 @@ public class RuneLiteTabbedPaneUI extends FlatTabbedPaneUI
 			@Override
 			public void mousePressed(MouseEvent e)
 			{
+				// TODO RL HOTKEY THING
+				if (draggable && SwingUtilities.isLeftMouseButton(e) && (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0)
+				{
+					dragging = true;
+					DragListener l =(DragListener) tabPane.getClientProperty("runelite.draglistener");
+					if (l != null) l.dragStart(e.getX(), e.getY());
+					System.out.println("Drag start at " + e);
+					return;
+				}
+
 				hackUpdateRollover(e);
 
 				if (!deselectable)
@@ -214,6 +231,15 @@ public class RuneLiteTabbedPaneUI extends FlatTabbedPaneUI
 			@Override
 			public void mouseReleased(MouseEvent e)
 			{
+				if (dragging)
+				{
+					System.out.println("Drag end");
+					dragging=false;
+					DragListener l =(DragListener) tabPane.getClientProperty("runelite.draglistener");
+					if (l != null) l.dragEnd();
+					return;
+				}
+
 				delegate.mouseClicked(e);
 			}
 
@@ -234,5 +260,12 @@ public class RuneLiteTabbedPaneUI extends FlatTabbedPaneUI
 				delegate.mouseEntered(e);
 			}
 		};
+	}
+
+	public interface DragListener
+	{
+		void dragStart(int x, int y);
+
+		void dragEnd();
 	}
 }

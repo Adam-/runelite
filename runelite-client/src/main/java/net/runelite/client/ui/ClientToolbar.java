@@ -47,6 +47,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
+import javax.swing.plaf.TabbedPaneUI;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -54,6 +55,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.runelite.client.config.ConfigManager;
 import static net.runelite.client.ui.ClientUI.CONFIG_CLIENT_SIDEBAR_ORDER;
 import static net.runelite.client.ui.ClientUI.CONFIG_GROUP;
+import net.runelite.client.ui.laf.RuneLiteTabbedPaneUI;
 import net.runelite.client.util.ImageUtil;
 import net.runelite.client.util.SwingUtil;
 
@@ -89,7 +91,7 @@ public class ClientToolbar
 		sidebar = new JTabbedPane(JTabbedPane.RIGHT);
 		sidebar.setBackground(ColorScheme.DARKER_GRAY_COLOR);
 		sidebar.setOpaque(true);
-		sidebar.putClientProperty(FlatClientProperties.STYLE, "tabInsets: 2,5,2,5; variableSize: true; deselectable: true; tabHeight: 26");
+		sidebar.putClientProperty(FlatClientProperties.STYLE, "tabInsets: 2,5,2,5; variableSize: true; deselectable: true; tabHeight: 26; draggable: true");
 		sidebar.setSelectedIndex(-1);
 		sidebar.addChangeListener(ev ->
 		{
@@ -161,14 +163,28 @@ public class ClientToolbar
 			{
 			}
 		});
-		final var defaultMouseListener = sidebar.getMouseListeners()[0];
-		sidebar.removeMouseListener(defaultMouseListener);
+		sidebar.putClientProperty("runelite.draglistener", new RuneLiteTabbedPaneUI.DragListener()
+			{
+				@Override
+				public void dragStart(int x, int y)
+				{
+					dragCurIndex = sidebar.indexAtLocation(x, y);
+				}
+
+				@Override
+				public void dragEnd()
+				{
+					dragCurIndex = -1;
+					int index = sidebar.getSelectedIndex();
+					selectedTab = index == -1 ? null : navButtons.get(index);
+				}
+			});
 		sidebar.addMouseListener(new MouseListener()
 		{
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{
-				defaultMouseListener.mouseClicked(e);
+//				defaultMouseListener.mouseClicked(e);
 
 				if (e.getButton() == MouseEvent.BUTTON3)
 				{
@@ -198,41 +214,41 @@ public class ClientToolbar
 			@Override
 			public void mousePressed(MouseEvent e)
 			{
-				// TODO RL HOTKEY THING
-				if (SwingUtilities.isLeftMouseButton(e) && (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0)
-				{
-					dragCurIndex = sidebar.indexAtLocation(e.getX(), e.getY());
-					System.out.println("Drag start at " + dragCurIndex);
-					return;
-				}
-				defaultMouseListener.mousePressed(e);
+//				// TODO RL HOTKEY THING
+//				if (SwingUtilities.isLeftMouseButton(e) && (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0)
+//				{
+//					dragCurIndex = sidebar.indexAtLocation(e.getX(), e.getY());
+//					System.out.println("Drag start at " + dragCurIndex);
+//					return;
+//				}
+//				defaultMouseListener.mousePressed(e);
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent e)
 			{
-				if (dragCurIndex > -1)
-				{
-					System.out.println("Drag end");
-					dragCurIndex = -1;
-					int index = sidebar.getSelectedIndex();
-					selectedTab = index == -1 ? null : navButtons.get(index);
-					return;
-				}
-
-				defaultMouseListener.mouseReleased(e);
+//				if (dragCurIndex > -1)
+//				{
+//					System.out.println("Drag end");
+//					dragCurIndex = -1;
+//					int index = sidebar.getSelectedIndex();
+//					selectedTab = index == -1 ? null : navButtons.get(index);
+//					return;
+//				}
+//
+//				defaultMouseListener.mouseReleased(e);
 			}
 
 			@Override
 			public void mouseEntered(MouseEvent e)
 			{
-				defaultMouseListener.mouseEntered(e);
+//				defaultMouseListener.mouseEntered(e);
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e)
 			{
-				defaultMouseListener.mouseExited(e);
+//				defaultMouseListener.mouseExited(e);
 			}
 		});
 		JPopupMenu menu = new JPopupMenu();
