@@ -96,7 +96,44 @@ public class ClientToolbar
 				return;
 			}
 
-			sidebarChanged();
+			NavigationButton oldSelectedTab = selectedTab;
+			NavigationButton newSelectedTab;
+
+			int index = sidebar.getSelectedIndex();
+			if (index < 0)
+			{
+				newSelectedTab = null;
+			}
+			else
+			{
+				newSelectedTab = navButtons.get(index);
+			}
+
+			if (oldSelectedTab == newSelectedTab)
+			{
+				return;
+			}
+
+			selectedTab = newSelectedTab;
+
+			if (sidebar.isVisible())
+			{
+				pushHistory();
+
+				if (oldSelectedTab != null)
+				{
+					SwingUtil.deactivate(oldSelectedTab.getPanel());
+				}
+				if (newSelectedTab != null)
+				{
+					SwingUtil.activate(newSelectedTab.getPanel());
+				}
+
+				if (newSelectedTab == null)
+				{
+					clientUI.get().giveClientFocus();
+				}
+			}
 		});
 		sidebar.addMouseMotionListener(new MouseMotionListener()
 		{
@@ -174,8 +211,10 @@ public class ClientToolbar
 			{
 				if (dragCurIndex > -1)
 				{
+					System.out.println("Drag end");
 					dragCurIndex = -1;
-					sidebarChanged();
+					int index = sidebar.getSelectedIndex();
+					selectedTab = index == -1 ? null : navButtons.get(index);
 					return;
 				}
 
@@ -199,48 +238,6 @@ public class ClientToolbar
 		item.addActionListener(l -> unsetSidebarOrder());
 		menu.add(item);
 		sidebar.setComponentPopupMenu(menu);
-	}
-
-	private void sidebarChanged()
-	{
-		NavigationButton oldSelectedTab = selectedTab;
-		NavigationButton newSelectedTab;
-
-		int index = sidebar.getSelectedIndex();
-		if (index < 0)
-		{
-			newSelectedTab = null;
-		}
-		else
-		{
-			newSelectedTab = navButtons.get(index);
-		}
-
-		if (oldSelectedTab == newSelectedTab)
-		{
-			return;
-		}
-
-		selectedTab = newSelectedTab;
-
-		if (sidebar.isVisible())
-		{
-			pushHistory();
-
-			if (oldSelectedTab != null)
-			{
-				SwingUtil.deactivate(oldSelectedTab.getPanel());
-			}
-			if (newSelectedTab != null)
-			{
-				SwingUtil.activate(newSelectedTab.getPanel());
-			}
-
-			if (newSelectedTab == null)
-			{
-				clientUI.get().giveClientFocus();
-			}
-		}
 	}
 
 	private void reorderNavButton(int from, int to)
