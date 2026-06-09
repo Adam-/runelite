@@ -509,7 +509,7 @@ public class OverlayManager
 	private void saveOverlayLocation(final Overlay overlay, Point originPosition)
 	{
 		final String key = overlay.getName() + OVERLAY_CONFIG_PREFERRED_LOCATION;
-		if (overlay.getPreferredLocation() != null)
+		if (originPosition != null)
 		{
 			configManager.setConfiguration(
 				RUNELITE_CONFIG_GROUP_NAME,
