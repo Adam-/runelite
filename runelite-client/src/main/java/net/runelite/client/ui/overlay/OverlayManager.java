@@ -28,6 +28,7 @@ import com.google.common.base.MoreObjects;
 import com.google.common.collect.ArrayListMultimap;
 import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -40,6 +41,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import net.runelite.api.Client;
+import net.runelite.api.events.BeforeRender;
 import net.runelite.api.gameval.InterfaceID;
 import net.runelite.api.widgets.WidgetItem;
 import net.runelite.client.config.ConfigGroup;
@@ -60,6 +63,9 @@ public class OverlayManager
 
 	private static final String OVERLAY_CONFIG_PREFERRED_LOCATION = "_preferredLocation";
 	private static final String OVERLAY_CONFIG_PREFERRED_POSITION = "_preferredPosition";
+	private static final String OVERLAY_CONFIG_ORIGIN_MODE = "_originMode";
+	private static final String OVERLAY_CONFIG_ORIGIN_X = "_originX";
+	private static final String OVERLAY_CONFIG_ORIGIN_Y = "_originY";
 	private static final String OVERLAY_CONFIG_PREFERRED_SIZE = "_preferredSize";
 	private static final String RUNELITE_CONFIG_GROUP_NAME = RuneLiteConfig.class.getAnnotation(ConfigGroup.class).value();
 
@@ -105,12 +111,20 @@ public class OverlayManager
 
 	private final ConfigManager configManager;
 	private final RuneLiteConfig runeLiteConfig;
+	private final Client client;
+
+	private Dimension lastDimensions;
 
 	@Inject
-	private OverlayManager(final ConfigManager configManager, final RuneLiteConfig runeLiteConfig)
+	private OverlayManager(
+		final ConfigManager configManager,
+		final RuneLiteConfig runeLiteConfig,
+		final Client client
+	)
 	{
 		this.configManager = configManager;
 		this.runeLiteConfig = runeLiteConfig;
+		this.client = client;
 	}
 
 	@Subscribe
@@ -136,6 +150,16 @@ public class OverlayManager
 			});
 		}
 		rebuildOverlayLayers();
+	}
+
+	@Subscribe
+	private void onBeforeRender(BeforeRender event)
+	{
+		if (lastDimensions != client.getRealDimensions())
+		{
+			lastDimensions = client.getRealDimensions();
+			recomputeOverlayPositions();
+		}
 	}
 
 	/**
@@ -245,15 +269,23 @@ public class OverlayManager
 	}
 
 	/**
-	 * Force save overlay data
+	 * Save overlay data
 	 *
 	 * @param overlay overlay to save
 	 */
 	public synchronized void saveOverlay(final Overlay overlay)
 	{
+		log.debug("Saving overlay {} origin: mode: {} x: {} y: {}", overlay.getName(), overlay.getOriginMode(), overlay.getOriginX(), overlay.getOriginY());
+
+		Point location = overlay.getPreferredLocation();
+		if (location != null)
+		{
+			location = convertAbsoluteToOrigin(location, overlay.getOriginX(), overlay.getOriginY());
+		}
+
 		saveOverlayPosition(overlay);
 		saveOverlaySize(overlay);
-		saveOverlayLocation(overlay);
+		saveOverlayLocation(overlay, location);
 		rebuildOverlayLayers();
 	}
 
@@ -267,6 +299,9 @@ public class OverlayManager
 		overlay.setPreferredPosition(null);
 		overlay.setPreferredSize(null);
 		overlay.setPreferredLocation(null);
+		overlay.setOriginMode(OverlayOriginMode.AUTO);
+		overlay.setOriginX(OverlayOrigin.LEFT);
+		overlay.setOriginY(OverlayOrigin.TOP);
 		saveOverlay(overlay);
 		overlay.revalidate();
 	}
@@ -317,21 +352,73 @@ public class OverlayManager
 		this.overlayMap = overlayMap;
 	}
 
+	void computeOverlayOrigins(Overlay overlay, int x, int y, int w, int h)
+	{
+		Dimension canvasDimensions = client.getRealDimensions();
+
+		// rough heuristic to determine overlay origins based on position
+		OverlayOrigin originX = OverlayOrigin.LEFT;
+		if (x + w / 2 > canvasDimensions.width * .55f)
+		{
+			originX = OverlayOrigin.RIGHT;
+		}
+		else if (x + w / 2 >= canvasDimensions.width * .45f)
+		{
+			originX = OverlayOrigin.CENTER;
+		}
+
+		OverlayOrigin originY = OverlayOrigin.TOP;
+		if (y + h / 2 > canvasDimensions.height * .55f)
+		{
+			originY = OverlayOrigin.BOTTOM;
+		}
+		else if (y + h / 2 > canvasDimensions.height * .45f)
+		{
+			originY = OverlayOrigin.CENTER;
+		}
+
+		overlay.setOriginX(originX);
+		overlay.setOriginY(originY);
+	}
+
 	private void loadOverlay(final Overlay overlay)
 	{
-		final Point location = loadOverlayLocation(overlay);
+		Point location = loadOverlayLocation(overlay);
 		final Dimension size = loadOverlaySize(overlay);
 		final OverlayPosition position = loadOverlayPosition(overlay);
 
 		if (overlay.isMovable())
 		{
+			OverlayOriginMode originMode = loadOverlayOriginMode(overlay);
+			OverlayOrigin originX = loadOverlayOrigin(overlay, false), originY = loadOverlayOrigin(overlay, true);
+			if (originMode != null)
+			{
+				overlay.setOriginMode(originMode);
+			}
+			if (originX != null)
+			{
+				overlay.setOriginX(originX);
+			}
+			if (originY != null)
+			{
+				overlay.setOriginY(originY);
+			}
+
+			if (originX != null && originY != null)
+			{
+				location = convertOriginToAbsolute(location, originX, originY);
+			}
+
 			overlay.setPreferredLocation(location);
 		}
 		else if (location != null)
 		{
 			log.info("Resetting preferred location of non-movable overlay {} (class {})", overlay.getName(), overlay.getClass().getName());
 			overlay.setPreferredLocation(null);
-			saveOverlayLocation(overlay);
+			overlay.setOriginMode(OverlayOriginMode.AUTO);
+			overlay.setOriginX(OverlayOrigin.LEFT);
+			overlay.setOriginY(OverlayOrigin.TOP);
+			saveOverlayLocation(overlay, null);
 		}
 
 		overlay.setPreferredSize(size);
@@ -348,6 +435,25 @@ public class OverlayManager
 		}
 	}
 
+	private synchronized void recomputeOverlayPositions()
+	{
+		for (Overlay overlay : overlays)
+		{
+			if (overlay.isMovable())
+			{
+				Point location = loadOverlayLocation(overlay);
+				final OverlayOrigin originX = loadOverlayOrigin(overlay, false), originY = loadOverlayOrigin(overlay, true);
+
+				if (originX != null && originY != null)
+				{
+					location = convertOriginToAbsolute(location, originX, originY);
+				}
+
+				overlay.setPreferredLocation(location);
+			}
+		}
+	}
+
 	private void updateOverlayConfig(final Overlay overlay)
 	{
 		if (overlay instanceof OverlayPanel)
@@ -357,21 +463,84 @@ public class OverlayManager
 		}
 	}
 
-	private void saveOverlayLocation(final Overlay overlay)
+	Point convertOriginToAbsolute(Point p, OverlayOrigin originX, OverlayOrigin originY)
+	{
+		Dimension d = client.getRealDimensions();
+		int ax = p.x;
+		if (originX == OverlayOrigin.RIGHT)
+		{
+			ax = d.width + p.x;
+		}
+		else if (originX == OverlayOrigin.CENTER)
+		{
+			ax = d.width / 2 + p.x;
+		}
+
+		int ay = p.y;
+		if (originY == OverlayOrigin.BOTTOM)
+		{
+			ay = d.height + p.y;
+		}
+		else if (originY == OverlayOrigin.CENTER)
+		{
+			ay = d.height / 2 + p.y;
+		}
+
+		return new Point(ax, ay);
+	}
+
+	Point convertAbsoluteToOrigin(Point p, OverlayOrigin originX, OverlayOrigin originY)
+	{
+		Dimension d = client.getRealDimensions();
+		int ox = p.x;
+		if (originX == OverlayOrigin.RIGHT)
+		{
+			ox = p.x - d.width;
+		}
+		else if (originX == OverlayOrigin.CENTER)
+		{
+			ox = p.x - d.width / 2;
+		}
+
+		int oy = p.y;
+		if (originY == OverlayOrigin.BOTTOM)
+		{
+			oy = p.y - d.height;
+		}
+		else if (originY == OverlayOrigin.CENTER)
+		{
+			oy = p.y - d.height / 2;
+		}
+
+		return new Point(ox, oy);
+	}
+
+	private void saveOverlayLocation(final Overlay overlay, Point originPosition)
 	{
 		final String key = overlay.getName() + OVERLAY_CONFIG_PREFERRED_LOCATION;
 		if (overlay.getPreferredLocation() != null)
 		{
 			configManager.setConfiguration(
 				RUNELITE_CONFIG_GROUP_NAME,
-				key,
-				overlay.getPreferredLocation());
+				key, originPosition);
+			configManager.setConfiguration(RUNELITE_CONFIG_GROUP_NAME,
+				overlay.getName() + OVERLAY_CONFIG_ORIGIN_MODE,
+				overlay.getOriginMode());
+			configManager.setConfiguration(RUNELITE_CONFIG_GROUP_NAME,
+				overlay.getName() + OVERLAY_CONFIG_ORIGIN_X,
+				overlay.getOriginX());
+			configManager.setConfiguration(RUNELITE_CONFIG_GROUP_NAME,
+				overlay.getName() + OVERLAY_CONFIG_ORIGIN_Y,
+				overlay.getOriginY());
 		}
 		else
 		{
 			configManager.unsetConfiguration(
 				RUNELITE_CONFIG_GROUP_NAME,
 				key);
+			configManager.unsetConfiguration(RUNELITE_CONFIG_GROUP_NAME, overlay.getName() + OVERLAY_CONFIG_ORIGIN_MODE);
+			configManager.unsetConfiguration(RUNELITE_CONFIG_GROUP_NAME, overlay.getName() + OVERLAY_CONFIG_ORIGIN_X);
+			configManager.unsetConfiguration(RUNELITE_CONFIG_GROUP_NAME, overlay.getName() + OVERLAY_CONFIG_ORIGIN_Y);
 		}
 	}
 
@@ -427,5 +596,16 @@ public class OverlayManager
 	{
 		final String locationKey = overlay.getName() + OVERLAY_CONFIG_PREFERRED_POSITION;
 		return configManager.getConfiguration(RUNELITE_CONFIG_GROUP_NAME, locationKey, OverlayPosition.class);
+	}
+
+	private OverlayOriginMode loadOverlayOriginMode(final Overlay overlay)
+	{
+		return configManager.getConfiguration(RUNELITE_CONFIG_GROUP_NAME, overlay.getName() + OVERLAY_CONFIG_ORIGIN_MODE, OverlayOriginMode.class);
+	}
+
+	private OverlayOrigin loadOverlayOrigin(final Overlay overlay, boolean vertical)
+	{
+		var key = overlay.getName() + (vertical ? OVERLAY_CONFIG_ORIGIN_Y : OVERLAY_CONFIG_ORIGIN_X);
+		return configManager.getConfiguration(RUNELITE_CONFIG_GROUP_NAME, key, OverlayOrigin.class);
 	}
 }

@@ -50,6 +50,8 @@ import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
 import net.runelite.api.KeyCode;
+import net.runelite.api.Menu;
+import net.runelite.api.MenuEntry;
 import net.runelite.api.events.BeforeRender;
 import net.runelite.api.events.ClientTick;
 import net.runelite.api.events.FocusChanged;
@@ -57,6 +59,7 @@ import net.runelite.api.gameval.InterfaceID;
 import net.runelite.api.gameval.VarbitID;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetItem;
+import net.runelite.client.chat.ChatMessageBuilder;
 import net.runelite.client.chat.ChatMessageManager;
 import net.runelite.client.chat.QueuedMessage;
 import net.runelite.client.config.RuneLiteConfig;
@@ -190,6 +193,8 @@ public class OverlayRenderer extends MouseAdapter
 			return;
 		}
 
+		addBuiltinMenus(overlay);
+
 		List<OverlayMenuEntry> menuEntries = overlay.getMenuEntries();
 		if (menuEntries.isEmpty())
 		{
@@ -206,6 +211,47 @@ public class OverlayRenderer extends MouseAdapter
 				.setTarget(ColorUtil.wrapWithColorTag(overlayMenuEntry.getTarget(), JagexColors.MENU_TARGET))
 				.setType(overlayMenuEntry.getMenuAction())
 				.onClick(MoreObjects.firstNonNull(overlayMenuEntry.callback, e -> eventBus.post(new OverlayMenuClicked(overlayMenuEntry, overlay))));
+		}
+	}
+
+	private void addBuiltinMenus(Overlay overlay)
+	{
+		if (overlay.getPreferredLocation() == null)
+		{
+			return;
+		}
+
+		Menu menu = client.getMenu();
+		Menu sub = menu.createMenuEntry(-1)
+			.setOption("Overlay Origin")
+			.createSubMenu();
+		String[] opts = {"Top left", "Top center", "Top right", "Bottom left", "Bottom center", "Bottom right"};
+		OverlayOrigin[] originX = {
+			OverlayOrigin.LEFT, OverlayOrigin.CENTER, OverlayOrigin.RIGHT,
+			OverlayOrigin.LEFT, OverlayOrigin.CENTER, OverlayOrigin.RIGHT
+		};
+		OverlayOrigin[] originY = {
+			OverlayOrigin.TOP, OverlayOrigin.TOP, OverlayOrigin.TOP,
+			OverlayOrigin.BOTTOM, OverlayOrigin.BOTTOM, OverlayOrigin.BOTTOM
+		};
+		for (int i = 0; i < opts.length; ++i)
+		{
+			OverlayOrigin ox = originX[i], oy = originY[i];
+			sub.createMenuEntry(-1 - i)
+				.setOption(opts[i])
+				.onClick(e ->
+				{
+					chatMessageManager.queue(QueuedMessage.builder()
+						.type(ChatMessageType.CONSOLE)
+						.runeLiteFormattedMessage("This overlay will now be automatically repositioned relative to the " +
+							oy.name().toLowerCase() + " " + ox.name().toLowerCase() + " of the screen when the client is resized.")
+						.build());
+
+					overlay.setOriginMode(OverlayOriginMode.MANUAL);
+					overlay.setOriginX(ox);
+					overlay.setOriginY(oy);
+					overlayManager.saveOverlay(overlay);
+				});
 		}
 	}
 
@@ -599,6 +645,13 @@ public class OverlayRenderer extends MouseAdapter
 			// Clamp drag to parent component
 			final Rectangle overlayBounds = currentManagedOverlay.getBounds();
 			overlayPosition = clampOverlayLocation(overlayPosition.x, overlayPosition.y, overlayBounds.width, overlayBounds.height, currentManagedOverlay);
+
+			// Compute the new origins for the overlay
+			if (currentManagedOverlay.getOriginMode() == OverlayOriginMode.AUTO)
+			{
+				overlayManager.computeOverlayOrigins(currentManagedOverlay, overlayPosition.x, overlayPosition.y, overlayBounds.width, overlayBounds.height);
+			}
+
 			currentManagedOverlay.setPreferredPosition(null);
 			currentManagedOverlay.setPreferredLocation(overlayPosition);
 		}
@@ -655,6 +708,9 @@ public class OverlayRenderer extends MouseAdapter
 
 					currentManagedOverlay.setPreferredPosition(position);
 					currentManagedOverlay.setPreferredLocation(null); // from dragging
+					currentManagedOverlay.setOriginMode(OverlayOriginMode.AUTO);
+					currentManagedOverlay.setOriginX(OverlayOrigin.LEFT);
+					currentManagedOverlay.setOriginY(OverlayOrigin.TOP);
 					currentManagedOverlay.revalidate();
 					break;
 				}
