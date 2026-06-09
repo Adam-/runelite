@@ -24,7 +24,7 @@
  */
 package net.runelite.client.ui.overlay;
 
-public enum OverlayOrigin
+enum OverlayOrigin
 {
 	LEFT,
 	CENTER,

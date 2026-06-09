@@ -24,7 +24,7 @@
  */
 package net.runelite.client.ui.overlay;
 
-public enum OverlayOriginMode
+enum OverlayOriginMode
 {
 	AUTO,
 	MANUAL
