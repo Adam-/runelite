@@ -391,21 +391,13 @@ public class OverlayManager
 		{
 			OverlayOriginMode originMode = loadOverlayOriginMode(overlay);
 			OverlayOrigin originX = loadOverlayOrigin(overlay, false), originY = loadOverlayOrigin(overlay, true);
-			if (originMode != null)
+
+			if (originMode != null && originX != null && originY != null)
 			{
 				overlay.setOriginMode(originMode);
-			}
-			if (originX != null)
-			{
 				overlay.setOriginX(originX);
-			}
-			if (originY != null)
-			{
 				overlay.setOriginY(originY);
-			}
 
-			if (originX != null && originY != null)
-			{
 				location = convertOriginToAbsolute(location, originX, originY);
 			}
 
