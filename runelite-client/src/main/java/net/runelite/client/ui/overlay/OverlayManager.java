@@ -391,7 +391,7 @@ public class OverlayManager
 			OverlayOriginMode originMode = loadOverlayOriginMode(overlay);
 			OverlayOrigin originX = loadOverlayOrigin(overlay, false), originY = loadOverlayOrigin(overlay, true);
 
-			if (originMode != null && originX != null && originY != null)
+			if (location != null && originMode != null && originX != null && originY != null)
 			{
 				overlay.setOriginMode(originMode);
 				overlay.setOriginX(originX);
