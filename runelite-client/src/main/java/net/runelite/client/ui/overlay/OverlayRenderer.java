@@ -191,7 +191,7 @@ public class OverlayRenderer extends MouseAdapter
 			return;
 		}
 
-		addBuiltinMenus(overlay);
+		addOriginMenu(overlay);
 
 		List<OverlayMenuEntry> menuEntries = overlay.getMenuEntries();
 		if (menuEntries.isEmpty())
@@ -212,7 +212,7 @@ public class OverlayRenderer extends MouseAdapter
 		}
 	}
 
-	private void addBuiltinMenus(Overlay overlay)
+	private void addOriginMenu(Overlay overlay)
 	{
 		if (overlay.getPreferredLocation() == null)
 		{
@@ -232,10 +232,11 @@ public class OverlayRenderer extends MouseAdapter
 			OverlayOrigin.TOP, OverlayOrigin.TOP, OverlayOrigin.TOP,
 			OverlayOrigin.BOTTOM, OverlayOrigin.BOTTOM, OverlayOrigin.BOTTOM
 		};
+		int off = 0;
 		for (int i = 0; i < opts.length; ++i)
 		{
 			OverlayOrigin ox = originX[i], oy = originY[i];
-			sub.createMenuEntry(-1 - i)
+			sub.createMenuEntry(-1 - off++)
 				.setOption(opts[i])
 				.onClick(e ->
 				{
@@ -245,9 +246,37 @@ public class OverlayRenderer extends MouseAdapter
 							oy.name().toLowerCase() + " " + ox.name().toLowerCase() + " of the screen when the client is resized.")
 						.build());
 
+					Point p = overlayManager.computeAbsolutePosition(overlay);
+					p = overlayManager.computeOriginPosition(p, OverlayOriginMode.MANUAL, ox, oy);
+					overlay.setPreferredLocation(p);
+
 					overlay.setOriginMode(OverlayOriginMode.MANUAL);
 					overlay.setOriginX(ox);
 					overlay.setOriginY(oy);
+					overlayManager.saveOverlay(overlay);
+				});
+		}
+		opts = new String[]{"Sidepanel"};
+		OverlayOriginMode[] origins = {OverlayOriginMode.SIDEPANEL};
+		for (int i = 0; i < opts.length; ++i)
+		{
+			OverlayOriginMode origin = origins[i];
+			sub.createMenuEntry(-1 - off++)
+				.setOption(opts[i])
+				.onClick(e ->
+				{
+					chatMessageManager.queue(QueuedMessage.builder()
+						.type(ChatMessageType.CONSOLE)
+						.runeLiteFormattedMessage("This overlay will now be automatically repositioned relative to the " +
+							origin.name().toLowerCase() + " when the client is resized.")
+						.build());
+
+					Point p = overlayManager.computeAbsolutePosition(overlay);
+					p = overlayManager.computeOriginPosition(p, origin, null, null);
+					overlay.setPreferredLocation(p);
+
+					overlay.setOriginMode(origin);
+					overlay.setOriginMode(origin);
 					overlayManager.saveOverlay(overlay);
 				});
 		}
@@ -343,9 +372,13 @@ public class OverlayRenderer extends MouseAdapter
 				snapCorner = snapCorners.forPosition(overlayPosition);
 				location = snapCorner.getNextDrawPosition(bounds);
 			}
+			else if (preferredLocation != null)
+			{
+				location = overlayManager.computeAbsolutePosition(overlay);
+			}
 			else
 			{
-				location = preferredLocation != null ? preferredLocation : bounds.getLocation();
+				location = bounds.getLocation();
 			}
 
 			// Clamp the overlay position to ensure it is on screen or within parent bounds
@@ -644,11 +677,13 @@ public class OverlayRenderer extends MouseAdapter
 			final Rectangle overlayBounds = currentManagedOverlay.getBounds();
 			overlayPosition = clampOverlayLocation(overlayPosition.x, overlayPosition.y, overlayBounds.width, overlayBounds.height, currentManagedOverlay);
 
-			// Compute the new origins for the overlay
 			if (currentManagedOverlay.getOriginMode() == OverlayOriginMode.AUTO)
 			{
+				// Compute the new origins for the overlay and the origin-relative position
 				overlayManager.computeOverlayOrigins(currentManagedOverlay, overlayPosition.x, overlayPosition.y, overlayBounds.width, overlayBounds.height);
 			}
+
+			overlayPosition = overlayManager.computeOriginPosition(overlayPosition, currentManagedOverlay.getOriginMode(), currentManagedOverlay.getOriginX(), currentManagedOverlay.getOriginY());
 
 			currentManagedOverlay.setPreferredPosition(null);
 			currentManagedOverlay.setPreferredLocation(overlayPosition);

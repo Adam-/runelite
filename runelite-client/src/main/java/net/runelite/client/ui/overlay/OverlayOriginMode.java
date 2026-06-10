@@ -24,8 +24,30 @@
  */
 package net.runelite.client.ui.overlay;
 
+import java.awt.Point;
+import net.runelite.api.Client;
+import net.runelite.api.gameval.InterfaceID;
+import net.runelite.api.widgets.Widget;
+
 enum OverlayOriginMode
 {
 	AUTO,
-	MANUAL
+	MANUAL,
+	SIDEPANEL
+		{
+			@Override
+			Widget getWidget(Client client)
+			{
+				Widget w = client.getWidget(InterfaceID.ToplevelOsrsStretch.SIDE_MENU);
+				return w;
+			}
+		}
+	;
+
+	Widget getWidget(Client client)
+	{
+		return null;
+	}
+
+	final Point coord = new Point();
 }

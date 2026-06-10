@@ -41,8 +41,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
-import net.runelite.api.events.BeforeRender;
 import net.runelite.api.gameval.InterfaceID;
+import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetItem;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigManager;
@@ -149,16 +149,6 @@ public class OverlayManager
 			});
 		}
 		rebuildOverlayLayers();
-	}
-
-	@Subscribe
-	private void onBeforeRender(BeforeRender event)
-	{
-		if (lastDimensions != client.getRealDimensions())
-		{
-			lastDimensions = client.getRealDimensions();
-			recomputeOverlayPositions();
-		}
 	}
 
 	/**
@@ -274,17 +264,11 @@ public class OverlayManager
 	 */
 	public synchronized void saveOverlay(final Overlay overlay)
 	{
-		log.debug("Saving overlay {} origin: mode: {} x: {} y: {}", overlay.getName(), overlay.getOriginMode(), overlay.getOriginX(), overlay.getOriginY());
-
-		Point location = overlay.getPreferredLocation();
-		if (location != null)
-		{
-			location = convertAbsoluteToOrigin(location, overlay.getOriginX(), overlay.getOriginY());
-		}
+		log.debug("Saving overlay {} origin: {} x: {} y: {}", overlay.getName(), overlay.getOriginMode(), overlay.getOriginX(), overlay.getOriginY());
 
 		saveOverlayPosition(overlay);
 		saveOverlaySize(overlay);
-		saveOverlayLocation(overlay, location);
+		saveOverlayLocation(overlay);
 		rebuildOverlayLayers();
 	}
 
@@ -396,8 +380,6 @@ public class OverlayManager
 				overlay.setOriginMode(originMode);
 				overlay.setOriginX(originX);
 				overlay.setOriginY(originY);
-
-				location = convertOriginToAbsolute(location, originX, originY);
 			}
 
 			overlay.setPreferredLocation(location);
@@ -409,7 +391,7 @@ public class OverlayManager
 			overlay.setOriginMode(OverlayOriginMode.AUTO);
 			overlay.setOriginX(OverlayOrigin.LEFT);
 			overlay.setOriginY(OverlayOrigin.TOP);
-			saveOverlayLocation(overlay, null);
+			saveOverlayLocation(overlay);
 		}
 
 		overlay.setPreferredSize(size);
@@ -426,25 +408,6 @@ public class OverlayManager
 		}
 	}
 
-	private synchronized void recomputeOverlayPositions()
-	{
-		for (Overlay overlay : overlays)
-		{
-			if (overlay.isMovable())
-			{
-				Point location = loadOverlayLocation(overlay);
-				final OverlayOrigin originX = loadOverlayOrigin(overlay, false), originY = loadOverlayOrigin(overlay, true);
-
-				if (originX != null && originY != null)
-				{
-					location = convertOriginToAbsolute(location, originX, originY);
-				}
-
-				overlay.setPreferredLocation(location);
-			}
-		}
-	}
-
 	private void updateOverlayConfig(final Overlay overlay)
 	{
 		if (overlay instanceof OverlayPanel)
@@ -454,7 +417,7 @@ public class OverlayManager
 		}
 	}
 
-	Point convertOriginToAbsolute(Point p, OverlayOrigin originX, OverlayOrigin originY)
+	private Point convertOriginToAbsolute(Point p, OverlayOrigin originX, OverlayOrigin originY)
 	{
 		Dimension d = client.getRealDimensions();
 		int ax = p.x;
@@ -480,7 +443,29 @@ public class OverlayManager
 		return new Point(ax, ay);
 	}
 
-	Point convertAbsoluteToOrigin(Point p, OverlayOrigin originX, OverlayOrigin originY)
+	Point computeAbsolutePosition(Overlay overlay)
+	{
+		OverlayOriginMode origin = overlay.getOriginMode();
+		if (origin == OverlayOriginMode.SIDEPANEL)
+		{
+			Widget w = origin.getWidget(client);
+			if (w == null)
+			{
+				return origin.coord;
+			}
+
+			var wp = w.getCanvasLocation();
+			var op = overlay.getPreferredLocation();
+			origin.coord.setLocation(wp.getX() + op.x, wp.getY() + op.y);
+			return origin.coord;
+		}
+		else
+		{
+			return convertOriginToAbsolute(overlay.getPreferredLocation(), overlay.getOriginX(), overlay.getOriginY());
+		}
+	}
+
+	private Point convertAbsoluteToOrigin(Point p, OverlayOrigin originX, OverlayOrigin originY)
 	{
 		Dimension d = client.getRealDimensions();
 		int ox = p.x;
@@ -506,14 +491,39 @@ public class OverlayManager
 		return new Point(ox, oy);
 	}
 
-	private void saveOverlayLocation(final Overlay overlay, Point originPosition)
+	Point computeOriginPosition(Point absPosition, OverlayOriginMode origin, OverlayOrigin originX, OverlayOrigin originY)
+	{
+		if (origin == OverlayOriginMode.SIDEPANEL)
+		{
+			Widget w = client.getWidget(InterfaceID.ToplevelOsrsStretch.SIDE_MENU);
+			int wx, wy;
+			if (w != null)
+			{
+				var wp = w.getCanvasLocation();
+				wx = wp.getX();
+				wy = wp.getY();
+			}
+			else
+			{
+				wx = origin.coord.x;
+				wy = origin.coord.y;
+			}
+			return new Point(absPosition.x - wx, absPosition.y - wy);
+		}
+		else
+		{
+			return convertAbsoluteToOrigin(absPosition, originX, originY);
+		}
+	}
+
+	private void saveOverlayLocation(final Overlay overlay)
 	{
 		final String key = overlay.getName() + OVERLAY_CONFIG_PREFERRED_LOCATION;
-		if (originPosition != null)
+		if (overlay.getPreferredLocation() != null)
 		{
 			configManager.setConfiguration(
 				RUNELITE_CONFIG_GROUP_NAME,
-				key, originPosition);
+				key, overlay.getPreferredLocation());
 			configManager.setConfiguration(RUNELITE_CONFIG_GROUP_NAME,
 				overlay.getName() + OVERLAY_CONFIG_ORIGIN_MODE,
 				overlay.getOriginMode());
