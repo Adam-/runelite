@@ -26,6 +26,9 @@ package net.runelite.client.ui.overlay;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.ArrayListMultimap;
+import com.google.common.graph.GraphBuilder;
+import com.google.common.graph.Graphs;
+import com.google.common.graph.MutableGraph;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.util.ArrayList;
@@ -40,10 +43,14 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
+import net.runelite.api.Menu;
 import net.runelite.api.gameval.InterfaceID;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetItem;
+import net.runelite.client.chat.ChatMessageManager;
+import net.runelite.client.chat.QueuedMessage;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.config.RuneLiteConfig;
@@ -111,19 +118,20 @@ public class OverlayManager
 	private final ConfigManager configManager;
 	private final RuneLiteConfig runeLiteConfig;
 	private final Client client;
-
-	private Dimension lastDimensions;
+	private final ChatMessageManager chatMessageManager;
 
 	@Inject
 	private OverlayManager(
 		final ConfigManager configManager,
 		final RuneLiteConfig runeLiteConfig,
-		final Client client
+		final Client client,
+		final ChatMessageManager chatMessageManager
 	)
 	{
 		this.configManager = configManager;
 		this.runeLiteConfig = runeLiteConfig;
 		this.client = client;
+		this.chatMessageManager = chatMessageManager;
 	}
 
 	@Subscribe
@@ -609,4 +617,105 @@ public class OverlayManager
 		var key = overlay.getName() + (vertical ? OVERLAY_CONFIG_ORIGIN_Y : OVERLAY_CONFIG_ORIGIN_X);
 		return configManager.getConfiguration(RUNELITE_CONFIG_GROUP_NAME, key, OverlayOriginLocation.class);
 	}
+
+	void addOriginMenu(Overlay overlay)
+	{
+		if (overlay.getPreferredLocation() == null)
+		{
+			return;
+		}
+
+		Menu menu = client.getMenu();
+		Menu sub = menu.createMenuEntry(-1)
+			.setOption("Overlay Origin")
+			.createSubMenu();
+		String[] opts = {"Top left", "Top center", "Top right", "Bottom left", "Bottom center", "Bottom right"};
+		OverlayOriginLocation[] originX = {
+			OverlayOriginLocation.LEFT, OverlayOriginLocation.CENTER, OverlayOriginLocation.RIGHT,
+			OverlayOriginLocation.LEFT, OverlayOriginLocation.CENTER, OverlayOriginLocation.RIGHT
+		};
+		OverlayOriginLocation[] originY = {
+			OverlayOriginLocation.TOP, OverlayOriginLocation.TOP, OverlayOriginLocation.TOP,
+			OverlayOriginLocation.BOTTOM, OverlayOriginLocation.BOTTOM, OverlayOriginLocation.BOTTOM
+		};
+		int off = 0;
+		for (int i = 0; i < opts.length; ++i)
+		{
+			OverlayOriginLocation ox = originX[i], oy = originY[i];
+			sub.createMenuEntry(-1 - off++)
+				.setOption(opts[i])
+				.onClick(e ->
+				{
+					chatMessageManager.queue(QueuedMessage.builder()
+						.type(ChatMessageType.CONSOLE)
+						.runeLiteFormattedMessage("This overlay will now be automatically repositioned relative to the " +
+							oy.name().toLowerCase() + " " + ox.name().toLowerCase() + " of the screen when the client is resized.")
+						.build());
+
+					Point p = computeAbsolutePosition(overlay);
+					p = computeOriginPosition(p, OverlayOrigin.MANUAL, ox, oy);
+					overlay.setPreferredLocation(p);
+
+					overlay.setOrigin(OverlayOrigin.MANUAL);
+					overlay.setOriginX(ox);
+					overlay.setOriginY(oy);
+					saveOverlay(overlay);
+				});
+		}
+		opts = new String[]{"Sidepanel"};
+		OverlayOrigin[] origins = {OverlayOrigin.SIDEPANEL};
+		for (int i = 0; i < opts.length; ++i)
+		{
+			OverlayOrigin origin = origins[i];
+			sub.createMenuEntry(-1 - off++)
+				.setOption(opts[i])
+				.onClick(e ->
+				{
+					if (cycleCheck(overlay, origin))
+					{
+						chatMessageManager.queue(QueuedMessage.builder()
+							.type(ChatMessageType.CONSOLE)
+							.runeLiteFormattedMessage("Cycle!")
+							.build());
+						return;
+					}
+
+					chatMessageManager.queue(QueuedMessage.builder()
+						.type(ChatMessageType.CONSOLE)
+						.runeLiteFormattedMessage("This overlay will now be automatically repositioned relative to the " +
+							origin.name().toLowerCase() + ".")
+						.build());
+
+					Point p = computeAbsolutePosition(overlay);
+					p = computeOriginPosition(p, origin, null, null);
+					overlay.setPreferredLocation(p);
+
+					overlay.setOrigin(origin);
+					saveOverlay(overlay);
+				});
+		}
+	}
+
+	private synchronized boolean cycleCheck(Overlay curOverlay, OverlayOrigin newOrigin)
+	{
+		MutableGraph<Widget> g = GraphBuilder
+			.directed()
+			.allowsSelfLoops(true)
+			.build();
+		for (Overlay overlay : overlays)
+		{
+			if (overlay instanceof WidgetOverlay)
+			{
+				OverlayOrigin origin = overlay == curOverlay ? newOrigin : overlay.getOrigin();
+				Widget overlayWidget = client.getWidget(((WidgetOverlay) overlay).componentId);
+				Widget originWidget = origin.getWidget(client);
+				if (overlayWidget != null && originWidget != null)
+				{
+					g.putEdge(overlayWidget, originWidget);
+				}
+			}
+		}
+		return Graphs.hasCycle(g);
+	}
+
 }

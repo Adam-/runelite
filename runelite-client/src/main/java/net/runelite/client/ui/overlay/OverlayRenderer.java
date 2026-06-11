@@ -25,9 +25,6 @@
 package net.runelite.client.ui.overlay;
 
 import com.google.common.base.MoreObjects;
-import com.google.common.graph.GraphBuilder;
-import com.google.common.graph.Graphs;
-import com.google.common.graph.MutableGraph;
 import com.google.common.primitives.Ints;
 import java.awt.Color;
 import java.awt.Composite;
@@ -44,11 +41,7 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.swing.SwingUtilities;
@@ -57,7 +50,6 @@ import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
 import net.runelite.api.KeyCode;
-import net.runelite.api.Menu;
 import net.runelite.api.events.BeforeRender;
 import net.runelite.api.events.ClientTick;
 import net.runelite.api.events.FocusChanged;
@@ -198,7 +190,7 @@ public class OverlayRenderer extends MouseAdapter
 			return;
 		}
 
-		addOriginMenu(overlay);
+		overlayManager.addOriginMenu(overlay);
 
 		List<OverlayMenuEntry> menuEntries = overlay.getMenuEntries();
 		if (menuEntries.isEmpty())
@@ -217,106 +209,6 @@ public class OverlayRenderer extends MouseAdapter
 				.setType(overlayMenuEntry.getMenuAction())
 				.onClick(MoreObjects.firstNonNull(overlayMenuEntry.callback, e -> eventBus.post(new OverlayMenuClicked(overlayMenuEntry, overlay))));
 		}
-	}
-
-	private void addOriginMenu(Overlay overlay)
-	{
-		if (overlay.getPreferredLocation() == null)
-		{
-			return;
-		}
-
-		Menu menu = client.getMenu();
-		Menu sub = menu.createMenuEntry(-1)
-			.setOption("Overlay Origin")
-			.createSubMenu();
-		String[] opts = {"Top left", "Top center", "Top right", "Bottom left", "Bottom center", "Bottom right"};
-		OverlayOriginLocation[] originX = {
-			OverlayOriginLocation.LEFT, OverlayOriginLocation.CENTER, OverlayOriginLocation.RIGHT,
-			OverlayOriginLocation.LEFT, OverlayOriginLocation.CENTER, OverlayOriginLocation.RIGHT
-		};
-		OverlayOriginLocation[] originY = {
-			OverlayOriginLocation.TOP, OverlayOriginLocation.TOP, OverlayOriginLocation.TOP,
-			OverlayOriginLocation.BOTTOM, OverlayOriginLocation.BOTTOM, OverlayOriginLocation.BOTTOM
-		};
-		int off = 0;
-		for (int i = 0; i < opts.length; ++i)
-		{
-			OverlayOriginLocation ox = originX[i], oy = originY[i];
-			sub.createMenuEntry(-1 - off++)
-				.setOption(opts[i])
-				.onClick(e ->
-				{
-					chatMessageManager.queue(QueuedMessage.builder()
-						.type(ChatMessageType.CONSOLE)
-						.runeLiteFormattedMessage("This overlay will now be automatically repositioned relative to the " +
-							oy.name().toLowerCase() + " " + ox.name().toLowerCase() + " of the screen when the client is resized.")
-						.build());
-
-					Point p = overlayManager.computeAbsolutePosition(overlay);
-					p = overlayManager.computeOriginPosition(p, OverlayOrigin.MANUAL, ox, oy);
-					overlay.setPreferredLocation(p);
-
-					overlay.setOrigin(OverlayOrigin.MANUAL);
-					overlay.setOriginX(ox);
-					overlay.setOriginY(oy);
-					overlayManager.saveOverlay(overlay);
-				});
-		}
-		opts = new String[]{"Sidepanel"};
-		OverlayOrigin[] origins = {OverlayOrigin.SIDEPANEL};
-		for (int i = 0; i < opts.length; ++i)
-		{
-			OverlayOrigin origin = origins[i];
-			sub.createMenuEntry(-1 - off++)
-				.setOption(opts[i])
-				.onClick(e ->
-				{
-					if (cycleCheck(overlay, origin))
-					{
-						chatMessageManager.queue(QueuedMessage.builder()
-							.type(ChatMessageType.CONSOLE)
-							.runeLiteFormattedMessage("Cycle!")
-							.build());
-						return;
-					}
-
-					chatMessageManager.queue(QueuedMessage.builder()
-						.type(ChatMessageType.CONSOLE)
-						.runeLiteFormattedMessage("This overlay will now be automatically repositioned relative to the " +
-							origin.name().toLowerCase() + ".")
-						.build());
-
-					Point p = overlayManager.computeAbsolutePosition(overlay);
-					p = overlayManager.computeOriginPosition(p, origin, null, null);
-					overlay.setPreferredLocation(p);
-
-					overlay.setOrigin(origin);
-					overlayManager.saveOverlay(overlay);
-				});
-		}
-	}
-
-	private boolean cycleCheck(Overlay curOverlay, OverlayOrigin newOrigin)
-	{
-		MutableGraph<Widget> g = GraphBuilder
-			.directed()
-			.allowsSelfLoops(true)
-			.build();
-		for (Overlay overlay : overlayManager.getOverlays())
-		{
-			if (overlay instanceof WidgetOverlay)
-			{
-				OverlayOrigin origin = overlay == curOverlay ? newOrigin : overlay.getOrigin();
-				Widget overlayWidget = client.getWidget(((WidgetOverlay) overlay).componentId);
-				Widget originWidget = origin.getWidget(client);
-				if (overlayWidget != null && originWidget != null)
-				{
-					g.putEdge(overlayWidget, originWidget);
-				}
-			}
-		}
-		return Graphs.hasCycle(g);
 	}
 
 	@Subscribe
