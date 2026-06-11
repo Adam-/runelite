@@ -28,7 +28,6 @@ import java.awt.Point;
 import net.runelite.api.Client;
 import net.runelite.api.annotations.Component;
 import net.runelite.api.gameval.InterfaceID;
-import net.runelite.api.gameval.VarbitID;
 import net.runelite.api.widgets.Widget;
 
 enum OverlayOrigin
