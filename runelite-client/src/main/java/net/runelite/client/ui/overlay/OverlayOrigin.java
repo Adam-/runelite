@@ -26,7 +26,9 @@ package net.runelite.client.ui.overlay;
 
 import java.awt.Point;
 import net.runelite.api.Client;
+import net.runelite.api.annotations.Component;
 import net.runelite.api.gameval.InterfaceID;
+import net.runelite.api.gameval.VarbitID;
 import net.runelite.api.widgets.Widget;
 
 enum OverlayOrigin
@@ -38,16 +40,12 @@ enum OverlayOrigin
 			@Override
 			Widget getWidget(Client client)
 			{
-				Widget w = client.getWidget(InterfaceID.ToplevelOsrsStretch.SIDE_MENU);
-				if (w == null)
-				{
-					w = client.getWidget(InterfaceID.ToplevelPreEoc.SIDE_CONTAINER);
-				}
-				if (w == null)
-				{
-					w = client.getWidget(InterfaceID.Toplevel.SIDE);
-				}
-				return w;
+				return getComponent(
+					client,
+					InterfaceID.ToplevelOsrsStretch.SIDE_MENU,
+					InterfaceID.ToplevelPreEoc.SIDE_CONTAINER,
+					InterfaceID.Toplevel.SIDE
+				);
 			}
 		},
 	CHATBOX
@@ -55,16 +53,12 @@ enum OverlayOrigin
 			@Override
 			Widget getWidget(Client client)
 			{
-				Widget w = client.getWidget(InterfaceID.ToplevelOsrsStretch.CHAT_CONTAINER);
-				if (w == null)
-				{
-					w = client.getWidget(InterfaceID.ToplevelPreEoc.CHAT_CONTAINER);
-				}
-				if (w == null)
-				{
-					w = client.getWidget(InterfaceID.Toplevel.CHAT_CONTAINER);
-				}
-				return w;
+				return getComponent(
+					client,
+					InterfaceID.ToplevelOsrsStretch.CHAT_CONTAINER,
+					InterfaceID.ToplevelPreEoc.CHAT_CONTAINER,
+					InterfaceID.Toplevel.CHAT_CONTAINER
+				);
 			}
 		},
 	MINIMAP
@@ -72,23 +66,34 @@ enum OverlayOrigin
 			@Override
 			Widget getWidget(Client client)
 			{
-				Widget w = client.getWidget(InterfaceID.ToplevelOsrsStretch.MAP_CONTAINER);
-				if (w == null)
-				{
-					w = client.getWidget(InterfaceID.ToplevelPreEoc.MAP_CONTAINER);
-				}
-				if (w == null)
-				{
-					w = client.getWidget(InterfaceID.Toplevel.MAPCONTAINER);
-				}
-				return w;
+				return getComponent(
+					client,
+					InterfaceID.ToplevelOsrsStretch.MAP_CONTAINER,
+					InterfaceID.ToplevelPreEoc.MAP_CONTAINER,
+					InterfaceID.Toplevel.MAPCONTAINER
+				);
 			}
-		}
-	;
+		};
 
 	Widget getWidget(Client client)
 	{
 		return null;
+	}
+
+	private static Widget getComponent(Client client, @Component int stretch, @Component int eoc, @Component int fixed)
+	{
+		if (client.isResized())
+		{
+			if (client.getVarbitValue(VarbitID.RESIZABLE_STONE_ARRANGEMENT) == 1)
+			{
+				return client.getWidget(eoc);
+			}
+			else
+			{
+				return client.getWidget(stretch);
+			}
+		}
+		return client.getWidget(fixed);
 	}
 
 	final Point coord = new Point();
