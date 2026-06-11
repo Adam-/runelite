@@ -276,7 +276,6 @@ public class OverlayRenderer extends MouseAdapter
 					overlay.setPreferredLocation(p);
 
 					overlay.setOrigin(origin);
-					overlay.setOrigin(origin);
 					overlayManager.saveOverlay(overlay);
 				});
 		}
