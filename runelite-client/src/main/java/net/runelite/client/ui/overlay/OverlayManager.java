@@ -291,8 +291,8 @@ public class OverlayManager
 		overlay.setPreferredSize(null);
 		overlay.setPreferredLocation(null);
 		overlay.setOrigin(OverlayOrigin.AUTO);
-		overlay.setOriginX(OverlayOriginLocation.LEFT);
-		overlay.setOriginY(OverlayOriginLocation.TOP);
+		overlay.setOriginX(OverlayOriginX.LEFT);
+		overlay.setOriginY(OverlayOriginY.TOP);
 		saveOverlay(overlay);
 		overlay.revalidate();
 	}
@@ -348,24 +348,24 @@ public class OverlayManager
 		Dimension canvasDimensions = client.getRealDimensions();
 
 		// rough heuristic to determine overlay origins based on position
-		OverlayOriginLocation originX = OverlayOriginLocation.LEFT;
+		OverlayOriginX originX = OverlayOriginX.LEFT;
 		if (x + w / 2 > canvasDimensions.width * .55f)
 		{
-			originX = OverlayOriginLocation.RIGHT;
+			originX = OverlayOriginX.RIGHT;
 		}
 		else if (x + w / 2 >= canvasDimensions.width * .45f)
 		{
-			originX = OverlayOriginLocation.CENTER;
+			originX = OverlayOriginX.CENTER;
 		}
 
-		OverlayOriginLocation originY = OverlayOriginLocation.TOP;
+		OverlayOriginY originY = OverlayOriginY.TOP;
 		if (y + h / 2 > canvasDimensions.height * .55f)
 		{
-			originY = OverlayOriginLocation.BOTTOM;
+			originY = OverlayOriginY.BOTTOM;
 		}
 		else if (y + h / 2 > canvasDimensions.height * .45f)
 		{
-			originY = OverlayOriginLocation.CENTER;
+			originY = OverlayOriginY.CENTER;
 		}
 
 		overlay.setOriginX(originX);
@@ -381,7 +381,8 @@ public class OverlayManager
 		if (overlay.isMovable())
 		{
 			OverlayOrigin originMode = loadOverlayOrigin(overlay);
-			OverlayOriginLocation originX = loadOverlayOrigin(overlay, false), originY = loadOverlayOrigin(overlay, true);
+			OverlayOriginX originX = loadOverlayOriginX(overlay);
+			OverlayOriginY originY = loadOverlayOriginY(overlay);
 
 			if (location != null && originMode != null && originX != null && originY != null)
 			{
@@ -397,8 +398,8 @@ public class OverlayManager
 			log.info("Resetting preferred location of non-movable overlay {} (class {})", overlay.getName(), overlay.getClass().getName());
 			overlay.setPreferredLocation(null);
 			overlay.setOrigin(OverlayOrigin.AUTO);
-			overlay.setOriginX(OverlayOriginLocation.LEFT);
-			overlay.setOriginY(OverlayOriginLocation.TOP);
+			overlay.setOriginX(OverlayOriginX.LEFT);
+			overlay.setOriginY(OverlayOriginY.TOP);
 			saveOverlayLocation(overlay);
 		}
 
@@ -425,25 +426,25 @@ public class OverlayManager
 		}
 	}
 
-	private void convertOriginToAbsolute(Point p, OverlayOriginLocation originX, OverlayOriginLocation originY, Point out)
+	private void convertOriginToAbsolute(Point p, OverlayOriginX originX, OverlayOriginY originY, Point out)
 	{
 		Dimension d = client.getRealDimensions();
 		int ax = p.x;
-		if (originX == OverlayOriginLocation.RIGHT)
+		if (originX == OverlayOriginX.RIGHT)
 		{
 			ax = d.width + p.x;
 		}
-		else if (originX == OverlayOriginLocation.CENTER)
+		else if (originX == OverlayOriginX.CENTER)
 		{
 			ax = d.width / 2 + p.x;
 		}
 
 		int ay = p.y;
-		if (originY == OverlayOriginLocation.BOTTOM)
+		if (originY == OverlayOriginY.BOTTOM)
 		{
 			ay = d.height + p.y;
 		}
-		else if (originY == OverlayOriginLocation.CENTER)
+		else if (originY == OverlayOriginY.CENTER)
 		{
 			ay = d.height / 2 + p.y;
 		}
@@ -481,25 +482,25 @@ public class OverlayManager
 		}
 	}
 
-	private Point convertAbsoluteToOrigin(Point p, OverlayOriginLocation originX, OverlayOriginLocation originY)
+	private Point convertAbsoluteToOrigin(Point p, OverlayOriginX originX, OverlayOriginY originY)
 	{
 		Dimension d = client.getRealDimensions();
 		int ox = p.x;
-		if (originX == OverlayOriginLocation.RIGHT)
+		if (originX == OverlayOriginX.RIGHT)
 		{
 			ox = p.x - d.width;
 		}
-		else if (originX == OverlayOriginLocation.CENTER)
+		else if (originX == OverlayOriginX.CENTER)
 		{
 			ox = p.x - d.width / 2;
 		}
 
 		int oy = p.y;
-		if (originY == OverlayOriginLocation.BOTTOM)
+		if (originY == OverlayOriginY.BOTTOM)
 		{
 			oy = p.y - d.height;
 		}
-		else if (originY == OverlayOriginLocation.CENTER)
+		else if (originY == OverlayOriginY.CENTER)
 		{
 			oy = p.y - d.height / 2;
 		}
@@ -507,7 +508,7 @@ public class OverlayManager
 		return new Point(ox, oy);
 	}
 
-	Point computeOriginPosition(Point absPosition, OverlayOrigin origin, OverlayOriginLocation originX, OverlayOriginLocation originY)
+	Point computeOriginPosition(Point absPosition, OverlayOrigin origin, OverlayOriginX originX, OverlayOriginY originY)
 	{
 		if (origin != OverlayOrigin.AUTO && origin != OverlayOrigin.MANUAL)
 		{
@@ -620,10 +621,14 @@ public class OverlayManager
 		return configManager.getConfiguration(RUNELITE_CONFIG_GROUP_NAME, overlay.getName() + OVERLAY_CONFIG_ORIGIN, OverlayOrigin.class);
 	}
 
-	private OverlayOriginLocation loadOverlayOrigin(final Overlay overlay, boolean vertical)
+	private OverlayOriginX loadOverlayOriginX(final Overlay overlay)
 	{
-		var key = overlay.getName() + (vertical ? OVERLAY_CONFIG_ORIGIN_Y : OVERLAY_CONFIG_ORIGIN_X);
-		return configManager.getConfiguration(RUNELITE_CONFIG_GROUP_NAME, key, OverlayOriginLocation.class);
+		return configManager.getConfiguration(RUNELITE_CONFIG_GROUP_NAME, OVERLAY_CONFIG_ORIGIN_X, OverlayOriginX.class);
+	}
+
+	private OverlayOriginY loadOverlayOriginY(final Overlay overlay)
+	{
+		return configManager.getConfiguration(RUNELITE_CONFIG_GROUP_NAME, OVERLAY_CONFIG_ORIGIN_Y, OverlayOriginX.class);
 	}
 
 	void addOriginMenu(Overlay overlay)
@@ -638,18 +643,19 @@ public class OverlayManager
 			.setOption("Overlay Origin")
 			.createSubMenu();
 		String[] opts = {"Top left", "Top center", "Top right", "Bottom left", "Bottom center", "Bottom right"};
-		OverlayOriginLocation[] originX = {
-			OverlayOriginLocation.LEFT, OverlayOriginLocation.CENTER, OverlayOriginLocation.RIGHT,
-			OverlayOriginLocation.LEFT, OverlayOriginLocation.CENTER, OverlayOriginLocation.RIGHT
+		OverlayOriginX[] originX = {
+			OverlayOriginX.LEFT, OverlayOriginX.CENTER, OverlayOriginX.RIGHT,
+			OverlayOriginX.LEFT, OverlayOriginX.CENTER, OverlayOriginX.RIGHT
 		};
-		OverlayOriginLocation[] originY = {
-			OverlayOriginLocation.TOP, OverlayOriginLocation.TOP, OverlayOriginLocation.TOP,
-			OverlayOriginLocation.BOTTOM, OverlayOriginLocation.BOTTOM, OverlayOriginLocation.BOTTOM
+		OverlayOriginY[] originY = {
+			OverlayOriginY.TOP, OverlayOriginY.TOP, OverlayOriginY.TOP,
+			OverlayOriginY.BOTTOM, OverlayOriginY.BOTTOM, OverlayOriginY.BOTTOM
 		};
 		int off = 0;
 		for (int i = 0; i < opts.length; ++i)
 		{
-			OverlayOriginLocation ox = originX[i], oy = originY[i];
+			OverlayOriginX ox = originX[i];
+			OverlayOriginY oy = originY[i];
 			sub.createMenuEntry(-1 - off++)
 				.setOption(opts[i])
 				.onClick(e ->

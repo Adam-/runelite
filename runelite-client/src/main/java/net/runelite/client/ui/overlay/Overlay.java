@@ -57,8 +57,8 @@ public abstract class Overlay implements LayoutableRenderableEntity
 	private final Plugin plugin;
 	private Point preferredLocation;
 	private OverlayOrigin origin = OverlayOrigin.AUTO;
-	private OverlayOriginLocation originX = OverlayOriginLocation.LEFT;
-	private OverlayOriginLocation originY = OverlayOriginLocation.TOP;
+	private OverlayOriginX originX = OverlayOriginX.LEFT;
+	private OverlayOriginY originY = OverlayOriginY.TOP;
 	private Dimension preferredSize;
 	private OverlayPosition preferredPosition;
 	private Rectangle bounds = new Rectangle();

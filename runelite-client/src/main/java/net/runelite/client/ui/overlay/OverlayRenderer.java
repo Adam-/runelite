@@ -672,8 +672,8 @@ public class OverlayRenderer extends MouseAdapter
 					currentManagedOverlay.setPreferredPosition(position);
 					currentManagedOverlay.setPreferredLocation(null); // from dragging
 					currentManagedOverlay.setOrigin(OverlayOrigin.AUTO);
-					currentManagedOverlay.setOriginX(OverlayOriginLocation.LEFT);
-					currentManagedOverlay.setOriginY(OverlayOriginLocation.TOP);
+					currentManagedOverlay.setOriginX(OverlayOriginX.LEFT);
+					currentManagedOverlay.setOriginY(OverlayOriginY.TOP);
 					currentManagedOverlay.revalidate();
 					break;
 				}
