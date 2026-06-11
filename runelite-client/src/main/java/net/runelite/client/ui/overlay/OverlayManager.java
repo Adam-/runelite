@@ -452,13 +452,6 @@ public class OverlayManager
 		out.setLocation(ax, ay);
 	}
 
-	private Point computeAbsolutePosition(Overlay overlay)
-	{
-		var p = new Point();
-		computeAbsolutePosition(overlay, p);
-		return p;
-	}
-
 	void computeAbsolutePosition(Overlay overlay, Point out)
 	{
 		OverlayOrigin origin = overlay.getOrigin();
@@ -633,11 +626,6 @@ public class OverlayManager
 
 	void addOriginMenu(Overlay overlay)
 	{
-		if (overlay.getPreferredLocation() == null)
-		{
-			return;
-		}
-
 		Menu menu = client.getMenu();
 		Menu sub = menu.createMenuEntry(-1)
 			.setOption("Overlay Origin")
@@ -666,7 +654,7 @@ public class OverlayManager
 							oy.name().toLowerCase() + " " + ox.name().toLowerCase() + " of the screen when the client is resized.")
 						.build());
 
-					Point p = computeAbsolutePosition(overlay);
+					Point p = overlay.getBounds().getLocation();
 					p = computeOriginPosition(p, OverlayOrigin.MANUAL, ox, oy);
 					overlay.setPreferredLocation(p);
 
@@ -701,7 +689,7 @@ public class OverlayManager
 							origin.name().toLowerCase() + ".")
 						.build());
 
-					Point p = computeAbsolutePosition(overlay);
+					Point p = overlay.getBounds().getLocation();
 					p = computeOriginPosition(p, origin, null, null);
 					overlay.setPreferredLocation(p);
 
