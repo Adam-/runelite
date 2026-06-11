@@ -454,7 +454,7 @@ public class OverlayManager
 	Point computeAbsolutePosition(Overlay overlay)
 	{
 		OverlayOrigin origin = overlay.getOrigin();
-		if (origin == OverlayOrigin.SIDEPANEL)
+		if (origin != OverlayOrigin.AUTO && origin != OverlayOrigin.MANUAL)
 		{
 			Widget w = origin.getWidget(client);
 			if (w == null)
@@ -501,7 +501,7 @@ public class OverlayManager
 
 	Point computeOriginPosition(Point absPosition, OverlayOrigin origin, OverlayOriginLocation originX, OverlayOriginLocation originY)
 	{
-		if (origin == OverlayOrigin.SIDEPANEL)
+		if (origin != OverlayOrigin.AUTO && origin != OverlayOrigin.MANUAL)
 		{
 			Widget w = origin.getWidget(client);
 			int wx, wy;
@@ -662,8 +662,8 @@ public class OverlayManager
 					saveOverlay(overlay);
 				});
 		}
-		opts = new String[]{"Sidepanel"};
-		OverlayOrigin[] origins = {OverlayOrigin.SIDEPANEL};
+		opts = new String[]{"Sidepanel", "Chatbox", "Minimap"};
+		OverlayOrigin[] origins = {OverlayOrigin.SIDEPANEL, OverlayOrigin.CHATBOX, OverlayOrigin.MINIMAP};
 		for (int i = 0; i < opts.length; ++i)
 		{
 			OverlayOrigin origin = origins[i];

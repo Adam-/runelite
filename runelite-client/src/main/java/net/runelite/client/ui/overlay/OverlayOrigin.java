@@ -49,6 +49,31 @@ enum OverlayOrigin
 				}
 				return w;
 			}
+		},
+	CHATBOX
+		{
+			@Override
+			Widget getWidget(Client client)
+			{
+				return client.getWidget(InterfaceID.Chatbox.UNIVERSE);
+			}
+		},
+	MINIMAP
+		{
+			@Override
+			Widget getWidget(Client client)
+			{
+				Widget w = client.getWidget(InterfaceID.ToplevelOsrsStretch.MAP_CONTAINER);
+				if (w == null)
+				{
+					w = client.getWidget(InterfaceID.ToplevelPreEoc.MAP_CONTAINER);
+				}
+				if (w == null)
+				{
+					w = client.getWidget(InterfaceID.Toplevel.MAPCONTAINER);
+				}
+				return w;
+			}
 		}
 	;
 
