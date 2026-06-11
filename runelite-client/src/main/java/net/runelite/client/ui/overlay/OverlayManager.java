@@ -675,7 +675,8 @@ public class OverlayManager
 					{
 						chatMessageManager.queue(QueuedMessage.builder()
 							.type(ChatMessageType.CONSOLE)
-							.runeLiteFormattedMessage("Cycle!")
+							.runeLiteFormattedMessage("The origin of " + origin.name().toLowerCase() + " is already relative to this overlay, either directly, or indirectly through multiple other overlays. " +
+								"Introducing a circular dependency is not permitted.")
 							.build());
 						return;
 					}
