@@ -657,6 +657,7 @@ public class OverlayManager
 					Point p = overlay.getBounds().getLocation();
 					p = computeOriginPosition(p, OverlayOrigin.MANUAL, ox, oy);
 					overlay.setPreferredLocation(p);
+					overlay.setPreferredPosition(null);
 
 					overlay.setOrigin(OverlayOrigin.MANUAL);
 					overlay.setOriginX(ox);
@@ -692,6 +693,7 @@ public class OverlayManager
 					Point p = overlay.getBounds().getLocation();
 					p = computeOriginPosition(p, origin, null, null);
 					overlay.setPreferredLocation(p);
+					overlay.setPreferredPosition(null);
 
 					overlay.setOrigin(origin);
 					saveOverlay(overlay);
