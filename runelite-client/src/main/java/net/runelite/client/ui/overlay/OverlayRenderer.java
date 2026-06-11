@@ -224,18 +224,18 @@ public class OverlayRenderer extends MouseAdapter
 			.setOption("Overlay Origin")
 			.createSubMenu();
 		String[] opts = {"Top left", "Top center", "Top right", "Bottom left", "Bottom center", "Bottom right"};
-		OverlayOrigin[] originX = {
-			OverlayOrigin.LEFT, OverlayOrigin.CENTER, OverlayOrigin.RIGHT,
-			OverlayOrigin.LEFT, OverlayOrigin.CENTER, OverlayOrigin.RIGHT
+		OverlayOriginLocation[] originX = {
+			OverlayOriginLocation.LEFT, OverlayOriginLocation.CENTER, OverlayOriginLocation.RIGHT,
+			OverlayOriginLocation.LEFT, OverlayOriginLocation.CENTER, OverlayOriginLocation.RIGHT
 		};
-		OverlayOrigin[] originY = {
-			OverlayOrigin.TOP, OverlayOrigin.TOP, OverlayOrigin.TOP,
-			OverlayOrigin.BOTTOM, OverlayOrigin.BOTTOM, OverlayOrigin.BOTTOM
+		OverlayOriginLocation[] originY = {
+			OverlayOriginLocation.TOP, OverlayOriginLocation.TOP, OverlayOriginLocation.TOP,
+			OverlayOriginLocation.BOTTOM, OverlayOriginLocation.BOTTOM, OverlayOriginLocation.BOTTOM
 		};
 		int off = 0;
 		for (int i = 0; i < opts.length; ++i)
 		{
-			OverlayOrigin ox = originX[i], oy = originY[i];
+			OverlayOriginLocation ox = originX[i], oy = originY[i];
 			sub.createMenuEntry(-1 - off++)
 				.setOption(opts[i])
 				.onClick(e ->
@@ -247,20 +247,20 @@ public class OverlayRenderer extends MouseAdapter
 						.build());
 
 					Point p = overlayManager.computeAbsolutePosition(overlay);
-					p = overlayManager.computeOriginPosition(p, OverlayOriginMode.MANUAL, ox, oy);
+					p = overlayManager.computeOriginPosition(p, OverlayOrigin.MANUAL, ox, oy);
 					overlay.setPreferredLocation(p);
 
-					overlay.setOriginMode(OverlayOriginMode.MANUAL);
+					overlay.setOrigin(OverlayOrigin.MANUAL);
 					overlay.setOriginX(ox);
 					overlay.setOriginY(oy);
 					overlayManager.saveOverlay(overlay);
 				});
 		}
 		opts = new String[]{"Sidepanel"};
-		OverlayOriginMode[] origins = {OverlayOriginMode.SIDEPANEL};
+		OverlayOrigin[] origins = {OverlayOrigin.SIDEPANEL};
 		for (int i = 0; i < opts.length; ++i)
 		{
-			OverlayOriginMode origin = origins[i];
+			OverlayOrigin origin = origins[i];
 			sub.createMenuEntry(-1 - off++)
 				.setOption(opts[i])
 				.onClick(e ->
@@ -275,8 +275,8 @@ public class OverlayRenderer extends MouseAdapter
 					p = overlayManager.computeOriginPosition(p, origin, null, null);
 					overlay.setPreferredLocation(p);
 
-					overlay.setOriginMode(origin);
-					overlay.setOriginMode(origin);
+					overlay.setOrigin(origin);
+					overlay.setOrigin(origin);
 					overlayManager.saveOverlay(overlay);
 				});
 		}
@@ -677,13 +677,13 @@ public class OverlayRenderer extends MouseAdapter
 			final Rectangle overlayBounds = currentManagedOverlay.getBounds();
 			overlayPosition = clampOverlayLocation(overlayPosition.x, overlayPosition.y, overlayBounds.width, overlayBounds.height, currentManagedOverlay);
 
-			if (currentManagedOverlay.getOriginMode() == OverlayOriginMode.AUTO)
+			if (currentManagedOverlay.getOrigin() == OverlayOrigin.AUTO)
 			{
 				// Compute the new origins for the overlay and the origin-relative position
 				overlayManager.computeOverlayOrigins(currentManagedOverlay, overlayPosition.x, overlayPosition.y, overlayBounds.width, overlayBounds.height);
 			}
 
-			overlayPosition = overlayManager.computeOriginPosition(overlayPosition, currentManagedOverlay.getOriginMode(), currentManagedOverlay.getOriginX(), currentManagedOverlay.getOriginY());
+			overlayPosition = overlayManager.computeOriginPosition(overlayPosition, currentManagedOverlay.getOrigin(), currentManagedOverlay.getOriginX(), currentManagedOverlay.getOriginY());
 
 			currentManagedOverlay.setPreferredPosition(null);
 			currentManagedOverlay.setPreferredLocation(overlayPosition);
@@ -741,9 +741,9 @@ public class OverlayRenderer extends MouseAdapter
 
 					currentManagedOverlay.setPreferredPosition(position);
 					currentManagedOverlay.setPreferredLocation(null); // from dragging
-					currentManagedOverlay.setOriginMode(OverlayOriginMode.AUTO);
-					currentManagedOverlay.setOriginX(OverlayOrigin.LEFT);
-					currentManagedOverlay.setOriginY(OverlayOrigin.TOP);
+					currentManagedOverlay.setOrigin(OverlayOrigin.AUTO);
+					currentManagedOverlay.setOriginX(OverlayOriginLocation.LEFT);
+					currentManagedOverlay.setOriginY(OverlayOriginLocation.TOP);
 					currentManagedOverlay.revalidate();
 					break;
 				}
