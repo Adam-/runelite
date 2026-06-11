@@ -55,7 +55,16 @@ enum OverlayOrigin
 			@Override
 			Widget getWidget(Client client)
 			{
-				return client.getWidget(InterfaceID.Chatbox.UNIVERSE);
+				Widget w = client.getWidget(InterfaceID.ToplevelOsrsStretch.CHAT_CONTAINER);
+				if (w == null)
+				{
+					w = client.getWidget(InterfaceID.ToplevelPreEoc.CHAT_CONTAINER);
+				}
+				if (w == null)
+				{
+					w = client.getWidget(InterfaceID.Toplevel.CHAT_CONTAINER);
+				}
+				return w;
 			}
 		},
 	MINIMAP
