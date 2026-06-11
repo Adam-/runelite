@@ -268,7 +268,7 @@ public class OverlayRenderer extends MouseAdapter
 					chatMessageManager.queue(QueuedMessage.builder()
 						.type(ChatMessageType.CONSOLE)
 						.runeLiteFormattedMessage("This overlay will now be automatically repositioned relative to the " +
-							origin.name().toLowerCase() + " when the client is resized.")
+							origin.name().toLowerCase() + ".")
 						.build());
 
 					Point p = overlayManager.computeAbsolutePosition(overlay);
@@ -678,10 +678,11 @@ public class OverlayRenderer extends MouseAdapter
 
 			if (currentManagedOverlay.getOrigin() == OverlayOrigin.AUTO)
 			{
-				// Compute the new origins for the overlay and the origin-relative position
+				// Compute the new origins for the overlay
 				overlayManager.computeOverlayOrigins(currentManagedOverlay, overlayPosition.x, overlayPosition.y, overlayBounds.width, overlayBounds.height);
 			}
 
+			// Compute new relative position
 			overlayPosition = overlayManager.computeOriginPosition(overlayPosition, currentManagedOverlay.getOrigin(), currentManagedOverlay.getOriginX(), currentManagedOverlay.getOriginY());
 
 			currentManagedOverlay.setPreferredPosition(null);
