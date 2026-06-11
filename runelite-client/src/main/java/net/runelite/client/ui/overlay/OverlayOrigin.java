@@ -84,7 +84,7 @@ enum OverlayOrigin
 	{
 		if (client.isResized())
 		{
-			if (client.getVarbitValue(VarbitID.RESIZABLE_STONE_ARRANGEMENT) == 1)
+			if (client.getTopLevelInterfaceId() == InterfaceID.TOPLEVEL_PRE_EOC)
 			{
 				return client.getWidget(eoc);
 			}
