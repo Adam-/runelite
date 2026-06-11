@@ -425,7 +425,7 @@ public class OverlayManager
 		}
 	}
 
-	private Point convertOriginToAbsolute(Point p, OverlayOriginLocation originX, OverlayOriginLocation originY)
+	private void convertOriginToAbsolute(Point p, OverlayOriginLocation originX, OverlayOriginLocation originY, Point out)
 	{
 		Dimension d = client.getRealDimensions();
 		int ax = p.x;
@@ -448,10 +448,17 @@ public class OverlayManager
 			ay = d.height / 2 + p.y;
 		}
 
-		return new Point(ax, ay);
+		out.setLocation(ax, ay);
 	}
 
-	Point computeAbsolutePosition(Overlay overlay)
+	private Point computeAbsolutePosition(Overlay overlay)
+	{
+		var p = new Point();
+		computeAbsolutePosition(overlay, p);
+		return p;
+	}
+
+	void computeAbsolutePosition(Overlay overlay, Point out)
 	{
 		OverlayOrigin origin = overlay.getOrigin();
 		if (origin != OverlayOrigin.AUTO && origin != OverlayOrigin.MANUAL)
@@ -459,17 +466,18 @@ public class OverlayManager
 			Widget w = origin.getWidget(client);
 			if (w == null)
 			{
-				return origin.coord;
+				out.setLocation(origin.coord);
+				return;
 			}
 
 			var wp = w.getCanvasLocation();
 			var op = overlay.getPreferredLocation();
 			origin.coord.setLocation(wp.getX() + op.x, wp.getY() + op.y);
-			return origin.coord;
+			out.setLocation(origin.coord);
 		}
 		else
 		{
-			return convertOriginToAbsolute(overlay.getPreferredLocation(), overlay.getOriginX(), overlay.getOriginY());
+			convertOriginToAbsolute(overlay.getPreferredLocation(), overlay.getOriginX(), overlay.getOriginY(), out);
 		}
 	}
 

@@ -286,12 +286,12 @@ public class OverlayRenderer extends MouseAdapter
 		final Rectangle clip = clipBounds(layer);
 		graphics.setClip(clip);
 
+		final Point location = new Point();
 		for (Overlay overlay : overlays)
 		{
 			final OverlayPosition overlayPosition = getCorrectedOverlayPosition(overlay);
 			final Rectangle bounds = overlay.getBounds();
 			final Point preferredLocation = overlay.getPreferredLocation();
-			Point location;
 			SnapCorner snapCorner = null;
 
 			// If the final position is not modified, layout it
@@ -299,19 +299,19 @@ public class OverlayRenderer extends MouseAdapter
 				&& overlayPosition != OverlayPosition.DETACHED && preferredLocation == null)
 			{
 				snapCorner = snapCorners.forPosition(overlayPosition);
-				location = snapCorner.getNextDrawPosition(bounds);
+				snapCorner.getNextDrawPosition(bounds, location);
 			}
 			else if (preferredLocation != null)
 			{
-				location = overlayManager.computeAbsolutePosition(overlay);
+				overlayManager.computeAbsolutePosition(overlay, location);
 			}
 			else
 			{
-				location = bounds.getLocation();
+				location.setLocation(bounds.x, bounds.y);
 			}
 
 			// Clamp the overlay position to ensure it is on screen or within parent bounds
-			location = clampOverlayLocation(location.x, location.y, bounds.width, bounds.height, overlay);
+			clampOverlayLocation(location.x, location.y, bounds.width, bounds.height, overlay, location);
 
 			if (overlay.getPreferredSize() != null)
 			{
@@ -604,7 +604,7 @@ public class OverlayRenderer extends MouseAdapter
 
 			// Clamp drag to parent component
 			final Rectangle overlayBounds = currentManagedOverlay.getBounds();
-			overlayPosition = clampOverlayLocation(overlayPosition.x, overlayPosition.y, overlayBounds.width, overlayBounds.height, currentManagedOverlay);
+			clampOverlayLocation(overlayPosition.x, overlayPosition.y, overlayBounds.width, overlayBounds.height, currentManagedOverlay, overlayPosition);
 
 			if (currentManagedOverlay.getOrigin() == OverlayOrigin.AUTO)
 			{
@@ -863,9 +863,9 @@ public class OverlayRenderer extends MouseAdapter
 	 * @param overlayWidth
 	 * @param overlayHeight
 	 * @param overlay       the overlay
-	 * @return the clamped position
+	 * @param out the clamped position
 	 */
-	private Point clampOverlayLocation(int overlayX, int overlayY, int overlayWidth, int overlayHeight, Overlay overlay)
+	private void clampOverlayLocation(int overlayX, int overlayY, int overlayWidth, int overlayHeight, Overlay overlay, Point out)
 	{
 		int px, py, pw, ph;
 		Rectangle parentBounds = overlay.getParentBounds();
@@ -886,7 +886,7 @@ public class OverlayRenderer extends MouseAdapter
 		}
 
 		// Constrain overlay position to be within the parent bounds
-		return new Point(
+		out.setLocation(
 			Ints.constrainToRange(overlayX, px,
 				Math.max(px, px + pw - overlayWidth)),
 			Ints.constrainToRange(overlayY, py,
