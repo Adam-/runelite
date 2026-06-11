@@ -25,6 +25,9 @@
 package net.runelite.client.ui.overlay;
 
 import com.google.common.base.MoreObjects;
+import com.google.common.graph.GraphBuilder;
+import com.google.common.graph.Graphs;
+import com.google.common.graph.MutableGraph;
 import com.google.common.primitives.Ints;
 import java.awt.Color;
 import java.awt.Composite;
@@ -41,7 +44,11 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.swing.SwingUtilities;
@@ -265,6 +272,15 @@ public class OverlayRenderer extends MouseAdapter
 				.setOption(opts[i])
 				.onClick(e ->
 				{
+					if (cycleCheck(overlay, origin))
+					{
+						chatMessageManager.queue(QueuedMessage.builder()
+							.type(ChatMessageType.CONSOLE)
+							.runeLiteFormattedMessage("Cycle!")
+							.build());
+						return;
+					}
+
 					chatMessageManager.queue(QueuedMessage.builder()
 						.type(ChatMessageType.CONSOLE)
 						.runeLiteFormattedMessage("This overlay will now be automatically repositioned relative to the " +
@@ -279,6 +295,28 @@ public class OverlayRenderer extends MouseAdapter
 					overlayManager.saveOverlay(overlay);
 				});
 		}
+	}
+
+	private boolean cycleCheck(Overlay curOverlay, OverlayOrigin newOrigin)
+	{
+		MutableGraph<Widget> g = GraphBuilder
+			.directed()
+			.allowsSelfLoops(true)
+			.build();
+		for (Overlay overlay : overlayManager.getOverlays())
+		{
+			if (overlay instanceof WidgetOverlay)
+			{
+				OverlayOrigin origin = overlay == curOverlay ? newOrigin : overlay.getOrigin();
+				Widget overlayWidget = client.getWidget(((WidgetOverlay) overlay).componentId);
+				Widget originWidget = origin.getWidget(client);
+				if (overlayWidget != null && originWidget != null)
+				{
+					g.putEdge(overlayWidget, originWidget);
+				}
+			}
+		}
+		return Graphs.hasCycle(g);
 	}
 
 	@Subscribe
