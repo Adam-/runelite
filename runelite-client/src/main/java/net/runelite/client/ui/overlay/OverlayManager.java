@@ -374,7 +374,7 @@ public class OverlayManager
 
 	private void loadOverlay(final Overlay overlay)
 	{
-		Point location = loadOverlayLocation(overlay);
+		final Point location = loadOverlayLocation(overlay);
 		final Dimension size = loadOverlaySize(overlay);
 		final OverlayPosition position = loadOverlayPosition(overlay);
 
