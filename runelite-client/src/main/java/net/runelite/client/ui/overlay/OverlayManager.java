@@ -495,7 +495,7 @@ public class OverlayManager
 	{
 		if (origin == OverlayOrigin.SIDEPANEL)
 		{
-			Widget w = client.getWidget(InterfaceID.ToplevelOsrsStretch.SIDE_MENU);
+			Widget w = origin.getWidget(client);
 			int wx, wy;
 			if (w != null)
 			{

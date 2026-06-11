@@ -39,6 +39,14 @@ enum OverlayOrigin
 			Widget getWidget(Client client)
 			{
 				Widget w = client.getWidget(InterfaceID.ToplevelOsrsStretch.SIDE_MENU);
+				if (w == null)
+				{
+					w = client.getWidget(InterfaceID.ToplevelPreEoc.SIDE_CONTAINER);
+				}
+				if (w == null)
+				{
+					w = client.getWidget(InterfaceID.Toplevel.SIDE);
+				}
 				return w;
 			}
 		}
