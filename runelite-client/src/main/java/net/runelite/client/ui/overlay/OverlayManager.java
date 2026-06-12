@@ -464,16 +464,22 @@ public class OverlayManager
 		if (origin != OverlayOrigin.AUTO && origin != OverlayOrigin.MANUAL)
 		{
 			Widget w = origin.getWidget(client);
-			if (w == null)
+			int wx, wy;
+			if (w != null)
 			{
-				out.setLocation(origin.coord);
-				return;
+				var wp = w.getCanvasLocation();
+				wx = wp.getX();
+				wy = wp.getY();
+				origin.coord.setLocation(wx, wy);
+			}
+			else
+			{
+				wx = origin.coord.x;
+				wy = origin.coord.y;
 			}
 
-			var wp = w.getCanvasLocation();
 			var op = overlay.getPreferredLocation();
-			origin.coord.setLocation(wp.getX() + op.x, wp.getY() + op.y);
-			out.setLocation(origin.coord);
+			out.setLocation(wx + op.x, wy + op.y);
 		}
 		else
 		{
