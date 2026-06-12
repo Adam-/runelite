@@ -390,6 +390,12 @@ public class OverlayManager
 				overlay.setOriginX(originX);
 				overlay.setOriginY(originY);
 			}
+			else
+			{
+				overlay.setOrigin(OverlayOrigin.AUTO);
+				overlay.setOriginX(OverlayOriginX.LEFT);
+				overlay.setOriginY(OverlayOriginY.TOP);
+			}
 
 			overlay.setPreferredLocation(location);
 		}
