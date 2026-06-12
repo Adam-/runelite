@@ -616,12 +616,12 @@ public class OverlayManager
 
 	private OverlayOriginX loadOverlayOriginX(final Overlay overlay)
 	{
-		return configManager.getConfiguration(RUNELITE_CONFIG_GROUP_NAME, OVERLAY_CONFIG_ORIGIN_X, OverlayOriginX.class);
+		return configManager.getConfiguration(RUNELITE_CONFIG_GROUP_NAME, overlay.getName() + OVERLAY_CONFIG_ORIGIN_X, OverlayOriginX.class);
 	}
 
 	private OverlayOriginY loadOverlayOriginY(final Overlay overlay)
 	{
-		return configManager.getConfiguration(RUNELITE_CONFIG_GROUP_NAME, OVERLAY_CONFIG_ORIGIN_Y, OverlayOriginX.class);
+		return configManager.getConfiguration(RUNELITE_CONFIG_GROUP_NAME, overlay.getName() + OVERLAY_CONFIG_ORIGIN_Y, OverlayOriginY.class);
 	}
 
 	void addOriginMenu(Overlay overlay)
