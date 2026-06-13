@@ -595,7 +595,7 @@ public class OverlayRenderer extends MouseAdapter
 			Point l = currentManagedOverlay.getPreferredLocation();
 			if (l != null)
 			{
-				l.setLocation(l.x + dx, l.y + dy);
+				l.translate(dx, dy);
 			}
 		}
 		else if (inOverlayDraggingMode)
