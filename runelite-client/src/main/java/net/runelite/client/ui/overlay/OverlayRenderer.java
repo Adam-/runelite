@@ -592,9 +592,10 @@ public class OverlayRenderer extends MouseAdapter
 			currentManagedBounds.setRect(x, y, width, height);
 			currentManagedOverlay.setPreferredSize(new Dimension(currentManagedBounds.width, currentManagedBounds.height));
 
-			if (currentManagedOverlay.getPreferredLocation() != null)
+			Point l = currentManagedOverlay.getPreferredLocation();
+			if (l != null)
 			{
-				currentManagedOverlay.setPreferredLocation(currentManagedBounds.getLocation());
+				l.setLocation(l.x + dx, l.y + dy);
 			}
 		}
 		else if (inOverlayDraggingMode)
