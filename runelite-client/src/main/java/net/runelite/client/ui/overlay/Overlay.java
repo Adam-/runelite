@@ -56,8 +56,14 @@ public abstract class Overlay implements LayoutableRenderableEntity
 	@Nullable
 	private final Plugin plugin;
 	private Point preferredLocation;
+	@Getter(AccessLevel.PACKAGE)
+	@Setter(AccessLevel.PACKAGE)
 	private OverlayOrigin origin = OverlayOrigin.AUTO;
+	@Getter(AccessLevel.PACKAGE)
+	@Setter(AccessLevel.PACKAGE)
 	private OverlayOriginX originX = OverlayOriginX.LEFT;
+	@Getter(AccessLevel.PACKAGE)
+	@Setter(AccessLevel.PACKAGE)
 	private OverlayOriginY originY = OverlayOriginY.TOP;
 	private Dimension preferredSize;
 	private OverlayPosition preferredPosition;
