@@ -565,8 +565,6 @@ public class OverlayRenderer extends MouseAdapter
 			final int minOverlaySize = currentManagedOverlay.getMinimumSize();
 			final int widthOverflow = Math.max(0, minOverlaySize - width);
 			final int heightOverflow = Math.max(0, minOverlaySize - height);
-			final int dx = x - originalX;
-			final int dy = y - originalY;
 
 			// If this resize operation would cause the dimensions to go below the minimum width/height, reset the
 			// dimensions and adjust the x/y position accordingly as needed
@@ -574,7 +572,7 @@ public class OverlayRenderer extends MouseAdapter
 			{
 				width = minOverlaySize;
 
-				if (dx > 0)
+				if (x > originalX)
 				{
 					x -= widthOverflow;
 				}
@@ -583,7 +581,7 @@ public class OverlayRenderer extends MouseAdapter
 			{
 				height = minOverlaySize;
 
-				if (dy > 0)
+				if (y > originalY)
 				{
 					y -= heightOverflow;
 				}
@@ -595,7 +593,7 @@ public class OverlayRenderer extends MouseAdapter
 			Point l = currentManagedOverlay.getPreferredLocation();
 			if (l != null)
 			{
-				l.translate(dx, dy);
+				l.translate(x - originalX, y -  originalY);
 			}
 		}
 		else if (inOverlayDraggingMode)
