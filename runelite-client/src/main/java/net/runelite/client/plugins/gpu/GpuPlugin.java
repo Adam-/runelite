@@ -2250,7 +2250,7 @@ public class GpuPlugin extends Plugin implements DrawCallbacks, GpuApi
 	@Override
 	public void unregisterExtension(Plugin owner, GpuExtension extension)
 	{
-		extensions.removeIf(e -> e.owner.equals(owner.getName()));
+		extensions.removeIf(e -> e.e == extension);
 	}
 
 	private boolean extensionDrawSkybox()
