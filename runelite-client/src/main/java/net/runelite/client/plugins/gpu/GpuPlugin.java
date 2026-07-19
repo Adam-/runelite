@@ -621,6 +621,7 @@ public class GpuPlugin extends Plugin implements DrawCallbacks, GpuApi
 			return null;
 		});
 		template.addInclude(GpuPlugin.class);
+		template.setExtensions(extensions);
 		return template;
 	}
 
