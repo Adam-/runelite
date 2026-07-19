@@ -79,6 +79,8 @@ float fogFactorLinear(const float dist, const float start, const float end) {
   return 1.0 - clamp((dist - start) / (end - start), 0.0, 1.0);
 }
 
+rlst_vert_definitions;
+
 void main() {
   vec4 vert = vec4(vertf + base, 1);
   float a = float(abhsl >> 24 & 0xff) / 255.f;
@@ -126,4 +128,6 @@ void main() {
                                 max(0.f, (nearestEdgeDistance + FOG_CORNER_ROUNDING_SQUARED) / (secondNearestEdgeDistance + FOG_CORNER_ROUNDING_SQUARED));
 
   fFogAmount = fogFactorLinear(fogDistance, 0.f, fogDepth * TILE_SIZE) * useFog;
+
+  rlst_vert_main_post;
 }

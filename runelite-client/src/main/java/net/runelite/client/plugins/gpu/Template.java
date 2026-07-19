@@ -22,7 +22,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package net.runelite.client.plugins.gpu.template;
+package net.runelite.client.plugins.gpu;
 
 import com.google.common.io.CharStreams;
 import java.io.IOException;
@@ -30,17 +30,24 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class Template
+class Template
 {
 	private final List<Function<String, String>> resourceLoaders = new ArrayList<>();
+	@Setter
+	private List<GpuPlugin.Extension> extensions = Collections.emptyList();
 
 	public String process(String str)
 	{
+		Pattern rlstPattern = Pattern.compile("rlst_[a-z_]+;");
 		StringBuilder sb = new StringBuilder();
 		for (String line : str.split("\r?\n"))
 		{
@@ -54,6 +61,31 @@ public class Template
 
 				String resourceStr = load(resource);
 				sb.append(resourceStr);
+				continue;
+			}
+
+			Matcher m = rlstPattern.matcher(line);
+			if (m.find())
+			{
+				String group = m.group();
+				String hook = group.substring(0, group.length() - 1);
+
+				sb.append(line, 0, m.start());
+
+				for (GpuPlugin.Extension extension : extensions)
+				{
+					String code = extension.e.getShaderExtension(hook);
+					if (code == null || code.isBlank())
+					{
+						continue;
+					}
+
+					sb.append("// START RUNELITE EXTENSION: ").append(extension.owner).append('\n');
+					sb.append(code).append('\n');
+					sb.append("// END   RUNELITE EXTENSION: ").append(extension.owner).append('\n');
+				}
+
+				sb.append(line.substring(m.end()));
 			}
 			else
 			{

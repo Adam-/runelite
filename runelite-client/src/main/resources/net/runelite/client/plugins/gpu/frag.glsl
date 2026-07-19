@@ -60,6 +60,8 @@ float linear_depth(float depth) {
 }
 #endif
 
+rlst_frag_definitions;
+
 void main() {
   vec4 c;
 
@@ -112,4 +114,6 @@ void main() {
     FragColor = vec4(dc, dc, dc, 1);
   }
 #endif
+
+  rlst_frag_main_post;
 }

@@ -31,7 +31,6 @@ import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.runelite.client.plugins.gpu.template.Template;
 import static org.lwjgl.opengl.GL33C.*;
 
 @Slf4j
@@ -75,6 +74,8 @@ class Shader
 				}
 
 				String source = template.load(unit.filename);
+				log.debug("Shader {} source:\n {}",  unit.filename, source);
+
 				glShaderSource(shader, source);
 				glCompileShader(shader);
 

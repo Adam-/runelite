@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import java.util.List;
 import net.runelite.client.plugins.gpu.config.ColorBlindMode;
 import net.runelite.client.plugins.gpu.config.UIScalingMode;
-import net.runelite.client.plugins.gpu.template.Template;
 import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Rule;

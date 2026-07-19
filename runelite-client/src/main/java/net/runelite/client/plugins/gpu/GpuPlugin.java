@@ -26,6 +26,7 @@ package net.runelite.client.plugins.gpu;
 
 import com.google.common.base.Stopwatch;
 import com.google.common.primitives.Ints;
+import com.google.inject.Binder;
 import com.google.inject.Provides;
 import java.awt.Canvas;
 import java.awt.Dimension;
@@ -36,12 +37,16 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 import javax.inject.Inject;
 import javax.swing.SwingUtilities;
+import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.BufferProvider;
 import net.runelite.api.Client;
@@ -71,9 +76,10 @@ import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.plugins.PluginInstantiationException;
 import net.runelite.client.plugins.PluginManager;
+import net.runelite.client.plugins.gpu.api.GpuApi;
+import net.runelite.client.plugins.gpu.api.GpuExtension;
 import net.runelite.client.plugins.gpu.config.AntiAliasingMode;
 import net.runelite.client.plugins.gpu.config.UIScalingMode;
-import net.runelite.client.plugins.gpu.template.Template;
 import net.runelite.client.ui.ClientUI;
 import net.runelite.client.ui.DrawManager;
 import net.runelite.rlawt.AWTContext;
@@ -97,7 +103,7 @@ import org.lwjgl.system.Configuration;
 	loadInSafeMode = false
 )
 @Slf4j
-public class GpuPlugin extends Plugin implements DrawCallbacks
+public class GpuPlugin extends Plugin implements DrawCallbacks, GpuApi
 {
 	static final int MAX_DISTANCE = 184;
 	static final int MAX_FOG_DEPTH = 100;
@@ -187,6 +193,8 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 	private RenderThread[] rts;
 
 	private SceneUploader clientUploader, mapUploader;
+
+	private final List<Extension> extensions = new CopyOnWriteArrayList<>();
 
 	static class SceneContext
 	{
@@ -484,6 +492,12 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 			// force main buffer provider rebuild to turn off alpha channel
 			client.resizeCanvas();
 		});
+	}
+
+	@Override
+	public void configure(Binder binder)
+	{
+		binder.bind(GpuApi.class).toInstance(this);
 	}
 
 	@Provides
@@ -1040,6 +1054,8 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 			glClearColor((sky >> 16 & 0xFF) / 255f, (sky >> 8 & 0xFF) / 255f, (sky & 0xFF) / 255f, 1f);
 			glClearDepth(0d);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+			extensionDrawSkybox();
 			return;
 		}
 
@@ -2210,5 +2226,40 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 			}
 			log.info("Total: {}kb", totalSzKb);
 		}
+	}
+
+	static class Extension
+	{
+		String owner;
+		GpuExtension e;
+
+		Extension(String owner, GpuExtension e)
+		{
+			this.owner = owner;
+			this.e = e;
+		}
+	}
+
+	@Override
+	public void registerExtension(Plugin owner, GpuExtension extension)
+	{
+		extensions.add(new Extension(owner.getName(), extension));
+	}
+
+	@Override
+	public void unregisterExtension(Plugin owner, GpuExtension extension)
+	{
+		extensions.removeIf(e -> e.owner.equals(owner.getName()));
+	}
+
+	private boolean extensionDrawSkybox()
+	{
+		boolean ret = false;
+		for (int i = 0; i < extensions.size(); ++i)
+		{
+			var e = extensions.get(i);
+			ret |= e.e.drawSkybox();
+		}
+		return ret;
 	}
 }
