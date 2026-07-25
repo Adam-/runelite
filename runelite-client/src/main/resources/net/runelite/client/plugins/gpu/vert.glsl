@@ -45,6 +45,7 @@ layout(location = 1) in int abhsl;
 layout(location = 2) in ivec4 tex;
 
 layout(std140) uniform uniforms {
+  mat4 worldProj;
   float cameraYaw;
   float cameraPitch;
   float cameraX;
@@ -52,7 +53,6 @@ layout(std140) uniform uniforms {
   float cameraZ;
 };
 
-uniform mat4 worldProj;
 uniform mat4 entityProj;
 uniform ivec4 entityTint;
 uniform float brightness;

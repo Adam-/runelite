@@ -108,7 +108,7 @@ public class GpuPlugin extends Plugin implements DrawCallbacks, GpuApi
 	static final int MAX_DISTANCE = 184;
 	static final int MAX_FOG_DEPTH = 100;
 	static final int SCENE_OFFSET = (Constants.EXTENDED_SCENE_SIZE - Constants.SCENE_SIZE) / 2; // offset for sxy -> msxy
-	private static final int UNIFORM_BUFFER_SIZE = 5 * Float.BYTES;
+	private static final int UNIFORM_BUFFER_SIZE = 96;
 	private static final int NUM_ZONES = Constants.EXTENDED_SCENE_SIZE >> 3;
 	private static final int MAX_WORLDVIEWS = 4096;
 
@@ -178,8 +178,6 @@ public class GpuPlugin extends Plugin implements DrawCallbacks, GpuApi
 	private int lastStretchedCanvasHeight;
 	private AntiAliasingMode lastAntiAliasingMode;
 	private int lastAnisotropicFilteringLevel = -1;
-
-	private GpuFloatBuffer uniformBuffer;
 
 	private int cameraYaw, cameraPitch;
 
@@ -719,7 +717,6 @@ public class GpuPlugin extends Plugin implements DrawCallbacks, GpuApi
 
 	private void initBuffers()
 	{
-		uniformBuffer = new GpuFloatBuffer(UNIFORM_BUFFER_SIZE);
 		initGlBuffer(glUniformBuffer);
 		Zone.initBuffer();
 
@@ -738,7 +735,6 @@ public class GpuPlugin extends Plugin implements DrawCallbacks, GpuApi
 	private void shutdownBuffers()
 	{
 		destroyGlBuffer(glUniformBuffer);
-		uniformBuffer = null;
 		Zone.freeBuffer();
 
 		for (int i = 0; i < rts.length; ++i) // NOPMD: ForLoopCanBeForeach
@@ -895,25 +891,6 @@ public class GpuPlugin extends Plugin implements DrawCallbacks, GpuApi
 	{
 		scene.setDrawDistance(getDrawDistance());
 
-		// UBO
-		uniformBuffer.clear();
-		uniformBuffer
-			.put(cameraYaw)
-			.put(cameraPitch)
-			.put(cameraX)
-			.put(cameraY)
-			.put(cameraZ);
-		uniformBuffer.flip();
-
-		glBindBuffer(GL_UNIFORM_BUFFER, glUniformBuffer.glBufferId);
-		glBufferData(GL_UNIFORM_BUFFER, uniformBuffer.getBuffer(), GL_DYNAMIC_DRAW);
-		glBindBuffer(GL_UNIFORM_BUFFER, 0);
-		uniformBuffer.clear();
-
-		glBindBufferBase(GL_UNIFORM_BUFFER, 0, glUniformBuffer.glBufferId);
-
-		checkGLErrors();
-
 		final int canvasHeight = client.getCanvasHeight();
 		final int canvasWidth = client.getCanvasWidth();
 
@@ -1028,6 +1005,19 @@ public class GpuPlugin extends Plugin implements DrawCallbacks, GpuApi
 		glUniform4i(uniEntityTint, 0, 0, 0, 0);
 
 		// Bind uniforms
+		glBindBuffer(GL_UNIFORM_BUFFER, glUniformBuffer.glBufferId);
+		glBufferData(GL_UNIFORM_BUFFER, UNIFORM_BUFFER_SIZE, GL_STREAM_DRAW);
+		var uniformBuffer = glMapBufferRange(GL_UNIFORM_BUFFER, 0, UNIFORM_BUFFER_SIZE, GL_MAP_WRITE_BIT).asFloatBuffer();
+		uniformBuffer
+			.put(projectionMatrix)
+			.put(cameraYaw)
+			.put(cameraPitch)
+			.put(cameraX)
+			.put(cameraY)
+			.put(cameraZ);
+		glUnmapBuffer(GL_UNIFORM_BUFFER);
+
+		glBindBufferBase(GL_UNIFORM_BUFFER, 0, glUniformBuffer.glBufferId);
 		glUniformBlockBinding(glProgram, uniBlockMain, 0);
 		glUniform1i(uniTextures, 1); // texture sampler array is bound to texture1
 
