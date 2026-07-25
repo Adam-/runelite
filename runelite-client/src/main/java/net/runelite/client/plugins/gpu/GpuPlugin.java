@@ -134,8 +134,7 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 	@Inject
 	private RenderCallbackManager renderCallbackManager;
 
-	@Inject
-	private ExtensionManager extensionManager;
+	private final ExtensionManager extensionManager = new ExtensionManager(this);
 
 	private Canvas canvas;
 	private AWTContext awtContext;
@@ -534,12 +533,7 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 			}
 			else if (configChanged.getKey().equals("uiScalingMode") || configChanged.getKey().equals("colorBlindMode"))
 			{
-				clientThread.invokeLater(() ->
-				{
-					log.debug("Recompiling shaders");
-					shutdownProgram();
-					initProgram();
-				});
+				recompileShaders();
 			}
 			else if (configChanged.getKey().equals("numThreads"))
 			{
@@ -566,6 +560,16 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 				});
 			}
 		}
+	}
+
+	void recompileShaders()
+	{
+		clientThread.invokeLater(() ->
+		{
+			log.debug("Recompiling shaders");
+			shutdownProgram();
+			initProgram();
+		});
 	}
 
 	private void setupSyncMode()
