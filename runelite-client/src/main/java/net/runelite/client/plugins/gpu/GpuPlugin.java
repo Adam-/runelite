@@ -1077,6 +1077,7 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 	{
 		if (scene.getWorldViewId() == WorldView.TOPLEVEL)
 		{
+			extensionManager.onPostDrawTopLevel();
 			postDrawToplevel();
 		}
 		else

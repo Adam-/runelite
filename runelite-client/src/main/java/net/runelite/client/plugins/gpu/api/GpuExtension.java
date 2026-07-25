@@ -15,4 +15,6 @@ public abstract class GpuExtension
 	{
 		return false;
 	}
+
+	public abstract void onPostDrawToplevel();
 }

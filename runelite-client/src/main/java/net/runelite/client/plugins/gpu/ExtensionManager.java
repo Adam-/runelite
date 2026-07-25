@@ -68,4 +68,13 @@ class ExtensionManager implements GpuApi
 		}
 		return ret;
 	}
+
+	void onPostDrawTopLevel()
+	{
+		for (int i = 0; i < extensions.size(); ++i)
+		{
+			var e = extensions.get(i);
+			e.e.onPostDrawToplevel();
+		}
+	}
 }
