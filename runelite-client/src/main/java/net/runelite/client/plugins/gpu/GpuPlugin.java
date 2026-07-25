@@ -37,16 +37,12 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 import javax.inject.Inject;
 import javax.swing.SwingUtilities;
-import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.BufferProvider;
 import net.runelite.api.Client;
@@ -77,7 +73,6 @@ import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.plugins.PluginInstantiationException;
 import net.runelite.client.plugins.PluginManager;
 import net.runelite.client.plugins.gpu.api.GpuApi;
-import net.runelite.client.plugins.gpu.api.GpuExtension;
 import net.runelite.client.plugins.gpu.config.AntiAliasingMode;
 import net.runelite.client.plugins.gpu.config.UIScalingMode;
 import net.runelite.client.ui.ClientUI;
@@ -103,7 +98,7 @@ import org.lwjgl.system.Configuration;
 	loadInSafeMode = false
 )
 @Slf4j
-public class GpuPlugin extends Plugin implements DrawCallbacks, GpuApi
+public class GpuPlugin extends Plugin implements DrawCallbacks
 {
 	static final int MAX_DISTANCE = 184;
 	static final int MAX_FOG_DEPTH = 100;
@@ -138,6 +133,9 @@ public class GpuPlugin extends Plugin implements DrawCallbacks, GpuApi
 
 	@Inject
 	private RenderCallbackManager renderCallbackManager;
+
+	@Inject
+	private ExtensionManager extensionManager;
 
 	private Canvas canvas;
 	private AWTContext awtContext;
@@ -191,8 +189,6 @@ public class GpuPlugin extends Plugin implements DrawCallbacks, GpuApi
 	private RenderThread[] rts;
 
 	private SceneUploader clientUploader, mapUploader;
-
-	private final List<Extension> extensions = new CopyOnWriteArrayList<>();
 
 	static class SceneContext
 	{
@@ -393,6 +389,8 @@ public class GpuPlugin extends Plugin implements DrawCallbacks, GpuApi
 					startupWorldLoad();
 				}
 
+				extensionManager.onContextCreate();
+
 				checkGLErrors();
 			}
 			catch (Throwable e)
@@ -451,6 +449,8 @@ public class GpuPlugin extends Plugin implements DrawCallbacks, GpuApi
 	{
 		clientThread.invoke(() ->
 		{
+			extensionManager.onContextDestroy();
+
 			client.setGpuFlags(0);
 			client.setDrawCallbacks(null);
 			client.setUnlockedFps(false);
@@ -495,7 +495,7 @@ public class GpuPlugin extends Plugin implements DrawCallbacks, GpuApi
 	@Override
 	public void configure(Binder binder)
 	{
-		binder.bind(GpuApi.class).toInstance(this);
+		binder.bind(GpuApi.class).toInstance(extensionManager);
 	}
 
 	@Provides
@@ -619,7 +619,7 @@ public class GpuPlugin extends Plugin implements DrawCallbacks, GpuApi
 			return null;
 		});
 		template.addInclude(GpuPlugin.class);
-		template.setExtensions(extensions);
+		template.setExtensions(extensionManager.extensions);
 		return template;
 	}
 
@@ -849,8 +849,8 @@ public class GpuPlugin extends Plugin implements DrawCallbacks, GpuApi
 
 	@Override
 	public void preSceneDraw(Scene scene, Projection entityProjection,
-		float cameraX, float cameraY, float cameraZ, float cameraPitch, float cameraYaw,
-		int minLevel, int level, int maxLevel, Set<Integer> hideRoofIds)
+							 float cameraX, float cameraY, float cameraZ, float cameraPitch, float cameraYaw,
+							 int minLevel, int level, int maxLevel, Set<Integer> hideRoofIds)
 	{
 		SceneContext ctx = context(scene);
 		if (ctx == null)
@@ -887,7 +887,7 @@ public class GpuPlugin extends Plugin implements DrawCallbacks, GpuApi
 	}
 
 	private void preSceneDrawToplevel(Scene scene,
-		float cameraX, float cameraY, float cameraZ, float cameraPitch, float cameraYaw)
+									  float cameraX, float cameraY, float cameraZ, float cameraPitch, float cameraYaw)
 	{
 		scene.setDrawDistance(getDrawDistance());
 
@@ -1047,7 +1047,7 @@ public class GpuPlugin extends Plugin implements DrawCallbacks, GpuApi
 			glClearDepth(0d);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-			extensionDrawSkybox();
+			extensionManager.extensionDrawSkybox();
 			return;
 		}
 
@@ -2218,40 +2218,5 @@ public class GpuPlugin extends Plugin implements DrawCallbacks, GpuApi
 			}
 			log.info("Total: {}kb", totalSzKb);
 		}
-	}
-
-	static class Extension
-	{
-		String owner;
-		GpuExtension e;
-
-		Extension(String owner, GpuExtension e)
-		{
-			this.owner = owner;
-			this.e = e;
-		}
-	}
-
-	@Override
-	public void registerExtension(Plugin owner, GpuExtension extension)
-	{
-		extensions.add(new Extension(owner.getName(), extension));
-	}
-
-	@Override
-	public void unregisterExtension(Plugin owner, GpuExtension extension)
-	{
-		extensions.removeIf(e -> e.e == extension);
-	}
-
-	private boolean extensionDrawSkybox()
-	{
-		boolean ret = false;
-		for (int i = 0; i < extensions.size(); ++i)
-		{
-			var e = extensions.get(i);
-			ret |= e.e.drawSkybox();
-		}
-		return ret;
 	}
 }

@@ -43,7 +43,7 @@ class Template
 {
 	private final List<Function<String, String>> resourceLoaders = new ArrayList<>();
 	@Setter
-	private List<GpuPlugin.Extension> extensions = Collections.emptyList();
+	private List<ExtensionManager.Extension> extensions = Collections.emptyList();
 
 	public String process(String str)
 	{
@@ -72,7 +72,7 @@ class Template
 
 				sb.append(line, 0, m.start());
 
-				for (GpuPlugin.Extension extension : extensions)
+				for (ExtensionManager.Extension extension : extensions)
 				{
 					String code = extension.e.getShaderExtension(hook);
 					if (code == null || code.isBlank())
