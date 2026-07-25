@@ -1010,11 +1010,12 @@ public class GpuPlugin extends Plugin implements DrawCallbacks, GpuApi
 		var uniformBuffer = glMapBufferRange(GL_UNIFORM_BUFFER, 0, UNIFORM_BUFFER_SIZE, GL_MAP_WRITE_BIT).asFloatBuffer();
 		uniformBuffer
 			.put(projectionMatrix)
-			.put(cameraYaw)
-			.put(cameraPitch)
 			.put(cameraX)
 			.put(cameraY)
-			.put(cameraZ);
+			.put(cameraZ)
+			.put(0)
+			.put(cameraYaw)
+			.put(cameraPitch);
 		glUnmapBuffer(GL_UNIFORM_BUFFER);
 
 		glBindBufferBase(GL_UNIFORM_BUFFER, 0, glUniformBuffer.glBufferId);

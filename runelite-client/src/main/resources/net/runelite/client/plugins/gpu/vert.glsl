@@ -46,11 +46,9 @@ layout(location = 2) in ivec4 tex;
 
 layout(std140) uniform uniforms {
   mat4 worldProj;
+  vec3 cameraPos;
   float cameraYaw;
   float cameraPitch;
-  float cameraX;
-  float cameraY;
-  float cameraZ;
 };
 
 uniform mat4 entityProj;
@@ -113,10 +111,10 @@ void main() {
     fHsl = float(((int(hsl[0]) & 63) << 10) | ((int(hsl[1]) & 7) << 7) | (int(hsl[2]) & 127));
   }
 
-  float fogWest = max(FOG_SCENE_EDGE_MIN, cameraX - drawDistance);
-  float fogEast = min(FOG_SCENE_EDGE_MAX, cameraX + drawDistance);
-  float fogSouth = max(FOG_SCENE_EDGE_MIN, cameraZ - drawDistance);
-  float fogNorth = min(FOG_SCENE_EDGE_MAX, cameraZ + drawDistance);
+  float fogWest = max(FOG_SCENE_EDGE_MIN, cameraPos.x - drawDistance);
+  float fogEast = min(FOG_SCENE_EDGE_MAX, cameraPos.x + drawDistance);
+  float fogSouth = max(FOG_SCENE_EDGE_MIN, cameraPos.z - drawDistance);
+  float fogNorth = min(FOG_SCENE_EDGE_MAX, cameraPos.z + drawDistance);
 
   // Calculate distance from the scene edge
   float xDist = min(worldPos.x - fogWest, fogEast - worldPos.x);
