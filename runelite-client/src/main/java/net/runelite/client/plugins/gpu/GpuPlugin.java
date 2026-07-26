@@ -1017,7 +1017,6 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 			.put(cameraX)
 			.put(cameraY)
 			.put(cameraZ)
-			.put(0)
 			.put(cameraYaw)
 			.put(cameraPitch);
 		glUnmapBuffer(GL_UNIFORM_BUFFER);
