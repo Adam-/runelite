@@ -81,7 +81,9 @@ class Template
 					}
 
 					sb.append("// START RUNELITE EXTENSION: ").append(extension.owner).append('\n');
+					sb.append('{').append('\n');
 					sb.append(code).append('\n');
+					sb.append('}').append('\n');
 					sb.append("// END   RUNELITE EXTENSION: ").append(extension.owner).append('\n');
 				}
 
