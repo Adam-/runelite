@@ -258,7 +258,6 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 	private int uniDrawDistance;
 	private int uniExpandedMapLoadingChunks;
 	private int uniSmoothBanding;
-	private int uniWorldProj;
 	static int uniEntityProj;
 	static int uniEntityTint;
 	private int uniBrightness;
@@ -643,7 +642,6 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 
 	private void initUniforms()
 	{
-		uniWorldProj = glGetUniformLocation(glProgram, "worldProj");
 		uniEntityProj = glGetUniformLocation(glProgram, "entityProj");
 		uniEntityTint = glGetUniformLocation(glProgram, "entityTint");
 		uniSmoothBanding = glGetUniformLocation(glProgram, "smoothBanding");
@@ -1002,7 +1000,6 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 		Mat4.mul(projectionMatrix, Mat4.rotateX(cameraPitch));
 		Mat4.mul(projectionMatrix, Mat4.rotateY(cameraYaw));
 		Mat4.mul(projectionMatrix, Mat4.translate(-cameraX, -cameraY, -cameraZ));
-		glUniformMatrix4fv(uniWorldProj, false, projectionMatrix);
 
 		glUniformMatrix4fv(uniEntityProj, false, IDENTITY);
 
