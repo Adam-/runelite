@@ -243,4 +243,15 @@ public interface GpuPluginConfig extends Config
 	{
 		return 3;
 	}
+
+	@ConfigItem(
+		keyName = "simd",
+		name = "simd",
+		description = "simd",
+		position = 21
+	)
+	default boolean simd()
+	{
+		return true;
+	}
 }

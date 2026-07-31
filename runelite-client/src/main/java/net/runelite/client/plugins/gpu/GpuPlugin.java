@@ -276,6 +276,8 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 
 	static final float[] IDENTITY = Mat4.identity();
 
+	static boolean usesimd;
+
 	@Override
 	protected void startUp()
 	{
@@ -290,6 +292,7 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 		}
 		clientUploader = new SceneUploader(renderCallbackManager);
 		mapUploader = new SceneUploader(renderCallbackManager);
+		usesimd = config.simd();
 		clientThread.invoke(() ->
 		{
 			try
@@ -497,6 +500,7 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 	{
 		if (configChanged.getGroup().equals(GpuPluginConfig.GROUP))
 		{
+			usesimd = config.simd();
 			if (configChanged.getKey().equals("unlockFps")
 				|| configChanged.getKey().equals("vsyncMode")
 				|| configChanged.getKey().equals("fpsTarget"))

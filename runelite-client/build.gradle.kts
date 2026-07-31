@@ -172,6 +172,8 @@ tasks.processResources {
 
 tasks.compileJava {
     options.isFork = true
+    options.release = 17
+    options.compilerArgs.add("--add-modules=jdk.incubator.vector")
 }
 
 tasks.jar {

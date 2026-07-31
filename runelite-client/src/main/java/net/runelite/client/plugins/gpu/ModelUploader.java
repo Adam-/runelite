@@ -26,13 +26,17 @@ package net.runelite.client.plugins.gpu;
 
 import java.nio.IntBuffer;
 import java.util.Arrays;
+import jdk.incubator.vector.VectorSpecies;
+import net.runelite.api.FloatProjection;
+import net.runelite.api.IntProjection;
 import net.runelite.api.Model;
 import net.runelite.api.Perspective;
 import net.runelite.api.Projection;
+import jdk.incubator.vector.FloatVector;
 
 class ModelUploader
 {
-	final int[] distances;
+	final float[] distances;
 	final char[] zsortHead, zsortTail, zsortNext;
 
 	private final float[] modelProjectedX;
@@ -59,7 +63,7 @@ class ModelUploader
 	private static final int FACE_SIZE = (VAO.VERT_SIZE >> 2) * 3;
 
 	{
-		distances = new int[MAX_VERTEX_COUNT];
+		distances = new float[MAX_VERTEX_COUNT];
 		zsortHead = new char[MAX_DIAMETER];
 		zsortTail = new char[MAX_DIAMETER];
 		zsortNext = new char[MAX_FACE_COUNT];
@@ -81,6 +85,290 @@ class ModelUploader
 
 		u = new float[3];
 		v = new float[3];
+	}
+
+	private static void rotateAndTranslateScalar(
+		float[] x,
+		float[] y,
+		float[] z,
+		float orientSine,
+		float orientCosine,
+		float x1,
+		float y1,
+		float z1,
+		float[] lx,
+		float[] ly,
+		float[] lz
+	)
+	{
+		final int vertexCount = x.length;
+		for (int v = 0; v < vertexCount; ++v)
+		{
+			float vertexX = x[v];
+			float vertexY = y[v];
+			float vertexZ = z[v];
+
+//			if (orientation != 0)
+			{
+				float x0 = vertexX;
+				vertexX = vertexZ * orientSine + x0 * orientCosine;
+				vertexZ = vertexZ * orientCosine - x0 * orientSine;
+			}
+
+			vertexX += x1;
+			vertexY += y1;
+			vertexZ += z1;
+
+			lx[v] = vertexX;
+			ly[v] = vertexY;
+			lz[v] = vertexZ;
+		}
+	}
+
+	private static void projectToplevelScalar(
+		float[] x,
+		float[] y,
+		float[] z,
+		float[] projectedX,
+		float[] projectedY,
+		float[] distance,
+		GpuPlugin.RenderThread rt,
+		Projection proj,
+		float zero
+	)
+	{
+		int vertexCount = x.length;
+		for (int i = 0; i < vertexCount; ++i)
+		{
+			float vertexX = x[i];
+			float vertexY = y[i];
+			float vertexZ = z[i];
+
+			float[] p = proj.project(vertexX, vertexY, vertexZ, rt.tmp);
+			if (p[2] < 50)
+			{
+//				continue;
+			}
+
+			projectedX[i] = p[0] / p[2];
+			projectedY[i] = p[1] / p[2];
+			distance[i] = p[2] - zero;
+		}
+	}
+
+	static final VectorSpecies<Float> SPECIES = FloatVector.SPECIES_PREFERRED;
+
+	private static void rotateAndTranslate(
+		float[] x,
+		float[] y,
+		float[] z,
+		float orientSine,
+		float orientCosine,
+		float x1,
+		float y1,
+		float z1,
+		float[] lx,
+		float[] ly,
+		float[] lz
+	)
+	{
+		int upper = SPECIES.loopBound(x.length);
+
+		FloatVector sin = FloatVector.broadcast(SPECIES, orientSine);
+		FloatVector cos = FloatVector.broadcast(SPECIES, orientCosine);
+
+		FloatVector tx = FloatVector.broadcast(SPECIES, x1);
+		FloatVector ty = FloatVector.broadcast(SPECIES, y1);
+		FloatVector tz = FloatVector.broadcast(SPECIES, z1);
+
+		int i = 0;
+		for (; i < upper; i += SPECIES.length()) {
+			FloatVector vx = FloatVector.fromArray(SPECIES, x, i);
+			FloatVector vy = FloatVector.fromArray(SPECIES, y, i);
+			FloatVector vz = FloatVector.fromArray(SPECIES, z, i);
+
+			FloatVector newX = vz.fma(sin, vx.mul(cos)).add(tx); // vz*sin + vx*cox + tx
+			FloatVector newY = vy.add(ty); // vy + ty
+			FloatVector newZ = vz.mul(cos).sub(vx.mul(sin)).add(tz); // vz*cos - vx*sin + tz
+
+			newX.intoArray(lx, i);
+			newY.intoArray(ly, i);
+			newZ.intoArray(lz, i);
+		}
+
+		// Scalar tail
+		for (; i < x.length; i++) {
+			float oldX = x[i];
+			float oldY = y[i];
+			float oldZ = z[i];
+
+			lx[i] = oldZ * orientSine + oldX * orientCosine + x1;
+			ly[i] = oldY + y1;
+			lz[i] = oldZ * orientCosine - oldX * orientSine + z1;
+		}
+	}
+
+	private static void projectToplevel(
+		float[] x,
+		float[] y,
+		float[] z,
+		float[] projectedX,
+		float[] projectedY,
+		float[] distance,
+		float cameraX,
+		float cameraY,
+		float cameraZ,
+		float yawSin,
+		float yawCos,
+		float pitchSin,
+		float pitchCos,
+		float zero
+	)
+	{
+		int upper = SPECIES.loopBound(x.length);
+
+		FloatVector vCameraX = FloatVector.broadcast(SPECIES, cameraX);
+		FloatVector vCameraY = FloatVector.broadcast(SPECIES, cameraY);
+		FloatVector vCameraZ = FloatVector.broadcast(SPECIES, cameraZ);
+
+		FloatVector vYawSin = FloatVector.broadcast(SPECIES, yawSin);
+		FloatVector vYawCos = FloatVector.broadcast(SPECIES, yawCos);
+
+		FloatVector vPitchSin = FloatVector.broadcast(SPECIES, pitchSin);
+		FloatVector vPitchCos = FloatVector.broadcast(SPECIES, pitchCos);
+
+		FloatVector one = FloatVector.broadcast(SPECIES, 1.0f);
+//		FloatVector zzero = FloatVector.broadcast(SPECIES, zero);
+
+		int i = 0;
+		for (; i < upper; i += SPECIES.length()) {
+
+			// translate(-fcameraX, -fcameraY, -fcameraZ)
+			FloatVector vx = FloatVector.fromArray(SPECIES, x, i).sub(vCameraX);
+			FloatVector vy = FloatVector.fromArray(SPECIES, y, i).sub(vCameraY);
+			FloatVector vz = FloatVector.fromArray(SPECIES, z, i).sub(vCameraZ);
+
+			// rotateY
+			FloatVector px = vx.fma(vYawCos, vz.mul(vYawSin));
+			FloatVector z0 = vz.mul(vYawCos).sub(vx.mul(vYawSin));
+
+			// rotateX
+			FloatVector py = vy.mul(vPitchCos).sub(z0.mul(vPitchSin));
+			FloatVector pz = z0.fma(vPitchCos, vy.mul(vPitchSin));
+
+			FloatVector invZ = one.div(pz);
+
+			px.mul(invZ).intoArray(projectedX, i);
+			py.mul(invZ).intoArray(projectedY, i);
+			pz.sub(zero).intoArray(distance, i);
+		}
+
+		// Scalar tail
+		for (; i < x.length; i++) {
+
+			float tx = x[i] - cameraX;
+			float ty = y[i] - cameraY;
+			float tz = z[i] - cameraZ;
+
+			float px = tx * yawCos + tz * yawSin;
+			float z0 = tz * yawCos - tx * yawSin;
+
+			float py = ty * pitchCos - z0 * pitchSin;
+			float pz = z0 * pitchCos + ty * pitchSin;
+
+			float invZ = 1f / pz;
+			projectedX[i] = px * invZ;
+			projectedY[i] = py * invZ;
+			distance[i] = pz - zero;
+		}
+	}
+
+	private static void projectWorldView(
+		float[] x,
+		float[] y,
+		float[] z,
+		float[] projectedX,
+		float[] projectedY,
+		float[] distance,
+		float[] projection,
+		float zero
+	)
+	{
+		int upper = SPECIES.loopBound(x.length);
+
+		FloatVector one = FloatVector.broadcast(SPECIES, 1.0f);
+
+		// Broadcast matrix once
+		FloatVector m00 = FloatVector.broadcast(SPECIES, projection[0]);
+		FloatVector m01 = FloatVector.broadcast(SPECIES, projection[4]);
+		FloatVector m02 = FloatVector.broadcast(SPECIES, projection[8]);
+		FloatVector m03 = FloatVector.broadcast(SPECIES, projection[12]);
+
+		FloatVector m10 = FloatVector.broadcast(SPECIES, projection[1]);
+		FloatVector m11 = FloatVector.broadcast(SPECIES, projection[5]);
+		FloatVector m12 = FloatVector.broadcast(SPECIES, projection[9]);
+		FloatVector m13 = FloatVector.broadcast(SPECIES, projection[13]);
+
+		FloatVector m20 = FloatVector.broadcast(SPECIES, projection[2]);
+		FloatVector m21 = FloatVector.broadcast(SPECIES, projection[6]);
+		FloatVector m22 = FloatVector.broadcast(SPECIES, projection[10]);
+		FloatVector m23 = FloatVector.broadcast(SPECIES, projection[14]);
+
+		int i = 0;
+		for (; i < upper; i += SPECIES.length()) {
+
+			FloatVector vx = FloatVector.fromArray(SPECIES, x, i);
+			FloatVector vy = FloatVector.fromArray(SPECIES, y, i);
+			FloatVector vz = FloatVector.fromArray(SPECIES, z, i);
+
+			FloatVector px =
+				vx.fma(m00,
+					vy.fma(m01,
+						vz.fma(m02, m03)));
+
+			FloatVector py =
+				vx.fma(m10,
+					vy.fma(m11,
+						vz.fma(m12, m13)));
+
+			FloatVector pz =
+				vx.fma(m20,
+					vy.fma(m21,
+						vz.fma(m22, m23)));
+
+			FloatVector invZ = one.div(pz);
+
+			px.mul(invZ).intoArray(projectedX, i);
+			py.mul(invZ).intoArray(projectedY, i);
+			pz.sub(zero).intoArray(distance, i);
+		}
+
+		// Scalar tail
+		for (; i < x.length; i++) {
+
+			float px =
+				x[i] * projection[0] +
+					y[i] * projection[4] +
+					z[i] * projection[8] +
+					projection[12];
+
+			float py =
+				x[i] * projection[1] +
+					y[i] * projection[5] +
+					z[i] * projection[9] +
+					projection[13];
+
+			float pz =
+				x[i] * projection[2] +
+					y[i] * projection[6] +
+					z[i] * projection[10] +
+					projection[14];
+
+			float invZ = 1f / pz;
+			projectedX[i] = px * invZ;
+			projectedY[i] = py * invZ;
+			distance[i] = pz - zero;
+		}
 	}
 
 	int uploadSortedModel(GpuPlugin.RenderThread rt, Projection proj, Model model, int orientation, int x, int y, int z, IntBuffer opaqueBuffer, IntBuffer alphaBuffer, boolean prioritySort)
@@ -108,7 +396,7 @@ class ModelUploader
 
 		float orientSine = 0;
 		float orientCosine = 0;
-		if (orientation != 0)
+//		if (orientation != 0)
 		{
 			orientSine = Perspective.SINE[orientation] / 65536f;
 			orientCosine = Perspective.COSINE[orientation] / 65536f;
@@ -117,37 +405,38 @@ class ModelUploader
 		float[] p = proj.project(x, y, z, rt.tmp);
 		int zero = (int) p[2];
 
-		for (int v = 0; v < vertexCount; ++v)
+		float[] vx = verticesX;
+		float[] vy = verticesY;
+		float[] vz = verticesZ;
+
+		if (GpuPlugin.usesimd)
 		{
-			float vertexX = verticesX[v];
-			float vertexY = verticesY[v];
-			float vertexZ = verticesZ[v];
+			rotateAndTranslate(vx, vy, vz, orientSine, orientCosine, x, y, z, modelLocalX, modelLocalY, modelLocalZ);
 
-			if (orientation != 0)
+			if (proj instanceof IntProjection)
 			{
-				float x0 = vertexX;
-				vertexX = vertexZ * orientSine + x0 * orientCosine;
-				vertexZ = vertexZ * orientCosine - x0 * orientSine;
+				IntProjection intp = (IntProjection) proj;
+				projectToplevel(
+					modelLocalX, modelLocalY, modelLocalZ,
+					modelProjectedX, modelProjectedY, distances,
+					intp.getCameraX(), intp.getCameraY(), intp.getCameraZ(),
+					intp.getYawSin(), intp.getYawCos(),
+					intp.getPitchSin(), intp.getPitchCos(),
+					zero);
+			} else {
+				FloatProjection  fp = (FloatProjection) proj;
+				projectWorldView(
+					modelLocalX, modelLocalY, modelLocalZ,
+					modelProjectedX, modelProjectedY, distances,
+					fp.getProjection(),
+					zero );
 			}
-
-			// move to local position
-			vertexX += x;
-			vertexY += y;
-			vertexZ += z;
-
-			modelLocalX[v] = vertexX;
-			modelLocalY[v] = vertexY;
-			modelLocalZ[v] = vertexZ;
-
-			p = proj.project(vertexX, vertexY, vertexZ, rt.tmp);
-			if (p[2] < 50)
-			{
-				return 0;
-			}
-
-			modelProjectedX[v] = p[0] / p[2];
-			modelProjectedY[v] = p[1] / p[2];
-			distances[v] = (int) p[2] - zero;
+		} else {
+			rotateAndTranslateScalar(vx, vy, vz, orientSine,  orientCosine, x, y, z, modelLocalX, modelLocalY, modelLocalZ);
+			projectToplevelScalar(modelLocalX, modelLocalY, modelLocalZ,
+				modelProjectedX, modelProjectedY, distances,
+				rt, proj,
+				zero);
 		}
 
 		final int diameter = model.getDiameter();
@@ -179,7 +468,7 @@ class ModelUploader
 
 				if ((aX - bX) * (cY - bY) - (cX - bX) * (aY - bY) > 0)
 				{
-					int distance = radius + (distances[v1] + distances[v2] + distances[v3]) / 3;
+					int distance = radius + (int)(distances[v1] + distances[v2] + distances[v3]) / 3;
 					assert distance >= 0 && distance < diameter;
 
 					if (zsortTail[distance] == (char) -1)
@@ -505,33 +794,34 @@ class ModelUploader
 
 		float orientSine = 0;
 		float orientCosine = 0;
-		if (orientation != 0)
+//		if (orientation != 0)
 		{
 			orientSine = Perspective.SINE[orientation] / 65536f;
 			orientCosine = Perspective.COSINE[orientation] / 65536f;
 		}
 
-		for (int v = 0; v < vertexCount; ++v)
-		{
-			float vertexX = verticesX[v];
-			float vertexY = verticesY[v];
-			float vertexZ = verticesZ[v];
-
-			if (orientation != 0)
-			{
-				float x0 = vertexX;
-				vertexX = vertexZ * orientSine + x0 * orientCosine;
-				vertexZ = vertexZ * orientCosine - x0 * orientSine;
-			}
-
-			vertexX += x;
-			vertexY += y;
-			vertexZ += z;
-
-			modelLocalX[v] = vertexX;
-			modelLocalY[v] = vertexY;
-			modelLocalZ[v] = vertexZ;
-		}
+		// interface Projector
+		// class ScalarProjector, VectorProjector
+		// VectorSupport 11: return new ScalarProjector
+		// VectorSupport 17:     private static boolean isVectorAvailable() {
+		//        return ModuleLayer.boot()
+		//                .findModule("jdk.incubator.vector")
+		//                .isPresent();
+		//    }
+		if (GpuPlugin.usesimd)
+		rotateAndTranslate(
+			verticesX, verticesY, verticesZ,
+			orientSine, orientCosine,
+			x, y, z,
+			modelLocalX, modelLocalY, modelLocalZ
+		);
+		else
+			rotateAndTranslateScalar(
+				verticesX, verticesY, verticesZ,
+				orientSine, orientCosine,
+				x, y, z,
+				modelLocalX, modelLocalY, modelLocalZ
+			);
 
 		int len = 0;
 		for (int face = 0; face < triangleCount; ++face)
