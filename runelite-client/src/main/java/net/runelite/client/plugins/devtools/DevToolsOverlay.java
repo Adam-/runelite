@@ -226,8 +226,11 @@ class DevToolsOverlay extends Overlay
 			}
 		}
 
-		String text = local.getName() + " (A: " + local.getAnimation() + ") (P: " + local.getPoseAnimation() + ") (G: " + local.getGraphic() + ")";
-		OverlayUtil.renderActorOverlay(graphics, local, text, CYAN);
+		if (local != null)
+		{
+			String text = local.getName() + " (A: " + local.getAnimation() + ") (P: " + local.getPoseAnimation() + ") (G: " + local.getGraphic() + ")";
+			OverlayUtil.renderActorOverlay(graphics, local, text, CYAN);
+		}
 	}
 
 	private void renderNpcs(WorldView wv, Graphics2D graphics)
