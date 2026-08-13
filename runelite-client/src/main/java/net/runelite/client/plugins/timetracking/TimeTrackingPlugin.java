@@ -232,7 +232,7 @@ public class TimeTrackingPlugin extends Plugin
 		Player player = client.getLocalPlayer();
 		lastTickLocation = player == null ? null : player.getWorldLocation();
 
-		if (loc == null || loc.getRegionID() != lastTickLocation.getRegionID())
+		if (loc == null || lastTickLocation == null || loc.getRegionID() != lastTickLocation.getRegionID())
 		{
 			return;
 		}
