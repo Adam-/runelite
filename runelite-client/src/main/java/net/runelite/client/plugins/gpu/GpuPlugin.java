@@ -27,7 +27,9 @@ package net.runelite.client.plugins.gpu;
 import com.google.common.base.Stopwatch;
 import com.google.common.primitives.Ints;
 import com.google.inject.Binder;
+import com.google.inject.Module;
 import com.google.inject.Provides;
+import com.google.inject.util.Providers;
 import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.GraphicsConfiguration;
@@ -491,9 +493,9 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 	}
 
 	@Override
-	public void configure(Binder binder)
+	public Module getPublicModule()
 	{
-		binder.bind(GpuApi.class).toInstance(extensionManager);
+		return b -> b.bind(GpuApi.class).toProvider(Providers.of(extensionManager));
 	}
 
 	@Provides
