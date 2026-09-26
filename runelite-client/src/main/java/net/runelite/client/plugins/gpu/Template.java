@@ -74,7 +74,7 @@ class Template
 
 				for (ExtensionManager.Extension extension : extensions)
 				{
-					String code = extension.e.getShaderExtension(hook);
+					String code = extension.e.injectShaderExtension(hook);
 					if (code == null || code.isBlank())
 					{
 						continue;

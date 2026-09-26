@@ -390,6 +390,7 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 				}
 
 				extensionManager.onContextCreate();
+				extensionManager.onProgramCreate(glProgram);
 
 				checkGLErrors();
 			}
@@ -570,6 +571,7 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 			log.debug("Recompiling shaders");
 			shutdownProgram();
 			initProgram();
+			extensionManager.onProgramCreate(glProgram);
 		});
 	}
 

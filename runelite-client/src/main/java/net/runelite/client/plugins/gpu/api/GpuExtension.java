@@ -6,7 +6,9 @@ public abstract class GpuExtension
 
 	public abstract void onContextDestroy();
 
-	public String getShaderExtension(String hook)
+	public abstract void onProgramCreate(int program);
+
+	public String injectShaderExtension(String hook)
 	{
 		return null;
 	}

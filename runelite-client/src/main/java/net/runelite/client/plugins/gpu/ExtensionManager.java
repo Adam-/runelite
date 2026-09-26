@@ -58,6 +58,15 @@ class ExtensionManager implements GpuApi
 		}
 	}
 
+	void onProgramCreate(int program)
+	{
+		for (int i = 0; i < extensions.size(); ++i)
+		{
+			var e = extensions.get(i);
+			e.e.onProgramCreate(program);
+		}
+	}
+
 	boolean extensionDrawSkybox()
 	{
 		boolean ret = false;
