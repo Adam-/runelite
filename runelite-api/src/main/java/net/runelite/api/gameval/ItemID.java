@@ -315,7 +315,7 @@ public final class ItemID
 	public static final int IKOV_LEVER = 83;
 
 	/**
-	 * Staff of armadyl
+	 * Staff of Armadyl
 	 */
 	public static final int IKOV_STAFFOFARMARDYL = 84;
 
@@ -325,7 +325,7 @@ public final class ItemID
 	public static final int IKOV_SHINYKEY = 85;
 
 	/**
-	 * Pendant of lucien
+	 * Pendant of Lucien
 	 */
 	public static final int IKOV_PENDANTOFLUCIEN = 86;
 
@@ -735,7 +735,7 @@ public final class ItemID
 	public static final int BLUE_DRAGON_SCALE = 243;
 
 	/**
-	 * Wine of zamorak
+	 * Wine of Zamorak
 	 */
 	public static final int WINE_OF_ZAMORAK = 245;
 
@@ -900,7 +900,7 @@ public final class ItemID
 	public static final int RESEARCH_NOTES = 291;
 
 	/**
-	 * Book on baxtorian
+	 * Book on Baxtorian
 	 */
 	public static final int BAXTORIAN_BOOK_WATERFALL_QUEST = 292;
 
@@ -1780,12 +1780,12 @@ public final class ItemID
 	public static final int BUCKET_BAILINGFULL = 585;
 
 	/**
-	 * Orb of protection
+	 * Orb of Protection
 	 */
 	public static final int ORB_OF_PROTECTION = 587;
 
 	/**
-	 * Orbs of protection
+	 * Orbs of Protection
 	 */
 	public static final int ORBS_OF_PROTECTION = 588;
 
@@ -1906,7 +1906,7 @@ public final class ItemID
 	public static final int ZQCRYSTAL_WHITE = 615;
 
 	/**
-	 * Beads of the dead
+	 * Beads of the Dead
 	 */
 	public static final int ZQDEADBEADS = 616;
 
@@ -3240,7 +3240,7 @@ public final class ItemID
 	public static final int CERT_HIGHWAYMAN_MASK = 980;
 
 	/**
-	 * Disk of returning
+	 * Disk of Returning
 	 */
 	public static final int DISCOFRETURNING = 981;
 
@@ -3409,7 +3409,7 @@ public final class ItemID
 	public static final int SANTA_HAT = 1050;
 
 	/**
-	 * Cape of legends
+	 * Cape of Legends
 	 */
 	public static final int CAPE_OF_LEGENDS = 1052;
 
@@ -4570,7 +4570,7 @@ public final class ItemID
 	public static final int CAVEWITCHCAT = 1491;
 
 	/**
-	 * Doll of iban
+	 * Doll of Iban
 	 */
 	public static final int IBANDOLL = 1492;
 
@@ -4580,7 +4580,7 @@ public final class ItemID
 	public static final int UPASS_JOURNAL = 1493;
 
 	/**
-	 * History of iban
+	 * History of Iban
 	 */
 	public static final int OLD_JOURNAL = 1494;
 
@@ -4595,17 +4595,17 @@ public final class ItemID
 	public static final int IBANSDOVE = 1496;
 
 	/**
-	 * Amulet of othanian
+	 * Amulet of Othanian
 	 */
 	public static final int OTHAINIAN_AMULET = 1497;
 
 	/**
-	 * Amulet of doomion
+	 * Amulet of Doomion
 	 */
 	public static final int DOOMION_AMULET = 1498;
 
 	/**
-	 * Amulet of holthion
+	 * Amulet of Holthion
 	 */
 	public static final int HOLTHION_AMULET = 1499;
 
@@ -7782,7 +7782,7 @@ public final class ItemID
 	public static final int BOOTS_WIZARD = 2579;
 
 	/**
-	 * Robin hood hat
+	 * Robin Hood hat
 	 */
 	public static final int ROBINHOODHAT = 2581;
 
@@ -10117,7 +10117,7 @@ public final class ItemID
 	public static final int COOKED_RABBIT = 3228;
 
 	/**
-	 * Big book of bangs
+	 * Big Book of Bangs
 	 */
 	public static final int REGICIDE_ALCHEMY = 3230;
 
@@ -12301,7 +12301,7 @@ public final class ItemID
 	public static final int UNFINISHED_GUTHIXBOOK = 3843;
 
 	/**
-	 * Book of balance
+	 * Book of Balance
 	 */
 	public static final int GUTHIXBOOK_COMPLETE = 3844;
 
@@ -13523,7 +13523,7 @@ public final class ItemID
 	public static final int FENK_CONDUCTOR = 4201;
 
 	/**
-	 * Ring of charos
+	 * Ring of Charos
 	 */
 	public static final int RING_OF_CHAROS = 4202;
 
@@ -13743,7 +13743,7 @@ public final class ItemID
 	public static final int AHOY_ROBES_OF_NECROVARUS = 4247;
 
 	/**
-	 * Book of haricanto
+	 * Book of Haricanto
 	 */
 	public static final int AHOY_BOOK_OF_HARICANTO = 4248;
 
@@ -15573,7 +15573,7 @@ public final class ItemID
 	public static final int ZOGRE_BOW = 4827;
 
 	/**
-	 * Book of 'h.a.m'
+	 * Book of 'H.A.M'
 	 */
 	public static final int ZOGRE_HAMBOOK = 4829;
 
@@ -19320,7 +19320,7 @@ public final class ItemID
 	public static final int MAGIC_STRING = 6038;
 
 	/**
-	 * Amulet of nature
+	 * Amulet of Nature
 	 */
 	public static final int NATURE_AMULET = 6040;
 
@@ -20561,7 +20561,7 @@ public final class ItemID
 	public static final int GARDEN_WHITE_TREE_PLANTPOT_SAPLING = 6464;
 
 	/**
-	 * Ring of charos(a)
+	 * Ring of Charos(a)
 	 */
 	public static final int RING_OF_CHAROS_UNLOCKED = 6465;
 
@@ -21621,12 +21621,12 @@ public final class ItemID
 	public static final int ELID_STATUETTE = 6785;
 
 	/**
-	 * Robe of elidinis
+	 * Robe of Elidinis
 	 */
 	public static final int ELID_ROBETOP = 6786;
 
 	/**
-	 * Robe of elidinis
+	 * Robe of Elidinis
 	 */
 	public static final int ELID_ROBEBOTTOMS = 6787;
 
@@ -22856,7 +22856,7 @@ public final class ItemID
 	public static final int FEVER_PLUNDER = 7143;
 
 	/**
-	 * Book o' piracy
+	 * Book o' Piracy
 	 */
 	public static final int FEVER_PIRACY_BOOK = 7144;
 
@@ -24314,7 +24314,7 @@ public final class ItemID
 	public static final int CRAB_SHELL_BROKEN = 7541;
 
 	/**
-	 * Cake of guidance
+	 * Cake of Guidance
 	 */
 	public static final int _100GUIDE_GUIDECAKE = 7542;
 
@@ -24691,7 +24691,7 @@ public final class ItemID
 	public static final int BURGH_BOOK_SEVENWARRIORS = 7633;
 
 	/**
-	 * Histories of the hallowland
+	 * Histories of the Hallowland
 	 */
 	public static final int BURGH_BOOK_HISTORIESOFHALLOWLAND = 7634;
 
@@ -24716,52 +24716,52 @@ public final class ItemID
 	public static final int BURGH_ROD_COMMAND2 = 7638;
 
 	/**
-	 * Rod of ivandis (10)
+	 * Rod of Ivandis (10)
 	 */
 	public static final int BURGH_ROD_COMMAND_FINAL_10 = 7639;
 
 	/**
-	 * Rod of ivandis (9)
+	 * Rod of Ivandis (9)
 	 */
 	public static final int BURGH_ROD_COMMAND_FINAL_9 = 7640;
 
 	/**
-	 * Rod of ivandis (8)
+	 * Rod of Ivandis (8)
 	 */
 	public static final int BURGH_ROD_COMMAND_FINAL_8 = 7641;
 
 	/**
-	 * Rod of ivandis (7)
+	 * Rod of Ivandis (7)
 	 */
 	public static final int BURGH_ROD_COMMAND_FINAL_7 = 7642;
 
 	/**
-	 * Rod of ivandis (6)
+	 * Rod of Ivandis (6)
 	 */
 	public static final int BURGH_ROD_COMMAND_FINAL_6 = 7643;
 
 	/**
-	 * Rod of ivandis (5)
+	 * Rod of Ivandis (5)
 	 */
 	public static final int BURGH_ROD_COMMAND_FINAL_5 = 7644;
 
 	/**
-	 * Rod of ivandis (4)
+	 * Rod of Ivandis (4)
 	 */
 	public static final int BURGH_ROD_COMMAND_FINAL_4 = 7645;
 
 	/**
-	 * Rod of ivandis (3)
+	 * Rod of Ivandis (3)
 	 */
 	public static final int BURGH_ROD_COMMAND_FINAL_3 = 7646;
 
 	/**
-	 * Rod of ivandis (2)
+	 * Rod of Ivandis (2)
 	 */
 	public static final int BURGH_ROD_COMMAND_FINAL_2 = 7647;
 
 	/**
-	 * Rod of ivandis (1)
+	 * Rod of Ivandis (1)
 	 */
 	public static final int BURGH_ROD_COMMAND_FINAL_1 = 7648;
 
@@ -27595,12 +27595,12 @@ public final class ItemID
 	public static final int POH_TROPHY_AMULETOFGLORY = 8283;
 
 	/**
-	 * Cape of legends
+	 * Cape of Legends
 	 */
 	public static final int POH_TROPHY_LEGENDSCAPE = 8284;
 
 	/**
-	 * King arthur
+	 * King Arthur
 	 */
 	public static final int POH_PORTRAIT_1 = 8285;
 
@@ -27610,7 +27610,7 @@ public final class ItemID
 	public static final int POH_PORTRAIT_2 = 8286;
 
 	/**
-	 * Giant dwarf
+	 * Giant Dwarf
 	 */
 	public static final int POH_PORTRAIT_3 = 8287;
 
@@ -27625,7 +27625,7 @@ public final class ItemID
 	public static final int POH_LANDSCAPE_1 = 8289;
 
 	/**
-	 * The desert
+	 * The Desert
 	 */
 	public static final int POH_LANDSCAPE_2 = 8290;
 
@@ -30244,7 +30244,7 @@ public final class ItemID
 	public static final int LUNAR_GROUNDTOOTH = 9082;
 
 	/**
-	 * Seal of passage
+	 * Seal of Passage
 	 */
 	public static final int LUNAR_SEAL_OF_PASSAGE = 9083;
 
@@ -31122,7 +31122,7 @@ public final class ItemID
 	public static final int ALUFT_GNOME_MINT_CAKE = 9475;
 
 	/**
-	 * Aluft aloft box
+	 * Aluft Aloft box
 	 */
 	public static final int ALUFT_DELIVERY_BOX = 9477;
 
@@ -31747,17 +31747,17 @@ public final class ItemID
 	public static final int MYQ3_SANGUINE_LADDER_TOP = 9655;
 
 	/**
-	 * Tome of experience (3)
+	 * Tome of Experience (3)
 	 */
 	public static final int MYQ3_XP_TOME_3 = 9656;
 
 	/**
-	 * Tome of experience (2)
+	 * Tome of Experience (2)
 	 */
 	public static final int MYQ3_XP_TOME_2 = 9657;
 
 	/**
-	 * Tome of experience (1)
+	 * Tome of Experience (1)
 	 */
 	public static final int MYQ3_XP_TOME_1 = 9658;
 
@@ -32039,7 +32039,7 @@ public final class ItemID
 	public static final int ELEM_MIND_HELM = 9733;
 
 	/**
-	 * Desert goat horn
+	 * Goat horn
 	 */
 	public static final int DESERT_GOAT_HORN = 9735;
 
@@ -34248,62 +34248,62 @@ public final class ItemID
 	public static final int TRAIL_LOGS_PURPLE = 10329;
 
 	/**
-	 * 3rd age range top
+	 * 3rd Age range top
 	 */
 	public static final int TRAIL_RANGER_TORSO = 10330;
 
 	/**
-	 * 3rd age range legs
+	 * 3rd Age range legs
 	 */
 	public static final int TRAIL_RANGER_LEGS = 10332;
 
 	/**
-	 * 3rd age range coif
+	 * 3rd Age range coif
 	 */
 	public static final int TRAIL_RANGER_COIF = 10334;
 
 	/**
-	 * 3rd age vambraces
+	 * 3rd Age vambraces
 	 */
 	public static final int TRAIL_RANGER_VAMBRACES = 10336;
 
 	/**
-	 * 3rd age robe top
+	 * 3rd Age robe top
 	 */
 	public static final int TRAIL_MAGE_TORSO = 10338;
 
 	/**
-	 * 3rd age robe
+	 * 3rd Age robe
 	 */
 	public static final int TRAIL_MAGE_LEGS = 10340;
 
 	/**
-	 * 3rd age mage hat
+	 * 3rd Age mage hat
 	 */
 	public static final int TRAIL_MAGE_HAT = 10342;
 
 	/**
-	 * 3rd age amulet
+	 * 3rd Age amulet
 	 */
 	public static final int TRAIL_MAGE_AMULET = 10344;
 
 	/**
-	 * 3rd age platelegs
+	 * 3rd Age platelegs
 	 */
 	public static final int TRAIL_SILVER_PLATE_LEGS = 10346;
 
 	/**
-	 * 3rd age platebody
+	 * 3rd Age platebody
 	 */
 	public static final int TRAIL_SILVER_PLATE_CHEST = 10348;
 
 	/**
-	 * 3rd age full helmet
+	 * 3rd Age full helmet
 	 */
 	public static final int TRAIL_FIGHTER_HELM = 10350;
 
 	/**
-	 * 3rd age kiteshield
+	 * 3rd Age kiteshield
 	 */
 	public static final int TRAIL_FIGHTER_SHIELD = 10352;
 
@@ -36184,7 +36184,7 @@ public final class ItemID
 	public static final int FREMMENIK_ROUND_SHIELD = 10826;
 
 	/**
-	 * Helm of neitiznot
+	 * Helm of Neitiznot
 	 */
 	public static final int FRIS_KINGLY_HELM = 10828;
 
@@ -38527,7 +38527,7 @@ public final class ItemID
 	public static final int PATTERN_LIME_DUMMY = 11526;
 
 	/**
-	 * Mausoleum bridge repair
+	 * Mausoleum bridge reinforcement
 	 */
 	public static final int PATTERN_PINEAPPLE_CHUNKS_DUMMY = 11527;
 	public static final int PATTERN_BLACK_BATTLEAXE_DUMMY = 11528;
@@ -38716,7 +38716,7 @@ public final class ItemID
 	public static final int PATTERN_HUNDRED_KNIFE_DUMMY = 11639;
 
 	/**
-	 * Book of knowledge
+	 * Book of Knowledge
 	 */
 	public static final int PATTERN_REWARD = 11640;
 	public static final int PATTERN_COCKTAIL_SHAKER_DUMMY = 11641;
@@ -39130,7 +39130,7 @@ public final class ItemID
 	public static final int NZONE_HERBBOX_OPENED = 11739;
 
 	/**
-	 * Scroll of redirection
+	 * Scroll of Redirection
 	 */
 	public static final int NZONE_REDIRECTION = 11740;
 
@@ -39370,7 +39370,7 @@ public final class ItemID
 	public static final int MYSTIC_STEAM_BATTLESTAFF = 11789;
 
 	/**
-	 * Staff of the dead
+	 * Staff of the Dead
 	 */
 	public static final int SOTD = 11791;
 
@@ -39523,7 +39523,7 @@ public final class ItemID
 	public static final int THANKSGIVING_TURKEY = 11848;
 
 	/**
-	 * Mark of grace
+	 * Mark of Grace
 	 */
 	public static final int GRACE = 11849;
 
@@ -39763,12 +39763,12 @@ public final class ItemID
 	public static final int SLAYER_CAVE_DIARY = 11904;
 
 	/**
-	 * Trident of the seas (full)
+	 * Trident of the Seas (full)
 	 */
 	public static final int TOTS = 11905;
 
 	/**
-	 * Trident of the seas
+	 * Trident of the Seas
 	 */
 	public static final int TOTS_CHARGED = 11907;
 
@@ -40058,7 +40058,7 @@ public final class ItemID
 	public static final int ABYSSAL_TENTACLE = 12006;
 
 	/**
-	 * Jar of dirt
+	 * Jar of Dirt
 	 */
 	public static final int JAR_OF_DIRT = 12007;
 
@@ -41599,17 +41599,17 @@ public final class ItemID
 	public static final int INFINITY_BOTTOM_GOLD = 12421;
 
 	/**
-	 * 3rd age wand
+	 * 3rd Age wand
 	 */
 	public static final int TRAIL_MAGE_WAND = 12422;
 
 	/**
-	 * 3rd age bow
+	 * 3rd Age bow
 	 */
 	public static final int TRAIL_RANGER_BOW = 12424;
 
 	/**
-	 * 3rd age longsword
+	 * 3rd Age longsword
 	 */
 	public static final int TRAIL_FIGHTER_SWORD = 12426;
 
@@ -41639,7 +41639,7 @@ public final class ItemID
 	public static final int FURY_ORNAMENT = 12436;
 
 	/**
-	 * 3rd age cloak
+	 * 3rd Age cloak
 	 */
 	public static final int TRAIL_THIRD_CAPE = 12437;
 
@@ -42204,7 +42204,7 @@ public final class ItemID
 	public static final int UNFINISHED_BANDOSBOOK = 12607;
 
 	/**
-	 * Book of war
+	 * Book of War
 	 */
 	public static final int BANDOSBOOK_COMPLETE = 12608;
 
@@ -42214,7 +42214,7 @@ public final class ItemID
 	public static final int UNFINISHED_ARMADYLBOOK = 12609;
 
 	/**
-	 * Book of law
+	 * Book of Law
 	 */
 	public static final int ARMADYLBOOK_COMPLETE = 12610;
 
@@ -42224,7 +42224,7 @@ public final class ItemID
 	public static final int UNFINISHED_ZAROSBOOK = 12611;
 
 	/**
-	 * Book of darkness
+	 * Book of Darkness
 	 */
 	public static final int ZAROSBOOK_COMPLETE = 12612;
 
@@ -42349,67 +42349,67 @@ public final class ItemID
 	public static final int TELEPORTSCROLL_LUMBERYARD = 12642;
 
 	/**
-	 * Pet dagannoth supreme
+	 * Pet Dagannoth Supreme
 	 */
 	public static final int SUPREMEPET = 12643;
 
 	/**
-	 * Pet dagannoth prime
+	 * Pet Dagannoth Prime
 	 */
 	public static final int PRIMEPET = 12644;
 
 	/**
-	 * Pet dagannoth rex
+	 * Pet Dagannoth Rex
 	 */
 	public static final int REXPET = 12645;
 
 	/**
-	 * Baby mole
+	 * Baby Mole
 	 */
 	public static final int MOLEPET = 12646;
 
 	/**
-	 * Kalphite princess
+	 * Kalphite Princess
 	 */
 	public static final int KQPET_WALKING = 12647;
 
 	/**
-	 * Pet smoke devil
+	 * Pet Smoke Devil
 	 */
 	public static final int SMOKEPET = 12648;
 
 	/**
-	 * Pet kree'arra
+	 * Pet Kree'arra
 	 */
 	public static final int ARMADYLPET = 12649;
 
 	/**
-	 * Pet general graardor
+	 * Pet General Graardor
 	 */
 	public static final int BANDOSPET = 12650;
 
 	/**
-	 * Pet zilyana
+	 * Pet Zilyana
 	 */
 	public static final int SARADOMINPET = 12651;
 
 	/**
-	 * Pet k'ril tsutsaroth
+	 * Pet K'ril Tsutsaroth
 	 */
 	public static final int ZAMORAKPET = 12652;
 
 	/**
-	 * Prince black dragon
+	 * Prince Black Dragon
 	 */
 	public static final int KBDPET = 12653;
 
 	/**
-	 * Kalphite princess
+	 * Kalphite Princess
 	 */
 	public static final int KQPET_FLYING = 12654;
 
 	/**
-	 * Pet kraken
+	 * Pet Kraken
 	 */
 	public static final int KRAKENPET = 12655;
 
@@ -42629,7 +42629,7 @@ public final class ItemID
 	public static final int _1DOSE2COMBAT = 12701;
 
 	/**
-	 * Pet penance queen
+	 * Pet Penance Queen
 	 */
 	public static final int PENANCEPET = 12703;
 
@@ -42802,11 +42802,6 @@ public final class ItemID
 	 * Archaic emblem (tier 1)
 	 */
 	public static final int BH_EMBLEM = 12746;
-
-	/**
-	 * Archaic emblem (tier 1)
-	 */
-	public static final int CERT_BH_EMBLEM = 12747;
 
 	/**
 	 * Archaic emblem (tier 2)
@@ -43204,12 +43199,12 @@ public final class ItemID
 	public static final int GRANITE_CLAMP = 12849;
 
 	/**
-	 * Amulet of the damned (full)
+	 * Amulet of the Damned (full)
 	 */
 	public static final int DAMNED_AMULET = 12851;
 
 	/**
-	 * Amulet of the damned
+	 * Amulet of the Damned
 	 */
 	public static final int DAMNED_AMULET_DEGRADED = 12853;
 
@@ -43304,7 +43299,7 @@ public final class ItemID
 	public static final int SET_BARROWS_KARIL = 12883;
 
 	/**
-	 * Jar of sand
+	 * Jar of Sand
 	 */
 	public static final int JAR_OF_SAND = 12885;
 
@@ -43369,7 +43364,7 @@ public final class ItemID
 	public static final int ANTISANTA_COALBOX_FULL = 12898;
 
 	/**
-	 * Trident of the swamp
+	 * Trident of the Swamp
 	 */
 	public static final int TOXIC_TOTS_CHARGED = 12899;
 
@@ -43384,7 +43379,7 @@ public final class ItemID
 	public static final int TOXIC_SOTD = 12902;
 
 	/**
-	 * Toxic staff of the dead
+	 * Toxic Staff of the Dead
 	 */
 	public static final int TOXIC_SOTD_CHARGED = 12904;
 
@@ -43429,7 +43424,7 @@ public final class ItemID
 	public static final int ANTIVENOM_1 = 12919;
 
 	/**
-	 * Pet snakeling
+	 * Pet Snakeling
 	 */
 	public static final int SNAKEPET = 12921;
 
@@ -43479,7 +43474,7 @@ public final class ItemID
 	public static final int SNAKEBOSS_BOOK = 12935;
 
 	/**
-	 * Jar of swamp
+	 * Jar of Swamp
 	 */
 	public static final int JAR_OF_SWAMP = 12936;
 
@@ -43489,12 +43484,12 @@ public final class ItemID
 	public static final int TELEPORTSCROLL_ZULANDRA = 12938;
 
 	/**
-	 * Pet snakeling
+	 * Pet Snakeling
 	 */
 	public static final int SNAKEPET_ORANGE = 12939;
 
 	/**
-	 * Pet snakeling
+	 * Pet Snakeling
 	 */
 	public static final int SNAKEPET_BLUE = 12940;
 
@@ -44214,22 +44209,22 @@ public final class ItemID
 	public static final int SET_UNHOLY_BOOK = 13151;
 
 	/**
-	 * Book of balance page set
+	 * Book of Balance page set
 	 */
 	public static final int SET_BOOK_BALANCE = 13153;
 
 	/**
-	 * Book of war page set
+	 * Book of War page set
 	 */
 	public static final int SET_BOOK_WAR = 13155;
 
 	/**
-	 * Book of law page set
+	 * Book of Law page set
 	 */
 	public static final int SET_BOOK_LAW = 13157;
 
 	/**
-	 * Book of darkness page set
+	 * Book of Darkness page set
 	 */
 	public static final int SET_BOOK_DARKNESS = 13159;
 
@@ -44391,7 +44386,7 @@ public final class ItemID
 	public static final int NZONE_ROTG = 13202;
 
 	/**
-	 * Mask of balance
+	 * Mask of Balance
 	 */
 	public static final int SUMMER2015_MASK = 13203;
 
@@ -44469,7 +44464,7 @@ public final class ItemID
 	public static final int DUMMY_MUSIC_CAPE = 13224;
 
 	/**
-	 * Tzrek-jad
+	 * TzRek-Jad
 	 */
 	public static final int JAD_PET = 13225;
 
@@ -44534,7 +44529,7 @@ public final class ItemID
 	public static final int INFERNAL_PICKAXE_EMPTY = 13244;
 
 	/**
-	 * Jar of souls
+	 * Jar of Souls
 	 */
 	public static final int JAR_OF_SOULS = 13245;
 
@@ -44644,7 +44639,7 @@ public final class ItemID
 	public static final int ABYSSAL_BLUDGEON_3 = 13276;
 
 	/**
-	 * Jar of miasma
+	 * Jar of Miasma
 	 */
 	public static final int JAR_OF_MIASMA = 13277;
 
@@ -45628,7 +45623,7 @@ public final class ItemID
 	public static final int ARCEUUS_CORPSE_DRAGON = 13511;
 
 	/**
-	 * Book of arcane knowledge
+	 * Book of Arcane Knowledge
 	 */
 	public static final int ARCEUUS_LIBRARY_REWARD = 13513;
 
@@ -45683,7 +45678,7 @@ public final class ItemID
 	public static final int ARCEUUS_LIBRARY_DARKMANUSCRIPT_10 = 13523;
 
 	/**
-	 * Rada's census
+	 * Rada's Census
 	 */
 	public static final int ARCEUUS_LIBRARY_CENSUSRADA = 13524;
 
@@ -45693,12 +45688,12 @@ public final class ItemID
 	public static final int ARCEUUS_LIBRARY_DIARYRICKTOR7 = 13525;
 
 	/**
-	 * Eathram &#38; rada extract
+	 * Eathram &#38; Rada extract
 	 */
 	public static final int ARCEUUS_LIBRARY_EATHRAMRADA = 13526;
 
 	/**
-	 * Killing of a king
+	 * Killing of a King
 	 */
 	public static final int ARCEUUS_LIBRARY_KILLINGKING = 13527;
 
@@ -45708,47 +45703,47 @@ public final class ItemID
 	public static final int ARCEUUS_LIBRARY_HOSIDIUSLETTER = 13528;
 
 	/**
-	 * Wintertodt parable
+	 * Wintertodt Parable
 	 */
 	public static final int ARCEUUS_LIBRARY_WINTERTODTPARABLE = 13529;
 
 	/**
-	 * Twill accord
+	 * Twill Accord
 	 */
 	public static final int ARCEUUS_LIBRARY_TWILLACCORD = 13530;
 
 	/**
-	 * Byrne's coronation speech
+	 * Byrne's Coronation Speech
 	 */
 	public static final int ARCEUUS_LIBRARY_BYRNESPEECH = 13531;
 
 	/**
-	 * Ideology of darkness
+	 * Ideology of Darkness
 	 */
 	public static final int ARCEUUS_LIBRARY_IDEOLOGYDARKNESS = 13532;
 
 	/**
-	 * Rada's journey
+	 * Rada's Journey
 	 */
 	public static final int ARCEUUS_LIBRARY_RADAJOURNEY = 13533;
 
 	/**
-	 * Transvergence theory
+	 * Transvergence Theory
 	 */
 	public static final int ARCEUUS_LIBRARY_TRANSVERGENCETHEORY = 13534;
 
 	/**
-	 * Tristessa's tragedy
+	 * Tristessa's Tragedy
 	 */
 	public static final int ARCEUUS_LIBRARY_TRISTESSATRAGEDY = 13535;
 
 	/**
-	 * Treachery of royalty
+	 * Treachery of Royalty
 	 */
 	public static final int ARCEUUS_LIBRARY_TREACHERYROYALTY = 13536;
 
 	/**
-	 * Transportation incantations
+	 * Transportation Incantations
 	 */
 	public static final int ARCEUUS_LIBRARY_TELEPORTUNLOCK = 13537;
 
@@ -46821,7 +46816,7 @@ public final class ItemID
 	public static final int MM2_TRANSLATED_NOTE = 19513;
 
 	/**
-	 * Book of spyology
+	 * Book of Spyology
 	 */
 	public static final int MM2_SPY_BOOK = 19515;
 
@@ -47101,7 +47096,7 @@ public final class ItemID
 	public static final int ARCEUUS_SOULBEARER_DAMAGED = 19636;
 
 	/**
-	 * Soul journey
+	 * Soul Journey
 	 */
 	public static final int ARCEUUS_LIBRARY_SOULBEARERBOOK = 19637;
 
@@ -47211,7 +47206,7 @@ public final class ItemID
 	public static final int CATA_TOTEM = 19685;
 
 	/**
-	 * Helm of raedwald
+	 * Helm of Raedwald
 	 */
 	public static final int RAEDWALD_HELM = 19687;
 
@@ -47246,7 +47241,7 @@ public final class ItemID
 	public static final int MIDSUM_HELM16 = 19699;
 
 	/**
-	 * Jar of darkness
+	 * Jar of Darkness
 	 */
 	public static final int JAR_OF_DARKNESS = 19701;
 
@@ -48376,12 +48371,12 @@ public final class ItemID
 	public static final int FANCY_TIARA = 20008;
 
 	/**
-	 * 3rd age axe
+	 * 3rd Age axe
 	 */
 	public static final int _3A_AXE = 20011;
 
 	/**
-	 * 3rd age pickaxe
+	 * 3rd Age pickaxe
 	 */
 	public static final int _3A_PICKAXE = 20014;
 
@@ -49942,12 +49937,12 @@ public final class ItemID
 	public static final int BR_INFINITY_LEGS = 20575;
 
 	/**
-	 * 3rd age robe top
+	 * 3rd Age robe top
 	 */
 	public static final int BR_3A_MAGE_BODY = 20576;
 
 	/**
-	 * 3rd age robe
+	 * 3rd Age robe
 	 */
 	public static final int BR_3A_MAGE_LEGS = 20577;
 
@@ -50294,7 +50289,7 @@ public final class ItemID
 	public static final int NZONE_ZENYTE_RING_ENCHANTED_RECOIL = 20657;
 
 	/**
-	 * Giant squirrel
+	 * Giant Squirrel
 	 */
 	public static final int SKILLPETAGILITY = 20659;
 
@@ -50454,12 +50449,12 @@ public final class ItemID
 	public static final int PYROMANCER_GLOVES = 20712;
 
 	/**
-	 * Tome of fire
+	 * Tome of Fire
 	 */
 	public static final int TOME_OF_FIRE = 20714;
 
 	/**
-	 * Tome of fire (empty)
+	 * Tome of Fire (empty)
 	 */
 	public static final int TOME_OF_FIRE_UNCHARGED = 20716;
 
@@ -52280,7 +52275,7 @@ public final class ItemID
 	public static final int EASTER17_LEMON = 21242;
 
 	/**
-	 * Bucket of wester sand
+	 * Bucket of Wester sand
 	 */
 	public static final int EASTER17_SAND = 21243;
 
@@ -52445,7 +52440,7 @@ public final class ItemID
 	public static final int SKILLCAPE_MAX_INFERNALCAPE_BROKEN = 21289;
 
 	/**
-	 * Jal-nib-rek
+	 * Jal-Nib-Rek
 	 */
 	public static final int INFERNOPET = 21291;
 
@@ -53063,7 +53058,7 @@ public final class ItemID
 	public static final int FOSSILQUEST_BONE_CHARM = 21530;
 
 	/**
-	 * Potion of sealegs
+	 * Potion of Sealegs
 	 */
 	public static final int FOSSILQUEST_POTION = 21531;
 
@@ -53607,7 +53602,7 @@ public final class ItemID
 	public static final int GRANITE_HAMMER = 21742;
 
 	/**
-	 * Jar of stone
+	 * Jar of Stone
 	 */
 	public static final int JAR_OF_STONE = 21745;
 
@@ -53632,12 +53627,12 @@ public final class ItemID
 	public static final int SLAYER_ROCK_THROWNHAMMER = 21754;
 
 	/**
-	 * Varlamore envoy
+	 * Varlamore Envoy
 	 */
 	public static final int HOSIDIUSQUEST_BOOK = 21756;
 
 	/**
-	 * Royal accord of twill
+	 * Royal Accord of Twill
 	 */
 	public static final int HOSIDIUSQUEST_ACCORD = 21758;
 
@@ -53652,27 +53647,27 @@ public final class ItemID
 	public static final int VEOS_KHAREDSTS_MEMOIRS = 21760;
 
 	/**
-	 * Lunch by the lancalliums
+	 * Lunch by the Lancalliums
 	 */
 	public static final int VEOS_MEMOIRS_HOS_PAGE = 21762;
 
 	/**
-	 * The fisher's flute
+	 * The Fisher's Flute
 	 */
 	public static final int VEOS_MEMOIRS_PISC_PAGE = 21764;
 
 	/**
-	 * History and hearsay
+	 * History and Hearsay
 	 */
 	public static final int VEOS_MEMOIRS_SHAY_PAGE = 21766;
 
 	/**
-	 * Jewellery of jubilation
+	 * Jewellery of Jubilation
 	 */
 	public static final int VEOS_MEMOIRS_LOVA_PAGE = 21768;
 
 	/**
-	 * A dark disposition
+	 * A Dark Disposition
 	 */
 	public static final int VEOS_MEMOIRS_ARC_PAGE = 21770;
 
@@ -53692,32 +53687,32 @@ public final class ItemID
 	public static final int PISCQUEST_FAVOUR_SCROLL = 21775;
 
 	/**
-	 * Imbued saradomin max cape
+	 * Imbued Saradomin max cape
 	 */
 	public static final int SKILLCAPE_MAX_SARADOMIN2 = 21776;
 
 	/**
-	 * Imbued saradomin max hood
+	 * Imbued Saradomin max hood
 	 */
 	public static final int SKILLCAPE_MAX_HOOD_SARADOMIN2 = 21778;
 
 	/**
-	 * Imbued zamorak max cape
+	 * Imbued Zamorak max cape
 	 */
 	public static final int SKILLCAPE_MAX_ZAMORAK2 = 21780;
 
 	/**
-	 * Imbued zamorak max hood
+	 * Imbued Zamorak max hood
 	 */
 	public static final int SKILLCAPE_MAX_HOOD_ZAMORAK2 = 21782;
 
 	/**
-	 * Imbued guthix max cape
+	 * Imbued Guthix max cape
 	 */
 	public static final int SKILLCAPE_MAX_GUTHIX2 = 21784;
 
 	/**
-	 * Imbued guthix max hood
+	 * Imbued Guthix max hood
 	 */
 	public static final int SKILLCAPE_MAX_HOOD_GUTHIX2 = 21786;
 
@@ -53729,17 +53724,17 @@ public final class ItemID
 	public static final int TELEPORTSCROLL_REVENANTS_SELECTED_DUMMY = 21790;
 
 	/**
-	 * Imbued saradomin cape
+	 * Imbued Saradomin cape
 	 */
 	public static final int MA2_SARADOMIN_CAPE = 21791;
 
 	/**
-	 * Imbued guthix cape
+	 * Imbued Guthix cape
 	 */
 	public static final int MA2_GUTHIX_CAPE = 21793;
 
 	/**
-	 * Imbued zamorak cape
+	 * Imbued Zamorak cape
 	 */
 	public static final int MA2_ZAMORAK_CAPE = 21795;
 
@@ -54610,7 +54605,7 @@ public final class ItemID
 	public static final int DRAGON_LUMP = 22103;
 
 	/**
-	 * Jar of decay
+	 * Jar of Decay
 	 */
 	public static final int JAR_OF_DECAY = 22106;
 
@@ -55005,7 +55000,7 @@ public final class ItemID
 	public static final int LEATHER_SHIELD_INFO = 22287;
 
 	/**
-	 * Trident of the seas (e)
+	 * Trident of the Seas (e)
 	 */
 	public static final int TOTS_I_CHARGED = 22288;
 
@@ -55015,7 +55010,7 @@ public final class ItemID
 	public static final int TOTS_I_UNCHARGED = 22290;
 
 	/**
-	 * Trident of the swamp (e)
+	 * Trident of the Swamp (e)
 	 */
 	public static final int TOXIC_TOTS_I_CHARGED = 22292;
 
@@ -55025,7 +55020,7 @@ public final class ItemID
 	public static final int TOXIC_TOTS_I_UNCHARGED = 22294;
 
 	/**
-	 * Staff of light
+	 * Staff of Light
 	 */
 	public static final int STAFF_OF_LIGHT = 22296;
 
@@ -55090,12 +55085,12 @@ public final class ItemID
 	public static final int OSB5_SWORD = 22316;
 
 	/**
-	 * Pet corporeal critter
+	 * Pet Corporeal Critter
 	 */
 	public static final int CORPPET = 22318;
 
 	/**
-	 * Tzrek-zuk
+	 * TzRek-Zuk
 	 */
 	public static final int INFERNOPET_ZUK = 22319;
 
@@ -55125,7 +55120,7 @@ public final class ItemID
 	public static final int GHRAZI_RAPIER = 22324;
 
 	/**
-	 * Scythe of vitur
+	 * Scythe of Vitur
 	 */
 	public static final int SCYTHE_OF_VITUR = 22325;
 
@@ -55312,7 +55307,7 @@ public final class ItemID
 	public static final int VANGUARDPET = 22380;
 
 	/**
-	 * Vasa minirio
+	 * Vasa Minirio
 	 */
 	public static final int VASAPET = 22382;
 
@@ -55422,17 +55417,17 @@ public final class ItemID
 	public static final int MYQ4_CHAIN = 22414;
 
 	/**
-	 * Tome of experience
+	 * Tome of Experience
 	 */
 	public static final int MYQ4_XP_TOME = 22415;
 
 	/**
-	 * The turncloak
+	 * The Turncloak
 	 */
 	public static final int SLEPE_BOOK_SISTER1 = 22416;
 
 	/**
-	 * Explosive discovery
+	 * Explosive Discovery
 	 */
 	public static final int SLEPE_BOOK_SISTER2 = 22418;
 
@@ -55442,12 +55437,12 @@ public final class ItemID
 	public static final int SLEPE_BOOK_SISTER3 = 22420;
 
 	/**
-	 * Elixir of everlasting
+	 * Elixir of Everlasting
 	 */
 	public static final int SLEPE_MANUSCRIPT_ELIXIR = 22422;
 
 	/**
-	 * Buried alive
+	 * Buried Alive
 	 */
 	public static final int SLEPE_MANUSCRIPT_BURIED_ALIVE = 22424;
 
@@ -55542,7 +55537,7 @@ public final class ItemID
 	public static final int _1DOSEBASTION = 22470;
 
 	/**
-	 * Lil' zik
+	 * Lil' Zik
 	 */
 	public static final int VERZIKPET = 22473;
 
@@ -55562,7 +55557,7 @@ public final class ItemID
 	public static final int SANGUINESTI_STAFF_UNCHARGED = 22481;
 
 	/**
-	 * Scythe of vitur (uncharged)
+	 * Scythe of Vitur (uncharged)
 	 */
 	public static final int SCYTHE_OF_VITUR_UNCHARGED = 22486;
 
@@ -55597,27 +55592,27 @@ public final class ItemID
 	public static final int TOB_BOOK_MAIDEN = 22504;
 
 	/**
-	 * The butcher
+	 * The Butcher
 	 */
 	public static final int TOB_BOOK_BLOAT = 22506;
 
 	/**
-	 * Arachnids of vampyrium
+	 * Arachnids of Vampyrium
 	 */
 	public static final int TOB_BOOK_NYLOCAS = 22508;
 
 	/**
-	 * The shadow realm
+	 * The Shadow Realm
 	 */
 	public static final int TOB_BOOK_SOTETSEG = 22510;
 
 	/**
-	 * The wild hunt
+	 * The Wild Hunt
 	 */
 	public static final int TOB_BOOK_XARPUS = 22512;
 
 	/**
-	 * Verzik vitur - patient record
+	 * Verzik Vitur - Patient Record
 	 */
 	public static final int TOB_BOOK_VERZIK = 22514;
 
@@ -55805,7 +55800,7 @@ public final class ItemID
 	public static final int LOOTING_BAG_OPEN = 22586;
 
 	/**
-	 * Old man's coffin
+	 * Old Man's coffin
 	 */
 	public static final int MY2ARM_COFFIN = 22588;
 
@@ -55855,22 +55850,22 @@ public final class ItemID
 	public static final int BASALT = 22603;
 
 	/**
-	 * Fire of eternal light
+	 * Fire of Eternal Light
 	 */
 	public static final int MY2ARM_DUMMY_FIRE_LIGHT = 22606;
 
 	/**
-	 * Fire of dehumidification
+	 * Fire of Dehumidification
 	 */
 	public static final int MY2ARM_DUMMY_FIRE_GHAST = 22607;
 
 	/**
-	 * Fire of nourishment
+	 * Fire of Nourishment
 	 */
 	public static final int MY2ARM_DUMMY_FIRE_HERB = 22608;
 
 	/**
-	 * Fire of unseasonal warmth
+	 * Fire of Unseasonal Warmth
 	 */
 	public static final int MY2ARM_DUMMY_FIRE_GWD = 22609;
 
@@ -55966,12 +55961,12 @@ public final class ItemID
 	public static final int PACK_BUCKET = 22660;
 
 	/**
-	 * Pet smoke devil
+	 * Pet Smoke Devil
 	 */
 	public static final int SMOKEPET_OLD = 22663;
 
 	/**
-	 * Scythe of vitur
+	 * Scythe of Vitur
 	 */
 	public static final int ROTTEN_SCYTHE = 22664;
 
@@ -56246,22 +56241,22 @@ public final class ItemID
 	public static final int CERT_BRUT_DRAGON_SPEAR_KP = 22744;
 
 	/**
-	 * Ikkle hydra
+	 * Ikkle Hydra
 	 */
 	public static final int HYDRAPET = 22746;
 
 	/**
-	 * Ikkle hydra
+	 * Ikkle Hydra
 	 */
 	public static final int HYDRAPET_ELECTRIC = 22748;
 
 	/**
-	 * Ikkle hydra
+	 * Ikkle Hydra
 	 */
 	public static final int HYDRAPET_FIRE = 22750;
 
 	/**
-	 * Ikkle hydra
+	 * Ikkle Hydra
 	 */
 	public static final int HYDRAPET_EXTINGUISHED = 22752;
 
@@ -56695,7 +56690,7 @@ public final class ItemID
 	public static final int TELETAB_BATTLEFRONT = 22949;
 
 	/**
-	 * Boots of brimstone
+	 * Boots of Brimstone
 	 */
 	public static final int BOOTS_OF_BRIMSTONE = 22951;
 
@@ -56943,7 +56938,7 @@ public final class ItemID
 	public static final int NEST_BOX_DECENTSEEDS_JAN2019 = 23062;
 
 	/**
-	 * Jar of chemicals
+	 * Jar of Chemicals
 	 */
 	public static final int JAR_OF_CHEMICALS = 23064;
 
@@ -57389,7 +57384,7 @@ public final class ItemID
 	public static final int TRAIL_MIMIC_CASKET = 23184;
 
 	/**
-	 * Ring of 3rd age
+	 * Ring of 3rd Age
 	 */
 	public static final int RING_OF_3RD_AGE = 23185;
 
@@ -57489,7 +57484,7 @@ public final class ItemID
 	public static final int JEWL_BESERKER_NECKLACE_ORNAMENT = 23240;
 
 	/**
-	 * 3rd age plateskirt
+	 * 3rd Age plateskirt
 	 */
 	public static final int TRAIL_SILVER_PLATE_SKIRT = 23242;
 
@@ -57624,17 +57619,17 @@ public final class ItemID
 	public static final int SANDWICH_LADY_BOTTOM = 23318;
 
 	/**
-	 * Rune scimitar ornament kit (guthix)
+	 * Rune scimitar ornament kit (Guthix)
 	 */
 	public static final int RUNE_SCIMITAR_ORNAMENT_KIT_GUTHIX = 23321;
 
 	/**
-	 * Rune scimitar ornament kit (saradomin)
+	 * Rune scimitar ornament kit (Saradomin)
 	 */
 	public static final int RUNE_SCIMITAR_ORNAMENT_KIT_SARADOMIN = 23324;
 
 	/**
-	 * Rune scimitar ornament kit (zamorak)
+	 * Rune scimitar ornament kit (Zamorak)
 	 */
 	public static final int RUNE_SCIMITAR_ORNAMENT_KIT_ZAMORAK = 23327;
 
@@ -57654,22 +57649,22 @@ public final class ItemID
 	public static final int RUNE_SCIMITAR_ZAMORAK = 23334;
 
 	/**
-	 * 3rd age druidic robe top
+	 * 3rd Age druidic robe top
 	 */
 	public static final int _3A_DRUIDIC_TOP = 23336;
 
 	/**
-	 * 3rd age druidic robe bottoms
+	 * 3rd Age druidic robe bottoms
 	 */
 	public static final int _3A_DRUIDIC_BOTTOMS = 23339;
 
 	/**
-	 * 3rd age druidic staff
+	 * 3rd Age druidic staff
 	 */
 	public static final int _3A_DRUIDIC_STAFF = 23342;
 
 	/**
-	 * 3rd age druidic cloak
+	 * 3rd Age druidic cloak
 	 */
 	public static final int _3A_DRUIDIC_CLOAK = 23345;
 
@@ -57699,7 +57694,7 @@ public final class ItemID
 	public static final int JOINT_OF_HAM = 23360;
 
 	/**
-	 * Staff of bob the cat
+	 * Staff of Bob the Cat
 	 */
 	public static final int STAFF_OF_BOBCAT = 23363;
 
@@ -58124,7 +58119,7 @@ public final class ItemID
 	public static final int CERT_BH_EMBLEM_10 = 23487;
 
 	/**
-	 * Wine of zamorak
+	 * Wine of Zamorak
 	 */
 	public static final int FAKE_WINE_OF_ZAMORAK = 23489;
 
@@ -58157,17 +58152,17 @@ public final class ItemID
 	public static final int HOSDUN_TEMPLE_KEY = 23502;
 
 	/**
-	 * Tome of the moon
+	 * Tome of the Moon
 	 */
 	public static final int HOSDUN_MOON_TOME = 23504;
 
 	/**
-	 * Tome of the sun
+	 * Tome of the Sun
 	 */
 	public static final int HOSDUN_SUN_TOME = 23506;
 
 	/**
-	 * Tome of the temple
+	 * Tome of the Temple
 	 */
 	public static final int HOSDUN_TEMPLE_TOME = 23508;
 
@@ -58202,12 +58197,12 @@ public final class ItemID
 	public static final int HOSDUN_EGG_SAC = 23520;
 
 	/**
-	 * Mask of ranul
+	 * Mask of Ranul
 	 */
 	public static final int HOSDUN_TEMPLE_MASK = 23522;
 
 	/**
-	 * Jar of eyes
+	 * Jar of Eyes
 	 */
 	public static final int JAR_OF_EYES = 23525;
 
@@ -58342,7 +58337,7 @@ public final class ItemID
 	public static final int BR_1DOSESTAMINA = 23589;
 
 	/**
-	 * Helm of neitiznot
+	 * Helm of Neitiznot
 	 */
 	public static final int BR_FRIS_KINGLY_HELM = 23591;
 
@@ -58372,17 +58367,17 @@ public final class ItemID
 	public static final int BR_XBOWS_CROSSBOW_RUNITE = 23601;
 
 	/**
-	 * Imbued guthix cape
+	 * Imbued Guthix cape
 	 */
 	public static final int BR_MA2_GUTHIX_CAPE = 23603;
 
 	/**
-	 * Imbued zamorak cape
+	 * Imbued Zamorak cape
 	 */
 	public static final int BR_MA2_ZAMORAK_CAPE = 23605;
 
 	/**
-	 * Imbued saradomin cape
+	 * Imbued Saradomin cape
 	 */
 	public static final int BR_MA2_SARADOMIN_CAPE = 23607;
 
@@ -58397,7 +58392,7 @@ public final class ItemID
 	public static final int BR_ACB = 23611;
 
 	/**
-	 * Staff of the dead
+	 * Staff of the Dead
 	 */
 	public static final int BR_SOTD = 23613;
 
@@ -58723,7 +58718,7 @@ public final class ItemID
 	public static final int GAUNTLETPET = 23757;
 
 	/**
-	 * Corrupted youngllef
+	 * Corrupted Youngllef
 	 */
 	public static final int GAUNTLETPET_CORRUPT = 23759;
 
@@ -59386,42 +59381,42 @@ public final class ItemID
 	public static final int CRYSTAL_CROWN_AMLODD = 23925;
 
 	/**
-	 * Crystal of ithell
+	 * Crystal of Ithell
 	 */
 	public static final int PRIF_CLAN_CRYSTAL_ITHELL = 23927;
 
 	/**
-	 * Crystal of iorwerth
+	 * Crystal of Iorwerth
 	 */
 	public static final int PRIF_CLAN_CRYSTAL_IORWERTH = 23929;
 
 	/**
-	 * Crystal of trahaearn
+	 * Crystal of Trahaearn
 	 */
 	public static final int PRIF_CLAN_CRYSTAL_TRAHAEARN = 23931;
 
 	/**
-	 * Crystal of cadarn
+	 * Crystal of Cadarn
 	 */
 	public static final int PRIF_CLAN_CRYSTAL_CADARN = 23933;
 
 	/**
-	 * Crystal of crwys
+	 * Crystal of Crwys
 	 */
 	public static final int PRIF_CLAN_CRYSTAL_CRWYS = 23935;
 
 	/**
-	 * Crystal of meilyr
+	 * Crystal of Meilyr
 	 */
 	public static final int PRIF_CLAN_CRYSTAL_MEILYR = 23937;
 
 	/**
-	 * Crystal of hefin
+	 * Crystal of Hefin
 	 */
 	public static final int PRIF_CLAN_CRYSTAL_HEFIN = 23939;
 
 	/**
-	 * Crystal of amlodd
+	 * Crystal of Amlodd
 	 */
 	public static final int PRIF_CLAN_CRYSTAL_AMLODD = 23941;
 
@@ -59536,12 +59531,12 @@ public final class ItemID
 	public static final int CRYSTAL_SHIELD_INACTIVE = 23993;
 
 	/**
-	 * Blade of saeldor
+	 * Blade of Saeldor
 	 */
 	public static final int BLADE_OF_SAELDOR = 23995;
 
 	/**
-	 * Blade of saeldor (inactive)
+	 * Blade of Saeldor (inactive)
 	 */
 	public static final int BLADE_OF_SAELDOR_INACTIVE = 23997;
 
@@ -59646,12 +59641,12 @@ public final class ItemID
 	public static final int PRIF_RANDAS_BOOK = 24049;
 
 	/**
-	 * A dear friend
+	 * A Dear Friend
 	 */
 	public static final int PRIF_AMLODD_BOOK = 24051;
 
 	/**
-	 * On leprechauns
+	 * On Leprechauns
 	 */
 	public static final int PRIF_LEPRECHAUN_BOOK = 24053;
 
@@ -59661,7 +59656,7 @@ public final class ItemID
 	public static final int PRIF_ARCLIGHT_BOOK = 24055;
 
 	/**
-	 * The eight clans
+	 * The Eight Clans
 	 */
 	public static final int PRIF_HYMN_SCROLL = 24057;
 
@@ -59671,7 +59666,7 @@ public final class ItemID
 	public static final int PRIF_GOLLWYN_BOOK = 24059;
 
 	/**
-	 * Niff &#38; harry
+	 * Niff &#38; Harry
 	 */
 	public static final int PRIF_POEM_SCROLL = 24061;
 
@@ -59691,22 +59686,22 @@ public final class ItemID
 	public static final int PRIF_ZULRAH_BOOK = 24067;
 
 	/**
-	 * The truth behind the myth (excerpt)
+	 * The Truth Behind the Myth (excerpt)
 	 */
 	public static final int PRIF_CAMORRA_BOOK = 24069;
 
 	/**
-	 * The living statues
+	 * The Living Statues
 	 */
 	public static final int PRIF_GARGOYLE_BOOK = 24071;
 
 	/**
-	 * The spurned demon
+	 * The Spurned Demon
 	 */
 	public static final int PRIF_ZALCANO_BOOK = 24073;
 
 	/**
-	 * Legends of the mountain
+	 * Legends of the Mountain
 	 */
 	public static final int PRIF_MOUNTAIN_BOOK = 24075;
 	public static final int FLETCHING_BOLT_TIP_OPAL = 24077;
@@ -59843,7 +59838,7 @@ public final class ItemID
 	public static final int DRAGON_PARRYINGDAGGER_TROUVER = 24143;
 
 	/**
-	 * Staff of balance
+	 * Staff of Balance
 	 */
 	public static final int STAFF_OF_BALANCE = 24144;
 
@@ -60158,17 +60153,17 @@ public final class ItemID
 	public static final int GRANITE_MAUL_UPGRADE = 24229;
 
 	/**
-	 * Imbued saradomin max cape (l)
+	 * Imbued Saradomin max cape (l)
 	 */
 	public static final int SKILLCAPE_MAX_SARADOMIN2_TROUVER = 24232;
 
 	/**
-	 * Imbued zamorak max cape (l)
+	 * Imbued Zamorak max cape (l)
 	 */
 	public static final int SKILLCAPE_MAX_ZAMORAK2_TROUVER = 24233;
 
 	/**
-	 * Imbued guthix max cape (l)
+	 * Imbued Guthix max cape (l)
 	 */
 	public static final int SKILLCAPE_MAX_GUTHIX2_TROUVER = 24234;
 
@@ -60178,47 +60173,47 @@ public final class ItemID
 	public static final int POH_BOARD = 24235;
 
 	/**
-	 * Imbued saradomin cape (broken)
+	 * Imbued Saradomin cape (broken)
 	 */
 	public static final int MA2_SARADOMIN_CAPE_BROKEN = 24236;
 
 	/**
-	 * Imbued saradomin max cape (broken)
+	 * Imbued Saradomin max cape (broken)
 	 */
 	public static final int SKILLCAPE_MAX_SARADOMIN2_BROKEN = 24238;
 
 	/**
-	 * Imbued guthix cape (broken)
+	 * Imbued Guthix cape (broken)
 	 */
 	public static final int MA2_GUTHIX_CAPE_BROKEN = 24240;
 
 	/**
-	 * Imbued guthix max cape (broken)
+	 * Imbued Guthix max cape (broken)
 	 */
 	public static final int SKILLCAPE_MAX_GUTHIX2_BROKEN = 24242;
 
 	/**
-	 * Imbued zamorak cape (broken)
+	 * Imbued Zamorak cape (broken)
 	 */
 	public static final int MA2_ZAMORAK_CAPE_BROKEN = 24244;
 
 	/**
-	 * Imbued zamorak max cape (broken)
+	 * Imbued Zamorak max cape (broken)
 	 */
 	public static final int SKILLCAPE_MAX_ZAMORAK2_BROKEN = 24246;
 
 	/**
-	 * Imbued saradomin cape (l)
+	 * Imbued Saradomin cape (l)
 	 */
 	public static final int MA2_SARADOMIN_CAPE_TROUVER = 24248;
 
 	/**
-	 * Imbued guthix cape (l)
+	 * Imbued Guthix cape (l)
 	 */
 	public static final int MA2_GUTHIX_CAPE_TROUVER = 24249;
 
 	/**
-	 * Imbued zamorak cape (l)
+	 * Imbued Zamorak cape (l)
 	 */
 	public static final int MA2_ZAMORAK_CAPE_TROUVER = 24250;
 
@@ -60278,7 +60273,7 @@ public final class ItemID
 	public static final int VIKINGEXILE_POLISHING_ROCK = 24262;
 
 	/**
-	 * Ballad of the basilisk
+	 * Ballad of the Basilisk
 	 */
 	public static final int VIKINGEXILE_BALLAD = 24263;
 
@@ -60706,17 +60701,17 @@ public final class ItemID
 	public static final int NIGHTMARE_STAFF = 24422;
 
 	/**
-	 * Harmonised nightmare staff
+	 * Harmonised Nightmare staff
 	 */
 	public static final int NIGHTMARE_STAFF_HARMONISED = 24423;
 
 	/**
-	 * Volatile nightmare staff
+	 * Volatile Nightmare staff
 	 */
 	public static final int NIGHTMARE_STAFF_VOLATILE = 24424;
 
 	/**
-	 * Eldritch nightmare staff
+	 * Eldritch Nightmare staff
 	 */
 	public static final int NIGHTMARE_STAFF_ELDRITCH = 24425;
 
@@ -60888,7 +60883,7 @@ public final class ItemID
 	public static final int SET_INQUISITORS_ARMOUR = 24488;
 
 	/**
-	 * Little nightmare
+	 * Little Nightmare
 	 */
 	public static final int NIGHTMAREPET = 24491;
 
@@ -60903,7 +60898,7 @@ public final class ItemID
 	public static final int TRAIL_HARD_ANAGRAM_EXP15_PUZZLEBOX = 24494;
 
 	/**
-	 * Jar of dreams
+	 * Jar of Dreams
 	 */
 	public static final int JAR_OF_DREAMS = 24495;
 
@@ -60933,7 +60928,7 @@ public final class ItemID
 	public static final int OSB7_CAT_EARS = 24522;
 
 	/**
-	 * Death's coffer
+	 * Death's Coffer
 	 */
 	public static final int OSB7_CAT_HAIR = 24523;
 
@@ -60953,7 +60948,7 @@ public final class ItemID
 	public static final int OSB7_REWARD_HELLCAT_EARS = 24527;
 
 	/**
-	 * Lamp of the gatherer
+	 * Lamp of the Gatherer
 	 */
 	public static final int ADVENTUREPATH_GATHERER_LAMP = 24528;
 
@@ -61033,12 +61028,12 @@ public final class ItemID
 	public static final int EASTER20_CAKE = 24549;
 
 	/**
-	 * Blade of saeldor (c)
+	 * Blade of Saeldor (c)
 	 */
 	public static final int BLADE_OF_SAELDOR_INFINITE = 24551;
 
 	/**
-	 * Blade of saeldor (c)
+	 * Blade of Saeldor (c)
 	 */
 	public static final int BLADE_OF_SAELDOR_INFINITE_DUMMY = 24553;
 
@@ -61265,12 +61260,12 @@ public final class ItemID
 	public static final int TUT2_BONES = 24655;
 
 	/**
-	 * Enraged tektiny
+	 * Enraged Tektiny
 	 */
 	public static final int TEKTONENRAGEDPET = 24656;
 
 	/**
-	 * Flying vespina
+	 * Flying Vespina
 	 */
 	public static final int VESPULAFLYINGPET = 24658;
 
@@ -61370,7 +61365,7 @@ public final class ItemID
 	public static final int IG_MUD_ARMOUR = 24688;
 
 	/**
-	 * Tome of experience
+	 * Tome of Experience
 	 */
 	public static final int MYQ5_XP_TOME = 24690;
 
@@ -61400,7 +61395,7 @@ public final class ItemID
 	public static final int BLISTERWOOD_FLAIL = 24699;
 
 	/**
-	 * Dark squirrel
+	 * Dark Squirrel
 	 */
 	public static final int SKILLPETAGILITY_DARK = 24701;
 
@@ -61846,22 +61841,22 @@ public final class ItemID
 	public static final int MM2_MONKEY_AWOWOGEI = 24867;
 
 	/**
-	 * Golden armadyl special attack
+	 * Golden Armadyl special attack
 	 */
 	public static final int BH_AGS_SPEC = 24868;
 
 	/**
-	 * Golden bandos special attack
+	 * Golden Bandos special attack
 	 */
 	public static final int BH_BGS_SPEC = 24869;
 
 	/**
-	 * Golden saradomin special attack
+	 * Golden Saradomin special attack
 	 */
 	public static final int BH_SGS_SPEC = 24870;
 
 	/**
-	 * Golden zamorak special attack
+	 * Golden Zamorak special attack
 	 */
 	public static final int BH_ZGS_SPEC = 24871;
 
@@ -62597,7 +62592,7 @@ public final class ItemID
 	public static final int LEAGUE_TRAILBLAZER_FAIRYS_FLIGHT_TELEPORT = 25102;
 
 	/**
-	 * Crystal of echoes
+	 * Crystal of Echoes
 	 */
 	public static final int LEAGUE_TRAILBLAZER_LAST_RECALL_TELEPORT = 25104;
 
@@ -63312,7 +63307,7 @@ public final class ItemID
 	public static final int SOUL_WARS_ECTOPLASMATOR = 25340;
 
 	/**
-	 * Spoils of war
+	 * Spoils of War
 	 */
 	public static final int SOUL_WARS_SPOILS = 25342;
 
@@ -63327,12 +63322,12 @@ public final class ItemID
 	public static final int SOUL_CAPE_BLUE = 25346;
 
 	/**
-	 * Lil' creator
+	 * Lil' Creator
 	 */
 	public static final int SOULWARSPET_BLUE = 25348;
 
 	/**
-	 * Lil' destructor
+	 * Lil' Destructor
 	 */
 	public static final int SOULWARSPET_RED = 25350;
 
@@ -63823,7 +63818,7 @@ public final class ItemID
 	public static final int BR_BARROWS_DHAROK_WEAPON = 25516;
 
 	/**
-	 * Volatile nightmare staff
+	 * Volatile Nightmare staff
 	 */
 	public static final int BR_NIGHTMARE_STAFF_VOLATILE = 25517;
 
@@ -63833,17 +63828,17 @@ public final class ItemID
 	public static final int BR_ANCESTRAL_HAT = 25518;
 
 	/**
-	 * Jalrek-jad
+	 * JalRek-Jad
 	 */
 	public static final int JAD_PET_INFERNO = 25519;
 
 	/**
-	 * Jar of spirits
+	 * Jar of Spirits
 	 */
 	public static final int JAR_OF_SPIRITS = 25521;
 
 	/**
-	 * Jar of smoke
+	 * Jar of Smoke
 	 */
 	public static final int JAR_OF_SMOKE = 25524;
 
@@ -63967,12 +63962,12 @@ public final class ItemID
 	public static final int TEMPOROSS_DAMP_EGG = 25571;
 
 	/**
-	 * Tome of water
+	 * Tome of Water
 	 */
 	public static final int TOME_OF_WATER = 25574;
 
 	/**
-	 * Tome of water (empty)
+	 * Tome of Water (empty)
 	 */
 	public static final int TOME_OF_WATER_UNCHARGED = 25576;
 
@@ -64082,7 +64077,7 @@ public final class ItemID
 	public static final int POH_WALLCHART_WATSON_MATERIAL = 25612;
 
 	/**
-	 * Baby mole-rat
+	 * Baby Mole-rat
 	 */
 	public static final int MOLEPET_NAKED = 25613;
 
@@ -64474,22 +64469,22 @@ public final class ItemID
 	public static final int GHRAZI_RAPIER_OR = 25734;
 
 	/**
-	 * Holy scythe of vitur
+	 * Holy Scythe of Vitur
 	 */
 	public static final int SCYTHE_OF_VITUR_OR = 25736;
 
 	/**
-	 * Holy scythe of vitur (uncharged)
+	 * Holy Scythe of Vitur (uncharged)
 	 */
 	public static final int SCYTHE_OF_VITUR_UNCHARGED_OR = 25738;
 
 	/**
-	 * Sanguine scythe of vitur
+	 * Sanguine Scythe of Vitur
 	 */
 	public static final int SCYTHE_OF_VITUR_BL = 25739;
 
 	/**
-	 * Sanguine scythe of vitur (uncharged)
+	 * Sanguine Scythe of Vitur (uncharged)
 	 */
 	public static final int SCYTHE_OF_VITUR_UNCHARGED_BL = 25741;
 
@@ -64509,27 +64504,27 @@ public final class ItemID
 	public static final int TOB_HARDMODE_DUST = 25746;
 
 	/**
-	 * Lil' maiden
+	 * Lil' Maiden
 	 */
 	public static final int MAIDENPET = 25748;
 
 	/**
-	 * Lil' bloat
+	 * Lil' Bloat
 	 */
 	public static final int BLOATPET = 25749;
 
 	/**
-	 * Lil' nylo
+	 * Lil' Nylo
 	 */
 	public static final int NYLOCASPET = 25750;
 
 	/**
-	 * Lil' sot
+	 * Lil' Sot
 	 */
 	public static final int SOTETSEGPET = 25751;
 
 	/**
-	 * Lil' xarp
+	 * Lil' Xarp
 	 */
 	public static final int XARPUSPET = 25752;
 
@@ -64799,12 +64794,12 @@ public final class ItemID
 	public static final int AKD_SHAYZIEN_JOURNAL = 25816;
 
 	/**
-	 * Royal accord of twill
+	 * Royal Accord of Twill
 	 */
 	public static final int AKD_ACCORD_DUMMY = 25817;
 
 	/**
-	 * Book of the dead
+	 * Book of the Dead
 	 */
 	public static final int BOOK_OF_THE_DEAD = 25818;
 
@@ -64916,92 +64911,92 @@ public final class ItemID
 	public static final int PRIF_WEAPON_SEED_ENHANCED = 25859;
 
 	/**
-	 * Bow of faerdhinen (inactive)
+	 * Bow of Faerdhinen (inactive)
 	 */
 	public static final int BOW_OF_FAERDHINEN_INACTIVE = 25862;
 
 	/**
-	 * Bow of faerdhinen
+	 * Bow of Faerdhinen
 	 */
 	public static final int BOW_OF_FAERDHINEN = 25865;
 
 	/**
-	 * Bow of faerdhinen (c)
+	 * Bow of Faerdhinen (c)
 	 */
 	public static final int BOW_OF_FAERDHINEN_INFINITE = 25867;
 
 	/**
-	 * Bow of faerdhinen (c)
+	 * Bow of Faerdhinen (c)
 	 */
 	public static final int BOW_OF_FAERDHINEN_INFINITE_DUMMY = 25869;
 
 	/**
-	 * Blade of saeldor (c)
+	 * Blade of Saeldor (c)
 	 */
 	public static final int BLADE_OF_SAELDOR_INFINITE_ITHELL = 25870;
 
 	/**
-	 * Blade of saeldor (c)
+	 * Blade of Saeldor (c)
 	 */
 	public static final int BLADE_OF_SAELDOR_INFINITE_IORWERTH = 25872;
 
 	/**
-	 * Blade of saeldor (c)
+	 * Blade of Saeldor (c)
 	 */
 	public static final int BLADE_OF_SAELDOR_INFINITE_TRAHAEARN = 25874;
 
 	/**
-	 * Blade of saeldor (c)
+	 * Blade of Saeldor (c)
 	 */
 	public static final int BLADE_OF_SAELDOR_INFINITE_CADARN = 25876;
 
 	/**
-	 * Blade of saeldor (c)
+	 * Blade of Saeldor (c)
 	 */
 	public static final int BLADE_OF_SAELDOR_INFINITE_CRWYS = 25878;
 
 	/**
-	 * Blade of saeldor (c)
+	 * Blade of Saeldor (c)
 	 */
 	public static final int BLADE_OF_SAELDOR_INFINITE_MEILYR = 25880;
 
 	/**
-	 * Blade of saeldor (c)
+	 * Blade of Saeldor (c)
 	 */
 	public static final int BLADE_OF_SAELDOR_INFINITE_AMLODD = 25882;
 
 	/**
-	 * Bow of faerdhinen (c)
+	 * Bow of Faerdhinen (c)
 	 */
 	public static final int BOW_OF_FAERDHINEN_INFINITE_ITHELL = 25884;
 
 	/**
-	 * Bow of faerdhinen (c)
+	 * Bow of Faerdhinen (c)
 	 */
 	public static final int BOW_OF_FAERDHINEN_INFINITE_IORWERTH = 25886;
 
 	/**
-	 * Bow of faerdhinen (c)
+	 * Bow of Faerdhinen (c)
 	 */
 	public static final int BOW_OF_FAERDHINEN_INFINITE_TRAHAEARN = 25888;
 
 	/**
-	 * Bow of faerdhinen (c)
+	 * Bow of Faerdhinen (c)
 	 */
 	public static final int BOW_OF_FAERDHINEN_INFINITE_CADARN = 25890;
 
 	/**
-	 * Bow of faerdhinen (c)
+	 * Bow of Faerdhinen (c)
 	 */
 	public static final int BOW_OF_FAERDHINEN_INFINITE_CRWYS = 25892;
 
 	/**
-	 * Bow of faerdhinen (c)
+	 * Bow of Faerdhinen (c)
 	 */
 	public static final int BOW_OF_FAERDHINEN_INFINITE_MEILYR = 25894;
 
 	/**
-	 * Bow of faerdhinen (c)
+	 * Bow of Faerdhinen (c)
 	 */
 	public static final int BOW_OF_FAERDHINEN_INFINITE_AMLODD = 25896;
 
@@ -65322,24 +65317,26 @@ public final class ItemID
 	public static final int TUMEKENS_HEKA_UNCHARGED = 25989;
 
 	/**
-	 * Sigil of resilience
+	 * Sigil of Resilience
 	 */
 	public static final int SIGIL_OF_RESILIENCE_ATTUNED = 25990;
 
 	/**
-	 * Sigil of resilience
+	 * Sigil of Resilience
 	 */
 	public static final int SIGIL_OF_RESILIENCE_UNATTUNED = 25991;
+	public static final int CERT_SIGIL_OF_RESILIENCE_UNATTUNED = 25992;
 
 	/**
-	 * Sigil of consistency
+	 * Sigil of Consistency
 	 */
 	public static final int SIGIL_OF_CONSISTENCY_ATTUNED = 25993;
 
 	/**
-	 * Sigil of consistency
+	 * Sigil of Consistency
 	 */
 	public static final int SIGIL_OF_CONSISTENCY_UNATTUNED = 25994;
+	public static final int CERT_SIGIL_OF_CONSISTENCY_UNATTUNED = 25995;
 
 	/**
 	 * Sigil of the formidable fighter
@@ -65347,449 +65344,494 @@ public final class ItemID
 	public static final int SIGIL_OF_THE_FORMIDABLE_FIGHTER_ATTUNED = 25996;
 
 	/**
-	 * Sigil of the formidable fighter
+	 * Sigil of the Formidable Fighter
 	 */
 	public static final int SIGIL_OF_THE_FORMIDABLE_FIGHTER_UNATTUNED = 25997;
+	public static final int CERT_SIGIL_OF_THE_FORMIDABLE_FIGHTER_UNATTUNED = 25998;
 
 	/**
-	 * Sigil of the rigorous ranger
+	 * Sigil of the Rigorous Ranger
 	 */
 	public static final int SIGIL_OF_THE_RIGOROUS_RANGER_ATTUNED = 25999;
 
 	/**
-	 * Sigil of the rigorous ranger
+	 * Sigil of the Rigorous Ranger
 	 */
 	public static final int SIGIL_OF_THE_RIGOROUS_RANGER_UNATTUNED = 26000;
+	public static final int CERT_SIGIL_OF_THE_RIGOROUS_RANGER_UNATTUNED = 26001;
 
 	/**
-	 * Sigil of the meticulous mage
+	 * Sigil of the Meticulous Mage
 	 */
 	public static final int SIGIL_OF_THE_METICULOUS_MAGE_ATTUNED = 26002;
 
 	/**
-	 * Sigil of the meticulous mage
+	 * Sigil of the Meticulous Mage
 	 */
 	public static final int SIGIL_OF_THE_METICULOUS_MAGE_UNATTUNED = 26003;
+	public static final int CERT_SIGIL_OF_THE_METICULOUS_MAGE_UNATTUNED = 26004;
 
 	/**
-	 * Sigil of fortification
+	 * Sigil of Fortification
 	 */
 	public static final int SIGIL_OF_FORTIFICATION_ATTUNED = 26005;
 
 	/**
-	 * Sigil of fortification
+	 * Sigil of Fortification
 	 */
 	public static final int SIGIL_OF_FORTIFICATION_UNATTUNED = 26006;
+	public static final int CERT_SIGIL_OF_FORTIFICATION_UNATTUNED = 26007;
 
 	/**
-	 * Sigil of barrows
+	 * Sigil of Barrows
 	 */
 	public static final int SIGIL_OF_BARROWS_ATTUNED = 26008;
 
 	/**
-	 * Sigil of barrows
+	 * Sigil of Barrows
 	 */
 	public static final int SIGIL_OF_BARROWS_UNATTUNED = 26009;
+	public static final int CERT_SIGIL_OF_BARROWS_UNATTUNED = 26010;
 
 	/**
-	 * Sigil of deft strikes
+	 * Sigil of Deft Strikes
 	 */
 	public static final int SIGIL_OF_DEFT_STRIKES_ATTUNED = 26011;
 
 	/**
-	 * Sigil of deft strikes
+	 * Sigil of Deft Strikes
 	 */
 	public static final int SIGIL_OF_DEFT_STRIKES_UNATTUNED = 26012;
+	public static final int CERT_SIGIL_OF_DEFT_STRIKES_UNATTUNED = 26013;
 
 	/**
-	 * Sigil of freedom
+	 * Sigil of Freedom
 	 */
 	public static final int SIGIL_OF_FREEDOM_ATTUNED = 26014;
 
 	/**
-	 * Sigil of freedom
+	 * Sigil of Freedom
 	 */
 	public static final int SIGIL_OF_FREEDOM_UNATTUNED = 26015;
+	public static final int CERT_SIGIL_OF_FREEDOM_UNATTUNED = 26016;
 
 	/**
-	 * Sigil of enhanced harvest
+	 * Sigil of Enhanced Harvest
 	 */
 	public static final int SIGIL_OF_ENHANCED_HARVEST_ATTUNED = 26017;
 
 	/**
-	 * Sigil of enhanced harvest
+	 * Sigil of Enhanced Harvest
 	 */
 	public static final int SIGIL_OF_ENHANCED_HARVEST_UNATTUNED = 26018;
+	public static final int CERT_SIGIL_OF_ENHANCED_HARVEST_UNATTUNED = 26019;
 
 	/**
-	 * Sigil of storage
+	 * Sigil of Storage
 	 */
 	public static final int SIGIL_OF_STORAGE_ATTUNED = 26020;
 
 	/**
-	 * Sigil of storage
+	 * Sigil of Storage
 	 */
 	public static final int SIGIL_OF_STORAGE_UNATTUNED = 26021;
+	public static final int CERT_SIGIL_OF_STORAGE_UNATTUNED = 26022;
 
 	/**
-	 * Sigil of the smith
+	 * Sigil of the Smith
 	 */
 	public static final int SIGIL_OF_THE_SMITH_ATTUNED = 26023;
 
 	/**
-	 * Sigil of the smith
+	 * Sigil of the Smith
 	 */
 	public static final int SIGIL_OF_THE_SMITH_UNATTUNED = 26024;
+	public static final int CERT_SIGIL_OF_THE_SMITH_UNATTUNED = 26025;
 
 	/**
-	 * Sigil of the alchemist
+	 * Sigil of the Alchemist
 	 */
 	public static final int SIGIL_OF_THE_ALCHEMIST_ATTUNED = 26026;
 
 	/**
-	 * Sigil of the alchemist
+	 * Sigil of the Alchemist
 	 */
 	public static final int SIGIL_OF_THE_ALCHEMIST_UNATTUNED = 26027;
+	public static final int CERT_SIGIL_OF_THE_ALCHEMIST_UNATTUNED = 26028;
 
 	/**
-	 * Sigil of the fletcher
+	 * Sigil of the Fletcher
 	 */
 	public static final int SIGIL_OF_THE_FLETCHER_ATTUNED = 26029;
 
 	/**
-	 * Sigil of the fletcher
+	 * Sigil of the Fletcher
 	 */
 	public static final int SIGIL_OF_THE_FLETCHER_UNATTUNED = 26030;
+	public static final int CERT_SIGIL_OF_THE_FLETCHER_UNATTUNED = 26031;
 
 	/**
-	 * Sigil of the chef
+	 * Sigil of the Chef
 	 */
 	public static final int SIGIL_OF_THE_CHEF_ATTUNED = 26032;
 
 	/**
-	 * Sigil of the chef
+	 * Sigil of the Chef
 	 */
 	public static final int SIGIL_OF_THE_CHEF_UNATTUNED = 26033;
+	public static final int CERT_SIGIL_OF_THE_CHEF_UNATTUNED = 26034;
 
 	/**
-	 * Sigil of the craftsman
+	 * Sigil of the Craftsman
 	 */
 	public static final int SIGIL_OF_THE_CRAFTER_ATTUNED = 26035;
 
 	/**
-	 * Sigil of the craftsman
+	 * Sigil of the Craftsman
 	 */
 	public static final int SIGIL_OF_THE_CRAFTER_UNATTUNED = 26036;
+	public static final int CERT_SIGIL_OF_THE_CRAFTER_UNATTUNED = 26037;
 
 	/**
-	 * Sigil of the abyss
+	 * Sigil of the Abyss
 	 */
 	public static final int SIGIL_OF_THE_ABYSS_ATTUNED = 26038;
 
 	/**
-	 * Sigil of the abyss
+	 * Sigil of the Abyss
 	 */
 	public static final int SIGIL_OF_THE_ABYSS_UNATTUNED = 26039;
+	public static final int CERT_SIGIL_OF_THE_ABYSS_UNATTUNED = 26040;
 
 	/**
-	 * Sigil of stamina
+	 * Sigil of Stamina
 	 */
 	public static final int SIGIL_OF_STAMINA_ATTUNED = 26041;
 
 	/**
-	 * Sigil of stamina
+	 * Sigil of Stamina
 	 */
 	public static final int SIGIL_OF_STAMINA_UNATTUNED = 26042;
+	public static final int CERT_SIGIL_OF_STAMINA_UNATTUNED = 26043;
 
 	/**
-	 * Sigil of the potion master
+	 * Sigil of the Potion Master
 	 */
 	public static final int SIGIL_OF_THE_POTION_MASTER_ATTUNED = 26044;
 
 	/**
-	 * Sigil of the potion master
+	 * Sigil of the Potion Master
 	 */
 	public static final int SIGIL_OF_THE_POTION_MASTER_UNATTUNED = 26045;
+	public static final int CERT_SIGIL_OF_THE_POTION_MASTER_UNATTUNED = 26046;
 
 	/**
-	 * Sigil of the eternal jeweller
+	 * Sigil of the Eternal Jeweller
 	 */
 	public static final int SIGIL_OF_THE_ETERNAL_JEWELLER_ATTUNED = 26047;
 
 	/**
-	 * Sigil of the eternal jeweller
+	 * Sigil of the Eternal Jeweller
 	 */
 	public static final int SIGIL_OF_THE_ETERNAL_JEWELLER_UNATTUNED = 26048;
+	public static final int CERT_SIGIL_OF_THE_ETERNAL_JEWELLER_UNATTUNED = 26049;
 
 	/**
-	 * Sigil of the treasure hunter
+	 * Sigil of the Treasure Hunter
 	 */
 	public static final int SIGIL_OF_THE_TREASURE_HUNTER_ATTUNED = 26050;
 
 	/**
-	 * Sigil of the treasure hunter
+	 * Sigil of the Treasure Hunter
 	 */
 	public static final int SIGIL_OF_THE_TREASURE_HUNTER_UNATTUNED = 26051;
+	public static final int CERT_SIGIL_OF_THE_TREASURE_HUNTER_UNATTUNED = 26052;
 
 	/**
-	 * Sigil of mobility
+	 * Sigil of Mobility
 	 */
 	public static final int SIGIL_OF_MOBILITY_ATTUNED = 26053;
 
 	/**
-	 * Sigil of mobility
+	 * Sigil of Mobility
 	 */
 	public static final int SIGIL_OF_MOBILITY_UNATTUNED = 26054;
+	public static final int CERT_SIGIL_OF_MOBILITY_UNATTUNED = 26055;
 
 	/**
-	 * Sigil of exaggeration
+	 * Sigil of Exaggeration
 	 */
 	public static final int SIGIL_OF_EXAGGERATION_ATTUNED = 26056;
 
 	/**
-	 * Sigil of exaggeration
+	 * Sigil of Exaggeration
 	 */
 	public static final int SIGIL_OF_EXAGGERATION_UNATTUNED = 26057;
+	public static final int CERT_SIGIL_OF_EXAGGERATION_UNATTUNED = 26058;
 
 	/**
-	 * Sigil of specialised strikes
+	 * Sigil of Specialised Strikes
 	 */
 	public static final int SIGIL_OF_SPECIALISED_STRIKES_ATTUNED = 26059;
 
 	/**
-	 * Sigil of specialised strikes
+	 * Sigil of Specialised Strikes
 	 */
 	public static final int SIGIL_OF_SPECIALISED_STRIKES_UNATTUNED = 26060;
+	public static final int CERT_SIGIL_OF_SPECIALISED_STRIKES_UNATTUNED = 26061;
 
 	/**
-	 * Sigil of the porcupine
+	 * Sigil of the Porcupine
 	 */
 	public static final int SIGIL_OF_THE_PORCUPINE_ATTUNED = 26062;
 
 	/**
-	 * Sigil of the porcupine
+	 * Sigil of the Porcupine
 	 */
 	public static final int SIGIL_OF_THE_PORCUPINE_UNATTUNED = 26063;
+	public static final int CERT_SIGIL_OF_THE_PORCUPINE_UNATTUNED = 26064;
 
 	/**
-	 * Sigil of binding
+	 * Sigil of Binding
 	 */
 	public static final int SIGIL_OF_BINDING_ATTUNED = 26065;
 
 	/**
-	 * Sigil of binding
+	 * Sigil of Binding
 	 */
 	public static final int SIGIL_OF_BINDING_UNATTUNED = 26066;
+	public static final int CERT_SIGIL_OF_BINDING_UNATTUNED = 26067;
 
 	/**
-	 * Sigil of escaping
+	 * Sigil of Escaping
 	 */
 	public static final int SIGIL_OF_ESCAPING_ATTUNED = 26068;
 
 	/**
-	 * Sigil of escaping
+	 * Sigil of Escaping
 	 */
 	public static final int SIGIL_OF_ESCAPING_UNATTUNED = 26069;
+	public static final int CERT_SIGIL_OF_ESCAPING_UNATTUNED = 26070;
 
 	/**
-	 * Sigil of the ruthless ranger
+	 * Sigil of the Ruthless Ranger
 	 */
 	public static final int SIGIL_OF_THE_RUTHLESS_RANGER_ATTUNED = 26071;
 
 	/**
-	 * Sigil of the ruthless ranger
+	 * Sigil of the Ruthless Ranger
 	 */
 	public static final int SIGIL_OF_THE_RUTHLESS_RANGER_UNATTUNED = 26072;
+	public static final int CERT_SIGIL_OF_THE_RUTHLESS_RANGER_UNATTUNED = 26073;
 
 	/**
-	 * Sigil of the feral fighter
+	 * Sigil of the Feral Fighter
 	 */
 	public static final int SIGIL_OF_THE_FERAL_FIGHTER_ATTUNED = 26074;
 
 	/**
-	 * Sigil of the feral fighter
+	 * Sigil of the Feral Fighter
 	 */
 	public static final int SIGIL_OF_THE_FERAL_FIGHTER_UNATTUNED = 26075;
+	public static final int CERT_SIGIL_OF_THE_FERAL_FIGHTER_UNATTUNED = 26076;
 
 	/**
-	 * Sigil of the menacing mage
+	 * Sigil of the Menacing Mage
 	 */
 	public static final int SIGIL_OF_THE_MENACING_MAGE_ATTUNED = 26077;
 
 	/**
-	 * Sigil of the menacing mage
+	 * Sigil of the Menacing Mage
 	 */
 	public static final int SIGIL_OF_THE_MENACING_MAGE_UNATTUNED = 26078;
+	public static final int CERT_SIGIL_OF_THE_MENACING_MAGE_UNATTUNED = 26079;
 
 	/**
-	 * Sigil of prosperity
+	 * Sigil of Prosperity
 	 */
 	public static final int SIGIL_OF_PROSPERITY_ATTUNED = 26080;
 
 	/**
-	 * Sigil of prosperity
+	 * Sigil of Prosperity
 	 */
 	public static final int SIGIL_OF_PROSPERITY_UNATTUNED = 26081;
+	public static final int CERT_SIGIL_OF_PROSPERITY_UNATTUNED = 26082;
 
 	/**
-	 * Sigil of the dwarves
+	 * Sigil of the Dwarves
 	 */
 	public static final int SIGIL_OF_THE_DWARVES_ATTUNED = 26083;
 
 	/**
-	 * Sigil of the dwarves
+	 * Sigil of the Dwarves
 	 */
 	public static final int SIGIL_OF_THE_DWARVES_UNATTUNED = 26084;
+	public static final int CERT_SIGIL_OF_THE_DWARVES_UNATTUNED = 26085;
 
 	/**
-	 * Sigil of the elves
+	 * Sigil of the Elves
 	 */
 	public static final int SIGIL_OF_THE_ELVES_ATTUNED = 26086;
 
 	/**
-	 * Sigil of the elves
+	 * Sigil of the Elves
 	 */
 	public static final int SIGIL_OF_THE_ELVES_UNATTUNED = 26087;
+	public static final int CERT_SIGIL_OF_THE_ELVES_UNATTUNED = 26088;
 
 	/**
-	 * Sigil of the barbarians
+	 * Sigil of the Barbarians
 	 */
 	public static final int SIGIL_OF_THE_BARBARIANS_ATTUNED = 26089;
 
 	/**
-	 * Sigil of the barbarians
+	 * Sigil of the Barbarians
 	 */
 	public static final int SIGIL_OF_THE_BARBARIANS_UNATTUNED = 26090;
+	public static final int CERT_SIGIL_OF_THE_BARBARIANS_UNATTUNED = 26091;
 
 	/**
-	 * Sigil of the gnomes
+	 * Sigil of the Gnomes
 	 */
 	public static final int SIGIL_OF_THE_GNOMES_ATTUNED = 26092;
 
 	/**
-	 * Sigil of the gnomes
+	 * Sigil of the Gnomes
 	 */
 	public static final int SIGIL_OF_THE_GNOMES_UNATTUNED = 26093;
+	public static final int CERT_SIGIL_OF_THE_GNOMES_UNATTUNED = 26094;
 
 	/**
-	 * Sigil of nature
+	 * Sigil of Nature
 	 */
 	public static final int SIGIL_OF_NATURE_ATTUNED = 26095;
 
 	/**
-	 * Sigil of nature
+	 * Sigil of Nature
 	 */
 	public static final int SIGIL_OF_NATURE_UNATTUNED = 26096;
+	public static final int CERT_SIGIL_OF_NATURE_UNATTUNED = 26097;
 
 	/**
-	 * Sigil of devotion
+	 * Sigil of Devotion
 	 */
 	public static final int SIGIL_OF_DEVOTION_ATTUNED = 26098;
 
 	/**
-	 * Sigil of devotion
+	 * Sigil of Devotion
 	 */
 	public static final int SIGIL_OF_DEVOTION_UNATTUNED = 26099;
+	public static final int CERT_SIGIL_OF_DEVOTION_UNATTUNED = 26100;
 
 	/**
-	 * Sigil of the forager
+	 * Sigil of the Forager
 	 */
 	public static final int SIGIL_OF_THE_FORAGER_ATTUNED = 26101;
 
 	/**
-	 * Sigil of the forager
+	 * Sigil of the Forager
 	 */
 	public static final int SIGIL_OF_THE_FORAGER_UNATTUNED = 26102;
+	public static final int CERT_SIGIL_OF_THE_FORAGER_UNATTUNED = 26103;
 
 	/**
-	 * Sigil of garments
+	 * Sigil of Garments
 	 */
 	public static final int SIGIL_OF_GARMENTS_ATTUNED = 26104;
 
 	/**
-	 * Sigil of garments
+	 * Sigil of Garments
 	 */
 	public static final int SIGIL_OF_GARMENTS_UNATTUNED = 26105;
+	public static final int CERT_SIGIL_OF_GARMENTS_UNATTUNED = 26106;
 
 	/**
-	 * Sigil of slaughter
+	 * Sigil of Slaughter
 	 */
 	public static final int SIGIL_OF_SLAUGHTER_ATTUNED = 26107;
 
 	/**
-	 * Sigil of slaughter
+	 * Sigil of Slaughter
 	 */
 	public static final int SIGIL_OF_SLAUGHTER_UNATTUNED = 26108;
+	public static final int CERT_SIGIL_OF_SLAUGHTER_UNATTUNED = 26109;
 
 	/**
-	 * Sigil of the fortune farmer
+	 * Sigil of the Fortune Farmer
 	 */
 	public static final int SIGIL_OF_THE_FORTUNE_FARMER_ATTUNED = 26110;
 
 	/**
-	 * Sigil of the fortune farmer
+	 * Sigil of the Fortune Farmer
 	 */
 	public static final int SIGIL_OF_THE_FORTUNE_FARMER_UNATTUNED = 26111;
+	public static final int CERT_SIGIL_OF_THE_FORTUNE_FARMER_UNATTUNED = 26112;
 
 	/**
-	 * Sigil of versatility
+	 * Sigil of Versatility
 	 */
 	public static final int SIGIL_OF_VERSATILITY_ATTUNED = 26113;
 
 	/**
-	 * Sigil of versatility
+	 * Sigil of Versatility
 	 */
 	public static final int SIGIL_OF_VERSATILITY_UNATTUNED = 26114;
+	public static final int CERT_SIGIL_OF_VERSATILITY_UNATTUNED = 26115;
 
 	/**
-	 * Sigil of the serpent
+	 * Sigil of the Serpent
 	 */
 	public static final int SIGIL_OF_THE_SERPENT_ATTUNED = 26116;
 
 	/**
-	 * Sigil of the serpent
+	 * Sigil of the Serpent
 	 */
 	public static final int SIGIL_OF_THE_SERPENT_UNATTUNED = 26117;
+	public static final int CERT_SIGIL_OF_THE_SERPENT_UNATTUNED = 26118;
 
 	/**
-	 * Sigil of supreme stamina
+	 * Sigil of Supreme Stamina
 	 */
 	public static final int SIGIL_OF_SUPREME_STAMINA_ATTUNED = 26119;
 
 	/**
-	 * Sigil of supreme stamina
+	 * Sigil of Supreme Stamina
 	 */
 	public static final int SIGIL_OF_SUPREME_STAMINA_UNATTUNED = 26120;
+	public static final int CERT_SIGIL_OF_SUPREME_STAMINA_UNATTUNED = 26121;
 
 	/**
-	 * Sigil of preservation
+	 * Sigil of Preservation
 	 */
 	public static final int SIGIL_OF_PRESERVATION_ATTUNED = 26122;
 
 	/**
-	 * Sigil of preservation
+	 * Sigil of Preservation
 	 */
 	public static final int SIGIL_OF_PRESERVATION_UNATTUNED = 26123;
+	public static final int CERT_SIGIL_OF_PRESERVATION_UNATTUNED = 26124;
 
 	/**
-	 * Sigil of finality
+	 * Sigil of Finality
 	 */
 	public static final int SIGIL_OF_FINALITY_ATTUNED = 26125;
 
 	/**
-	 * Sigil of finality
+	 * Sigil of Finality
 	 */
 	public static final int SIGIL_OF_FINALITY_UNATTUNED = 26126;
+	public static final int CERT_SIGIL_OF_FINALITY_UNATTUNED = 26127;
 
 	/**
-	 * Sigil of pious protection
+	 * Sigil of Pious Protection
 	 */
 	public static final int SIGIL_OF_PIOUS_PROTECTION_ATTUNED = 26128;
 
 	/**
-	 * Sigil of pious protection
+	 * Sigil of Pious Protection
 	 */
 	public static final int SIGIL_OF_PIOUS_PROTECTION_UNATTUNED = 26129;
+	public static final int CERT_SIGIL_OF_PIOUS_PROTECTION_UNATTUNED = 26130;
 
 	/**
 	 * Sigil of aggression
@@ -65797,59 +65839,65 @@ public final class ItemID
 	public static final int SIGIL_OF_AGGRESSION_ATTUNED = 26131;
 
 	/**
-	 * Sigil of aggression
+	 * Sigil of Aggression
 	 */
 	public static final int SIGIL_OF_AGGRESSION_UNATTUNED = 26132;
+	public static final int CERT_SIGIL_OF_AGGRESSION_UNATTUNED = 26133;
 
 	/**
-	 * Sigil of rampage
+	 * Sigil of Rampage
 	 */
 	public static final int SIGIL_OF_RAMPAGE_ATTUNED = 26134;
 
 	/**
-	 * Sigil of rampage
+	 * Sigil of Rampage
 	 */
 	public static final int SIGIL_OF_RAMPAGE_UNATTUNED = 26135;
+	public static final int CERT_SIGIL_OF_RAMPAGE_UNATTUNED = 26136;
 
 	/**
-	 * Sigil of the skiller
+	 * Sigil of the Skiller
 	 */
 	public static final int SIGIL_OF_THE_SKILLER_ATTUNED = 26137;
 
 	/**
-	 * Sigil of the skiller
+	 * Sigil of the Skiller
 	 */
 	public static final int SIGIL_OF_THE_SKILLER_UNATTUNED = 26138;
+	public static final int CERT_SIGIL_OF_THE_SKILLER_UNATTUNED = 26139;
 
 	/**
-	 * Sigil of remote storage
+	 * Sigil of Remote Storage
 	 */
 	public static final int SIGIL_OF_REMOTE_STORAGE_ATTUNED = 26140;
 
 	/**
-	 * Sigil of remote storage
+	 * Sigil of Remote Storage
 	 */
 	public static final int SIGIL_OF_REMOTE_STORAGE_UNATTUNED = 26141;
+	public static final int CERT_SIGIL_OF_REMOTE_STORAGE_UNATTUNED = 26142;
 
 	/**
-	 * Sigil of last recall
+	 * Sigil of Last Recall
 	 */
 	public static final int SIGIL_OF_LAST_RECALL_ATTUNED = 26143;
 
 	/**
-	 * Sigil of last recall
+	 * Sigil of Last Recall
 	 */
 	public static final int SIGIL_OF_LAST_RECALL_UNATTUNED = 26144;
+	public static final int CERT_SIGIL_OF_LAST_RECALL_UNATTUNED = 26145;
 
 	/**
-	 * Sigil of the guardian angel
+	 * Sigil of the Guardian Angel
 	 */
 	public static final int SIGIL_OF_THE_GUARDIAN_ANGEL_ATTUNED = 26146;
 
 	/**
-	 * Sigil of the guardian angel
+	 * Sigil of the Guardian Angel
 	 */
 	public static final int SIGIL_OF_THE_GUARDIAN_ANGEL_UNATTUNED = 26147;
+	public static final int CERT_SIGIL_OF_THE_GUARDIAN_ANGEL_UNATTUNED = 26148;
 
 	/**
 	 * Tuna
@@ -66472,22 +66520,22 @@ public final class ItemID
 	public static final int NEX_FROZEN_KEY = 26356;
 
 	/**
-	 * Frozen key piece (armadyl)
+	 * Frozen key piece (Armadyl)
 	 */
 	public static final int NEX_FROZEN_KEY_ARMADYL = 26358;
 
 	/**
-	 * Frozen key piece (bandos)
+	 * Frozen key piece (Bandos)
 	 */
 	public static final int NEX_FROZEN_KEY_BANDOS = 26360;
 
 	/**
-	 * Frozen key piece (zamorak)
+	 * Frozen key piece (Zamorak)
 	 */
 	public static final int NEX_FROZEN_KEY_ZAMORAK = 26362;
 
 	/**
-	 * Frozen key piece (saradomin)
+	 * Frozen key piece (Saradomin)
 	 */
 	public static final int NEX_FROZEN_KEY_SARADOMIN = 26364;
 
@@ -66709,22 +66757,22 @@ public final class ItemID
 	public static final int LEAGUE_3_RUNE_XBOW = 26486;
 
 	/**
-	 * Book of balance (or)
+	 * Book of Balance (or)
 	 */
 	public static final int LEAGUE_3_BOOK_GUTHIX = 26488;
 
 	/**
-	 * Book of darkness (or)
+	 * Book of Darkness (or)
 	 */
 	public static final int LEAGUE_3_BOOK_ZAROS = 26490;
 
 	/**
-	 * Book of law (or)
+	 * Book of Law (or)
 	 */
 	public static final int LEAGUE_3_BOOK_ARMADYL = 26492;
 
 	/**
-	 * Book of war (or)
+	 * Book of War (or)
 	 */
 	public static final int LEAGUE_3_BOOK_BANDOS = 26494;
 
@@ -66938,7 +66986,7 @@ public final class ItemID
 	public static final int LOTG_KEY_YELLOW = 26576;
 
 	/**
-	 * Plain of mud sphere
+	 * Plain of Mud sphere
 	 */
 	public static final int LOTG_TELEPORT_ARTIFACT = 26577;
 
@@ -67413,7 +67461,7 @@ public final class ItemID
 	public static final int BLIGHTED_SACK_SURGE = 26705;
 
 	/**
-	 * Scroll of imbuing
+	 * Scroll of Imbuing
 	 */
 	public static final int PVPA_IMBUING_SCROLL = 26706;
 
@@ -67498,42 +67546,42 @@ public final class ItemID
 	public static final int PVPA_CENTURION_CUIRASS_TROUVER = 26722;
 
 	/**
-	 * Wristbands of the arena
+	 * Wristbands of the Arena
 	 */
 	public static final int PVPA_ARENA_WRISTBANDS = 26723;
 
 	/**
-	 * Wristbands of the arena (l)
+	 * Wristbands of the Arena (l)
 	 */
 	public static final int PVPA_ARENA_WRISTBANDS_TROUVER = 26724;
 
 	/**
-	 * Wristbands of the arena (c)
+	 * Wristbands of the Arena (c)
 	 */
 	public static final int PVPA_ARENA_WRISTBANDS_CHARGED = 26725;
 
 	/**
-	 * Wristbands of the arena (cl)
+	 * Wristbands of the Arena (cl)
 	 */
 	public static final int PVPA_ARENA_WRISTBANDS_CHARGED_TROUVER = 26726;
 
 	/**
-	 * Wristbands of the arena (i)
+	 * Wristbands of the Arena (i)
 	 */
 	public static final int PVPA_ARENA_WRISTBANDS_I = 26727;
 
 	/**
-	 * Wristbands of the arena (il)
+	 * Wristbands of the Arena (il)
 	 */
 	public static final int PVPA_ARENA_WRISTBANDS_I_TROUVER = 26728;
 
 	/**
-	 * Wristbands of the arena (ic)
+	 * Wristbands of the Arena (ic)
 	 */
 	public static final int PVPA_ARENA_WRISTBANDS_I_CHARGED = 26729;
 
 	/**
-	 * Wristbands of the arena (ilc)
+	 * Wristbands of the Arena (ilc)
 	 */
 	public static final int PVPA_ARENA_WRISTBANDS_I_CHARGED_TROUVER = 26730;
 
@@ -67942,67 +67990,67 @@ public final class ItemID
 	public static final int ABYSSAL_LANTERN_REDWOOD = 26848;
 
 	/**
-	 * Hat of the eye
+	 * Hat of the Eye
 	 */
 	public static final int HAT_OF_THE_EYE = 26850;
 
 	/**
-	 * Robe top of the eye
+	 * Robe top of the Eye
 	 */
 	public static final int ROBE_TOP_OF_THE_EYE = 26852;
 
 	/**
-	 * Robe bottoms of the eye
+	 * Robe bottoms of the Eye
 	 */
 	public static final int ROBE_BOTTOM_OF_THE_EYE = 26854;
 
 	/**
-	 * Boots of the eye
+	 * Boots of the Eye
 	 */
 	public static final int BOOTS_OF_THE_EYE = 26856;
 
 	/**
-	 * Hat of the eye (red)
+	 * Hat of the Eye (red)
 	 */
 	public static final int HAT_OF_THE_EYE_RED = 26858;
 
 	/**
-	 * Robe top of the eye (red)
+	 * Robe top of the Eye (red)
 	 */
 	public static final int ROBE_TOP_OF_THE_EYE_RED = 26860;
 
 	/**
-	 * Robe bottoms of the eye (red)
+	 * Robe bottoms of the Eye (red)
 	 */
 	public static final int ROBE_BOTTOM_OF_THE_EYE_RED = 26862;
 
 	/**
-	 * Hat of the eye (green)
+	 * Hat of the Eye (green)
 	 */
 	public static final int HAT_OF_THE_EYE_GREEN = 26864;
 
 	/**
-	 * Robe top of the eye (green)
+	 * Robe top of the Eye (green)
 	 */
 	public static final int ROBE_TOP_OF_THE_EYE_GREEN = 26866;
 
 	/**
-	 * Robe bottoms of the eye (green)
+	 * Robe bottoms of the Eye (green)
 	 */
 	public static final int ROBE_BOTTOM_OF_THE_EYE_GREEN = 26868;
 
 	/**
-	 * Hat of the eye (blue)
+	 * Hat of the Eye (blue)
 	 */
 	public static final int HAT_OF_THE_EYE_BLUE = 26870;
 
 	/**
-	 * Robe top of the eye (blue)
+	 * Robe top of the Eye (blue)
 	 */
 	public static final int ROBE_TOP_OF_THE_EYE_BLUE = 26872;
 
 	/**
-	 * Robe bottoms of the eye (blue)
+	 * Robe bottoms of the Eye (blue)
 	 */
 	public static final int ROBE_BOTTOM_OF_THE_EYE_BLUE = 26874;
 
@@ -68162,7 +68210,7 @@ public final class ItemID
 	public static final int GOTR_LOST_BAG = 26912;
 
 	/**
-	 * Amulet of the eye
+	 * Amulet of the Eye
 	 */
 	public static final int GOTR_AMULET_OF_THE_EYE = 26914;
 
@@ -68354,7 +68402,7 @@ public final class ItemID
 	public static final int BCS_TOMB_KEY = 26960;
 
 	/**
-	 * Lily of the elid
+	 * Lily of the Elid
 	 */
 	public static final int BCS_LILY = 26961;
 
@@ -68444,17 +68492,17 @@ public final class ItemID
 	public static final int GOTR_LOST_BAG_BLUE = 26988;
 
 	/**
-	 * Amulet of the eye
+	 * Amulet of the Eye
 	 */
 	public static final int GOTR_AMULET_OF_THE_EYE_RED = 26990;
 
 	/**
-	 * Amulet of the eye
+	 * Amulet of the Eye
 	 */
 	public static final int GOTR_AMULET_OF_THE_EYE_GREEN = 26992;
 
 	/**
-	 * Amulet of the eye
+	 * Amulet of the Eye
 	 */
 	public static final int GOTR_AMULET_OF_THE_EYE_BLUE = 26994;
 
@@ -68896,7 +68944,7 @@ public final class ItemID
 	public static final int BR_SARADOMIN_CHAPS = 27182;
 
 	/**
-	 * 3rd age mage hat
+	 * 3rd Age mage hat
 	 */
 	public static final int BR_3A_MAGE_HAT = 27183;
 
@@ -68916,7 +68964,7 @@ public final class ItemID
 	public static final int BR_ZARYTE_XBOW = 27186;
 
 	/**
-	 * Bow of faerdhinen (c)
+	 * Bow of Faerdhinen (c)
 	 */
 	public static final int BR_BOW_OF_FAERDHINEN = 27187;
 
@@ -68976,17 +69024,17 @@ public final class ItemID
 	public static final int BR_INQUISITORS_MACE = 27198;
 
 	/**
-	 * 3rd age range top
+	 * 3rd Age range top
 	 */
 	public static final int BR_3A_RANGER_TORSO = 27199;
 
 	/**
-	 * 3rd age range legs
+	 * 3rd Age range legs
 	 */
 	public static final int BR_3A_RANGER_LEGS = 27200;
 
 	/**
-	 * 3rd age range coif
+	 * 3rd Age range coif
 	 */
 	public static final int BR_3A_RANGER_COIF = 27201;
 
@@ -69131,7 +69179,7 @@ public final class ItemID
 	public static final int ARMADYLEAN_COMPONENT = 27269;
 
 	/**
-	 * Lily of the sands
+	 * Lily of the Sands
 	 */
 	public static final int LILY_OF_THE_SANDS = 27272;
 
@@ -69146,7 +69194,7 @@ public final class ItemID
 	public static final int TUMEKENS_SHADOW_UNCHARGED = 27277;
 
 	/**
-	 * Thread of elidinis
+	 * Thread of Elidinis
 	 */
 	public static final int THREAD_OF_ELIDINIS = 27279;
 
@@ -69156,12 +69204,12 @@ public final class ItemID
 	public static final int DIVINE_RUNE_POUCH = 27281;
 
 	/**
-	 * Breach of the scarab
+	 * Breach of the Scarab
 	 */
 	public static final int BREACH_OF_THE_SCARAB = 27283;
 
 	/**
-	 * Eye of the corruptor
+	 * Eye of the Corruptor
 	 */
 	public static final int EYE_OF_THE_CORRUPTOR = 27285;
 
@@ -69171,7 +69219,7 @@ public final class ItemID
 	public static final int KERIS_PARTISAN_CORRUPTION = 27287;
 
 	/**
-	 * Jewel of the sun
+	 * Jewel of the Sun
 	 */
 	public static final int JEWEL_OF_THE_SUN = 27289;
 
@@ -69281,22 +69329,22 @@ public final class ItemID
 	public static final int TOA_SUPPLY_HEAL_OVERTIME_1 = 27325;
 
 	/**
-	 * Tears of elidinis (4)
+	 * Tears of Elidinis (4)
 	 */
 	public static final int TOA_SUPPLY_PRAYER_4 = 27327;
 
 	/**
-	 * Tears of elidinis (3)
+	 * Tears of Elidinis (3)
 	 */
 	public static final int TOA_SUPPLY_PRAYER_3 = 27329;
 
 	/**
-	 * Tears of elidinis (2)
+	 * Tears of Elidinis (2)
 	 */
 	public static final int TOA_SUPPLY_PRAYER_2 = 27331;
 
 	/**
-	 * Tears of elidinis (1)
+	 * Tears of Elidinis (1)
 	 */
 	public static final int TOA_SUPPLY_PRAYER_1 = 27333;
 
@@ -69361,7 +69409,7 @@ public final class ItemID
 	public static final int SET_MASORI_FORTIFIED = 27355;
 
 	/**
-	 * Tome of fire
+	 * Tome of Fire
 	 */
 	public static final int BR_TOME_OF_FIRE = 27358;
 
@@ -69401,7 +69449,7 @@ public final class ItemID
 	public static final int TOA_CAMEL_KEY = 27369;
 
 	/**
-	 * Mask of rebirth
+	 * Mask of Rebirth
 	 */
 	public static final int TOA_AMASCUT_MASK = 27370;
 
@@ -69421,22 +69469,22 @@ public final class ItemID
 	public static final int AVAS_ASSEMBLER_MASORI_TROUVER = 27376;
 
 	/**
-	 * Remnant of akkha
+	 * Remnant of Akkha
 	 */
 	public static final int TOA_PET_MORPH_AKKHA = 27377;
 
 	/**
-	 * Remnant of ba-ba
+	 * Remnant of Ba-Ba
 	 */
 	public static final int TOA_PET_MORPH_BABA = 27378;
 
 	/**
-	 * Remnant of kephri
+	 * Remnant of Kephri
 	 */
 	public static final int TOA_PET_MORPH_KEPHRI = 27379;
 
 	/**
-	 * Remnant of zebak
+	 * Remnant of Zebak
 	 */
 	public static final int TOA_PET_MORPH_ZEBAK = 27380;
 
@@ -69581,32 +69629,32 @@ public final class ItemID
 	public static final int CRACKCLUE_2022 = 27427;
 
 	/**
-	 * Hood of ruin
+	 * Hood of Ruin
 	 */
 	public static final int ROBESOFRUIN_HOOD = 27428;
 
 	/**
-	 * Robe top of ruin
+	 * Robe top of Ruin
 	 */
 	public static final int ROBESOFRUIN_TOP = 27430;
 
 	/**
-	 * Robe bottom of ruin
+	 * Robe bottom of Ruin
 	 */
 	public static final int ROBESOFRUIN_BOTTOM = 27432;
 
 	/**
-	 * Gloves of ruin
+	 * Gloves of Ruin
 	 */
 	public static final int ROBESOFRUIN_GLOVES = 27434;
 
 	/**
-	 * Socks of ruin
+	 * Socks of Ruin
 	 */
 	public static final int ROBESOFRUIN_SOCKS = 27436;
 
 	/**
-	 * Cloak of ruin
+	 * Cloak of Ruin
 	 */
 	public static final int ROBESOFRUIN_CLOAK = 27438;
 
@@ -70268,12 +70316,12 @@ public final class ItemID
 	public static final int CALLISTO_PET_LEGACY = 27649;
 
 	/**
-	 * Vet'ion jr.
+	 * Vet'ion Jr.
 	 */
 	public static final int VETION_PET_LEGACY = 27650;
 
 	/**
-	 * Vet'ion jr.
+	 * Vet'ion Jr.
 	 */
 	public static final int VETION_PET2_LEGACY = 27651;
 
@@ -70308,17 +70356,17 @@ public final class ItemID
 	public static final int WILD_CAVE_ACCURSED_CHARGED = 27665;
 
 	/**
-	 * Claws of callisto
+	 * Claws of Callisto
 	 */
 	public static final int WBR_CALLISTO_CLAWS = 27667;
 
 	/**
-	 * Fangs of venenatis
+	 * Fangs of Venenatis
 	 */
 	public static final int WBR_VENENATIS_FANG = 27670;
 
 	/**
-	 * Skull of vet'ion
+	 * Skull of Vet'ion
 	 */
 	public static final int WBR_VETION_SKULL = 27673;
 
@@ -71356,7 +71404,7 @@ public final class ItemID
 	public static final int BH_BARBASSAULT_PENANCE_FIGHTER_TORSO_CORRUPTED_TROUVER = 28069;
 
 	/**
-	 * Helm of neitiznot (or)
+	 * Helm of Neitiznot (or)
 	 */
 	public static final int BH_FRIS_KINGLY_HELM_CORRUPTED = 28070;
 
@@ -71806,7 +71854,7 @@ public final class ItemID
 	public static final int CERT_CRYSTAL_AXE_2H_INACTIVE = 28224;
 
 	/**
-	 * 3rd age felling axe
+	 * 3rd Age felling axe
 	 */
 	public static final int _3A_AXE_2H = 28226;
 
@@ -72041,7 +72089,7 @@ public final class ItemID
 	public static final int SOULREAPER_AXE_HEAD = 28319;
 
 	/**
-	 * Eye of the duke
+	 * Eye of the Duke
 	 */
 	public static final int SOULREAPER_AXE_EYE = 28321;
 
@@ -72758,184 +72806,202 @@ public final class ItemID
 	public static final int ANCIENT_SCEPTRE_SHADOW_TROUVER = 28476;
 
 	/**
-	 * Sigil of sustenance
+	 * Sigil of Sustenance
 	 */
 	public static final int SIGIL_OF_SUSTENANCE_ATTUNED = 28477;
 
 	/**
-	 * Sigil of sustenance
+	 * Sigil of Sustenance
 	 */
 	public static final int SIGIL_OF_SUSTENANCE_UNATTUNED = 28478;
+	public static final int CERT_SIGIL_OF_SUSTENANCE_UNATTUNED = 28479;
 
 	/**
-	 * Sigil of hoarding
+	 * Sigil of Hoarding
 	 */
 	public static final int SIGIL_OF_HOARDING_ATTUNED = 28480;
 
 	/**
-	 * Sigil of hoarding
+	 * Sigil of Hoarding
 	 */
 	public static final int SIGIL_OF_HOARDING_UNATTUNED = 28481;
+	public static final int CERT_SIGIL_OF_HOARDING_UNATTUNED = 28482;
 
 	/**
-	 * Sigil of the alchemaniac
+	 * Sigil of the Alchemaniac
 	 */
 	public static final int SIGIL_OF_THE_ALCHEMANIAC_ATTUNED = 28483;
 
 	/**
-	 * Sigil of the alchemaniac
+	 * Sigil of the Alchemaniac
 	 */
 	public static final int SIGIL_OF_THE_ALCHEMANIAC_UNATTUNED = 28484;
+	public static final int CERT_SIGIL_OF_THE_ALCHEMANIAC_UNATTUNED = 28485;
 
 	/**
-	 * Sigil of the hunter
+	 * Sigil of the Hunter
 	 */
 	public static final int SIGIL_OF_THE_HUNTER_ATTUNED = 28486;
 
 	/**
-	 * Sigil of the hunter
+	 * Sigil of the Hunter
 	 */
 	public static final int SIGIL_OF_THE_HUNTER_UNATTUNED = 28487;
+	public static final int CERT_SIGIL_OF_THE_HUNTER_UNATTUNED = 28488;
 
 	/**
-	 * Sigil of resistance
+	 * Sigil of Resistance
 	 */
 	public static final int SIGIL_OF_RESISTANCE_ATTUNED = 28489;
 
 	/**
-	 * Sigil of resistance
+	 * Sigil of Resistance
 	 */
 	public static final int SIGIL_OF_RESISTANCE_UNATTUNED = 28490;
+	public static final int CERT_SIGIL_OF_RESISTANCE_UNATTUNED = 28491;
 
 	/**
-	 * Sigil of agile fortune
+	 * Sigil of Agile Fortune
 	 */
 	public static final int SIGIL_OF_AGILE_FORTUNE_ATTUNED = 28492;
 
 	/**
-	 * Sigil of agile fortune
+	 * Sigil of Agile Fortune
 	 */
 	public static final int SIGIL_OF_AGILE_FORTUNE_UNATTUNED = 28493;
+	public static final int CERT_SIGIL_OF_AGILE_FORTUNE_UNATTUNED = 28494;
 
 	/**
-	 * Sigil of the food master
+	 * Sigil of the Food Master
 	 */
 	public static final int SIGIL_OF_THE_FOOD_MASTER_ATTUNED = 28495;
 
 	/**
-	 * Sigil of the food master
+	 * Sigil of the Food Master
 	 */
 	public static final int SIGIL_OF_THE_FOOD_MASTER_UNATTUNED = 28496;
+	public static final int CERT_SIGIL_OF_THE_FOOD_MASTER_UNATTUNED = 28497;
 
 	/**
-	 * Sigil of the well fed
+	 * Sigil of the Well Fed
 	 */
 	public static final int SIGIL_OF_THE_WELL_FED_ATTUNED = 28498;
 
 	/**
-	 * Sigil of the well fed
+	 * Sigil of The Well Fed
 	 */
 	public static final int SIGIL_OF_THE_WELL_FED_UNATTUNED = 28499;
+	public static final int CERT_SIGIL_OF_THE_WELL_FED_UNATTUNED = 28500;
 
 	/**
-	 * Sigil of the infernal chef
+	 * Sigil of the Infernal Chef
 	 */
 	public static final int SIGIL_OF_THE_INFERNAL_CHEF_ATTUNED = 28501;
 
 	/**
-	 * Sigil of the infernal chef
+	 * Sigil of the Infernal Chef
 	 */
 	public static final int SIGIL_OF_THE_INFERNAL_CHEF_UNATTUNED = 28502;
+	public static final int CERT_SIGIL_OF_THE_INFERNAL_CHEF_UNATTUNED = 28503;
 
 	/**
-	 * Sigil of the infernal smith
+	 * Sigil of the Infernal Smith
 	 */
 	public static final int SIGIL_OF_THE_INFERNAL_SMITH_ATTUNED = 28504;
 
 	/**
-	 * Sigil of the infernal smith
+	 * Sigil of the Infernal Smith
 	 */
 	public static final int SIGIL_OF_THE_INFERNAL_SMITH_UNATTUNED = 28505;
+	public static final int CERT_SIGIL_OF_THE_INFERNAL_SMITH_UNATTUNED = 28506;
 
 	/**
-	 * Sigil of the lightbearer
+	 * Sigil of the Lightbearer
 	 */
 	public static final int SIGIL_OF_THE_LIGHTBEARER_ATTUNED = 28507;
 
 	/**
-	 * Sigil of the lightbearer
+	 * Sigil of the Lightbearer
 	 */
 	public static final int SIGIL_OF_THE_LIGHTBEARER_UNATTUNED = 28508;
+	public static final int CERT_SIGIL_OF_THE_LIGHTBEARER_UNATTUNED = 28509;
 
 	/**
-	 * Sigil of the bloodhound
+	 * Sigil of the Bloodhound
 	 */
 	public static final int SIGIL_OF_THE_BLOODHOUND_ATTUNED = 28510;
 
 	/**
-	 * Sigil of the bloodhound
+	 * Sigil of the Bloodhound
 	 */
 	public static final int SIGIL_OF_THE_BLOODHOUND_UNATTUNED = 28511;
+	public static final int CERT_SIGIL_OF_THE_BLOODHOUND_UNATTUNED = 28512;
 
 	/**
-	 * Sigil of precision
+	 * Sigil of Precision
 	 */
 	public static final int SIGIL_OF_PRECISION_ATTUNED = 28513;
 
 	/**
-	 * Sigil of precision
+	 * Sigil of Precision
 	 */
 	public static final int SIGIL_OF_PRECISION_UNATTUNED = 28514;
+	public static final int CERT_SIGIL_OF_PRECISION_UNATTUNED = 28515;
 
 	/**
-	 * Sigil of the augmented thrall
+	 * Sigil of the Augmented Thrall
 	 */
 	public static final int SIGIL_OF_THE_AUGMENTED_THRALL_ATTUNED = 28516;
 
 	/**
-	 * Sigil of the augmented thrall
+	 * Sigil of the Augmented Thrall
 	 */
 	public static final int SIGIL_OF_THE_AUGMENTED_THRALL_UNATTUNED = 28517;
+	public static final int CERT_SIGIL_OF_THE_AUGMENTED_THRALL_UNATTUNED = 28518;
 
 	/**
-	 * Sigil of faith
+	 * Sigil of Faith
 	 */
 	public static final int SIGIL_OF_FAITH_ATTUNED = 28519;
 
 	/**
-	 * Sigil of faith
+	 * Sigil of Faith
 	 */
 	public static final int SIGIL_OF_FAITH_UNATTUNED = 28520;
+	public static final int CERT_SIGIL_OF_FAITH_UNATTUNED = 28521;
 
 	/**
-	 * Sigil of titanium
+	 * Sigil of Titanium
 	 */
 	public static final int SIGIL_OF_TITANIUM_ATTUNED = 28522;
 
 	/**
-	 * Sigil of titanium
+	 * Sigil of Titanium
 	 */
 	public static final int SIGIL_OF_TITANIUM_UNATTUNED = 28523;
+	public static final int CERT_SIGIL_OF_TITANIUM_UNATTUNED = 28524;
 
 	/**
-	 * Sigil of the ninja
+	 * Sigil of the Ninja
 	 */
 	public static final int SIGIL_OF_THE_NINJA_ATTUNED = 28525;
 
 	/**
-	 * Sigil of the ninja
+	 * Sigil of the Ninja
 	 */
 	public static final int SIGIL_OF_THE_NINJA_UNATTUNED = 28526;
+	public static final int CERT_SIGIL_OF_THE_NINJA_UNATTUNED = 28527;
 
 	/**
-	 * Sigil of woodcraft
+	 * Sigil of Woodcraft
 	 */
 	public static final int SIGIL_OF_WOODCRAFT_ATTUNED = 28528;
 
 	/**
-	 * Sigil of woodcraft
+	 * Sigil of Woodcraft
 	 */
 	public static final int SIGIL_OF_WOODCRAFT_UNATTUNED = 28529;
+	public static final int CERT_SIGIL_OF_WOODCRAFT_UNATTUNED = 28530;
 
 	/**
 	 * Corrupted voidwaker
@@ -72958,12 +73024,12 @@ public final class ItemID
 	public static final int DEADMAN_BLIGHTED_TWISTED_BOW = 28540;
 
 	/**
-	 * Corrupted scythe of vitur
+	 * Corrupted Scythe of Vitur
 	 */
 	public static final int DEADMAN_BLIGHTED_SCYTHE_OF_VITUR = 28543;
 
 	/**
-	 * Corrupted scythe of vitur (uncharged)
+	 * Corrupted Scythe of Vitur (uncharged)
 	 */
 	public static final int DEADMAN_BLIGHTED_SCYTHE_OF_VITUR_UNCHARGED = 28545;
 
@@ -73629,7 +73695,7 @@ public final class ItemID
 	public static final int DOV_IMBUED_BARRONITE = 28806;
 
 	/**
-	 * Shield of arrav
+	 * Shield of Arrav
 	 */
 	public static final int DOV_SHIELD_OF_ARRAV = 28807;
 
@@ -73704,7 +73770,7 @@ public final class ItemID
 	public static final int DIZANAS_QUIVER_BROKEN = 28826;
 
 	/**
-	 * Blessed dizana's quiver (broken)
+	 * Blessed Dizana's quiver (broken)
 	 */
 	public static final int DIZANAS_QUIVER_INFINITE_BROKEN = 28828;
 
@@ -73967,12 +74033,12 @@ public final class ItemID
 	public static final int TRAIL_HARD_MUSIC_VM01 = 28918;
 
 	/**
-	 * Tonalztics of ralos (uncharged)
+	 * Tonalztics of Ralos (uncharged)
 	 */
 	public static final int TONALZTICS_OF_RALOS_UNCHARGED = 28919;
 
 	/**
-	 * Tonalztics of ralos
+	 * Tonalztics of Ralos
 	 */
 	public static final int TONALZTICS_OF_RALOS_CHARGED = 28922;
 
@@ -74040,12 +74106,12 @@ public final class ItemID
 	public static final int DIZANAS_QUIVER_CHARGED_TROUVER = 28953;
 
 	/**
-	 * Blessed dizana's quiver
+	 * Blessed Dizana's quiver
 	 */
 	public static final int DIZANAS_QUIVER_INFINITE = 28955;
 
 	/**
-	 * Blessed dizana's quiver (l)
+	 * Blessed Dizana's quiver (l)
 	 */
 	public static final int DIZANAS_QUIVER_INFINITE_TROUVER = 28957;
 
@@ -74055,7 +74121,7 @@ public final class ItemID
 	public static final int COLOSSEUM_PASSIONATE_SUPPORTER_NOTE = 28958;
 
 	/**
-	 * Smol heredit
+	 * Smol Heredit
 	 */
 	public static final int SOLHEREDITPET = 28960;
 
@@ -74126,7 +74192,7 @@ public final class ItemID
 	public static final int VMQ2_AMULET = 28976;
 
 	/**
-	 * Knight of varlamore
+	 * Knight of Varlamore
 	 */
 	public static final int VMQ2_KNIGHT_5_FOLLOWER_OBJ = 28977;
 
@@ -74176,7 +74242,7 @@ public final class ItemID
 	public static final int FROG_QUEST_PLUSHY = 28987;
 
 	/**
-	 * Blue moon spear
+	 * Blue Moon spear
 	 */
 	public static final int FROSTMOON_SPEAR = 28988;
 
@@ -74201,137 +74267,137 @@ public final class ItemID
 	public static final int ECLIPSE_ATLATL_DUMMY = 29003;
 
 	/**
-	 * Eclipse moon chestplate
+	 * Eclipse Moon chestplate
 	 */
 	public static final int ECLIPSE_MOON_CHESTPLATE = 29004;
 
 	/**
-	 * Eclipse moon tassets
+	 * Eclipse Moon tassets
 	 */
 	public static final int ECLIPSE_MOON_TASSETS = 29007;
 
 	/**
-	 * Eclipse moon helm
+	 * Eclipse Moon helm
 	 */
 	public static final int ECLIPSE_MOON_HELM = 29010;
 
 	/**
-	 * Blue moon chestplate
+	 * Blue Moon chestplate
 	 */
 	public static final int FROST_MOON_CHESTPLATE = 29013;
 
 	/**
-	 * Blue moon tassets
+	 * Blue Moon tassets
 	 */
 	public static final int FROST_MOON_TASSETS = 29016;
 
 	/**
-	 * Blue moon helm
+	 * Blue Moon helm
 	 */
 	public static final int FROST_MOON_HELM = 29019;
 
 	/**
-	 * Blood moon chestplate
+	 * Blood Moon chestplate
 	 */
 	public static final int BLOOD_MOON_CHESTPLATE = 29022;
 
 	/**
-	 * Blood moon tassets
+	 * Blood Moon tassets
 	 */
 	public static final int BLOOD_MOON_TASSETS = 29025;
 
 	/**
-	 * Blood moon helm
+	 * Blood Moon helm
 	 */
 	public static final int BLOOD_MOON_HELM = 29028;
 
 	/**
-	 * Eclipse moon chestplate
+	 * Eclipse Moon chestplate
 	 */
 	public static final int ECLIPSE_MOON_CHESTPLATE_DEGRADED = 29031;
 
 	/**
-	 * Eclipse moon tassets
+	 * Eclipse Moon tassets
 	 */
 	public static final int ECLIPSE_MOON_TASSETS_DEGRADED = 29033;
 
 	/**
-	 * Eclipse moon helm
+	 * Eclipse Moon helm
 	 */
 	public static final int ECLIPSE_MOON_HELM_DEGRADED = 29035;
 
 	/**
-	 * Blue moon chestplate
+	 * Blue Moon chestplate
 	 */
 	public static final int FROST_MOON_CHESTPLATE_DEGRADED = 29037;
 
 	/**
-	 * Blue moon tassets
+	 * Blue Moon tassets
 	 */
 	public static final int FROST_MOON_TASSETS_DEGRADED = 29039;
 
 	/**
-	 * Blue moon helm
+	 * Blue Moon helm
 	 */
 	public static final int FROST_MOON_HELM_DEGRADED = 29041;
 
 	/**
-	 * Blood moon chestplate
+	 * Blood Moon chestplate
 	 */
 	public static final int BLOOD_MOON_CHESTPLATE_DEGRADED = 29043;
 
 	/**
-	 * Blood moon tassets
+	 * Blood Moon tassets
 	 */
 	public static final int BLOOD_MOON_TASSETS_DEGRADED = 29045;
 
 	/**
-	 * Blood moon helm
+	 * Blood Moon helm
 	 */
 	public static final int BLOOD_MOON_HELM_DEGRADED = 29047;
 
 	/**
-	 * Eclipse moon chestplate (broken)
+	 * Eclipse Moon chestplate (broken)
 	 */
 	public static final int ECLIPSE_MOON_CHESTPLATE_BROKEN = 29049;
 
 	/**
-	 * Eclipse moon tassets (broken)
+	 * Eclipse Moon tassets (broken)
 	 */
 	public static final int ECLIPSE_MOON_TASSETS_BROKEN = 29052;
 
 	/**
-	 * Eclipse moon helm (broken)
+	 * Eclipse Moon helm (broken)
 	 */
 	public static final int ECLIPSE_MOON_HELM_BROKEN = 29055;
 
 	/**
-	 * Blue moon chestplate (broken)
+	 * Blue Moon chestplate (broken)
 	 */
 	public static final int FROST_MOON_CHESTPLATE_BROKEN = 29058;
 
 	/**
-	 * Blue moon tassets (broken)
+	 * Blue Moon tassets (broken)
 	 */
 	public static final int FROST_MOON_TASSETS_BROKEN = 29061;
 
 	/**
-	 * Blue moon helm (broken)
+	 * Blue Moon helm (broken)
 	 */
 	public static final int FROST_MOON_HELM_BROKEN = 29064;
 
 	/**
-	 * Blood moon chestplate (broken)
+	 * Blood Moon chestplate (broken)
 	 */
 	public static final int BLOOD_MOON_CHESTPLATE_BROKEN = 29067;
 
 	/**
-	 * Blood moon tassets (broken)
+	 * Blood Moon tassets (broken)
 	 */
 	public static final int BLOOD_MOON_TASSETS_BROKEN = 29070;
 
 	/**
-	 * Blood moon helm (broken)
+	 * Blood Moon helm (broken)
 	 */
 	public static final int BLOOD_MOON_HELM_BROKEN = 29073;
 
@@ -75211,12 +75277,12 @@ public final class ItemID
 	public static final int PLACEHOLDER_EASTER24_EVENT_BOOK_AYASTER = 29432;
 
 	/**
-	 * Book of egg
+	 * Book of Egg
 	 */
 	public static final int EASTER24_REWARD_BOOK_EASTER = 29433;
 
 	/**
-	 * Book of egg
+	 * Book of Egg
 	 */
 	public static final int EASTER24_REWARD_BOOK_EASTER_OPEN = 29435;
 
@@ -75748,42 +75814,42 @@ public final class ItemID
 	public static final int DEADMAN_BLIGHTED_DARK_BOW = 29599;
 
 	/**
-	 * Corrupted volatile nightmare staff
+	 * Corrupted Volatile Nightmare staff
 	 */
 	public static final int DEADMAN_BLIGHTED_VOLATILE_STAFF = 29602;
 
 	/**
-	 * Armadyl godsword (deadman)
+	 * Armadyl godsword (Deadman)
 	 */
 	public static final int DEADMAN_AGS = 29605;
 
 	/**
-	 * Voidwaker (deadman)
+	 * Voidwaker (Deadman)
 	 */
 	public static final int DEADMAN_VOIDWAKER = 29607;
 
 	/**
-	 * Volatile nightmare staff (deadman)
+	 * Volatile Nightmare staff (Deadman)
 	 */
 	public static final int DEADMAN_NIGHTMARE_STAFF_VOLATILE = 29609;
 
 	/**
-	 * Dark bow (deadman)
+	 * Dark bow (Deadman)
 	 */
 	public static final int DEADMAN_DARKBOW = 29611;
 
 	/**
-	 * Imbued zamorak cape (deadman)
+	 * Imbued Zamorak cape (Deadman)
 	 */
 	public static final int DEADMAN_MA2_ZAMORAK_CAPE = 29613;
 
 	/**
-	 * Imbued guthix cape (deadman)
+	 * Imbued Guthix cape (Deadman)
 	 */
 	public static final int DEADMAN_MA2_GUTHIX_CAPE = 29615;
 
 	/**
-	 * Imbued saradomin cape (deadman)
+	 * Imbued Saradomin cape (Deadman)
 	 */
 	public static final int DEADMAN_MA2_SARADOMIN_CAPE = 29617;
 
@@ -75839,114 +75905,125 @@ public final class ItemID
 	public static final int BOUGHT_DEADMAN_POINTS = 29647;
 
 	/**
-	 * Sigil of meticulousness
+	 * Sigil of Meticulousness
 	 */
 	public static final int SIGIL_OF_METICULOUSNESS_ATTUNED = 29648;
 
 	/**
-	 * Sigil of meticulousness
+	 * Sigil of Meticulousness
 	 */
 	public static final int SIGIL_OF_METICULOUSNESS_UNATTUNED = 29649;
+	public static final int CERT_SIGIL_OF_METICULOUSNESS_UNATTUNED = 29650;
 
 	/**
-	 * Sigil of revoked limitation
+	 * Sigil of Revoked Limitation
 	 */
 	public static final int SIGIL_OF_REVOKED_LIMITATION_ATTUNED = 29651;
 
 	/**
-	 * Sigil of revoked limitation
+	 * Sigil of Revoked Limitation
 	 */
 	public static final int SIGIL_OF_REVOKED_LIMITATION_UNATTUNED = 29652;
+	public static final int CERT_SIGIL_OF_REVOKED_LIMITATION_UNATTUNED = 29653;
 
 	/**
-	 * Sigil of the rampart
+	 * Sigil of the Rampart
 	 */
 	public static final int SIGIL_OF_RAMPART_ATTUNED = 29654;
 
 	/**
-	 * Sigil of the rampart
+	 * Sigil of the Rampart
 	 */
 	public static final int SIGIL_OF_RAMPART_UNATTUNED = 29655;
+	public static final int CERT_SIGIL_OF_RAMPART_UNATTUNED = 29656;
 
 	/**
-	 * Sigil of deception
+	 * Sigil of Deception
 	 */
 	public static final int SIGIL_OF_DECEPTION_ATTUNED = 29657;
 
 	/**
-	 * Sigil of deception
+	 * Sigil of Deception
 	 */
 	public static final int SIGIL_OF_DECEPTION_UNATTUNED = 29658;
+	public static final int CERT_SIGIL_OF_DECEPTION_UNATTUNED = 29659;
 
 	/**
-	 * Sigil of litheness
+	 * Sigil of Litheness
 	 */
 	public static final int SIGIL_OF_LITHE_ATTUNED = 29660;
 
 	/**
-	 * Sigil of litheness
+	 * Sigil of Litheness
 	 */
 	public static final int SIGIL_OF_LITHE_UNATTUNED = 29661;
+	public static final int CERT_SIGIL_OF_LITHE_UNATTUNED = 29662;
 
 	/**
-	 * Sigil of the adroit
+	 * Sigil of the Adroit
 	 */
 	public static final int SIGIL_OF_ADROIT_ATTUNED = 29663;
 
 	/**
-	 * Sigil of the adroit
+	 * Sigil of the Adroit
 	 */
 	public static final int SIGIL_OF_ADROIT_UNATTUNED = 29664;
+	public static final int CERT_SIGIL_OF_ADROIT_UNATTUNED = 29665;
 
 	/**
-	 * Sigil of onslaught
+	 * Sigil of Onslaught
 	 */
 	public static final int SIGIL_OF_ONSLAUGHT_ATTUNED = 29666;
 
 	/**
-	 * Sigil of onslaught
+	 * Sigil of Onslaught
 	 */
 	public static final int SIGIL_OF_ONSLAUGHT_UNATTUNED = 29667;
+	public static final int CERT_SIGIL_OF_ONSLAUGHT_UNATTUNED = 29668;
 
 	/**
-	 * Sigil of restoration
+	 * Sigil of Restoration
 	 */
 	public static final int SIGIL_OF_RESTORATION_ATTUNED = 29669;
 
 	/**
-	 * Sigil of restoration
+	 * Sigil of Restoration
 	 */
 	public static final int SIGIL_OF_RESTORATION_UNATTUNED = 29670;
+	public static final int CERT_SIGIL_OF_RESTORATION_UNATTUNED = 29671;
 
 	/**
-	 * Sigil of the swashbuckler
+	 * Sigil of the Swashbuckler
 	 */
 	public static final int SIGIL_OF_SWASHBUCKLER_ATTUNED = 29672;
 
 	/**
-	 * Sigil of the swashbuckler
+	 * Sigil of the Swashbuckler
 	 */
 	public static final int SIGIL_OF_SWASHBUCKLER_UNATTUNED = 29673;
+	public static final int CERT_SIGIL_OF_SWASHBUCKLER_UNATTUNED = 29674;
 
 	/**
-	 * Sigil of the gunslinger
+	 * Sigil of the Gunslinger
 	 */
 	public static final int SIGIL_OF_GUNSLINGER_ATTUNED = 29675;
 
 	/**
-	 * Sigil of the gunslinger
+	 * Sigil of the Gunslinger
 	 */
 	public static final int SIGIL_OF_GUNSLINGER_UNATTUNED = 29676;
+	public static final int CERT_SIGIL_OF_GUNSLINGER_UNATTUNED = 29677;
 
 	/**
-	 * Sigil of arcane swiftness
+	 * Sigil of Arcane Swiftness
 	 */
 	public static final int SIGIL_OF_ARCANE_SWIFTNESS_ATTUNED = 29678;
 
 	/**
-	 * Sigil of arcane swiftness
+	 * Sigil of Arcane Swiftness
 	 */
 	public static final int SIGIL_OF_ARCANE_SWIFTNESS_UNATTUNED = 29679;
+	public static final int CERT_SIGIL_OF_ARCANE_SWIFTNESS_UNATTUNED = 29680;
 
 	/**
 	 * Null
@@ -76214,7 +76291,7 @@ public final class ItemID
 	public static final int ARAXYTE_VENOM_SACK = 29784;
 
 	/**
-	 * Jar of venom
+	 * Jar of Venom
 	 */
 	public static final int JAR_OF_VENOM = 29786;
 
@@ -76324,52 +76401,52 @@ public final class ItemID
 	public static final int ARAXXORPET_CUTE = 29838;
 
 	/**
-	 * Eclipse moon chestplate
+	 * Eclipse Moon chestplate
 	 */
 	public static final int BR_ECLIPSE_MOON_CHESTPLATE = 29840;
 
 	/**
-	 * Eclipse moon tassets
+	 * Eclipse Moon tassets
 	 */
 	public static final int BR_ECLIPSE_MOON_TASSETS = 29841;
 
 	/**
-	 * Eclipse moon helm
+	 * Eclipse Moon helm
 	 */
 	public static final int BR_ECLIPSE_MOON_HELM = 29842;
 
 	/**
-	 * Blue moon chestplate
+	 * Blue Moon chestplate
 	 */
 	public static final int BR_FROST_MOON_CHESTPLATE = 29843;
 
 	/**
-	 * Blue moon tassets
+	 * Blue Moon tassets
 	 */
 	public static final int BR_FROST_MOON_TASSETS = 29844;
 
 	/**
-	 * Blue moon helm
+	 * Blue Moon helm
 	 */
 	public static final int BR_FROST_MOON_HELM = 29845;
 
 	/**
-	 * Blood moon chestplate
+	 * Blood Moon chestplate
 	 */
 	public static final int BR_BLOOD_MOON_CHESTPLATE = 29846;
 
 	/**
-	 * Blood moon tassets
+	 * Blood Moon tassets
 	 */
 	public static final int BR_BLOOD_MOON_TASSETS = 29847;
 
 	/**
-	 * Blood moon helm
+	 * Blood Moon helm
 	 */
 	public static final int BR_BLOOD_MOON_HELM = 29848;
 
 	/**
-	 * Blue moon spear
+	 * Blue Moon spear
 	 */
 	public static final int BR_FROSTMOON_SPEAR = 29849;
 
@@ -76546,12 +76623,12 @@ public final class ItemID
 	public static final int GLACIAL_TEMOTLI = 29889;
 
 	/**
-	 * Pendant of ates (inert)
+	 * Pendant of Ates (inert)
 	 */
 	public static final int PENDANT_OF_ATES_EMPTY = 29892;
 
 	/**
-	 * Pendant of ates
+	 * Pendant of Ates
 	 */
 	public static final int PENDANT_OF_ATES = 29893;
 
@@ -77087,12 +77164,12 @@ public final class ItemID
 	public static final int WYRM_AGILITY_ZIPLINE_DUMMY = 30063;
 
 	/**
-	 * Tome of earth
+	 * Tome of Earth
 	 */
 	public static final int TOME_OF_EARTH = 30064;
 
 	/**
-	 * Tome of earth (empty)
+	 * Tome of Earth (empty)
 	 */
 	public static final int TOME_OF_EARTH_UNCHARGED = 30066;
 
@@ -77281,7 +77358,7 @@ public final class ItemID
 	public static final int NZONE_TELETAB_ALDARIN = 30149;
 
 	/**
-	 * Bone squirrel
+	 * Bone Squirrel
 	 */
 	public static final int SKILLPETAGILITY_BONE = 30151;
 
@@ -78237,7 +78314,7 @@ public final class ItemID
 	public static final int RING_OF_KINGS = 30378;
 
 	/**
-	 * Gloves of the damned
+	 * Gloves of the Damned
 	 */
 	public static final int DAMNED_GLOVES = 30380;
 
@@ -78457,7 +78534,7 @@ public final class ItemID
 	public static final int LEAGUE_5_DEATH_SCROLL = 30455;
 
 	/**
-	 * Raging echoes npc contact scroll
+	 * Raging echoes astral contact scroll
 	 */
 	public static final int LEAGUE_5_CONTACT_SCROLL = 30457;
 
@@ -79300,57 +79377,57 @@ public final class ItemID
 	public static final int WET_CLOTH = 30808;
 
 	/**
-	 * Contract of glyphic attenuation
+	 * Contract of Glyphic Attenuation
 	 */
 	public static final int YAMA_SPECIAL_CONTRACT = 30810;
 
 	/**
-	 * Contract of sensory clouding
+	 * Contract of Sensory Clouding
 	 */
 	public static final int YAMA_SPELL_CONTRACT = 30813;
 
 	/**
-	 * Contract of bloodied blows
+	 * Contract of Bloodied Blows
 	 */
 	public static final int YAMA_2H_CONTRACT = 30816;
 
 	/**
-	 * Contract of divine severance
+	 * Contract of Divine Severance
 	 */
 	public static final int YAMA_HEAVYRANGED_CONTRACT = 30819;
 
 	/**
-	 * Contract of forfeit breath
+	 * Contract of Forfeit Breath
 	 */
 	public static final int YAMA_BINDING_CONTRACT = 30822;
 
 	/**
-	 * Contract of oathplate acquisition
+	 * Contract of Oathplate Acquisition
 	 */
 	public static final int YAMA_ARMOUR_CONTRACT = 30825;
 
 	/**
-	 * Contract of shard acquisition
+	 * Contract of Shard Acquisition
 	 */
 	public static final int YAMA_SHARD_CONTRACT = 30828;
 
 	/**
-	 * Contract of catalyst acquisition
+	 * Contract of Catalyst Acquisition
 	 */
 	public static final int YAMA_CATALYST_CONTRACT = 30831;
 
 	/**
-	 * Contract of worm acquisition
+	 * Contract of Worm Acquisition
 	 */
 	public static final int YAMA_WORM_CONTRACT = 30834;
 
 	/**
-	 * Contract of harmony acquisition
+	 * Contract of Harmony Acquisition
 	 */
 	public static final int YAMA_HORN_CONTRACT = 30837;
 
 	/**
-	 * Contract of familiar acquisition
+	 * Contract of Familiar Acquisition
 	 */
 	public static final int YAMA_PET_CONTRACT = 30840;
 
@@ -79456,7 +79533,7 @@ public final class ItemID
 	public static final int KERIS_PARTISAN_AMASCUT = 30891;
 
 	/**
-	 * Jewel of amascut
+	 * Jewel of Amascut
 	 */
 	public static final int JEWEL_OF_AMASCUT = 30893;
 
@@ -79832,7 +79909,7 @@ public final class ItemID
 	public static final int HEADLESS_ATLATL_DART_5 = 31015;
 
 	/**
-	 * Sacraments of ent folk
+	 * Sacraments of Ent Folk
 	 */
 	public static final int ENT_TOTEMS_INTRO_BOOK = 31016;
 
@@ -80056,12 +80133,12 @@ public final class ItemID
 	public static final int DEMON_TEAR = 31111;
 
 	/**
-	 * Eye of ayak
+	 * Eye of Ayak
 	 */
 	public static final int EYE_OF_AYAK = 31113;
 
 	/**
-	 * Eye of ayak (uncharged)
+	 * Eye of Ayak (uncharged)
 	 */
 	public static final int EYE_OF_AYAK_UNCHARGED = 31115;
 
@@ -80133,17 +80210,17 @@ public final class ItemID
 	public static final int AGILITY_SWING_AREA = 31135;
 
 	/**
-	 * Blood moon armour set
+	 * Blood Moon armour set
 	 */
 	public static final int SET_BLOOD_MOON_ARMOUR = 31136;
 
 	/**
-	 * Blue moon armour set
+	 * Blue Moon armour set
 	 */
 	public static final int SET_BLUE_MOON_ARMOUR = 31139;
 
 	/**
-	 * Eclipse moon armour set
+	 * Eclipse Moon armour set
 	 */
 	public static final int SET_ECLIPSE_MOON_ARMOUR = 31142;
 
@@ -80339,12 +80416,12 @@ public final class ItemID
 	public static final int GRYPHON_FEATHER_5 = 31240;
 
 	/**
-	 * Horn of plenty
+	 * Horn of Plenty
 	 */
 	public static final int HORN_OF_PLENTY = 31241;
 
 	/**
-	 * Horn of plenty (empty)
+	 * Horn of Plenty (empty)
 	 */
 	public static final int HORN_OF_PLENTY_UNCHARGED = 31243;
 
@@ -80680,7 +80757,7 @@ public final class ItemID
 	public static final int CURRENT_AFFAIRS_MAYORAL_FISHBOWL = 31330;
 
 	/**
-	 * Mayor of catherby
+	 * Mayor of Catherby
 	 */
 	public static final int CURRENT_AFFAIRS_MAYOR_OF_CATHERBY = 31331;
 
@@ -81573,7 +81650,7 @@ public final class ItemID
 	public static final int SERRATED_KEY = 31756;
 
 	/**
-	 * Heart of ithell
+	 * Heart of Ithell
 	 */
 	public static final int HEART_OF_ITHELL = 31757;
 
@@ -81723,7 +81800,7 @@ public final class ItemID
 	public static final int SAILING_CHARTING_DRINK_CRATE_SMUGGLED_RUM = 31831;
 
 	/**
-	 * Bottle of sorodamin's bru
+	 * Bottle of sOrodamin's bru
 	 */
 	public static final int SAILING_CHARTING_DRINK_CRATE_SORODAMIN_BRU = 31832;
 
@@ -81733,7 +81810,7 @@ public final class ItemID
 	public static final int SAILING_CHARTING_DRINK_CRATE_PRYING_TIMES = 31833;
 
 	/**
-	 * Bottle of potterington's marrow wine
+	 * Bottle of Potterington's marrow wine
 	 */
 	public static final int SAILING_CHARTING_DRINK_CRATE_MARROW_WINE = 31834;
 
@@ -81748,7 +81825,7 @@ public final class ItemID
 	public static final int SAILING_CHARTING_DRINK_CRATE_SPINNERS_GASP = 31836;
 
 	/**
-	 * Bottle of barracuda brew
+	 * Bottle of Barracuda brew
 	 */
 	public static final int SAILING_CHARTING_DRINK_CRATE_BARRACUDA_BREW = 31837;
 
@@ -81758,12 +81835,12 @@ public final class ItemID
 	public static final int SAILING_CHARTING_DRINK_CRATE_BANANA_DAIQUIRI = 31838;
 
 	/**
-	 * Bottle of kharazi cooler
+	 * Bottle of Kharazi cooler
 	 */
 	public static final int SAILING_CHARTING_DRINK_CRATE_KHARAZI_COOLER = 31839;
 
 	/**
-	 * Bottle of dognose draught
+	 * Bottle of Dognose draught
 	 */
 	public static final int SAILING_CHARTING_DRINK_CRATE_DOGNOSE_DRAUGHT = 31840;
 
@@ -81793,7 +81870,7 @@ public final class ItemID
 	public static final int SAILING_CHARTING_DRINK_CRATE_POINT_PUNCH = 31845;
 
 	/**
-	 * Bottle of oo'glug
+	 * Bottle of Oo'glug
 	 */
 	public static final int SAILING_CHARTING_DRINK_CRATE_OOGLUG = 31846;
 
@@ -81833,7 +81910,7 @@ public final class ItemID
 	public static final int SAILING_CHARTING_DRINK_CRATE_ZUL_RYE = 31853;
 
 	/**
-	 * Bottle of captain clop's mango gin
+	 * Bottle of Captain Clop's mango gin
 	 */
 	public static final int SAILING_CHARTING_DRINK_CRATE_MANGO_GIN = 31854;
 
@@ -81908,7 +81985,7 @@ public final class ItemID
 	public static final int SAILING_CHARTING_DRINK_CRATE_TOAD_CIDER = 31871;
 
 	/**
-	 * Bottle of waterbirth blue lagoon
+	 * Bottle of Waterbirth blue lagoon
 	 */
 	public static final int SAILING_CHARTING_DRINK_CRATE_BLUE_LAGOON = 31872;
 
@@ -81953,7 +82030,7 @@ public final class ItemID
 	public static final int SAILING_CHARTING_DRINK_CRATE_DWARVERN_WIZARD = 31881;
 
 	/**
-	 * Bottle of kgp standard issue martini
+	 * Bottle of KGP standard issue martini
 	 */
 	public static final int SAILING_CHARTING_DRINK_CRATE_KGP_MARTINI = 31882;
 
@@ -81963,7 +82040,7 @@ public final class ItemID
 	public static final int SAILING_CHARTING_DRINK_CRATE_CORPSE_REVIVER = 31883;
 
 	/**
-	 * Bottle of weiss meltwater
+	 * Bottle of Weiss meltwater
 	 */
 	public static final int SAILING_CHARTING_DRINK_CRATE_WEISS_MELTWATER = 31884;
 
@@ -81973,7 +82050,7 @@ public final class ItemID
 	public static final int SAILING_CHARTING_DRINK_CRATE_REDDEST_RUM = 31885;
 
 	/**
-	 * Bottle of elidinis's life water
+	 * Bottle of Elidinis's life water
 	 */
 	public static final int SAILING_CHARTING_DRINK_CRATE_LIFE_WATER = 31886;
 
@@ -82028,12 +82105,12 @@ public final class ItemID
 	public static final int SAILING_CHARTING_DRINK_CRATE_WILD_WHISKY = 31896;
 
 	/**
-	 * Bottle of robert's port
+	 * Bottle of Robert's Port
 	 */
 	public static final int SAILING_CHARTING_DRINK_CRATE_ROBERTS_PORT = 31897;
 
 	/**
-	 * Bottle of sea shandy 2
+	 * Bottle of Sea Shandy 2
 	 */
 	public static final int SAILING_CHARTING_DRINK_CRATE_SEA_SHANDY = 31898;
 
@@ -82063,7 +82140,7 @@ public final class ItemID
 	public static final int SAILING_CHARTING_DRINK_CRATE_MYSTERY_FRUIT = 31903;
 
 	/**
-	 * Bottle of captain cat's black rum
+	 * Bottle of Captain Cat's black rum
 	 */
 	public static final int SAILING_CHARTING_DRINK_CRATE_SAILING_CAT = 31905;
 
@@ -83267,7 +83344,7 @@ public final class ItemID
 	public static final int SAILING_SKILLGUIDE_PORTS_ALDARIN = 32275;
 
 	/**
-	 * Ruins of unkah
+	 * Ruins of Unkah
 	 */
 	public static final int SAILING_SKILLGUIDE_PORTS_RUINS_OF_UNKAH = 32276;
 
@@ -83602,7 +83679,7 @@ public final class ItemID
 	public static final int FISH_CRATE_MARLIN_VAR = 32385;
 
 	/**
-	 * Medallion of the deep
+	 * Medallion of the Deep
 	 */
 	public static final int MEDALLION_OF_THE_DEEP = 32386;
 
@@ -83712,102 +83789,102 @@ public final class ItemID
 	public static final int LOST_SCHEMATIC_DRAGON_KEEL = 32410;
 
 	/**
-	 * Small key (the pandemonium)
+	 * Small key (The Pandemonium)
 	 */
 	public static final int LOST_SCHEMATIC_KEY_CHINCHOMPA = 32411;
 
 	/**
-	 * Small key (the onyx crest)
+	 * Small key (The Onyx Crest)
 	 */
 	public static final int LOST_SCHEMATIC_KEY_ANGLERS = 32412;
 
 	/**
-	 * Small key (tear of the soul)
+	 * Small key (Tear of the Soul)
 	 */
 	public static final int LOST_SCHEMATIC_KEY_BUCCANEERS = 32413;
 
 	/**
-	 * Small key (ynysdail)
+	 * Small key (Ynysdail)
 	 */
 	public static final int LOST_SCHEMATIC_KEY_LLEDRITH = 32414;
 
 	/**
-	 * Small key (minotaurs' rest)
+	 * Small key (Minotaurs' Rest)
 	 */
 	public static final int LOST_SCHEMATIC_KEY_CROWNJEWEL = 32415;
 
 	/**
-	 * Small key (buccaneers' haven)
+	 * Small key (Buccaneers' Haven)
 	 */
 	public static final int LOST_SCHEMATIC_KEY_DEEPFIN = 32416;
 
 	/**
-	 * Small key (isle of bones)
+	 * Small key (Isle of Bones)
 	 */
 	public static final int LOST_SCHEMATIC_KEY_SHIMMERING = 32417;
 
 	/**
-	 * Small key (charred island)
+	 * Small key (Charred Island)
 	 */
 	public static final int LOST_SCHEMATIC_KEY_BRITTLE = 32418;
 
 	/**
-	 * Small key (laguna aurorae)
+	 * Small key (Laguna Aurorae)
 	 */
 	public static final int LOST_SCHEMATIC_KEY_SUNBLEAK = 32419;
 
 	/**
-	 * Small key (drumstick isle)
+	 * Small key (Drumstick Isle)
 	 */
 	public static final int LOST_SCHEMATIC_KEY_GRIMSTONE = 32420;
 
 	/**
-	 * Lockbox directions (chinchompa island)
+	 * Lockbox directions (Chinchompa Island)
 	 */
 	public static final int LOST_SCHEMATIC_MAP_CHINCHOMPA = 32421;
 
 	/**
-	 * Lockbox directions (anglers' retreat)
+	 * Lockbox directions (Anglers' Retreat)
 	 */
 	public static final int LOST_SCHEMATIC_MAP_ANGLERS = 32422;
 
 	/**
-	 * Lockbox directions (buccaneers' haven)
+	 * Lockbox directions (Buccaneers' Haven)
 	 */
 	public static final int LOST_SCHEMATIC_MAP_BUCCANEERS = 32423;
 
 	/**
-	 * Lockbox directions (lledrith island)
+	 * Lockbox directions (Lledrith Island)
 	 */
 	public static final int LOST_SCHEMATIC_MAP_LLEDRITH = 32424;
 
 	/**
-	 * Lockbox directions (the crown jewel)
+	 * Lockbox directions (The Crown Jewel)
 	 */
 	public static final int LOST_SCHEMATIC_MAP_CROWNJEWEL = 32425;
 
 	/**
-	 * Lockbox directions (deepfin point)
+	 * Lockbox directions (Deepfin Point)
 	 */
 	public static final int LOST_SCHEMATIC_MAP_DEEPFIN = 32426;
 
 	/**
-	 * Lockbox directions (shimmering atoll)
+	 * Lockbox directions (Shimmering Atoll)
 	 */
 	public static final int LOST_SCHEMATIC_MAP_SHIMMERING = 32427;
 
 	/**
-	 * Lockbox directions (brittle isle)
+	 * Lockbox directions (Brittle Isle)
 	 */
 	public static final int LOST_SCHEMATIC_MAP_BRITTLE = 32428;
 
 	/**
-	 * Lockbox directions (sunbleak island)
+	 * Lockbox directions (Sunbleak Island)
 	 */
 	public static final int LOST_SCHEMATIC_MAP_SUNBLEAK = 32429;
 
 	/**
-	 * Lockbox directions (grimstone)
+	 * Lockbox directions (Grimstone)
 	 */
 	public static final int LOST_SCHEMATIC_MAP_GRIMSTONE = 32430;
 
@@ -86076,7 +86153,7 @@ public final class ItemID
 	public static final int TRAWLING_ICON_DUMMY = 32920;
 
 	/**
-	 * Jar of feathers
+	 * Jar of Feathers
 	 */
 	public static final int JAR_OF_FEATHERS = 32921;
 
@@ -86099,6 +86176,11 @@ public final class ItemID
 	 * Null
 	 */
 	public static final int XMAS25_SERVING_PLATTER = 32926;
+
+	/**
+	 * Null
+	 */
+	public static final int PLACEHOLDER_XMAS25_SERVING_PLATTER = 32927;
 
 	/**
 	 * Lovley jubbly bib
@@ -86506,7 +86588,7 @@ public final class ItemID
 	public static final int DEADMAN_2026_HOME_TELEPORT_SCROLL = 33018;
 
 	/**
-	 * Bow of faerdhinen (c)
+	 * Bow of Faerdhinen (c)
 	 */
 	public static final int BOW_OF_FAERDHINEN_INFINITE_DEADMAN = 33021;
 
@@ -86546,7 +86628,7 @@ public final class ItemID
 	public static final int TOXIC_SOTD_DEADMAN = 33035;
 
 	/**
-	 * Toxic staff (deadman)
+	 * Toxic staff (Deadman)
 	 */
 	public static final int TOXIC_SOTD_CHARGED_DEADMAN = 33036;
 
@@ -86576,52 +86658,52 @@ public final class ItemID
 	public static final int MAGIC_ROCK_OF_FORTUITY_ACTIVE = 33050;
 
 	/**
-	 * Sigil of the gods
+	 * Sigil of the Gods
 	 */
 	public static final int SIGIL_OF_THE_GODS_ATTUNED = 33053;
 
 	/**
-	 * Sigil of the gods
+	 * Sigil of the Gods
 	 */
 	public static final int SIGIL_OF_THE_GODS_UNATTUNED = 33054;
 
 	/**
-	 * Sigil of conclusion
+	 * Sigil of Conclusion
 	 */
 	public static final int SIGIL_OF_CONCLUSION_ATTUNED = 33055;
 
 	/**
-	 * Sigil of conclusion
+	 * Sigil of Conclusion
 	 */
 	public static final int SIGIL_OF_CONCLUSION_UNATTUNED = 33056;
 
 	/**
-	 * Sigil of automation
+	 * Sigil of Automation
 	 */
 	public static final int SIGIL_OF_AUTOMATION_ATTUNED = 33057;
 
 	/**
-	 * Sigil of automation
+	 * Sigil of Automation
 	 */
 	public static final int SIGIL_OF_AUTOMATION_UNATTUNED = 33058;
 
 	/**
-	 * Sigil of eternal belief
+	 * Sigil of Eternal Belief
 	 */
 	public static final int SIGIL_OF_ETERNAL_BELIEF_ATTUNED = 33059;
 
 	/**
-	 * Sigil of eternal belief
+	 * Sigil of Eternal Belief
 	 */
 	public static final int SIGIL_OF_ETERNAL_BELIEF_UNATTUNED = 33060;
 
 	/**
-	 * Sigil of efficiency
+	 * Sigil of Efficiency
 	 */
 	public static final int SIGIL_OF_EFFICIENCY_ATTUNED = 33061;
 
 	/**
-	 * Sigil of efficiency
+	 * Sigil of Efficiency
 	 */
 	public static final int SIGIL_OF_EFFICIENCY_UNATTUNED = 33062;
 
@@ -87235,7 +87317,7 @@ public final class ItemID
 	public static final int DEMONIC_TRIDENT_ORNAMENT_KIT = 33311;
 
 	/**
-	 * Trident of the swamp (o)
+	 * Trident of the Swamp (o)
 	 */
 	public static final int TOXIC_TOTS_CHARGED_ORN = 33314;
 
@@ -87243,9 +87325,10 @@ public final class ItemID
 	 * Uncharged toxic trident (o)
 	 */
 	public static final int TOXIC_TOTS_UNCHARGED_ORN = 33316;
+	public static final int CERT_TOXIC_TOTS_UNCHARGED_ORN = 33317;
 
 	/**
-	 * Trident of the swamp (e) (o)
+	 * Trident of the Swamp (e) (o)
 	 */
 	public static final int TOXIC_TOTS_I_CHARGED_ORN = 33318;
 
@@ -87253,19 +87336,21 @@ public final class ItemID
 	 * Uncharged toxic trident (e) (o)
 	 */
 	public static final int TOXIC_TOTS_I_UNCHARGED_ORN = 33320;
+	public static final int CERT_TOXIC_TOTS_I_UNCHARGED_ORN = 33321;
 
 	/**
-	 * Trident of the seas (o)
+	 * Trident of the Seas (o)
 	 */
 	public static final int TOTS_CHARGED_ORN = 33322;
 
 	/**
-	 * Trident of the seas (full) (o)
+	 * Trident of the Seas (full) (o)
 	 */
 	public static final int TOTS_ORN = 33323;
+	public static final int CERT_TOTS_ORN = 33324;
 
 	/**
-	 * Trident of the seas (e) (o)
+	 * Trident of the Seas (e) (o)
 	 */
 	public static final int TOTS_I_CHARGED_ORN = 33326;
 
@@ -87273,6 +87358,7 @@ public final class ItemID
 	 * Uncharged trident (e) (o)
 	 */
 	public static final int TOTS_I_UNCHARGED_ORN = 33328;
+	public static final int CERT_TOTS_I_UNCHARGED_ORN = 33329;
 
 	/**
 	 * Iban's staff (o)
@@ -87293,6 +87379,7 @@ public final class ItemID
 	 * Soulreaper axe (o)
 	 */
 	public static final int SOULREAPER_AXE_ORN = 33335;
+	public static final int CERT_SOULREAPER_AXE_ORN = 33336;
 
 	/**
 	 * Oathplate slayer helmet
@@ -87365,7 +87452,7 @@ public final class ItemID
 	public static final int LEAGUE_6_BUTLER_SCROLL = 33368;
 
 	/**
-	 * Mark of grace
+	 * Mark of Grace
 	 */
 	public static final int GRACE_HOTFOOT = 33371;
 
@@ -87736,12 +87823,12 @@ public final class ItemID
 	public static final int DIZANAS_QUIVER_TROUVER_MANGLED = 33526;
 
 	/**
-	 * Blessed dizana's quiver (l) (broken)
+	 * Blessed Dizana's quiver (l) (broken)
 	 */
 	public static final int DIZANAS_QUIVER_INFINITE_TROUVER_BROKEN = 33528;
 
 	/**
-	 * Blessed dizana's quiver (l) (mangled)
+	 * Blessed Dizana's quiver (l) (mangled)
 	 */
 	public static final int DIZANAS_QUIVER_INFINITE_TROUVER_MANGLED = 33530;
 
@@ -88119,7 +88206,7 @@ public final class ItemID
 	public static final int MYQ6_DERYGULL_JOURNAL = 33704;
 
 	/**
-	 * Pious proceedings
+	 * Pious Proceedings
 	 */
 	public static final int MYQ6_ERYSAIL_JOURNAL = 33705;
 
@@ -88697,6 +88784,1844 @@ public final class ItemID
 	 * Ancient sceptre (l) (mangled)
 	 */
 	public static final int ANCIENT_SCEPTRE_TROUVER_MANGLED = 33829;
+
+	/**
+	 * Letvek in a bucket
+	 */
+	public static final int LETVEK_IN_A_BUCKET = 33833;
+
+	/**
+	 * Wyrmscraig goat hoof
+	 */
+	public static final int HG_GOAT_PIT_HOOF = 33835;
+
+	/**
+	 * Noble robe top
+	 */
+	public static final int WYRMSCRAIG_NOBLE_ROBETOP01 = 33836;
+
+	/**
+	 * Noble robe top
+	 */
+	public static final int WYRMSCRAIG_NOBLE_ROBETOP02 = 33839;
+
+	/**
+	 * Noble robe top
+	 */
+	public static final int WYRMSCRAIG_NOBLE_ROBETOP03 = 33842;
+
+	/**
+	 * Noble robe top
+	 */
+	public static final int WYRMSCRAIG_NOBLE_ROBETOP04 = 33845;
+
+	/**
+	 * Noble robe top
+	 */
+	public static final int WYRMSCRAIG_NOBLE_ROBETOP05 = 33848;
+
+	/**
+	 * Noble robe top
+	 */
+	public static final int WYRMSCRAIG_NOBLE_ROBETOP06 = 33851;
+
+	/**
+	 * Noble robe top
+	 */
+	public static final int WYRMSCRAIG_NOBLE_ROBETOP07 = 33854;
+
+	/**
+	 * Wyrmscraig noble skirt
+	 */
+	public static final int WYRMSCRAIG_NOBLE_SKIRT01 = 33857;
+
+	/**
+	 * Wyrmscraig noble skirt
+	 */
+	public static final int WYRMSCRAIG_NOBLE_SKIRT02 = 33860;
+
+	/**
+	 * Wyrmscraig noble skirt
+	 */
+	public static final int WYRMSCRAIG_NOBLE_SKIRT03 = 33863;
+
+	/**
+	 * Wyrmscraig noble skirt
+	 */
+	public static final int WYRMSCRAIG_NOBLE_SKIRT04 = 33866;
+
+	/**
+	 * Wyrmscraig noble skirt
+	 */
+	public static final int WYRMSCRAIG_NOBLE_SKIRT05 = 33869;
+
+	/**
+	 * Wyrmscraig noble skirt
+	 */
+	public static final int WYRMSCRAIG_NOBLE_SKIRT06 = 33872;
+
+	/**
+	 * Wyrmscraig noble skirt
+	 */
+	public static final int WYRMSCRAIG_NOBLE_SKIRT07 = 33875;
+
+	/**
+	 * Wyrmscraig shoes
+	 */
+	public static final int WYRMSCRAIG_NOBLE_SHOES = 33878;
+
+	/**
+	 * Wyrmscraig boots
+	 */
+	public static final int WYRMSCRAIG_NOBLE_BOOTS = 33881;
+
+	/**
+	 * Wyrmscraig villager robe top
+	 */
+	public static final int WYRMSCRAIG_VILLAGER_ROBETOP01 = 33884;
+
+	/**
+	 * Wyrmscraig villager robe top
+	 */
+	public static final int WYRMSCRAIG_VILLAGER_ROBETOP02 = 33887;
+
+	/**
+	 * Wyrmscraig villager robe top
+	 */
+	public static final int WYRMSCRAIG_VILLAGER_ROBETOP03 = 33890;
+
+	/**
+	 * Wyrmscraig villager robe top
+	 */
+	public static final int WYRMSCRAIG_VILLAGER_ROBETOP04 = 33893;
+
+	/**
+	 * Wyrmscraig villager robe top
+	 */
+	public static final int WYRMSCRAIG_VILLAGER_ROBETOP05 = 33896;
+
+	/**
+	 * Wyrmscraig villager robe top
+	 */
+	public static final int WYRMSCRAIG_VILLAGER_ROBETOP06 = 33899;
+
+	/**
+	 * Wyrmscraig villager robe top
+	 */
+	public static final int WYRMSCRAIG_VILLAGER_ROBETOP07 = 33902;
+
+	/**
+	 * Wyrmscraig villager robe top
+	 */
+	public static final int WYRMSCRAIG_VILLAGER_ROBETOP08 = 33905;
+
+	/**
+	 * Wyrmscraig villager robe bottom
+	 */
+	public static final int WYRMSCRAIG_VILLAGER_ROBEBOTTOM_STRIPED01 = 33908;
+
+	/**
+	 * Wyrmscraig villager robe bottom
+	 */
+	public static final int WYRMSCRAIG_VILLAGER_ROBEBOTTOM_STRIPED02 = 33911;
+
+	/**
+	 * Wyrmscraig villager robe bottom
+	 */
+	public static final int WYRMSCRAIG_VILLAGER_ROBEBOTTOM_STRIPED03 = 33914;
+
+	/**
+	 * Wyrmscraig villager robe bottom
+	 */
+	public static final int WYRMSCRAIG_VILLAGER_ROBEBOTTOM_STRIPED04 = 33917;
+
+	/**
+	 * Wyrmscraig villager robe bottom
+	 */
+	public static final int WYRMSCRAIG_VILLAGER_ROBEBOTTOM_STRIPED05 = 33920;
+
+	/**
+	 * Wyrmscraig villager robe bottom
+	 */
+	public static final int WYRMSCRAIG_VILLAGER_ROBEBOTTOM_STRIPED06 = 33923;
+
+	/**
+	 * Wyrmscraig villager robe bottom
+	 */
+	public static final int WYRMSCRAIG_VILLAGER_ROBEBOTTOM_STRIPED07 = 33926;
+
+	/**
+	 * Wyrmscraig villager robe bottom
+	 */
+	public static final int WYRMSCRAIG_VILLAGER_ROBEBOTTOM01 = 33929;
+
+	/**
+	 * Wyrmscraig villager robe bottom
+	 */
+	public static final int WYRMSCRAIG_VILLAGER_ROBEBOTTOM02 = 33932;
+
+	/**
+	 * Wyrmscraig villager robe bottom
+	 */
+	public static final int WYRMSCRAIG_VILLAGER_ROBEBOTTOM03 = 33935;
+
+	/**
+	 * Wyrmscraig villager robe bottom
+	 */
+	public static final int WYRMSCRAIG_VILLAGER_ROBEBOTTOM04 = 33938;
+
+	/**
+	 * Wyrmscraig villager robe bottom
+	 */
+	public static final int WYRMSCRAIG_VILLAGER_ROBEBOTTOM05 = 33941;
+
+	/**
+	 * Wyrmscraig villager robe bottom
+	 */
+	public static final int WYRMSCRAIG_VILLAGER_ROBEBOTTOM06 = 33944;
+
+	/**
+	 * Wyrmscraig villager robe bottom
+	 */
+	public static final int WYRMSCRAIG_VILLAGER_ROBEBOTTOM07 = 33947;
+
+	/**
+	 * Wyrmscraig villager robe top
+	 */
+	public static final int WYRMSCRAIG_VILLAGER_DRESS_ROBETOP01 = 33950;
+
+	/**
+	 * Wyrmscraig villager robe top
+	 */
+	public static final int WYRMSCRAIG_VILLAGER_DRESS_ROBETOP02 = 33953;
+
+	/**
+	 * Wyrmscraig villager robe top
+	 */
+	public static final int WYRMSCRAIG_VILLAGER_DRESS_ROBETOP03 = 33956;
+
+	/**
+	 * Wyrmscraig villager robe top
+	 */
+	public static final int WYRMSCRAIG_VILLAGER_DRESS_ROBETOP04 = 33959;
+
+	/**
+	 * Wyrmscraig villager robe top
+	 */
+	public static final int WYRMSCRAIG_VILLAGER_DRESS_ROBETOP05 = 33962;
+
+	/**
+	 * Wyrmscraig villager robe top
+	 */
+	public static final int WYRMSCRAIG_VILLAGER_DRESS_ROBETOP06 = 33965;
+
+	/**
+	 * Wyrmscraig villager robe top
+	 */
+	public static final int WYRMSCRAIG_VILLAGER_DRESS_ROBETOP07 = 33968;
+
+	/**
+	 * Wyrmscraig villager skirt
+	 */
+	public static final int WYRMSCRAIG_VILLAGER_SKIRT01 = 33971;
+
+	/**
+	 * Wyrmscraig villager skirt
+	 */
+	public static final int WYRMSCRAIG_VILLAGER_SKIRT02 = 33974;
+
+	/**
+	 * Wyrmscraig villager skirt
+	 */
+	public static final int WYRMSCRAIG_VILLAGER_SKIRT03 = 33977;
+
+	/**
+	 * Wyrmscraig villager skirt
+	 */
+	public static final int WYRMSCRAIG_VILLAGER_SKIRT04 = 33980;
+
+	/**
+	 * Wyrmscraig villager skirt
+	 */
+	public static final int WYRMSCRAIG_VILLAGER_SKIRT05 = 33983;
+
+	/**
+	 * Wyrmscraig villager skirt
+	 */
+	public static final int WYRMSCRAIG_VILLAGER_SKIRT06 = 33986;
+
+	/**
+	 * Wyrmscraig villager skirt
+	 */
+	public static final int WYRMSCRAIG_VILLAGER_SKIRT07 = 33989;
+
+	/**
+	 * Wyrmscraig villager work skirt
+	 */
+	public static final int WYRMSCRAIG_VILLAGER_WORK_SKIRT01 = 33992;
+
+	/**
+	 * Wyrmscraig villager work skirt
+	 */
+	public static final int WYRMSCRAIG_VILLAGER_WORK_SKIRT02 = 33995;
+
+	/**
+	 * Wyrmscraig villager work skirt
+	 */
+	public static final int WYRMSCRAIG_VILLAGER_WORK_SKIRT03 = 33998;
+
+	/**
+	 * Wyrmscraig villager work skirt
+	 */
+	public static final int WYRMSCRAIG_VILLAGER_WORK_SKIRT04 = 34001;
+
+	/**
+	 * Wyrmscraig villager work skirt
+	 */
+	public static final int WYRMSCRAIG_VILLAGER_WORK_SKIRT05 = 34004;
+
+	/**
+	 * Wyrmscraig villager work skirt
+	 */
+	public static final int WYRMSCRAIG_VILLAGER_WORK_SKIRT06 = 34007;
+
+	/**
+	 * Wyrmscraig villager work skirt
+	 */
+	public static final int WYRMSCRAIG_VILLAGER_WORK_SKIRT07 = 34010;
+
+	/**
+	 * Wyrmscraig villager work skirt
+	 */
+	public static final int WYRMSCRAIG_VILLAGER_WORK_SKIRT08 = 34013;
+
+	/**
+	 * Wooden spikes
+	 */
+	public static final int GOAT_PIT_SPIKES = 34016;
+
+	/**
+	 * Wyrmscraig goat fur
+	 */
+	public static final int GOAT_PIT_FUR = 34017;
+
+	/**
+	 * Sunstone
+	 */
+	public static final int SUNSTONE = 34020;
+
+	/**
+	 * Sunstone core
+	 */
+	public static final int SUNSTONE_CORE = 34022;
+
+	/**
+	 * Jeweller's chisel
+	 */
+	public static final int JEWELLERS_CHISEL = 34024;
+
+	/**
+	 * Golem crafting
+	 */
+	public static final int GOLEM_CRAFTING_DROPTRACKING = 34026;
+
+	/**
+	 * Hallowfell
+	 */
+	public static final int HALLOWFELL = 34027;
+
+	/**
+	 * Jar of Light
+	 */
+	public static final int JAR_OF_LIGHT = 34030;
+
+	/**
+	 * Sunstone crystal
+	 */
+	public static final int SUNSTONE_CRYSTAL = 34032;
+
+	/**
+	 * Ardeaglais teleport
+	 */
+	public static final int TELEPORTSCROLL_ARDEAGLAIS = 34033;
+
+	/**
+	 * Null
+	 */
+	public static final int MAD_ANGEL_SWORD = 34035;
+
+	/**
+	 * Null
+	 */
+	public static final int CERT_MAD_ANGEL_SWORD = 34036;
+
+	/**
+	 * Null
+	 */
+	public static final int PLACEHOLDER_MAD_ANGEL_SWORD = 34037;
+	public static final int TELEPORTSCROLL_ARDEAGLAIS_DUMMY = 34038;
+	public static final int TELEPORTSCROLL_ARDEAGLAIS_SELECTED_DUMMY = 34039;
+
+	/**
+	 * Mr McGroot
+	 */
+	public static final int GOATPITPET = 34040;
+
+	/**
+	 * Aggy
+	 */
+	public static final int MADANGELPET = 34042;
+
+	/**
+	 * Large hat
+	 */
+	public static final int FFG_KEENANS_HAT = 34044;
+
+	/**
+	 * Worn journal
+	 */
+	public static final int FFG_HISTORY_BOOK = 34045;
+
+	/**
+	 * Scrawled notebook
+	 */
+	public static final int FFG_KEENANS_NOTES = 34046;
+	public static final int FFG_GOLEM_CHISEL_DUMMY = 34047;
+
+	/**
+	 * Scorched note
+	 */
+	public static final int ORTHACAS_NOTE_A = 34048;
+
+	/**
+	 * Scorched note
+	 */
+	public static final int ORTHACAS_NOTE_B = 34049;
+
+	/**
+	 * Scorched note
+	 */
+	public static final int ORTHACAS_NOTE_C = 34050;
+
+	/**
+	 * Observations
+	 */
+	public static final int WYRMSCRAIG_CATHEDRAL_DIARY = 34051;
+
+	/**
+	 * Warning note
+	 */
+	public static final int FFG_WARNING_NOTE = 34052;
+
+	/**
+	 * Golem primer
+	 */
+	public static final int WYRMSCRAIG_GOLEM_PRIMER = 34053;
+
+	/**
+	 * Ancient sunstone core
+	 */
+	public static final int FFG_OLD_GOLEM_CORE = 34054;
+
+	/**
+	 * Staircase key
+	 */
+	public static final int FFG_STAIRCASE_KEY = 34055;
+
+	/**
+	 * Dull sunstone core
+	 */
+	public static final int DULL_SUNSTONE_CORE = 34056;
+
+	/**
+	 * Final letter
+	 */
+	public static final int FFG_FINAL_NOTE = 34057;
+
+	/**
+	 * Wyrmscraig
+	 */
+	public static final int SAILING_SKILLGUIDE_PORTS_WYRMSCRAIG = 34058;
+
+	/**
+	 * Fairy tale quest lamp
+	 */
+	public static final int DEADMAN_QUEST_LAMP_TIER_11 = 34059;
+
+	/**
+	 * Vampyre snail shell
+	 */
+	public static final int VAMPYRE_SNAIL_SHELL = 34061;
+
+	/**
+	 * Vampyre snelm
+	 */
+	public static final int SNELM_VAMPYRE = 34063;
+
+	/**
+	 * Shark lure pack
+	 */
+	public static final int SHARK_LURE_PACK = 34065;
+
+	/**
+	 * Sawmill coupon (teak plank)
+	 */
+	public static final int SAWMILL_COUPON_TEAK = 34068;
+
+	/**
+	 * Sawmill coupon (mahogany plank)
+	 */
+	public static final int SAWMILL_COUPON_MAHOGANY = 34070;
+
+	/**
+	 * Sawmill coupon (camphor plank)
+	 */
+	public static final int SAWMILL_COUPON_CAMPHOR = 34072;
+
+	/**
+	 * Sawmill coupon (ironwood plank)
+	 */
+	public static final int SAWMILL_COUPON_IRONWOOD = 34074;
+
+	/**
+	 * Courier reward bag
+	 */
+	public static final int PORT_TASK_LOOTSACK_DROPTRACKING = 34076;
+
+	/**
+	 * Tiny port reward bag (cairn isle)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T0_CAIRN_ISLE = 34077;
+
+	/**
+	 * Small port reward bag (cairn isle)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T1_CAIRN_ISLE = 34079;
+
+	/**
+	 * Medium port reward bag (cairn isle)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T2_CAIRN_ISLE = 34081;
+
+	/**
+	 * Large port reward bag (cairn isle)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T3_CAIRN_ISLE = 34083;
+
+	/**
+	 * Huge port reward bag (cairn isle)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T4_CAIRN_ISLE = 34085;
+
+	/**
+	 * Tiny port reward bag (entrana)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T0_ENTRANA = 34087;
+
+	/**
+	 * Small port reward bag (entrana)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T1_ENTRANA = 34089;
+
+	/**
+	 * Medium port reward bag (entrana)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T2_ENTRANA = 34091;
+
+	/**
+	 * Large port reward bag (entrana)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T3_ENTRANA = 34093;
+
+	/**
+	 * Huge port reward bag (entrana)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T4_ENTRANA = 34095;
+
+	/**
+	 * Tiny port reward bag (neitiznot)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T0_NEITIZNOT = 34097;
+
+	/**
+	 * Small port reward bag (neitiznot)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T1_NEITIZNOT = 34099;
+
+	/**
+	 * Medium port reward bag (neitiznot)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T2_NEITIZNOT = 34101;
+
+	/**
+	 * Large port reward bag (neitiznot)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T3_NEITIZNOT = 34103;
+
+	/**
+	 * Huge port reward bag (neitiznot)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T4_NEITIZNOT = 34105;
+
+	/**
+	 * Tiny port reward bag (jatizso)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T0_JATIZSO = 34107;
+
+	/**
+	 * Small port reward bag (jatizso)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T1_JATIZSO = 34109;
+
+	/**
+	 * Medium port reward bag (jatizso)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T2_JATIZSO = 34111;
+
+	/**
+	 * Large port reward bag (jatizso)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T3_JATIZSO = 34113;
+
+	/**
+	 * Huge port reward bag (jatizso)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T4_JATIZSO = 34115;
+
+	/**
+	 * Tiny port reward bag (hosidius)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T0_HOSIDIUS = 34117;
+
+	/**
+	 * Small port reward bag (hosidius)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T1_HOSIDIUS = 34119;
+
+	/**
+	 * Medium port reward bag (hosidius)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T2_HOSIDIUS = 34121;
+
+	/**
+	 * Large port reward bag (hosidius)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T3_HOSIDIUS = 34123;
+
+	/**
+	 * Huge port reward bag (hosidius)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T4_HOSIDIUS = 34125;
+
+	/**
+	 * Tiny port reward bag (sunset coast)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T0_SUNSET_COAST = 34127;
+
+	/**
+	 * Small port reward bag (sunset coast)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T1_SUNSET_COAST = 34129;
+
+	/**
+	 * Medium port reward bag (sunset coast)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T2_SUNSET_COAST = 34131;
+
+	/**
+	 * Large port reward bag (sunset coast)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T3_SUNSET_COAST = 34133;
+
+	/**
+	 * Huge port reward bag (sunset coast)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T4_SUNSET_COAST = 34135;
+
+	/**
+	 * Tiny port reward bag (piscatoris)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T0_PISCATORIS = 34137;
+
+	/**
+	 * Small port reward bag (piscatoris)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T1_PISCATORIS = 34139;
+
+	/**
+	 * Medium port reward bag (piscatoris)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T2_PISCATORIS = 34141;
+
+	/**
+	 * Large port reward bag (piscatoris)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T3_PISCATORIS = 34143;
+
+	/**
+	 * Huge port reward bag (piscatoris)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T4_PISCATORIS = 34145;
+
+	/**
+	 * Tiny port reward bag (etceteria)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T0_ETCETERIA = 34147;
+
+	/**
+	 * Small port reward bag (etceteria)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T1_ETCETERIA = 34149;
+
+	/**
+	 * Medium port reward bag (etceteria)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T2_ETCETERIA = 34151;
+
+	/**
+	 * Large port reward bag (etceteria)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T3_ETCETERIA = 34153;
+
+	/**
+	 * Huge port reward bag (etceteria)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T4_ETCETERIA = 34155;
+
+	/**
+	 * Tiny port reward bag (ruins of unkah)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T0_RUINS_OF_UNKAH = 34157;
+
+	/**
+	 * Small port reward bag (ruins of unkah)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T1_RUINS_OF_UNKAH = 34159;
+
+	/**
+	 * Medium port reward bag (ruins of unkah)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T2_RUINS_OF_UNKAH = 34161;
+
+	/**
+	 * Large port reward bag (ruins of unkah)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T3_RUINS_OF_UNKAH = 34163;
+
+	/**
+	 * Huge port reward bag (ruins of unkah)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T4_RUINS_OF_UNKAH = 34165;
+
+	/**
+	 * Tiny port reward bag (lunar isle)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T0_LUNAR_ISLE = 34167;
+
+	/**
+	 * Small port reward bag (lunar isle)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T1_LUNAR_ISLE = 34169;
+
+	/**
+	 * Medium port reward bag (lunar isle)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T2_LUNAR_ISLE = 34171;
+
+	/**
+	 * Large port reward bag (lunar isle)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T3_LUNAR_ISLE = 34173;
+
+	/**
+	 * Huge port reward bag (lunar isle)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T4_LUNAR_ISLE = 34175;
+
+	/**
+	 * Tiny port reward bag (corsair cove)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T0_CORSAIR_COVE = 34177;
+
+	/**
+	 * Small port reward bag (corsair cove)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T1_CORSAIR_COVE = 34179;
+
+	/**
+	 * Medium port reward bag (corsair cove)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T2_CORSAIR_COVE = 34181;
+
+	/**
+	 * Large port reward bag (corsair cove)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T3_CORSAIR_COVE = 34183;
+
+	/**
+	 * Huge port reward bag (corsair cove)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T4_CORSAIR_COVE = 34185;
+
+	/**
+	 * Tiny port reward bag (prifddinas)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T0_PRIFDDINAS = 34187;
+
+	/**
+	 * Small port reward bag (prifddinas)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T1_PRIFDDINAS = 34189;
+
+	/**
+	 * Medium port reward bag (prifddinas)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T2_PRIFDDINAS = 34191;
+
+	/**
+	 * Large port reward bag (prifddinas)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T3_PRIFDDINAS = 34193;
+
+	/**
+	 * Huge port reward bag (prifddinas)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T4_PRIFDDINAS = 34195;
+
+	/**
+	 * Tiny port reward bag (lands end)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T0_LANDS_END = 34197;
+
+	/**
+	 * Small port reward bag (lands end)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T1_LANDS_END = 34199;
+
+	/**
+	 * Medium port reward bag (lands end)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T2_LANDS_END = 34201;
+
+	/**
+	 * Large port reward bag (lands end)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T3_LANDS_END = 34203;
+
+	/**
+	 * Huge port reward bag (lands end)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T4_LANDS_END = 34205;
+
+	/**
+	 * Tiny port reward bag (aldarin)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T0_ALDARIN = 34207;
+
+	/**
+	 * Small port reward bag (aldarin)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T1_ALDARIN = 34209;
+
+	/**
+	 * Medium port reward bag (aldarin)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T2_ALDARIN = 34211;
+
+	/**
+	 * Large port reward bag (aldarin)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T3_ALDARIN = 34213;
+
+	/**
+	 * Huge port reward bag (aldarin)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T4_ALDARIN = 34215;
+
+	/**
+	 * Tiny port reward bag (summer shore)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T0_SUMMER_SHORE = 34217;
+
+	/**
+	 * Small port reward bag (summer shore)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T1_SUMMER_SHORE = 34219;
+
+	/**
+	 * Medium port reward bag (summer shore)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T2_SUMMER_SHORE = 34221;
+
+	/**
+	 * Large port reward bag (summer shore)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T3_SUMMER_SHORE = 34223;
+
+	/**
+	 * Huge port reward bag (summer shore)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T4_SUMMER_SHORE = 34225;
+
+	/**
+	 * Tiny port reward bag (musa point)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T0_MUSA_POINT = 34227;
+
+	/**
+	 * Small port reward bag (musa point)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T1_MUSA_POINT = 34229;
+
+	/**
+	 * Medium port reward bag (musa point)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T2_MUSA_POINT = 34231;
+
+	/**
+	 * Large port reward bag (musa point)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T3_MUSA_POINT = 34233;
+
+	/**
+	 * Huge port reward bag (musa point)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T4_MUSA_POINT = 34235;
+
+	/**
+	 * Tiny port reward bag (rellekka)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T0_RELLEKKA = 34237;
+
+	/**
+	 * Small port reward bag (rellekka)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T1_RELLEKKA = 34239;
+
+	/**
+	 * Medium port reward bag (rellekka)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T2_RELLEKKA = 34241;
+
+	/**
+	 * Large port reward bag (rellekka)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T3_RELLEKKA = 34243;
+
+	/**
+	 * Huge port reward bag (rellekka)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T4_RELLEKKA = 34245;
+
+	/**
+	 * Tiny port reward bag (void knights outpost)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T0_VOID_KNIGHTS_OUTPOST = 34247;
+
+	/**
+	 * Small port reward bag (void knights outpost)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T1_VOID_KNIGHTS_OUTPOST = 34249;
+
+	/**
+	 * Medium port reward bag (void knights outpost)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T2_VOID_KNIGHTS_OUTPOST = 34251;
+
+	/**
+	 * Large port reward bag (void knights outpost)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T3_VOID_KNIGHTS_OUTPOST = 34253;
+
+	/**
+	 * Huge port reward bag (void knights outpost)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T4_VOID_KNIGHTS_OUTPOST = 34255;
+
+	/**
+	 * Tiny port reward bag (the pandemonium)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T0_THE_PANDEMONIUM = 34257;
+
+	/**
+	 * Small port reward bag (the pandemonium)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T1_THE_PANDEMONIUM = 34259;
+
+	/**
+	 * Medium port reward bag (the pandemonium)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T2_THE_PANDEMONIUM = 34261;
+
+	/**
+	 * Large port reward bag (the pandemonium)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T3_THE_PANDEMONIUM = 34263;
+
+	/**
+	 * Huge port reward bag (the pandemonium)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T4_THE_PANDEMONIUM = 34265;
+
+	/**
+	 * Tiny port reward bag (red rock)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T0_RED_ROCK = 34267;
+
+	/**
+	 * Small port reward bag (red rock)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T1_RED_ROCK = 34269;
+
+	/**
+	 * Medium port reward bag (red rock)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T2_RED_ROCK = 34271;
+
+	/**
+	 * Large port reward bag (red rock)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T3_RED_ROCK = 34273;
+
+	/**
+	 * Huge port reward bag (red rock)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T4_RED_ROCK = 34275;
+
+	/**
+	 * Tiny port reward bag (brimhaven)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T0_BRIMHAVEN = 34277;
+
+	/**
+	 * Small port reward bag (brimhaven)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T1_BRIMHAVEN = 34279;
+
+	/**
+	 * Medium port reward bag (brimhaven)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T2_BRIMHAVEN = 34281;
+
+	/**
+	 * Large port reward bag (brimhaven)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T3_BRIMHAVEN = 34283;
+
+	/**
+	 * Huge port reward bag (brimhaven)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T4_BRIMHAVEN = 34285;
+
+	/**
+	 * Tiny port reward bag (port tyras)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T0_PORT_TYRAS = 34287;
+
+	/**
+	 * Small port reward bag (port tyras)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T1_PORT_TYRAS = 34289;
+
+	/**
+	 * Medium port reward bag (port tyras)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T2_PORT_TYRAS = 34291;
+
+	/**
+	 * Large port reward bag (port tyras)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T3_PORT_TYRAS = 34293;
+
+	/**
+	 * Huge port reward bag (port tyras)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T4_PORT_TYRAS = 34295;
+
+	/**
+	 * Tiny port reward bag (catherby)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T0_CATHERBY = 34297;
+
+	/**
+	 * Small port reward bag (catherby)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T1_CATHERBY = 34299;
+
+	/**
+	 * Medium port reward bag (catherby)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T2_CATHERBY = 34301;
+
+	/**
+	 * Large port reward bag (catherby)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T3_CATHERBY = 34303;
+
+	/**
+	 * Huge port reward bag (catherby)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T4_CATHERBY = 34305;
+
+	/**
+	 * Tiny port reward bag (civitas illa fortis)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T0_CIVITAS_ILLA_FORTIS = 34307;
+
+	/**
+	 * Small port reward bag (civitas illa fortis)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T1_CIVITAS_ILLA_FORTIS = 34309;
+
+	/**
+	 * Medium port reward bag (civitas illa fortis)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T2_CIVITAS_ILLA_FORTIS = 34311;
+
+	/**
+	 * Large port reward bag (civitas illa fortis)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T3_CIVITAS_ILLA_FORTIS = 34313;
+
+	/**
+	 * Huge port reward bag (civitas illa fortis)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T4_CIVITAS_ILLA_FORTIS = 34315;
+
+	/**
+	 * Tiny port reward bag (ardougne)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T0_ARDOUGNE = 34317;
+
+	/**
+	 * Small port reward bag (ardougne)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T1_ARDOUGNE = 34319;
+
+	/**
+	 * Medium port reward bag (ardougne)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T2_ARDOUGNE = 34321;
+
+	/**
+	 * Large port reward bag (ardougne)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T3_ARDOUGNE = 34323;
+
+	/**
+	 * Huge port reward bag (ardougne)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T4_ARDOUGNE = 34325;
+
+	/**
+	 * Tiny port reward bag (port khazard)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T0_PORT_KHAZARD = 34327;
+
+	/**
+	 * Small port reward bag (port khazard)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T1_PORT_KHAZARD = 34329;
+
+	/**
+	 * Medium port reward bag (port khazard)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T2_PORT_KHAZARD = 34331;
+
+	/**
+	 * Large port reward bag (port khazard)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T3_PORT_KHAZARD = 34333;
+
+	/**
+	 * Huge port reward bag (port khazard)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T4_PORT_KHAZARD = 34335;
+
+	/**
+	 * Tiny port reward bag (deepfin point)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T0_DEEPFIN_POINT = 34337;
+
+	/**
+	 * Small port reward bag (deepfin point)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T1_DEEPFIN_POINT = 34339;
+
+	/**
+	 * Medium port reward bag (deepfin point)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T2_DEEPFIN_POINT = 34341;
+
+	/**
+	 * Large port reward bag (deepfin point)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T3_DEEPFIN_POINT = 34343;
+
+	/**
+	 * Huge port reward bag (deepfin point)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T4_DEEPFIN_POINT = 34345;
+
+	/**
+	 * Tiny port reward bag (port sarim)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T0_PORT_SARIM = 34347;
+
+	/**
+	 * Small port reward bag (port sarim)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T1_PORT_SARIM = 34349;
+
+	/**
+	 * Medium port reward bag (port sarim)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T2_PORT_SARIM = 34351;
+
+	/**
+	 * Large port reward bag (port sarim)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T3_PORT_SARIM = 34353;
+
+	/**
+	 * Huge port reward bag (port sarim)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T4_PORT_SARIM = 34355;
+
+	/**
+	 * Tiny port reward bag (port piscarilius)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T0_PORT_PISCARILIUS = 34357;
+
+	/**
+	 * Small port reward bag (port piscarilius)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T1_PORT_PISCARILIUS = 34359;
+
+	/**
+	 * Medium port reward bag (port piscarilius)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T2_PORT_PISCARILIUS = 34361;
+
+	/**
+	 * Large port reward bag (port piscarilius)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T3_PORT_PISCARILIUS = 34363;
+
+	/**
+	 * Huge port reward bag (port piscarilius)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T4_PORT_PISCARILIUS = 34365;
+
+	/**
+	 * Tiny port reward bag (port roberts)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T0_PORT_ROBERTS = 34367;
+
+	/**
+	 * Small port reward bag (port roberts)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T1_PORT_ROBERTS = 34369;
+
+	/**
+	 * Medium port reward bag (port roberts)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T2_PORT_ROBERTS = 34371;
+
+	/**
+	 * Large port reward bag (port roberts)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T3_PORT_ROBERTS = 34373;
+
+	/**
+	 * Huge port reward bag (port roberts)
+	 */
+	public static final int PORT_TASK_LOOTSACK_T4_PORT_ROBERTS = 34375;
+
+	/**
+	 * Tiny port coin bag
+	 */
+	public static final int PORT_TASK_LOOTSACK_T0_COINS = 34377;
+
+	/**
+	 * Small port coin bag
+	 */
+	public static final int PORT_TASK_LOOTSACK_T1_COINS = 34379;
+
+	/**
+	 * Medium port coin bag
+	 */
+	public static final int PORT_TASK_LOOTSACK_T2_COINS = 34381;
+
+	/**
+	 * Large port coin bag
+	 */
+	public static final int PORT_TASK_LOOTSACK_T3_COINS = 34383;
+
+	/**
+	 * Huge port coin bag
+	 */
+	public static final int PORT_TASK_LOOTSACK_T4_COINS = 34385;
+
+	/**
+	 * Big red button
+	 */
+	public static final int NOSAVE_LANSCAPE_TOOL = 34388;
+
+	/**
+	 * Lanscape coins
+	 */
+	public static final int LANSCAPE_2026_CURRENCY = 34390;
+	public static final int LANSCAPE_2026_CURRENCY_2 = 34392;
+	public static final int LANSCAPE_2026_CURRENCY_3 = 34393;
+	public static final int LANSCAPE_2026_CURRENCY_4 = 34394;
+	public static final int LANSCAPE_2026_CURRENCY_5 = 34395;
+	public static final int LANSCAPE_2026_CURRENCY_25 = 34396;
+	public static final int LANSCAPE_2026_CURRENCY_100 = 34397;
+	public static final int LANSCAPE_2026_CURRENCY_250 = 34398;
+	public static final int LANSCAPE_2026_CURRENCY_1000 = 34399;
+	public static final int LANSCAPE_2026_CURRENCY_10000 = 34400;
+
+	/**
+	 * Necklace of Fangs
+	 */
+	public static final int NECKLACE_OF_FANGS = 34401;
+
+	/**
+	 * Air diamond
+	 */
+	public static final int AIR_DIAMOND = 34404;
+
+	/**
+	 * Amulet of air
+	 */
+	public static final int AMULET_OF_AIR = 34407;
+
+	/**
+	 * Water sapphire
+	 */
+	public static final int WATER_SAPPHIRE = 34410;
+
+	/**
+	 * Amulet of water
+	 */
+	public static final int AMULET_OF_WATER = 34413;
+
+	/**
+	 * Earth emerald
+	 */
+	public static final int EARTH_EMERALD = 34416;
+
+	/**
+	 * Amulet of earth
+	 */
+	public static final int AMULET_OF_EARTH = 34419;
+
+	/**
+	 * Fire ruby
+	 */
+	public static final int FIRE_RUBY = 34422;
+
+	/**
+	 * Amulet of fire
+	 */
+	public static final int AMULET_OF_FIRE = 34425;
+
+	/**
+	 * Elemental amulet
+	 */
+	public static final int ELEMENTAL_AMULET = 34428;
+
+	/**
+	 * Labrador
+	 */
+	public static final int LABRADOR_YELLOW_OBJECT = 34431;
+
+	/**
+	 * Labrador
+	 */
+	public static final int LABRADOR_BROWN_OBJECT = 34433;
+
+	/**
+	 * Labrador
+	 */
+	public static final int LABRADOR_BLACK_OBJECT = 34435;
+
+	/**
+	 * Chihuahua
+	 */
+	public static final int CHIHUAHUA_TAN_OBJECT = 34437;
+
+	/**
+	 * Chihuahua
+	 */
+	public static final int CHIHUAHUA_WHITE_OBJECT = 34439;
+
+	/**
+	 * Chihuahua
+	 */
+	public static final int CHIHUAHUA_TOASTED_OBJECT = 34441;
+
+	/**
+	 * Border collie
+	 */
+	public static final int COLLIE_CHOCO_OBJECT = 34443;
+
+	/**
+	 * Border collie
+	 */
+	public static final int COLLIE_MERLE_OBJECT = 34445;
+
+	/**
+	 * Border collie
+	 */
+	public static final int COLLIE_BW_OBJECT = 34447;
+
+	/**
+	 * Corgi
+	 */
+	public static final int CORGI_TAN_OBJECT = 34449;
+
+	/**
+	 * Corgi
+	 */
+	public static final int CORGI_YELLOW_OBJECT = 34451;
+
+	/**
+	 * Corgi
+	 */
+	public static final int CORGI_TOASTED_OBJECT = 34453;
+
+	/**
+	 * Greyhound
+	 */
+	public static final int GREYHOUND_TAN_OBJECT = 34455;
+
+	/**
+	 * Greyhound
+	 */
+	public static final int GREYHOUND_GREY_OBJECT = 34457;
+
+	/**
+	 * Greyhound
+	 */
+	public static final int GREYHOUND_CREAM_OBJECT = 34459;
+
+	/**
+	 * Husky
+	 */
+	public static final int HUSKY_BW_OBJECT = 34461;
+
+	/**
+	 * Husky
+	 */
+	public static final int HUSKY_GREY_OBJECT = 34463;
+
+	/**
+	 * Husky
+	 */
+	public static final int HUSKY_CHOCO_OBJECT = 34465;
+
+	/**
+	 * Pug
+	 */
+	public static final int PUG_FAWN_OBJECT = 34467;
+
+	/**
+	 * Pug
+	 */
+	public static final int PUG_BROWN_OBJECT = 34469;
+
+	/**
+	 * Pug
+	 */
+	public static final int PUG_BLACK_OBJECT = 34471;
+
+	/**
+	 * Samoyed
+	 */
+	public static final int SAMOYED_WHITE_OBJECT = 34473;
+
+	/**
+	 * Samoyed
+	 */
+	public static final int SAMOYED_YELLOW_OBJECT = 34475;
+
+	/**
+	 * Samoyed
+	 */
+	public static final int SAMOYED_BLACK_OBJECT = 34477;
+
+	/**
+	 * Bernese mountain dog
+	 */
+	public static final int SHEPARD_CHOCO_OBJECT = 34479;
+
+	/**
+	 * Bernese mountain dog
+	 */
+	public static final int SHEPARD_MERLE_OBJECT = 34481;
+
+	/**
+	 * Bernese mountain dog
+	 */
+	public static final int SHEPARD_TOASTED_OBJECT = 34483;
+
+	/**
+	 * Shiba
+	 */
+	public static final int SHIBA_TAN_OBJECT = 34485;
+
+	/**
+	 * Shiba
+	 */
+	public static final int SHIBA_WHITE_OBJECT = 34487;
+
+	/**
+	 * Shiba
+	 */
+	public static final int SHIBA_TOASTED_OBJECT = 34489;
+
+	/**
+	 * Spaniel
+	 */
+	public static final int SPANIEL_RED_OBJECT = 34491;
+
+	/**
+	 * Spaniel
+	 */
+	public static final int SPANIEL_WHITE_OBJECT = 34493;
+
+	/**
+	 * Spaniel
+	 */
+	public static final int SPANIEL_BLACK_OBJECT = 34495;
+
+	/**
+	 * Yorkie
+	 */
+	public static final int YORKIE_BROWN_OBJECT = 34497;
+
+	/**
+	 * Yorkie
+	 */
+	public static final int YORKIE_WHITE_OBJECT = 34499;
+
+	/**
+	 * Yorkie
+	 */
+	public static final int YORKIE_YELLOW_OBJECT = 34501;
+
+	/**
+	 * Labrador puppy
+	 */
+	public static final int LABRADOR_YELLOW_PUPPY_OBJECT = 34503;
+
+	/**
+	 * Labrador puppy
+	 */
+	public static final int LABRADOR_CHOCO_PUPPY_OBJECT = 34505;
+
+	/**
+	 * Labrador puppy
+	 */
+	public static final int LABRADOR_BLACK_PUPPY_OBJECT = 34507;
+
+	/**
+	 * Husky puppy
+	 */
+	public static final int HUSKY_BW_PUPPY_OBJECT = 34509;
+
+	/**
+	 * Husky puppy
+	 */
+	public static final int HUSKY_GREY_PUPPY_OBJECT = 34511;
+
+	/**
+	 * Husky puppy
+	 */
+	public static final int HUSKY_CHOCO_PUPPY_OBJECT = 34513;
+
+	/**
+	 * Chihuahua puppy
+	 */
+	public static final int CHIHUAHUA_TAN_PUPPY_OBJECT = 34515;
+
+	/**
+	 * Chihuahua puppy
+	 */
+	public static final int CHIHUAHUA_WHITE_PUPPY_OBJECT = 34517;
+
+	/**
+	 * Chihuahua puppy
+	 */
+	public static final int CHIHUAHUA_TOASTED_PUPPY_OBJECT = 34519;
+
+	/**
+	 * Border collie puppy
+	 */
+	public static final int COLLIE_CHOCO_PUPPY_OBJECT = 34521;
+
+	/**
+	 * Border collie puppy
+	 */
+	public static final int COLLIE_MERLE_PUPPY_OBJECT = 34523;
+
+	/**
+	 * Border collie puppy
+	 */
+	public static final int COLLIE_BW_PUPPY_OBJECT = 34525;
+
+	/**
+	 * Corgi puppy
+	 */
+	public static final int CORGI_TAN_PUPPY_OBJECT = 34527;
+
+	/**
+	 * Corgi puppy
+	 */
+	public static final int CORGI_YELLOW_PUPPY_OBJECT = 34529;
+
+	/**
+	 * Corgi puppy
+	 */
+	public static final int CORGI_TOASTED_PUPPY_OBJECT = 34531;
+
+	/**
+	 * Greyhound puppy
+	 */
+	public static final int GREYHOUND_TAN_PUPPY_OBJECT = 34533;
+
+	/**
+	 * Greyhound puppy
+	 */
+	public static final int GREYHOUND_GREY_PUPPY_OBJECT = 34535;
+
+	/**
+	 * Greyhound puppy
+	 */
+	public static final int GREYHOUND_CREAM_PUPPY_OBJECT = 34537;
+
+	/**
+	 * Pug puppy
+	 */
+	public static final int PUG_FAWN_PUPPY_OBJECT = 34539;
+
+	/**
+	 * Pug puppy
+	 */
+	public static final int PUG_BROWN_PUPPY_OBJECT = 34541;
+
+	/**
+	 * Pug puppy
+	 */
+	public static final int PUG_BLACK_PUPPY_OBJECT = 34543;
+
+	/**
+	 * Samoyed puppy
+	 */
+	public static final int SAMOYED_WHITE_PUPPY_OBJECT = 34545;
+
+	/**
+	 * Samoyed puppy
+	 */
+	public static final int SAMOYED_YELLOW_PUPPY_OBJECT = 34547;
+
+	/**
+	 * Samoyed puppy
+	 */
+	public static final int SAMOYED_BLACK_PUPPY_OBJECT = 34549;
+
+	/**
+	 * Bernese mountain dog puppy
+	 */
+	public static final int SHEPARD_CHOCO_PUPPY_OBJECT = 34551;
+
+	/**
+	 * Bernese mountain dog puppy
+	 */
+	public static final int SHEPARD_MERLE_PUPPY_OBJECT = 34553;
+
+	/**
+	 * Bernese mountain dog puppy
+	 */
+	public static final int SHEPARD_TOASTED_PUPPY_OBJECT = 34555;
+
+	/**
+	 * Shiba puppy
+	 */
+	public static final int SHIBA_TAN_PUPPY_OBJECT = 34557;
+
+	/**
+	 * Shiba puppy
+	 */
+	public static final int SHIBA_WHITE_PUPPY_OBJECT = 34559;
+
+	/**
+	 * Shiba puppy
+	 */
+	public static final int SHIBA_TOASTED_PUPPY_OBJECT = 34561;
+
+	/**
+	 * Spaniel puppy
+	 */
+	public static final int SPANIEL_RED_PUPPY_OBJECT = 34563;
+
+	/**
+	 * Spaniel puppy
+	 */
+	public static final int SPANIEL_WHITE_PUPPY_OBJECT = 34565;
+
+	/**
+	 * Spaniel puppy
+	 */
+	public static final int SPANIEL_BLACK_PUPPY_OBJECT = 34567;
+
+	/**
+	 * Yorkie puppy
+	 */
+	public static final int YORKIE_BROWN_PUPPY_OBJECT = 34569;
+
+	/**
+	 * Yorkie puppy
+	 */
+	public static final int YORKIE_WHITE_PUPPY_OBJECT = 34571;
+
+	/**
+	 * Yorkie puppy
+	 */
+	public static final int YORKIE_YELLOW_PUPPY_OBJECT = 34573;
+
+	/**
+	 * Shell
+	 */
+	public static final int CRAB_SHELL_1 = 34575;
+
+	/**
+	 * Shell
+	 */
+	public static final int CRAB_SHELL_2 = 34576;
+
+	/**
+	 * Shell
+	 */
+	public static final int CRAB_SHELL_3 = 34577;
+
+	/**
+	 * Shell
+	 */
+	public static final int CRAB_SHELL_4 = 34578;
+
+	/**
+	 * Shell
+	 */
+	public static final int CRAB_SHELL_5 = 34579;
+
+	/**
+	 * Shell
+	 */
+	public static final int CRAB_SHELL_6 = 34580;
+
+	/**
+	 * Shell
+	 */
+	public static final int CRAB_SHELL_7 = 34581;
+
+	/**
+	 * Shell
+	 */
+	public static final int CRAB_SHELL_BAD1 = 34582;
+
+	/**
+	 * Shell
+	 */
+	public static final int CRAB_SHELL_BAD2 = 34583;
+
+	/**
+	 * Weathered rosewood plank
+	 */
+	public static final int CRAB_PLANK = 34584;
+
+	/**
+	 * Battered barrel
+	 */
+	public static final int CRAB_BARREL = 34585;
+
+	/**
+	 * Sea-soaked bowstring
+	 */
+	public static final int CRAB_BOWSTRING = 34586;
+
+	/**
+	 * Instrument
+	 */
+	public static final int CRAB_BASS = 34587;
+	public static final int CRAB_BOTTLE = 34588;
+
+	/**
+	 * Shell collection
+	 */
+	public static final int CRAB_SHELL_CONTAINER = 34589;
+
+	/**
+	 * Shell C
+	 */
+	public static final int CRAB_SHELL_REWARD_1 = 34591;
+
+	/**
+	 * Shell D
+	 */
+	public static final int CRAB_SHELL_REWARD_2 = 34592;
+
+	/**
+	 * Shell E
+	 */
+	public static final int CRAB_SHELL_REWARD_3 = 34593;
+
+	/**
+	 * Shell F
+	 */
+	public static final int CRAB_SHELL_REWARD_4 = 34594;
+
+	/**
+	 * Shell G
+	 */
+	public static final int CRAB_SHELL_REWARD_5 = 34595;
+
+	/**
+	 * Shell A
+	 */
+	public static final int CRAB_SHELL_REWARD_6 = 34596;
+
+	/**
+	 * Shell A#
+	 */
+	public static final int CRAB_SHELL_REWARD_7 = 34597;
+
+	/**
+	 * Stray puppy
+	 */
+	public static final int DOGQ_PUPPY_ONE_OBJECT = 34598;
+
+	/**
+	 * Stray puppy
+	 */
+	public static final int DOGQ_PUPPY_TWO_OBJECT = 34599;
+
+	/**
+	 * Stray puppy
+	 */
+	public static final int DOGQ_PUPPY_THREE_OBJECT = 34600;
+
+	/**
+	 * Stray dog
+	 */
+	public static final int DOGQ_STRAY_DOG_FOLLOWER_OBJECT = 34601;
+
+	/**
+	 * Stuffed dog
+	 */
+	public static final int DOGQ_STUFFED_DOG = 34602;
 
 	public static final class Cert
 	{
@@ -91753,6 +93678,7 @@ public final class ItemID
 		public static final int PACK_OJIBWAY_BIRD_SNARE = 12741;
 		public static final int PACK_BOX_TRAP = 12743;
 		public static final int PACK_MAGIC_IMP_BOX = 12745;
+		public static final int BH_EMBLEM = 12747;
 		public static final int BH_BLUE_PAINT = 12758;
 		public static final int BH_GREEN_PAINT = 12760;
 		public static final int BH_YELLOW_PAINT = 12762;
@@ -93340,6 +95266,82 @@ public final class ItemID
 		public static final int NECKLACE_OF_RUPTURE = 33640;
 		public static final int DUMMY_STYMPHIKE_FEATHER01 = 33645;
 		public static final int RAW_IMPALER_MEAT = 33822;
+		public static final int WYRMSCRAIG_NOBLE_ROBETOP01 = 33837;
+		public static final int WYRMSCRAIG_NOBLE_ROBETOP02 = 33840;
+		public static final int WYRMSCRAIG_NOBLE_ROBETOP03 = 33843;
+		public static final int WYRMSCRAIG_NOBLE_ROBETOP04 = 33846;
+		public static final int WYRMSCRAIG_NOBLE_ROBETOP05 = 33849;
+		public static final int WYRMSCRAIG_NOBLE_ROBETOP06 = 33852;
+		public static final int WYRMSCRAIG_NOBLE_ROBETOP07 = 33855;
+		public static final int WYRMSCRAIG_NOBLE_SKIRT01 = 33858;
+		public static final int WYRMSCRAIG_NOBLE_SKIRT02 = 33861;
+		public static final int WYRMSCRAIG_NOBLE_SKIRT03 = 33864;
+		public static final int WYRMSCRAIG_NOBLE_SKIRT04 = 33867;
+		public static final int WYRMSCRAIG_NOBLE_SKIRT05 = 33870;
+		public static final int WYRMSCRAIG_NOBLE_SKIRT06 = 33873;
+		public static final int WYRMSCRAIG_NOBLE_SKIRT07 = 33876;
+		public static final int WYRMSCRAIG_NOBLE_SHOES = 33879;
+		public static final int WYRMSCRAIG_NOBLE_BOOTS = 33882;
+		public static final int WYRMSCRAIG_VILLAGER_ROBETOP01 = 33885;
+		public static final int WYRMSCRAIG_VILLAGER_ROBETOP02 = 33888;
+		public static final int WYRMSCRAIG_VILLAGER_ROBETOP03 = 33891;
+		public static final int WYRMSCRAIG_VILLAGER_ROBETOP04 = 33894;
+		public static final int WYRMSCRAIG_VILLAGER_ROBETOP05 = 33897;
+		public static final int WYRMSCRAIG_VILLAGER_ROBETOP06 = 33900;
+		public static final int WYRMSCRAIG_VILLAGER_ROBETOP07 = 33903;
+		public static final int WYRMSCRAIG_VILLAGER_ROBETOP08 = 33906;
+		public static final int WYRMSCRAIG_VILLAGER_ROBEBOTTOM_STRIPED01 = 33909;
+		public static final int WYRMSCRAIG_VILLAGER_ROBEBOTTOM_STRIPED02 = 33912;
+		public static final int WYRMSCRAIG_VILLAGER_ROBEBOTTOM_STRIPED03 = 33915;
+		public static final int WYRMSCRAIG_VILLAGER_ROBEBOTTOM_STRIPED04 = 33918;
+		public static final int WYRMSCRAIG_VILLAGER_ROBEBOTTOM_STRIPED05 = 33921;
+		public static final int WYRMSCRAIG_VILLAGER_ROBEBOTTOM_STRIPED06 = 33924;
+		public static final int WYRMSCRAIG_VILLAGER_ROBEBOTTOM_STRIPED07 = 33927;
+		public static final int WYRMSCRAIG_VILLAGER_ROBEBOTTOM01 = 33930;
+		public static final int WYRMSCRAIG_VILLAGER_ROBEBOTTOM02 = 33933;
+		public static final int WYRMSCRAIG_VILLAGER_ROBEBOTTOM03 = 33936;
+		public static final int WYRMSCRAIG_VILLAGER_ROBEBOTTOM04 = 33939;
+		public static final int WYRMSCRAIG_VILLAGER_ROBEBOTTOM05 = 33942;
+		public static final int WYRMSCRAIG_VILLAGER_ROBEBOTTOM06 = 33945;
+		public static final int WYRMSCRAIG_VILLAGER_ROBEBOTTOM07 = 33948;
+		public static final int WYRMSCRAIG_VILLAGER_DRESS_ROBETOP01 = 33951;
+		public static final int WYRMSCRAIG_VILLAGER_DRESS_ROBETOP02 = 33954;
+		public static final int WYRMSCRAIG_VILLAGER_DRESS_ROBETOP03 = 33957;
+		public static final int WYRMSCRAIG_VILLAGER_DRESS_ROBETOP04 = 33960;
+		public static final int WYRMSCRAIG_VILLAGER_DRESS_ROBETOP05 = 33963;
+		public static final int WYRMSCRAIG_VILLAGER_DRESS_ROBETOP06 = 33966;
+		public static final int WYRMSCRAIG_VILLAGER_DRESS_ROBETOP07 = 33969;
+		public static final int WYRMSCRAIG_VILLAGER_SKIRT01 = 33972;
+		public static final int WYRMSCRAIG_VILLAGER_SKIRT02 = 33975;
+		public static final int WYRMSCRAIG_VILLAGER_SKIRT03 = 33978;
+		public static final int WYRMSCRAIG_VILLAGER_SKIRT04 = 33981;
+		public static final int WYRMSCRAIG_VILLAGER_SKIRT05 = 33984;
+		public static final int WYRMSCRAIG_VILLAGER_SKIRT06 = 33987;
+		public static final int WYRMSCRAIG_VILLAGER_SKIRT07 = 33990;
+		public static final int WYRMSCRAIG_VILLAGER_WORK_SKIRT01 = 33993;
+		public static final int WYRMSCRAIG_VILLAGER_WORK_SKIRT02 = 33996;
+		public static final int WYRMSCRAIG_VILLAGER_WORK_SKIRT03 = 33999;
+		public static final int WYRMSCRAIG_VILLAGER_WORK_SKIRT04 = 34002;
+		public static final int WYRMSCRAIG_VILLAGER_WORK_SKIRT05 = 34005;
+		public static final int WYRMSCRAIG_VILLAGER_WORK_SKIRT06 = 34008;
+		public static final int WYRMSCRAIG_VILLAGER_WORK_SKIRT07 = 34011;
+		public static final int WYRMSCRAIG_VILLAGER_WORK_SKIRT08 = 34014;
+		public static final int GOAT_PIT_FUR = 34018;
+		public static final int HALLOWFELL = 34028;
+		public static final int BH_EMBLEM_5 = 34060;
+		public static final int SHARK_LURE_PACK = 34066;
+		public static final int NOSAVE_LANSCAPE_TOOL = 34389;
+		public static final int NECKLACE_OF_FANGS = 34402;
+		public static final int AIR_DIAMOND = 34405;
+		public static final int AMULET_OF_AIR = 34408;
+		public static final int WATER_SAPPHIRE = 34411;
+		public static final int AMULET_OF_WATER = 34414;
+		public static final int EARTH_EMERALD = 34417;
+		public static final int AMULET_OF_EARTH = 34420;
+		public static final int FIRE_RUBY = 34423;
+		public static final int AMULET_OF_FIRE = 34426;
+		public static final int ELEMENTAL_AMULET = 34429;
+		public static final int BLANKRUNE_DAEYALT = 34603;
 	}
 
 	public static final class Placeholder
@@ -103000,6 +105002,323 @@ public final class ItemID
 		public static final int ANCIENT_SCEPTRE_TROUVER_MANGLED = 33830;
 		public static final int CERT_ALUFT_COCTAIL_GLASS_EMPTY = 33831;
 		public static final int CERT_ALUFT_COCTAIL_GLASS_EMPTY_DUMMY = 33832;
+		public static final int LETVEK_IN_A_BUCKET = 33834;
+		public static final int WYRMSCRAIG_NOBLE_ROBETOP01 = 33838;
+		public static final int WYRMSCRAIG_NOBLE_ROBETOP02 = 33841;
+		public static final int WYRMSCRAIG_NOBLE_ROBETOP03 = 33844;
+		public static final int WYRMSCRAIG_NOBLE_ROBETOP04 = 33847;
+		public static final int WYRMSCRAIG_NOBLE_ROBETOP05 = 33850;
+		public static final int WYRMSCRAIG_NOBLE_ROBETOP06 = 33853;
+		public static final int WYRMSCRAIG_NOBLE_ROBETOP07 = 33856;
+		public static final int WYRMSCRAIG_NOBLE_SKIRT01 = 33859;
+		public static final int WYRMSCRAIG_NOBLE_SKIRT02 = 33862;
+		public static final int WYRMSCRAIG_NOBLE_SKIRT03 = 33865;
+		public static final int WYRMSCRAIG_NOBLE_SKIRT04 = 33868;
+		public static final int WYRMSCRAIG_NOBLE_SKIRT05 = 33871;
+		public static final int WYRMSCRAIG_NOBLE_SKIRT06 = 33874;
+		public static final int WYRMSCRAIG_NOBLE_SKIRT07 = 33877;
+		public static final int WYRMSCRAIG_NOBLE_SHOES = 33880;
+		public static final int WYRMSCRAIG_NOBLE_BOOTS = 33883;
+		public static final int WYRMSCRAIG_VILLAGER_ROBETOP01 = 33886;
+		public static final int WYRMSCRAIG_VILLAGER_ROBETOP02 = 33889;
+		public static final int WYRMSCRAIG_VILLAGER_ROBETOP03 = 33892;
+		public static final int WYRMSCRAIG_VILLAGER_ROBETOP04 = 33895;
+		public static final int WYRMSCRAIG_VILLAGER_ROBETOP05 = 33898;
+		public static final int WYRMSCRAIG_VILLAGER_ROBETOP06 = 33901;
+		public static final int WYRMSCRAIG_VILLAGER_ROBETOP07 = 33904;
+		public static final int WYRMSCRAIG_VILLAGER_ROBETOP08 = 33907;
+		public static final int WYRMSCRAIG_VILLAGER_ROBEBOTTOM_STRIPED01 = 33910;
+		public static final int WYRMSCRAIG_VILLAGER_ROBEBOTTOM_STRIPED02 = 33913;
+		public static final int WYRMSCRAIG_VILLAGER_ROBEBOTTOM_STRIPED03 = 33916;
+		public static final int WYRMSCRAIG_VILLAGER_ROBEBOTTOM_STRIPED04 = 33919;
+		public static final int WYRMSCRAIG_VILLAGER_ROBEBOTTOM_STRIPED05 = 33922;
+		public static final int WYRMSCRAIG_VILLAGER_ROBEBOTTOM_STRIPED06 = 33925;
+		public static final int WYRMSCRAIG_VILLAGER_ROBEBOTTOM_STRIPED07 = 33928;
+		public static final int WYRMSCRAIG_VILLAGER_ROBEBOTTOM01 = 33931;
+		public static final int WYRMSCRAIG_VILLAGER_ROBEBOTTOM02 = 33934;
+		public static final int WYRMSCRAIG_VILLAGER_ROBEBOTTOM03 = 33937;
+		public static final int WYRMSCRAIG_VILLAGER_ROBEBOTTOM04 = 33940;
+		public static final int WYRMSCRAIG_VILLAGER_ROBEBOTTOM05 = 33943;
+		public static final int WYRMSCRAIG_VILLAGER_ROBEBOTTOM06 = 33946;
+		public static final int WYRMSCRAIG_VILLAGER_ROBEBOTTOM07 = 33949;
+		public static final int WYRMSCRAIG_VILLAGER_DRESS_ROBETOP01 = 33952;
+		public static final int WYRMSCRAIG_VILLAGER_DRESS_ROBETOP02 = 33955;
+		public static final int WYRMSCRAIG_VILLAGER_DRESS_ROBETOP03 = 33958;
+		public static final int WYRMSCRAIG_VILLAGER_DRESS_ROBETOP04 = 33961;
+		public static final int WYRMSCRAIG_VILLAGER_DRESS_ROBETOP05 = 33964;
+		public static final int WYRMSCRAIG_VILLAGER_DRESS_ROBETOP06 = 33967;
+		public static final int WYRMSCRAIG_VILLAGER_DRESS_ROBETOP07 = 33970;
+		public static final int WYRMSCRAIG_VILLAGER_SKIRT01 = 33973;
+		public static final int WYRMSCRAIG_VILLAGER_SKIRT02 = 33976;
+		public static final int WYRMSCRAIG_VILLAGER_SKIRT03 = 33979;
+		public static final int WYRMSCRAIG_VILLAGER_SKIRT04 = 33982;
+		public static final int WYRMSCRAIG_VILLAGER_SKIRT05 = 33985;
+		public static final int WYRMSCRAIG_VILLAGER_SKIRT06 = 33988;
+		public static final int WYRMSCRAIG_VILLAGER_SKIRT07 = 33991;
+		public static final int WYRMSCRAIG_VILLAGER_WORK_SKIRT01 = 33994;
+		public static final int WYRMSCRAIG_VILLAGER_WORK_SKIRT02 = 33997;
+		public static final int WYRMSCRAIG_VILLAGER_WORK_SKIRT03 = 34000;
+		public static final int WYRMSCRAIG_VILLAGER_WORK_SKIRT04 = 34003;
+		public static final int WYRMSCRAIG_VILLAGER_WORK_SKIRT05 = 34006;
+		public static final int WYRMSCRAIG_VILLAGER_WORK_SKIRT06 = 34009;
+		public static final int WYRMSCRAIG_VILLAGER_WORK_SKIRT07 = 34012;
+		public static final int WYRMSCRAIG_VILLAGER_WORK_SKIRT08 = 34015;
+		public static final int GOAT_PIT_FUR = 34019;
+		public static final int SUNSTONE = 34021;
+		public static final int SUNSTONE_CORE = 34023;
+		public static final int JEWELLERS_CHISEL = 34025;
+		public static final int HALLOWFELL = 34029;
+		public static final int JAR_OF_LIGHT = 34031;
+		public static final int TELEPORTSCROLL_ARDEAGLAIS = 34034;
+		public static final int GOATPITPET = 34041;
+		public static final int MADANGELPET = 34043;
+		public static final int VAMPYRE_SNAIL_SHELL = 34062;
+		public static final int SNELM_VAMPYRE = 34064;
+		public static final int SHARK_LURE_PACK = 34067;
+		public static final int SAWMILL_COUPON_TEAK = 34069;
+		public static final int SAWMILL_COUPON_MAHOGANY = 34071;
+		public static final int SAWMILL_COUPON_CAMPHOR = 34073;
+		public static final int SAWMILL_COUPON_IRONWOOD = 34075;
+		public static final int PORT_TASK_LOOTSACK_T0_CAIRN_ISLE = 34078;
+		public static final int PORT_TASK_LOOTSACK_T1_CAIRN_ISLE = 34080;
+		public static final int PORT_TASK_LOOTSACK_T2_CAIRN_ISLE = 34082;
+		public static final int PORT_TASK_LOOTSACK_T3_CAIRN_ISLE = 34084;
+		public static final int PORT_TASK_LOOTSACK_T4_CAIRN_ISLE = 34086;
+		public static final int PORT_TASK_LOOTSACK_T0_ENTRANA = 34088;
+		public static final int PORT_TASK_LOOTSACK_T1_ENTRANA = 34090;
+		public static final int PORT_TASK_LOOTSACK_T2_ENTRANA = 34092;
+		public static final int PORT_TASK_LOOTSACK_T3_ENTRANA = 34094;
+		public static final int PORT_TASK_LOOTSACK_T4_ENTRANA = 34096;
+		public static final int PORT_TASK_LOOTSACK_T0_NEITIZNOT = 34098;
+		public static final int PORT_TASK_LOOTSACK_T1_NEITIZNOT = 34100;
+		public static final int PORT_TASK_LOOTSACK_T2_NEITIZNOT = 34102;
+		public static final int PORT_TASK_LOOTSACK_T3_NEITIZNOT = 34104;
+		public static final int PORT_TASK_LOOTSACK_T4_NEITIZNOT = 34106;
+		public static final int PORT_TASK_LOOTSACK_T0_JATIZSO = 34108;
+		public static final int PORT_TASK_LOOTSACK_T1_JATIZSO = 34110;
+		public static final int PORT_TASK_LOOTSACK_T2_JATIZSO = 34112;
+		public static final int PORT_TASK_LOOTSACK_T3_JATIZSO = 34114;
+		public static final int PORT_TASK_LOOTSACK_T4_JATIZSO = 34116;
+		public static final int PORT_TASK_LOOTSACK_T0_HOSIDIUS = 34118;
+		public static final int PORT_TASK_LOOTSACK_T1_HOSIDIUS = 34120;
+		public static final int PORT_TASK_LOOTSACK_T2_HOSIDIUS = 34122;
+		public static final int PORT_TASK_LOOTSACK_T3_HOSIDIUS = 34124;
+		public static final int PORT_TASK_LOOTSACK_T4_HOSIDIUS = 34126;
+		public static final int PORT_TASK_LOOTSACK_T0_SUNSET_COAST = 34128;
+		public static final int PORT_TASK_LOOTSACK_T1_SUNSET_COAST = 34130;
+		public static final int PORT_TASK_LOOTSACK_T2_SUNSET_COAST = 34132;
+		public static final int PORT_TASK_LOOTSACK_T3_SUNSET_COAST = 34134;
+		public static final int PORT_TASK_LOOTSACK_T4_SUNSET_COAST = 34136;
+		public static final int PORT_TASK_LOOTSACK_T0_PISCATORIS = 34138;
+		public static final int PORT_TASK_LOOTSACK_T1_PISCATORIS = 34140;
+		public static final int PORT_TASK_LOOTSACK_T2_PISCATORIS = 34142;
+		public static final int PORT_TASK_LOOTSACK_T3_PISCATORIS = 34144;
+		public static final int PORT_TASK_LOOTSACK_T4_PISCATORIS = 34146;
+		public static final int PORT_TASK_LOOTSACK_T0_ETCETERIA = 34148;
+		public static final int PORT_TASK_LOOTSACK_T1_ETCETERIA = 34150;
+		public static final int PORT_TASK_LOOTSACK_T2_ETCETERIA = 34152;
+		public static final int PORT_TASK_LOOTSACK_T3_ETCETERIA = 34154;
+		public static final int PORT_TASK_LOOTSACK_T4_ETCETERIA = 34156;
+		public static final int PORT_TASK_LOOTSACK_T0_RUINS_OF_UNKAH = 34158;
+		public static final int PORT_TASK_LOOTSACK_T1_RUINS_OF_UNKAH = 34160;
+		public static final int PORT_TASK_LOOTSACK_T2_RUINS_OF_UNKAH = 34162;
+		public static final int PORT_TASK_LOOTSACK_T3_RUINS_OF_UNKAH = 34164;
+		public static final int PORT_TASK_LOOTSACK_T4_RUINS_OF_UNKAH = 34166;
+		public static final int PORT_TASK_LOOTSACK_T0_LUNAR_ISLE = 34168;
+		public static final int PORT_TASK_LOOTSACK_T1_LUNAR_ISLE = 34170;
+		public static final int PORT_TASK_LOOTSACK_T2_LUNAR_ISLE = 34172;
+		public static final int PORT_TASK_LOOTSACK_T3_LUNAR_ISLE = 34174;
+		public static final int PORT_TASK_LOOTSACK_T4_LUNAR_ISLE = 34176;
+		public static final int PORT_TASK_LOOTSACK_T0_CORSAIR_COVE = 34178;
+		public static final int PORT_TASK_LOOTSACK_T1_CORSAIR_COVE = 34180;
+		public static final int PORT_TASK_LOOTSACK_T2_CORSAIR_COVE = 34182;
+		public static final int PORT_TASK_LOOTSACK_T3_CORSAIR_COVE = 34184;
+		public static final int PORT_TASK_LOOTSACK_T4_CORSAIR_COVE = 34186;
+		public static final int PORT_TASK_LOOTSACK_T0_PRIFDDINAS = 34188;
+		public static final int PORT_TASK_LOOTSACK_T1_PRIFDDINAS = 34190;
+		public static final int PORT_TASK_LOOTSACK_T2_PRIFDDINAS = 34192;
+		public static final int PORT_TASK_LOOTSACK_T3_PRIFDDINAS = 34194;
+		public static final int PORT_TASK_LOOTSACK_T4_PRIFDDINAS = 34196;
+		public static final int PORT_TASK_LOOTSACK_T0_LANDS_END = 34198;
+		public static final int PORT_TASK_LOOTSACK_T1_LANDS_END = 34200;
+		public static final int PORT_TASK_LOOTSACK_T2_LANDS_END = 34202;
+		public static final int PORT_TASK_LOOTSACK_T3_LANDS_END = 34204;
+		public static final int PORT_TASK_LOOTSACK_T4_LANDS_END = 34206;
+		public static final int PORT_TASK_LOOTSACK_T0_ALDARIN = 34208;
+		public static final int PORT_TASK_LOOTSACK_T1_ALDARIN = 34210;
+		public static final int PORT_TASK_LOOTSACK_T2_ALDARIN = 34212;
+		public static final int PORT_TASK_LOOTSACK_T3_ALDARIN = 34214;
+		public static final int PORT_TASK_LOOTSACK_T4_ALDARIN = 34216;
+		public static final int PORT_TASK_LOOTSACK_T0_SUMMER_SHORE = 34218;
+		public static final int PORT_TASK_LOOTSACK_T1_SUMMER_SHORE = 34220;
+		public static final int PORT_TASK_LOOTSACK_T2_SUMMER_SHORE = 34222;
+		public static final int PORT_TASK_LOOTSACK_T3_SUMMER_SHORE = 34224;
+		public static final int PORT_TASK_LOOTSACK_T4_SUMMER_SHORE = 34226;
+		public static final int PORT_TASK_LOOTSACK_T0_MUSA_POINT = 34228;
+		public static final int PORT_TASK_LOOTSACK_T1_MUSA_POINT = 34230;
+		public static final int PORT_TASK_LOOTSACK_T2_MUSA_POINT = 34232;
+		public static final int PORT_TASK_LOOTSACK_T3_MUSA_POINT = 34234;
+		public static final int PORT_TASK_LOOTSACK_T4_MUSA_POINT = 34236;
+		public static final int PORT_TASK_LOOTSACK_T0_RELLEKKA = 34238;
+		public static final int PORT_TASK_LOOTSACK_T1_RELLEKKA = 34240;
+		public static final int PORT_TASK_LOOTSACK_T2_RELLEKKA = 34242;
+		public static final int PORT_TASK_LOOTSACK_T3_RELLEKKA = 34244;
+		public static final int PORT_TASK_LOOTSACK_T4_RELLEKKA = 34246;
+		public static final int PORT_TASK_LOOTSACK_T0_VOID_KNIGHTS_OUTPOST = 34248;
+		public static final int PORT_TASK_LOOTSACK_T1_VOID_KNIGHTS_OUTPOST = 34250;
+		public static final int PORT_TASK_LOOTSACK_T2_VOID_KNIGHTS_OUTPOST = 34252;
+		public static final int PORT_TASK_LOOTSACK_T3_VOID_KNIGHTS_OUTPOST = 34254;
+		public static final int PORT_TASK_LOOTSACK_T4_VOID_KNIGHTS_OUTPOST = 34256;
+		public static final int PORT_TASK_LOOTSACK_T0_THE_PANDEMONIUM = 34258;
+		public static final int PORT_TASK_LOOTSACK_T1_THE_PANDEMONIUM = 34260;
+		public static final int PORT_TASK_LOOTSACK_T2_THE_PANDEMONIUM = 34262;
+		public static final int PORT_TASK_LOOTSACK_T3_THE_PANDEMONIUM = 34264;
+		public static final int PORT_TASK_LOOTSACK_T4_THE_PANDEMONIUM = 34266;
+		public static final int PORT_TASK_LOOTSACK_T0_RED_ROCK = 34268;
+		public static final int PORT_TASK_LOOTSACK_T1_RED_ROCK = 34270;
+		public static final int PORT_TASK_LOOTSACK_T2_RED_ROCK = 34272;
+		public static final int PORT_TASK_LOOTSACK_T3_RED_ROCK = 34274;
+		public static final int PORT_TASK_LOOTSACK_T4_RED_ROCK = 34276;
+		public static final int PORT_TASK_LOOTSACK_T0_BRIMHAVEN = 34278;
+		public static final int PORT_TASK_LOOTSACK_T1_BRIMHAVEN = 34280;
+		public static final int PORT_TASK_LOOTSACK_T2_BRIMHAVEN = 34282;
+		public static final int PORT_TASK_LOOTSACK_T3_BRIMHAVEN = 34284;
+		public static final int PORT_TASK_LOOTSACK_T4_BRIMHAVEN = 34286;
+		public static final int PORT_TASK_LOOTSACK_T0_PORT_TYRAS = 34288;
+		public static final int PORT_TASK_LOOTSACK_T1_PORT_TYRAS = 34290;
+		public static final int PORT_TASK_LOOTSACK_T2_PORT_TYRAS = 34292;
+		public static final int PORT_TASK_LOOTSACK_T3_PORT_TYRAS = 34294;
+		public static final int PORT_TASK_LOOTSACK_T4_PORT_TYRAS = 34296;
+		public static final int PORT_TASK_LOOTSACK_T0_CATHERBY = 34298;
+		public static final int PORT_TASK_LOOTSACK_T1_CATHERBY = 34300;
+		public static final int PORT_TASK_LOOTSACK_T2_CATHERBY = 34302;
+		public static final int PORT_TASK_LOOTSACK_T3_CATHERBY = 34304;
+		public static final int PORT_TASK_LOOTSACK_T4_CATHERBY = 34306;
+		public static final int PORT_TASK_LOOTSACK_T0_CIVITAS_ILLA_FORTIS = 34308;
+		public static final int PORT_TASK_LOOTSACK_T1_CIVITAS_ILLA_FORTIS = 34310;
+		public static final int PORT_TASK_LOOTSACK_T2_CIVITAS_ILLA_FORTIS = 34312;
+		public static final int PORT_TASK_LOOTSACK_T3_CIVITAS_ILLA_FORTIS = 34314;
+		public static final int PORT_TASK_LOOTSACK_T4_CIVITAS_ILLA_FORTIS = 34316;
+		public static final int PORT_TASK_LOOTSACK_T0_ARDOUGNE = 34318;
+		public static final int PORT_TASK_LOOTSACK_T1_ARDOUGNE = 34320;
+		public static final int PORT_TASK_LOOTSACK_T2_ARDOUGNE = 34322;
+		public static final int PORT_TASK_LOOTSACK_T3_ARDOUGNE = 34324;
+		public static final int PORT_TASK_LOOTSACK_T4_ARDOUGNE = 34326;
+		public static final int PORT_TASK_LOOTSACK_T0_PORT_KHAZARD = 34328;
+		public static final int PORT_TASK_LOOTSACK_T1_PORT_KHAZARD = 34330;
+		public static final int PORT_TASK_LOOTSACK_T2_PORT_KHAZARD = 34332;
+		public static final int PORT_TASK_LOOTSACK_T3_PORT_KHAZARD = 34334;
+		public static final int PORT_TASK_LOOTSACK_T4_PORT_KHAZARD = 34336;
+		public static final int PORT_TASK_LOOTSACK_T0_DEEPFIN_POINT = 34338;
+		public static final int PORT_TASK_LOOTSACK_T1_DEEPFIN_POINT = 34340;
+		public static final int PORT_TASK_LOOTSACK_T2_DEEPFIN_POINT = 34342;
+		public static final int PORT_TASK_LOOTSACK_T3_DEEPFIN_POINT = 34344;
+		public static final int PORT_TASK_LOOTSACK_T4_DEEPFIN_POINT = 34346;
+		public static final int PORT_TASK_LOOTSACK_T0_PORT_SARIM = 34348;
+		public static final int PORT_TASK_LOOTSACK_T1_PORT_SARIM = 34350;
+		public static final int PORT_TASK_LOOTSACK_T2_PORT_SARIM = 34352;
+		public static final int PORT_TASK_LOOTSACK_T3_PORT_SARIM = 34354;
+		public static final int PORT_TASK_LOOTSACK_T4_PORT_SARIM = 34356;
+		public static final int PORT_TASK_LOOTSACK_T0_PORT_PISCARILIUS = 34358;
+		public static final int PORT_TASK_LOOTSACK_T1_PORT_PISCARILIUS = 34360;
+		public static final int PORT_TASK_LOOTSACK_T2_PORT_PISCARILIUS = 34362;
+		public static final int PORT_TASK_LOOTSACK_T3_PORT_PISCARILIUS = 34364;
+		public static final int PORT_TASK_LOOTSACK_T4_PORT_PISCARILIUS = 34366;
+		public static final int PORT_TASK_LOOTSACK_T0_PORT_ROBERTS = 34368;
+		public static final int PORT_TASK_LOOTSACK_T1_PORT_ROBERTS = 34370;
+		public static final int PORT_TASK_LOOTSACK_T2_PORT_ROBERTS = 34372;
+		public static final int PORT_TASK_LOOTSACK_T3_PORT_ROBERTS = 34374;
+		public static final int PORT_TASK_LOOTSACK_T4_PORT_ROBERTS = 34376;
+		public static final int PORT_TASK_LOOTSACK_T0_COINS = 34378;
+		public static final int PORT_TASK_LOOTSACK_T1_COINS = 34380;
+		public static final int PORT_TASK_LOOTSACK_T2_COINS = 34382;
+		public static final int PORT_TASK_LOOTSACK_T3_COINS = 34384;
+		public static final int PORT_TASK_LOOTSACK_T4_COINS = 34386;
+		public static final int ABYSSALSIRE_UNSIRED = 34387;
+		public static final int LANSCAPE_2026_CURRENCY = 34391;
+		public static final int NECKLACE_OF_FANGS = 34403;
+		public static final int AIR_DIAMOND = 34406;
+		public static final int AMULET_OF_AIR = 34409;
+		public static final int WATER_SAPPHIRE = 34412;
+		public static final int AMULET_OF_WATER = 34415;
+		public static final int EARTH_EMERALD = 34418;
+		public static final int AMULET_OF_EARTH = 34421;
+		public static final int FIRE_RUBY = 34424;
+		public static final int AMULET_OF_FIRE = 34427;
+		public static final int ELEMENTAL_AMULET = 34430;
+		public static final int LABRADOR_YELLOW_OBJECT = 34432;
+		public static final int LABRADOR_BROWN_OBJECT = 34434;
+		public static final int LABRADOR_BLACK_OBJECT = 34436;
+		public static final int CHIHUAHUA_TAN_OBJECT = 34438;
+		public static final int CHIHUAHUA_WHITE_OBJECT = 34440;
+		public static final int CHIHUAHUA_TOASTED_OBJECT = 34442;
+		public static final int COLLIE_CHOCO_OBJECT = 34444;
+		public static final int COLLIE_MERLE_OBJECT = 34446;
+		public static final int COLLIE_BW_OBJECT = 34448;
+		public static final int CORGI_TAN_OBJECT = 34450;
+		public static final int CORGI_YELLOW_OBJECT = 34452;
+		public static final int CORGI_TOASTED_OBJECT = 34454;
+		public static final int GREYHOUND_TAN_OBJECT = 34456;
+		public static final int GREYHOUND_GREY_OBJECT = 34458;
+		public static final int GREYHOUND_CREAM_OBJECT = 34460;
+		public static final int HUSKY_BW_OBJECT = 34462;
+		public static final int HUSKY_GREY_OBJECT = 34464;
+		public static final int HUSKY_CHOCO_OBJECT = 34466;
+		public static final int PUG_FAWN_OBJECT = 34468;
+		public static final int PUG_BROWN_OBJECT = 34470;
+		public static final int PUG_BLACK_OBJECT = 34472;
+		public static final int SAMOYED_WHITE_OBJECT = 34474;
+		public static final int SAMOYED_YELLOW_OBJECT = 34476;
+		public static final int SAMOYED_BLACK_OBJECT = 34478;
+		public static final int SHEPARD_CHOCO_OBJECT = 34480;
+		public static final int SHEPARD_MERLE_OBJECT = 34482;
+		public static final int SHEPARD_TOASTED_OBJECT = 34484;
+		public static final int SHIBA_TAN_OBJECT = 34486;
+		public static final int SHIBA_WHITE_OBJECT = 34488;
+		public static final int SHIBA_TOASTED_OBJECT = 34490;
+		public static final int SPANIEL_RED_OBJECT = 34492;
+		public static final int SPANIEL_WHITE_OBJECT = 34494;
+		public static final int SPANIEL_BLACK_OBJECT = 34496;
+		public static final int YORKIE_BROWN_OBJECT = 34498;
+		public static final int YORKIE_WHITE_OBJECT = 34500;
+		public static final int YORKIE_YELLOW_OBJECT = 34502;
+		public static final int LABRADOR_YELLOW_PUPPY_OBJECT = 34504;
+		public static final int LABRADOR_CHOCO_PUPPY_OBJECT = 34506;
+		public static final int LABRADOR_BLACK_PUPPY_OBJECT = 34508;
+		public static final int HUSKY_BW_PUPPY_OBJECT = 34510;
+		public static final int HUSKY_GREY_PUPPY_OBJECT = 34512;
+		public static final int HUSKY_CHOCO_PUPPY_OBJECT = 34514;
+		public static final int CHIHUAHUA_TAN_PUPPY_OBJECT = 34516;
+		public static final int CHIHUAHUA_WHITE_PUPPY_OBJECT = 34518;
+		public static final int CHIHUAHUA_TOASTED_PUPPY_OBJECT = 34520;
+		public static final int COLLIE_CHOCO_PUPPY_OBJECT = 34522;
+		public static final int COLLIE_MERLE_PUPPY_OBJECT = 34524;
+		public static final int COLLIE_BW_PUPPY_OBJECT = 34526;
+		public static final int CORGI_TAN_PUPPY_OBJECT = 34528;
+		public static final int CORGI_YELLOW_PUPPY_OBJECT = 34530;
+		public static final int CORGI_TOASTED_PUPPY_OBJECT = 34532;
+		public static final int GREYHOUND_TAN_PUPPY_OBJECT = 34534;
+		public static final int GREYHOUND_GREY_PUPPY_OBJECT = 34536;
+		public static final int GREYHOUND_CREAM_PUPPY_OBJECT = 34538;
+		public static final int PUG_FAWN_PUPPY_OBJECT = 34540;
+		public static final int PUG_BROWN_PUPPY_OBJECT = 34542;
+		public static final int PUG_BLACK_PUPPY_OBJECT = 34544;
+		public static final int SAMOYED_WHITE_PUPPY_OBJECT = 34546;
+		public static final int SAMOYED_YELLOW_PUPPY_OBJECT = 34548;
+		public static final int SAMOYED_BLACK_PUPPY_OBJECT = 34550;
+		public static final int SHEPARD_CHOCO_PUPPY_OBJECT = 34552;
+		public static final int SHEPARD_MERLE_PUPPY_OBJECT = 34554;
+		public static final int SHEPARD_TOASTED_PUPPY_OBJECT = 34556;
+		public static final int SHIBA_TAN_PUPPY_OBJECT = 34558;
+		public static final int SHIBA_WHITE_PUPPY_OBJECT = 34560;
+		public static final int SHIBA_TOASTED_PUPPY_OBJECT = 34562;
+		public static final int SPANIEL_RED_PUPPY_OBJECT = 34564;
+		public static final int SPANIEL_WHITE_PUPPY_OBJECT = 34566;
+		public static final int SPANIEL_BLACK_PUPPY_OBJECT = 34568;
+		public static final int YORKIE_BROWN_PUPPY_OBJECT = 34570;
+		public static final int YORKIE_WHITE_PUPPY_OBJECT = 34572;
+		public static final int YORKIE_YELLOW_PUPPY_OBJECT = 34574;
+		public static final int CRAB_SHELL_CONTAINER = 34590;
 	}
 /* This file is automatically generated. Do not edit. */
 }

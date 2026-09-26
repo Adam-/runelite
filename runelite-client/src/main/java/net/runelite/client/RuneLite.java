@@ -106,6 +106,7 @@ public class RuneLite
 	public static final File DEFAULT_SESSION_FILE = new File(RUNELITE_DIR, "session");
 	public static final File NOTIFICATIONS_DIR = new File(RuneLite.RUNELITE_DIR, "notifications");
 	public static final File FONTS_DIR = new File(RuneLite.RUNELITE_DIR, "fonts");
+	public static final Path PLUGIN_DATA = new File(RuneLite.RUNELITE_DIR, "plugin-data").toPath();
 
 	private static final int MAX_OKHTTP_CACHE_SIZE = 20 * 1024 * 1024; // 20mb
 	public static String USER_AGENT = "RuneLite/" + RuneLiteProperties.getVersion() + "-" + RuneLiteProperties.getCommit() + (RuneLiteProperties.isDirty() ? "+" : "");
@@ -419,14 +420,19 @@ public class RuneLite
 			.addInterceptor(chain ->
 			{
 				Request request = chain.request();
-				if (request.header("User-Agent") != null)
+				var ua = request.header("User-Agent");
+				if (ua == null)
 				{
-					return chain.proceed(request);
+					ua = USER_AGENT;
+				}
+				else if (!ua.startsWith("RuneLite"))
+				{
+					ua = USER_AGENT + " " + ua;
 				}
 
 				Request userAgentRequest = request
 					.newBuilder()
-					.header("User-Agent", USER_AGENT)
+					.header("User-Agent", ua)
 					.build();
 				return chain.proceed(userAgentRequest);
 			})

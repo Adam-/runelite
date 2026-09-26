@@ -21272,7 +21272,7 @@ public final class ObjectID extends ObjectID1
 	public static final int ZOGRE_COFFIN_SPECIAL_SEARCHED = 6845;
 
 	/**
-	 * Broken Lecturn
+	 * Broken lectern
 	 */
 	public static final int ZOGRE_LECTURN = 6846;
 
@@ -35556,6 +35556,7 @@ public final class ObjectID extends ObjectID1
 	 * Boxes
 	 */
 	public static final int CW_BANK_BOXES_2 = 10803;
+	public static final int WALLKIT_WOODEN01_WINDOW01_UPPER = 10804;
 
 	/**
 	 * Sandy's Desk
@@ -55544,7 +55545,7 @@ public final class ObjectID extends ObjectID1
 	public static final int XBOWS_REGICIDE_GRAPPLE_TREE = 17046;
 
 	/**
-	 * Wall
+	 * Rough wall
 	 */
 	public static final int XBOWS_YANILLE_CASTLEWALL = 17047;
 
@@ -55554,12 +55555,12 @@ public final class ObjectID extends ObjectID1
 	public static final int XBOWS_YANILLE_CASTLEWALL_BATTLEMENT = 17048;
 
 	/**
-	 * Wall
+	 * Rough wall
 	 */
 	public static final int XBOWS_FAI_FALADOR_CASTLE_WALLS_HILLSKEW = 17049;
 
 	/**
-	 * Wall
+	 * Rough wall
 	 */
 	public static final int XBOWS_FAI_FALADOR_CASTLE_ARCHES_HILLSKEW = 17050;
 
@@ -87936,7 +87937,15 @@ public final class ObjectID extends ObjectID1
 	public static final int ARCHEUUS_LIBRARY_RAILING_02 = 28370;
 	public static final int ARCHEUUS_LIBRARY_RAILING_03 = 28371;
 	public static final int ARCHEUUS_LIBRARY_RAILING_04 = 28372;
+
+	/**
+	 * Railing
+	 */
 	public static final int ARCHEUUS_LIBRARY_RAILING_05 = 28373;
+
+	/**
+	 * Railing
+	 */
 	public static final int ARCHEUUS_LIBRARY_RAILING_06 = 28374;
 	public static final int ARCHEUUS_LIBRARY_RAILING_STUDY_01 = 28375;
 	public static final int ARCHEUUS_LIBRARY_RAILING_STUDY_02 = 28376;
