@@ -26,7 +26,6 @@ package net.runelite.client.plugins.gpu;
 
 import com.google.common.base.Stopwatch;
 import com.google.common.primitives.Ints;
-import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Provides;
 import com.google.inject.util.Providers;
@@ -136,7 +135,11 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 	@Inject
 	private RenderCallbackManager renderCallbackManager;
 
-	private final ExtensionManager extensionManager = new ExtensionManager(this);
+	@Inject
+	private PBOManager pboManager;
+
+	@Inject
+	private ExtensionManager extensionManager;
 
 	private Canvas canvas;
 	private AWTContext awtContext;
@@ -783,6 +786,7 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 
 	private void shutdownInterfaceTexture()
 	{
+		pboManager.shutdown();
 		glDeleteBuffers(interfacePbo);
 		glDeleteTextures(interfaceTexture);
 		interfaceTexture = -1;
@@ -793,8 +797,8 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 		final GraphicsConfiguration graphicsConfiguration = clientUI.getGraphicsConfiguration();
 		final AffineTransform transform = graphicsConfiguration.getDefaultTransform();
 
-		width = getScaledValue(transform.getScaleX(), width);
-		height = getScaledValue(transform.getScaleY(), height);
+		width = scale(transform.getScaleX(), width);
+		height = scale(transform.getScaleY(), height);
 
 		if (aaSamples > 0)
 		{
@@ -1105,8 +1109,8 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 		final GraphicsConfiguration graphicsConfiguration = clientUI.getGraphicsConfiguration();
 		final AffineTransform transform = graphicsConfiguration.getDefaultTransform();
 
-		width = getScaledValue(transform.getScaleX(), width);
-		height = getScaledValue(transform.getScaleY(), height);
+		width = scale(transform.getScaleX(), width);
+		height = scale(transform.getScaleY(), height);
 
 		int defaultFbo = awtContext.getFramebuffer(false);
 		glBindFramebuffer(GL_READ_FRAMEBUFFER, fboScene);
@@ -1550,6 +1554,7 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 		}
 
 		drawManager.processDrawComplete(this::screenshot);
+		pboManager.emitFramePbo(awtContext);
 
 		glBindFramebuffer(GL_FRAMEBUFFER, awtContext.getFramebuffer(false));
 
@@ -1582,12 +1587,12 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 		{
 			Dimension dim = client.getStretchedDimensions();
 			glDpiAwareViewport(0, 0, dim.width, dim.height);
-			glUniform2i(uniTexTargetDimensions, getScaledValue(t.getScaleX(), dim.width), getScaledValue(t.getScaleY(), dim.height));
+			glUniform2i(uniTexTargetDimensions, scale(t.getScaleX(), dim.width), scale(t.getScaleY(), dim.height));
 		}
 		else
 		{
 			glDpiAwareViewport(0, 0, canvasWidth, canvasHeight);
-			glUniform2i(uniTexTargetDimensions, getScaledValue(t.getScaleX(), canvasWidth), getScaledValue(t.getScaleY(), canvasHeight));
+			glUniform2i(uniTexTargetDimensions, scale(t.getScaleX(), canvasWidth), scale(t.getScaleY(), canvasHeight));
 		}
 
 		// Set the sampling function used when stretching the UI.
@@ -1629,8 +1634,8 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 
 		final GraphicsConfiguration graphicsConfiguration = clientUI.getGraphicsConfiguration();
 		final AffineTransform t = graphicsConfiguration.getDefaultTransform();
-		width = getScaledValue(t.getScaleX(), width);
-		height = getScaledValue(t.getScaleY(), height);
+		width = scale(t.getScaleX(), width);
+		height = scale(t.getScaleY(), height);
 
 		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		int[] pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
@@ -2148,7 +2153,7 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 		log.debug("WorldView ready: {}", scene.getWorldViewId());
 	}
 
-	private int getScaledValue(final double scale, final int value)
+	static int scale(final double scale, final int value)
 	{
 		return (int) (value * scale);
 	}
@@ -2158,10 +2163,10 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 		final GraphicsConfiguration graphicsConfiguration = clientUI.getGraphicsConfiguration();
 		final AffineTransform t = graphicsConfiguration.getDefaultTransform();
 		glViewport(
-			getScaledValue(t.getScaleX(), x),
-			getScaledValue(t.getScaleY(), y),
-			getScaledValue(t.getScaleX(), width),
-			getScaledValue(t.getScaleY(), height));
+			scale(t.getScaleX(), x),
+			scale(t.getScaleY(), y),
+			scale(t.getScaleX(), width),
+			scale(t.getScaleY(), height));
 	}
 
 	private int getDrawDistance()

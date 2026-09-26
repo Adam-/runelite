@@ -2,12 +2,14 @@ package net.runelite.client.plugins.gpu;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import lombok.RequiredArgsConstructor;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.gpu.api.GpuApi;
 import net.runelite.client.plugins.gpu.api.GpuExtension;
+import net.runelite.client.plugins.gpu.api.PBOListener;
 
-@RequiredArgsConstructor
+@Singleton
 class ExtensionManager implements GpuApi
 {
 	static class Extension
@@ -23,8 +25,16 @@ class ExtensionManager implements GpuApi
 	}
 
 	private final GpuPlugin plugin;
+	private final PBOManager pboManager;
 
 	final List<Extension> extensions = new CopyOnWriteArrayList<>();
+
+	@Inject
+	ExtensionManager(GpuPlugin plugin, PBOManager pboManager)
+	{
+		this.plugin = plugin;
+		this.pboManager = pboManager;
+	}
 
 	@Override
 	public void registerExtension(Plugin owner, GpuExtension extension)
@@ -38,6 +48,18 @@ class ExtensionManager implements GpuApi
 	{
 		extensions.removeIf(e -> e.e == extension);
 		plugin.recompileShaders();
+	}
+
+	@Override
+	public void registerPBOListener(PBOListener listener)
+	{
+		pboManager.register(listener);
+	}
+
+	@Override
+	public void unregisterPBOListener(PBOListener listener)
+	{
+		pboManager.unregister(listener);
 	}
 
 	void onContextCreate()

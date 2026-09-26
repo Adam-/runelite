@@ -7,4 +7,8 @@ public interface GpuApi
 	void registerExtension(Plugin owner, GpuExtension extension);
 
 	void unregisterExtension(Plugin owner, GpuExtension extension);
+
+	void registerPBOListener(PBOListener listener);
+
+	void unregisterPBOListener(PBOListener listener);
 }
