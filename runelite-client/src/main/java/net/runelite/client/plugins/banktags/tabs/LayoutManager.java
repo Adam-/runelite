@@ -26,6 +26,7 @@
 package net.runelite.client.plugins.banktags.tabs;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -59,6 +60,7 @@ import net.runelite.api.gameval.InterfaceID;
 import net.runelite.api.gameval.InventoryID;
 import net.runelite.api.gameval.ItemID;
 import net.runelite.api.gameval.VarClientID;
+import net.runelite.api.gameval.VarPlayerID;
 import net.runelite.api.gameval.VarbitID;
 import net.runelite.api.widgets.ItemQuantityMode;
 import net.runelite.api.widgets.JavaScriptCallback;
@@ -422,6 +424,35 @@ public class LayoutManager
 				{
 					c.setAction(10, "Examine");
 				}
+				if (isPotStorage)
+				{
+					Potion potion = potionStorage.findPotion(item);
+					if (potion != null)
+					{
+						var potionEnum = potion.potionEnum;
+						int potionItemId1 = potionEnum.getIntValue(1);
+						int potionItemId2 = potionEnum.getIntValue(2);
+						int potionItemId3 = potionEnum.getIntValue(3);
+						int potionItemId4 = potionEnum.getIntValue(4);
+						c.setAction(10, "Doses");
+						if (potionItemId1 > -1)
+						{
+							c.setSubOp(10, 6, "1 Dose");
+						}
+						if (potionItemId2 > -1)
+						{
+							c.setSubOp(10, 7, "2 Dose");
+						}
+						if (potionItemId3 > -1)
+						{
+							c.setSubOp(10, 8, "3 Dose");
+						}
+						if (potionItemId4 > -1)
+						{
+							c.setSubOp(10, 9, "4 Dose");
+						}
+					}
+				}
 				c.setOpacity(0);
 			}
 
@@ -689,12 +720,28 @@ public class LayoutManager
 					return;
 				}
 
-				idx = potionStorage.getIdx(w.getItemId());
-				if (idx > -1)
+				Potion p = potionStorage.findPotion(w.getItemId());
+				if (p != null)
 				{
 					potionStorage.prepareWidgets();
 					menu.setParam1(InterfaceID.Bankmain.POTIONSTORE_ITEMS);
-					menu.setParam0(idx);
+					if (event.getId() > 0xffff)
+					{
+						// submenu click for doses
+						menu.setParam0(p.dosesChildId());
+						menu.setIdentifier((event.getId() >> 16) - 1);
+					}
+					else
+					{
+						menu.setParam0(p.withdrawChildId());
+					}
+				}
+
+				if (w.getItemId() == ItemID.VIAL_EMPTY)
+				{
+					potionStorage.prepareWidgets();
+					menu.setParam1(InterfaceID.Bankmain.POTIONSTORE_ITEMS);
+					menu.setParam0(potionStorage.getVialsChildIdx());
 				}
 			}
 		}
@@ -835,6 +882,13 @@ public class LayoutManager
 				}
 			}
 
+			// quiver
+			if (hasQuiver(i, e))
+			{
+				final int quiverAmmo = client.getVarpValue(VarPlayerID.DIZANAS_QUIVER_TEMP_AMMO);
+				l.setItemAtPos(quiverAmmo, 2);
+			}
+
 			// Middle column
 			for (int j = 0; j < 5; ++j)
 			{
@@ -869,6 +923,14 @@ public class LayoutManager
 			Collection<Integer> runePouchVariations = ItemVariationMapping.getVariations(ItemID.BH_RUNE_POUCH);
 			Collection<Integer> divineRunePouchVariations = ItemVariationMapping.getVariations(ItemID.DIVINE_RUNE_POUCH);
 			return runePouchVariations.stream().anyMatch(inv::contains) || divineRunePouchVariations.stream().anyMatch(inv::contains);
+		}
+
+		private boolean hasQuiver(ItemContainer inv, ItemContainer worn)
+		{
+			final Item cape = worn != null ? worn.getItem(EquipmentInventorySlot.CAPE.getSlotIdx()) : null;
+
+			return (cape != null && client.getItemDefinition(cape.getId()).getIntValue(ParamID.QUIVER_AMMO_AVAILABLE) == 1)
+				|| (inv != null && Arrays.stream(inv.getItems()).anyMatch(item -> client.getItemDefinition(item.getId()).getIntValue(ParamID.QUIVER_AMMO_AVAILABLE) == 1));
 		}
 	}
 }

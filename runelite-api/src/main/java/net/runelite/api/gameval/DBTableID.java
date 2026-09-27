@@ -207,7 +207,7 @@ public final class DBTableID
 		/**
 		 * integer
 		 */
-		public static final int COL_RELATED_CONTENT = 48;
+		public static final int COL_RESTRICTED_CONTENT = 48;
 
 		public static final class Row
 		{
@@ -425,6 +425,8 @@ public final class DBTableID
 			public static final int QUEST_LEARNINGTHEROPES = 9643;
 			public static final int QUEST_IDESOFMILK = 9645;
 			public static final int QUEST_BLOODMOONRISES = 16414;
+			public static final int QUEST_RUFFSITUATION = 16971;
+			public static final int QUEST_CRABQUEST = 16972;
 		}
 	}
 
@@ -586,7 +588,7 @@ public final class DBTableID
 		/**
 		 * integer
 		 */
-		public static final int COL_RELATED_CONTENT = 8;
+		public static final int COL_RESTRICTED_CONTENT = 8;
 
 		public static final class Row
 		{
@@ -734,7 +736,7 @@ public final class DBTableID
 		/**
 		 * integer
 		 */
-		public static final int COL_RELATED_CONTENT = 6;
+		public static final int COL_RESTRICTED_CONTENT = 6;
 
 		public static final class Row
 		{
@@ -829,7 +831,7 @@ public final class DBTableID
 		/**
 		 * integer
 		 */
-		public static final int COL_RELATED_CONTENT = 8;
+		public static final int COL_RESTRICTED_CONTENT = 8;
 
 		public static final class Row
 		{
@@ -901,7 +903,7 @@ public final class DBTableID
 		/**
 		 * integer
 		 */
-		public static final int COL_RELATED_CONTENT = 8;
+		public static final int COL_RESTRICTED_CONTENT = 8;
 
 		public static final class Row
 		{
@@ -1144,7 +1146,7 @@ public final class DBTableID
 		/**
 		 * integer
 		 */
-		public static final int COL_RELATED_CONTENT = 12;
+		public static final int COL_RESTRICTED_CONTENT = 12;
 
 		/**
 		 * string
@@ -1522,7 +1524,7 @@ public final class DBTableID
 		/**
 		 * integer
 		 */
-		public static final int COL_RELATED_CONTENT = 13;
+		public static final int COL_RESTRICTED_CONTENT = 13;
 
 		public static final class Row
 		{
@@ -1707,7 +1709,7 @@ public final class DBTableID
 		/**
 		 * integer
 		 */
-		public static final int COL_RELATED_CONTENT = 9;
+		public static final int COL_RESTRICTED_CONTENT = 9;
 
 		public static final class Row
 		{
@@ -1767,7 +1769,7 @@ public final class DBTableID
 		/**
 		 * integer
 		 */
-		public static final int COL_RELATED_CONTENT = 7;
+		public static final int COL_RESTRICTED_CONTENT = 7;
 
 		public static final class Row
 		{
@@ -1836,7 +1838,7 @@ public final class DBTableID
 		/**
 		 * integer
 		 */
-		public static final int COL_RELATED_CONTENT = 7;
+		public static final int COL_RESTRICTED_CONTENT = 7;
 
 		public static final class Row
 		{
@@ -2032,7 +2034,7 @@ public final class DBTableID
 		/**
 		 * integer
 		 */
-		public static final int COL_RELATED_CONTENT = 8;
+		public static final int COL_RESTRICTED_CONTENT = 8;
 
 		public static final class Row
 		{
@@ -2106,7 +2108,7 @@ public final class DBTableID
 		/**
 		 * integer
 		 */
-		public static final int COL_RELATED_CONTENT = 7;
+		public static final int COL_RESTRICTED_CONTENT = 7;
 
 		public static final class Row
 		{
@@ -4460,10 +4462,19 @@ public final class DBTableID
 			public static final int CW_SHOP_DATA = 5063;
 			public static final int ENT_TOTEMS_SHOP = 5458;
 			public static final int ENT_TOTEMS_SHOP_IRONMAN = 5459;
+			public static final int GOTR_REWARD_SHOP_ALL = 7142;
+			public static final int GOTR_REWARD_SHOP_NONE = 7226;
+			public static final int GOTR_REWARD_SHOP_LAW = 7227;
+			public static final int GOTR_REWARD_SHOP_DEATH = 7228;
+			public static final int GOTR_REWARD_SHOP_BLOOD = 7229;
+			public static final int GOTR_REWARD_SHOP_LAW_DEATH = 7230;
+			public static final int GOTR_REWARD_SHOP_LAW_BLOOD = 7231;
+			public static final int GOTR_REWARD_SHOP_DEATH_BLOOD = 7232;
 			public static final int SAILING_BOAT_SHOP = 8548;
 			public static final int DEADMAN_SKULL_SHOP = 9575;
 			public static final int VAMPYRIUM_CONSUMABLE_SHOP = 16873;
 			public static final int VAMPYRIUM_CONSUMABLE_SHOP_IVAN = 16874;
+			public static final int TEMPOROSS_SHOP_DATA = 16951;
 		}
 	}
 
@@ -4793,6 +4804,16 @@ public final class DBTableID
 			public static final int ENT_TOTEMS_SHOP_STOCK_MASK = 5463;
 			public static final int ENT_TOTEMS_SHOP_IRONMAN_STOCK_MASK = 5464;
 			public static final int ENT_TOTEMS_SHOP_STOCK_BRANCH = 5465;
+			public static final int GOTR_SHOP_DATA_BLOOD_TALISMAN = 7233;
+			public static final int GOTR_SHOP_DATA_DEATH_TALISMAN = 7234;
+			public static final int GOTR_SHOP_DATA_LAW_TALISMAN = 7235;
+			public static final int GOTR_SHOP_DATA_NATURE_TALISMAN = 7236;
+			public static final int GOTR_SHOP_DATA_COSMIC_TALISMAN = 7237;
+			public static final int GOTR_SHOP_DATA_CHAOS_TALISMAN = 7238;
+			public static final int GOTR_SHOP_DATA_BODY_TALISMAN = 7239;
+			public static final int GOTR_SHOP_DATA_MIND_TALISMAN = 7240;
+			public static final int GOTR_SHOP_DATA_FIRE_TALISMAN = 7241;
+			public static final int GOTR_SHOP_DATA_EARTH_TALISMAN = 7242;
 			public static final int SAILING_SHIP_STOCK_RAFT = 8549;
 			public static final int SAILING_SHIP_STOCK_SKIFF = 8550;
 			public static final int SAILING_SHIP_STOCK_SLOOP = 8551;
@@ -4879,6 +4900,18 @@ public final class DBTableID
 			public static final int VAMPYRIUM_FROTHY_POTION_3 = 16891;
 			public static final int VAMPYRIUM_FROTHY_POTION_2 = 16892;
 			public static final int VAMPYRIUM_FROTHY_POTION_1 = 16893;
+			public static final int GOTR_SHOP_DATA_WATER_TALISMAN = 16898;
+			public static final int GOTR_SHOP_DATA_AIR_TALISMAN = 16940;
+			public static final int GOTR_SHOP_DATA_ABYSSAL_NEEDLE = 16941;
+			public static final int GOTR_SHOP_DATA_GUARDIANS_EYE = 16942;
+			public static final int GOTR_SHOP_DATA_RING_OF_ELEMENTS = 16943;
+			public static final int GOTR_SHOP_DATA_HAT_OF_THE_EYE = 16944;
+			public static final int GOTR_SHOP_DATA_ROBE_TOP_OF_THE_EYE = 16945;
+			public static final int GOTR_SHOP_DATA_ROBE_BOTTOM_OF_THE_EYE = 16946;
+			public static final int GOTR_SHOP_DATA_BOOTS_OF_THE_EYE = 16947;
+			public static final int GOTR_SHOP_DATA_ABYSSAL_LANTERN = 16948;
+			public static final int TEMPOROSS_SHOP_DATA_FISH_BARREL = 16952;
+			public static final int TEMPOROSS_SHOP_DATA_TACKLE_BOX = 16953;
 		}
 	}
 
@@ -4952,6 +4985,8 @@ public final class DBTableID
 			public static final int OMNISHOP_CURRENCY_CW_PLAUDITS = 5105;
 			public static final int OMNISHOP_CURRENCY_ENT_TOTEMS_RESEARCH_POINTS = 5460;
 			public static final int OMNISHOP_CURRENCY_DEADMAN_SKULL_POINTS = 9576;
+			public static final int OMNISHOP_CURRENCY_ABYSSAL_PEARL = 16949;
+			public static final int OMNISHOP_CURRENCY_SPIRIT_FLAKES = 16954;
 		}
 	}
 
@@ -5059,7 +5094,7 @@ public final class DBTableID
 		/**
 		 * integer
 		 */
-		public static final int COL_RELATED_CONTENT = 14;
+		public static final int COL_RESTRICTED_CONTENT = 14;
 
 		public static final class Row
 		{
@@ -7020,6 +7055,7 @@ public final class DBTableID
 			public static final int HISCORES_BOSSES_YAMA = 5130;
 			public static final int HISCORES_BOSSES_DOOM_OF_MOKHAIOTL = 5484;
 			public static final int HISCORES_BOSSES_MAD_ANGEL = 7208;
+			public static final int HISCORES_BOSSES_MAGGOT_KING = 7209;
 			public static final int HISCORES_BOSSES_GRYPHON_BOSS = 9447;
 			public static final int HISCORES_BOSSES_COWBOSS = 9655;
 		}
@@ -9665,7 +9701,7 @@ public final class DBTableID
 		/**
 		 * integer
 		 */
-		public static final int COL_RELATED_CONTENT = 19;
+		public static final int COL_RESTRICTED_CONTENT = 19;
 
 		public static final class Row
 		{
@@ -10278,7 +10314,7 @@ public final class DBTableID
 		/**
 		 * integer
 		 */
-		public static final int COL_RELATED_CONTENT = 8;
+		public static final int COL_RESTRICTED_CONTENT = 8;
 
 		public static final class Row
 		{
@@ -10788,6 +10824,7 @@ public final class DBTableID
 			public static final int ACTION_POH_SKILLCAPE_DEPOSIT = 6860;
 			public static final int ACTION_DRINK_STEAMFORGE_BREW_INSIDE_SYO_INN = 6861;
 			public static final int ACTION_EAT_CABBAGE_INFRONT_OF_BRASSICAN_MAGE = 6862;
+			public static final int LEAGUE_TASK_REACH_TOTAL_LEVEL_2376 = 7210;
 			public static final int LEAGUE_TASK_ALL_EASY_COMBAT_ACHIEVEMENTS = 13323;
 			public static final int LEAGUE_TASK_ALL_MEDIUM_COMBAT_ACHIEVEMENTS = 13324;
 			public static final int LEAGUE_TASK_SCURRIUS_COMBAT_ACHIEVEMENTS = 13325;
@@ -14016,6 +14053,72 @@ public final class DBTableID
 			public static final int SLAYER_MODIFIER_CLUES = 7205;
 			public static final int SLAYER_MODIFIER_SUPERIOR_CHANCE = 7206;
 			public static final int SLAYER_MODIFIER_XP_BOOST = 7207;
+		}
+	}
+
+	public static final class PuppyColours
+	{
+		public static final int ID = 132;
+
+		/**
+		 * string
+		 */
+		public static final int COL_NAME = 0;
+
+		/**
+		 * model
+		 */
+		public static final int COL_PUPPY_SELECTION = 1;
+
+		/**
+		 * string
+		 */
+		public static final int COL_COLOUR_NAMES = 3;
+
+		/**
+		 * integer
+		 */
+		public static final int COL_COLOUR_OPTION = 4;
+
+		/**
+		 * model
+		 */
+		public static final int COL_DOG_MODEL = 5;
+
+		/**
+		 * boolean
+		 */
+		public static final int COL_LARGE = 6;
+
+		/**
+		 * boolean
+		 */
+		public static final int COL_FREE_UNLOCK = 7;
+
+		/**
+		 * integer
+		 */
+		public static final int COL_UNLOCK_BIT = 8;
+
+		/**
+		 * string
+		 */
+		public static final int COL_LOCATION_HINT = 9;
+
+		public static final class Row
+		{
+			public static final int LABRADOR = 16959;
+			public static final int SPANIEL = 16960;
+			public static final int PUG = 16961;
+			public static final int COLLIE = 16962;
+			public static final int CORGI = 16963;
+			public static final int GREYHOUND = 16964;
+			public static final int CHIHUAHUA = 16965;
+			public static final int SAMOYED = 16966;
+			public static final int SHEPARD = 16967;
+			public static final int SHIBA = 16968;
+			public static final int HUSKY = 16969;
+			public static final int YORKIE = 16970;
 		}
 	}
 
@@ -17452,77 +17555,77 @@ public final class DBTableID
 		/**
 		 * (loc, string)
 		 */
-		public static final int COL_FACILITIES_REQUIRED = 10;
+		public static final int COL_FACILITIES_REQUIRED = 11;
 
 		/**
 		 * (loc, string)
 		 */
-		public static final int COL_FACILITITES_RECOMMENDED = 11;
+		public static final int COL_FACILITITES_RECOMMENDED = 12;
 
 		/**
 		 * boolean
 		 */
-		public static final int COL_BOAT_COMBAT_REQUIRED = 12;
+		public static final int COL_BOAT_COMBAT_REQUIRED = 13;
 
 		/**
 		 * integer
 		 */
-		public static final int COL_REGULAR_COMBAT_REQUIRED = 13;
+		public static final int COL_REGULAR_COMBAT_REQUIRED = 14;
 
 		/**
 		 * integer
 		 */
-		public static final int COL_COMBAT_RECOMMENDED = 14;
+		public static final int COL_COMBAT_RECOMMENDED = 15;
 
 		/**
 		 * namedobj
 		 */
-		public static final int COL_DELIVERY_OBJECT = 15;
+		public static final int COL_DELIVERY_OBJECT = 16;
 
 		/**
 		 * (namedobj, integer)
 		 */
-		public static final int COL_CARGO = 16;
+		public static final int COL_CARGO = 17;
 
 		/**
 		 * (integer, integer)
 		 */
-		public static final int COL_PORT_CHECKPOINT = 17;
+		public static final int COL_PORT_CHECKPOINT = 18;
 
 		/**
 		 * npc
 		 */
-		public static final int COL_BOUNTY_TARGET_ALIVE = 18;
+		public static final int COL_BOUNTY_TARGET_ALIVE = 19;
 
 		/**
 		 * npc
 		 */
-		public static final int COL_BOUNTY_TARGET_DEAD = 19;
+		public static final int COL_BOUNTY_TARGET_DEAD = 20;
 
 		/**
 		 * namedobj
 		 */
-		public static final int COL_BOUNTY_OBJECT = 20;
+		public static final int COL_BOUNTY_OBJECT = 21;
 
 		/**
 		 * integer
 		 */
-		public static final int COL_BOUNTY_OBJECT_AMOUNT = 21;
+		public static final int COL_BOUNTY_OBJECT_AMOUNT = 22;
 
 		/**
 		 * integer
 		 */
-		public static final int COL_BOUNTY_OBJECT_RARITY = 22;
+		public static final int COL_BOUNTY_OBJECT_RARITY = 23;
 
 		/**
 		 * model
 		 */
-		public static final int COL_TASK_BOARD_GRAPHIC = 23;
+		public static final int COL_TASK_BOARD_GRAPHIC = 24;
 
 		/**
 		 * string
 		 */
-		public static final int COL_FLAVOUR_TEXT = 24;
+		public static final int COL_FLAVOUR_TEXT = 25;
 
 		public static final class Row
 		{
@@ -18458,7 +18561,7 @@ public final class DBTableID
 		/**
 		 * integer
 		 */
-		public static final int COL_RELATED_CONTENT = 8;
+		public static final int COL_RESTRICTED_CONTENT = 8;
 
 		public static final class Row
 		{
@@ -18750,6 +18853,11 @@ public final class DBTableID
 		 */
 		public static final int COL_MEMBERSONLY = 3;
 
+		/**
+		 * (boolean, integer)
+		 */
+		public static final int COL_CUSTOM_ORDER = 4;
+
 		public static final class Row
 		{
 			public static final int SKILL_GUIDE_SUBSECTION_AGILITY_OVERVIEW = 9656;
@@ -19005,6 +19113,11 @@ public final class DBTableID
 		 */
 		public static final int COL_OTHERDATA_CONSTRUCTION = 9;
 
+		/**
+		 * integer
+		 */
+		public static final int COL_CUSTOM_ORDERING = 10;
+
 		public static final class Row
 		{
 			public static final int SKILL_FEATURE_AGILITY_WYRMSCRAIG_STEPPING_STONE_EAST = 7134;
@@ -19015,9 +19128,23 @@ public final class DBTableID
 			public static final int SKILL_FEATURE_CRAFTING_OTHER_SUNSTONE_GOLEM = 7139;
 			public static final int SKILL_FEATURE_HUNTER_GOAT_PIT = 7140;
 			public static final int SKILL_FEATURE_MINING_SUNSTONE = 7141;
-			public static final int SKILL_FEATURE_RUNECRAFT_SUNSTONE_GOLEMS = 7142;
 			public static final int SKILL_FEATURE_SAILING_PORTS_WYRMSCRAIG = 7143;
 			public static final int SKILL_FEATURE_SLAYER_MASTER_WYRMSCRAIG = 7144;
+			public static final int SKILL_FEATURE_AGILITY_PIPEWITHINEDGEVILLEDUNGEON = 7211;
+			public static final int SKILL_FEATURE_AGILITY_DRAYNOR_MANOR_FENCE = 7212;
+			public static final int SKILL_FEATURE_AGILITY_GIANTS_PLATEAU = 7213;
+			public static final int SKILL_FEATURE_AGILITY_MOS_LEHARMLESS_STEPPING_STONES = 7214;
+			public static final int SKILL_FEATURE_AGILITY_NORTH_SOPHANEM_STEPPING_STONES = 7215;
+			public static final int SKILL_FEATURE_AGILITY_ARCEUUS_LIBRARY_RAILING = 7216;
+			public static final int SKILL_FEATURE_AGILITY_ARCEUUS_LIBRARY_RAILING2 = 7217;
+			public static final int SKILL_FEATURE_AGILITY_CHAMPIONS_GUILD_STEPPING_STONES = 7218;
+			public static final int SKILL_FEATURE_AGILITY_CLIMBCATHERBYCLIFF = 7219;
+			public static final int SKILL_FEATURE_AGILITY_ESCAPEFROMTHEWATEROBELISKISLAND_OVERLEVELLED = 7220;
+			public static final int SKILL_FEATURE_AGILITY_KARAMJACROSSINGSOUTHOFVOLCANO_OVERLEVELLED = 7221;
+			public static final int SKILL_FEATURE_AGILITY_POLLNIVNEACH_SCRAMBLE = 7222;
+			public static final int SKILL_FEATURE_AGILITY_YANILLEWALLCLIMB_OVERLEVELLED = 7223;
+			public static final int SKILL_FEATURE_AGILITY_FALADORWALLCLIMB_OVERLEVELLED = 7224;
+			public static final int SKILL_FEATURE_AGILITY_JUMPACROSSTHERIVERLUMTOALKHARID = 7225;
 			public static final int SKILL_FEATURE_AGILITY_OVERVIEW_0 = 9662;
 			public static final int SKILL_FEATURE_AGILITY_OVERVIEW_1 = 9663;
 			public static final int SKILL_FEATURE_AGILITY_OVERVIEW_2 = 9664;
@@ -20516,17 +20643,17 @@ public final class DBTableID
 			public static final int SKILL_FEATURE_FISHING_RAW_CAVE_EEL = 11236;
 			public static final int SKILL_FEATURE_FISHING_RAW_LAVA_EEL = 11237;
 			public static final int SKILL_FEATURE_FISHING_SHIMMERINGSHOAL = 11238;
-			public static final int SKILL_FEATURE_FISHING_RAW_GIANT_KRILL = 11239;
-			public static final int SKILL_FEATURE_FISHING_RAW_HADDOCK = 11240;
+			public static final int SKILL_FEATURE_MAGIC_ELEMENTAL_AMULETS = 11239;
+			public static final int SKILL_FEATURE_RUNECRAFT_AMULET_OF_AIR = 11240;
 			public static final int SKILL_FEATURE_FISHING_GLISTENINGSHOAL = 11241;
-			public static final int SKILL_FEATURE_FISHING_RAW_YELLOWFIN = 11242;
+			public static final int SKILL_FEATURE_RUNECRAFT_AMULET_OF_WATER = 11242;
 			public static final int SKILL_FEATURE_FISHING_INFERNAL_EEL = 11243;
 			public static final int SKILL_FEATURE_FISHING_RAW_ANGLERFISH = 11244;
-			public static final int SKILL_FEATURE_FISHING_RAW_HALIBUT = 11245;
+			public static final int SKILL_FEATURE_RUNECRAFT_AMULET_OF_EARTH = 11245;
 			public static final int SKILL_FEATURE_FISHING_VIBRANTSHOAL = 11246;
-			public static final int SKILL_FEATURE_FISHING_RAW_BLUEFIN = 11247;
+			public static final int SKILL_FEATURE_RUNECRAFT_AMULET_OF_FIRE = 11247;
 			public static final int SKILL_FEATURE_FISHING_SNAKEBOSS_EEL = 11248;
-			public static final int SKILL_FEATURE_FISHING_RAW_MARLIN = 11249;
+			public static final int SKILL_FEATURE_RUNECRAFT_ELEMENTAL_AMULET = 11249;
 			public static final int SKILL_FEATURE_FISHING_RAW_TUNA = 11250;
 			public static final int SKILL_FEATURE_FISHING_RAW_SWORDFISH = 11251;
 			public static final int SKILL_FEATURE_FISHING_RAW_SWORDTIP_SQUID = 11252;
@@ -20856,7 +20983,7 @@ public final class DBTableID
 			public static final int SKILL_FEATURE_HERBLORE_MM_POTION_LLM_UNFINISHED = 11592;
 			public static final int SKILL_FEATURE_HERBLORE_MM_POTION_LLA_UNFINISHED = 11593;
 			public static final int SKILL_FEATURE_HERBLORE_MM_POTION_MAL_UNFINISHED = 11594;
-			public static final int SKILL_FEATURE_HERBLORE_MM_SECONDARY_POUCH = 11595;
+			public static final int SKILL_FEATURE_FISHING_GIANTKRILLSHOAL = 11595;
 			public static final int SKILL_FEATURE_HERBLORE_SKILLCAPE = 11596;
 			public static final int SKILL_FEATURE_HITPOINTS_OVERVIEW_0 = 11602;
 			public static final int SKILL_FEATURE_HITPOINTS_OVERVIEW_1 = 11603;
@@ -21055,7 +21182,7 @@ public final class DBTableID
 			public static final int SKILL_FEATURE_HUNTER_BIRDHOUSE_YEW = 11810;
 			public static final int SKILL_FEATURE_HUNTER_BIRDHOUSE_MAGIC = 11811;
 			public static final int SKILL_FEATURE_HUNTER_BIRDHOUSE_REDWOOD = 11812;
-			public static final int SKILL_FEATURE_HUNTER_1TRAP = 11813;
+			public static final int SKILL_FEATURE_FISHING_HADDOCKSHOAL = 11813;
 			public static final int SKILL_FEATURE_HUNTER_OJIBWAY_BIRD_SNARE = 11814;
 			public static final int SKILL_FEATURE_HUNTER_NOOSE_WAND = 11815;
 			public static final int SKILL_FEATURE_HUNTER_BUTTERFLY_NET = 11816;
@@ -22465,6 +22592,17 @@ public final class DBTableID
 			public static final int SKILL_FEATURE_SLAYER_VENATOR = 16903;
 			public static final int SKILL_FEATURE_STRENGTH_CRIMSON_KISTEN = 16904;
 			public static final int SKILL_FEATURE_WOODCUTTING_BLOODWOOD_LOGS = 16905;
+			public static final int SKILL_FEATURE_CONSTRUCTION_COS_ROOM_TREASURE_CHEST_MAHOGANY = 16950;
+			public static final int SKILL_FEATURE_FISHING_YELLOWFINSHOAL = 16955;
+			public static final int SKILL_FEATURE_FISHING_HALIBUTSHOAL = 16956;
+			public static final int SKILL_FEATURE_FISHING_BLUEFINSHOAL = 16957;
+			public static final int SKILL_FEATURE_FISHING_MARLINSHOAL = 16958;
+			public static final int SKILL_FEATURE_HITPOINTS_GIANT_KRILL_COOKED = 16973;
+			public static final int SKILL_FEATURE_HITPOINTS_HADDOCK_COOKED = 16974;
+			public static final int SKILL_FEATURE_HITPOINTS_YELLOWFIN_COOKED = 16975;
+			public static final int SKILL_FEATURE_HITPOINTS_HALIBUT_COOKED = 16976;
+			public static final int SKILL_FEATURE_HITPOINTS_BLUEFIN_COOKED = 16977;
+			public static final int SKILL_FEATURE_HITPOINTS_MARLIN_COOKED = 16978;
 		}
 	}
 
