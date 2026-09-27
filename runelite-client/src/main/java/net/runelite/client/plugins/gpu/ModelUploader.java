@@ -27,11 +27,8 @@ package net.runelite.client.plugins.gpu;
 import java.nio.IntBuffer;
 import java.util.Arrays;
 import jdk.incubator.vector.VectorSpecies;
-import net.runelite.api.FloatProjection;
-import net.runelite.api.IntProjection;
 import net.runelite.api.Model;
 import net.runelite.api.Perspective;
-import net.runelite.api.Projection;
 import jdk.incubator.vector.FloatVector;
 
 class ModelUploader
@@ -125,34 +122,42 @@ class ModelUploader
 		}
 	}
 
-	private static void projectToplevelScalar(
+	private static void projectScalar(
 		float[] x,
 		float[] y,
 		float[] z,
 		float[] projectedX,
 		float[] projectedY,
 		float[] distance,
-		GpuPlugin.RenderThread rt,
-		Projection proj,
+		float[] projection,
 		float zero
 	)
 	{
 		int vertexCount = x.length;
 		for (int i = 0; i < vertexCount; ++i)
 		{
-			float vertexX = x[i];
-			float vertexY = y[i];
-			float vertexZ = z[i];
+			float px =
+				x[i] * projection[0] +
+					y[i] * projection[4] +
+					z[i] * projection[8] +
+					projection[12];
 
-			float[] p = proj.project(vertexX, vertexY, vertexZ, rt.tmp);
-			if (p[2] < 50)
-			{
-//				continue;
-			}
+			float py =
+				x[i] * projection[1] +
+					y[i] * projection[5] +
+					z[i] * projection[9] +
+					projection[13];
 
-			projectedX[i] = p[0] / p[2];
-			projectedY[i] = p[1] / p[2];
-			distance[i] = p[2] - zero;
+			float pz =
+				x[i] * projection[2] +
+					y[i] * projection[6] +
+					z[i] * projection[10] +
+					projection[14];
+
+			float invZ = 1f / pz;
+			projectedX[i] = px * invZ;
+			projectedY[i] = py * invZ;
+			distance[i] = pz - zero;
 		}
 	}
 
@@ -208,82 +213,7 @@ class ModelUploader
 		}
 	}
 
-	private static void projectToplevel(
-		float[] x,
-		float[] y,
-		float[] z,
-		float[] projectedX,
-		float[] projectedY,
-		float[] distance,
-		float cameraX,
-		float cameraY,
-		float cameraZ,
-		float yawSin,
-		float yawCos,
-		float pitchSin,
-		float pitchCos,
-		float zero
-	)
-	{
-		int upper = SPECIES.loopBound(x.length);
-
-		FloatVector vCameraX = FloatVector.broadcast(SPECIES, cameraX);
-		FloatVector vCameraY = FloatVector.broadcast(SPECIES, cameraY);
-		FloatVector vCameraZ = FloatVector.broadcast(SPECIES, cameraZ);
-
-		FloatVector vYawSin = FloatVector.broadcast(SPECIES, yawSin);
-		FloatVector vYawCos = FloatVector.broadcast(SPECIES, yawCos);
-
-		FloatVector vPitchSin = FloatVector.broadcast(SPECIES, pitchSin);
-		FloatVector vPitchCos = FloatVector.broadcast(SPECIES, pitchCos);
-
-		FloatVector one = FloatVector.broadcast(SPECIES, 1.0f);
-//		FloatVector zzero = FloatVector.broadcast(SPECIES, zero);
-
-		int i = 0;
-		for (; i < upper; i += SPECIES.length()) {
-
-			// translate(-fcameraX, -fcameraY, -fcameraZ)
-			FloatVector vx = FloatVector.fromArray(SPECIES, x, i).sub(vCameraX);
-			FloatVector vy = FloatVector.fromArray(SPECIES, y, i).sub(vCameraY);
-			FloatVector vz = FloatVector.fromArray(SPECIES, z, i).sub(vCameraZ);
-
-			// rotateY
-			FloatVector px = vx.fma(vYawCos, vz.mul(vYawSin));
-			FloatVector z0 = vz.mul(vYawCos).sub(vx.mul(vYawSin));
-
-			// rotateX
-			FloatVector py = vy.mul(vPitchCos).sub(z0.mul(vPitchSin));
-			FloatVector pz = z0.fma(vPitchCos, vy.mul(vPitchSin));
-
-			FloatVector invZ = one.div(pz);
-
-			px.mul(invZ).intoArray(projectedX, i);
-			py.mul(invZ).intoArray(projectedY, i);
-			pz.sub(zero).intoArray(distance, i);
-		}
-
-		// Scalar tail
-		for (; i < x.length; i++) {
-
-			float tx = x[i] - cameraX;
-			float ty = y[i] - cameraY;
-			float tz = z[i] - cameraZ;
-
-			float px = tx * yawCos + tz * yawSin;
-			float z0 = tz * yawCos - tx * yawSin;
-
-			float py = ty * pitchCos - z0 * pitchSin;
-			float pz = z0 * pitchCos + ty * pitchSin;
-
-			float invZ = 1f / pz;
-			projectedX[i] = px * invZ;
-			projectedY[i] = py * invZ;
-			distance[i] = pz - zero;
-		}
-	}
-
-	private static void projectWorldView(
+	private static void project(
 		float[] x,
 		float[] y,
 		float[] z,
@@ -371,7 +301,7 @@ class ModelUploader
 		}
 	}
 
-	int uploadSortedModel(GpuPlugin.RenderThread rt, Projection proj, Model model, int orientation, int x, int y, int z, IntBuffer opaqueBuffer, IntBuffer alphaBuffer, boolean prioritySort)
+	int uploadSortedModel(float[] projection, Model model, int orientation, int x, int y, int z, IntBuffer opaqueBuffer, IntBuffer alphaBuffer, boolean prioritySort)
 	{
 		final int vertexCount = model.getVerticesCount();
 		final float[] verticesX = model.getVerticesX();
@@ -402,8 +332,7 @@ class ModelUploader
 			orientCosine = Perspective.COSINE[orientation] / 65536f;
 		}
 
-		float[] p = proj.project(x, y, z, rt.tmp);
-		int zero = (int) p[2];
+		int zero = (int) (x * projection[2] + y * projection[6] + z * projection[10] + projection[14]);
 
 		float[] vx = verticesX;
 		float[] vy = verticesY;
@@ -412,30 +341,18 @@ class ModelUploader
 		if (GpuPlugin.usesimd)
 		{
 			rotateAndTranslate(vx, vy, vz, orientSine, orientCosine, x, y, z, modelLocalX, modelLocalY, modelLocalZ);
-
-			if (proj instanceof IntProjection)
-			{
-				IntProjection intp = (IntProjection) proj;
-				projectToplevel(
-					modelLocalX, modelLocalY, modelLocalZ,
-					modelProjectedX, modelProjectedY, distances,
-					intp.getCameraX(), intp.getCameraY(), intp.getCameraZ(),
-					intp.getYawSin(), intp.getYawCos(),
-					intp.getPitchSin(), intp.getPitchCos(),
-					zero);
-			} else {
-				FloatProjection  fp = (FloatProjection) proj;
-				projectWorldView(
-					modelLocalX, modelLocalY, modelLocalZ,
-					modelProjectedX, modelProjectedY, distances,
-					fp.getProjection(),
-					zero );
-			}
-		} else {
-			rotateAndTranslateScalar(vx, vy, vz, orientSine,  orientCosine, x, y, z, modelLocalX, modelLocalY, modelLocalZ);
-			projectToplevelScalar(modelLocalX, modelLocalY, modelLocalZ,
+			project(
+				modelLocalX, modelLocalY, modelLocalZ,
 				modelProjectedX, modelProjectedY, distances,
-				rt, proj,
+				projection,
+				zero);
+		}
+		else
+		{
+			rotateAndTranslateScalar(vx, vy, vz, orientSine, orientCosine, x, y, z, modelLocalX, modelLocalY, modelLocalZ);
+			projectScalar(modelLocalX, modelLocalY, modelLocalZ,
+				modelProjectedX, modelProjectedY, distances,
+				projection,
 				zero);
 		}
 

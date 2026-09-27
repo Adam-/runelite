@@ -180,7 +180,6 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 	static class RenderThread
 	{
 		VAOList vaoO, vaoA;
-		float[] tmp = new float[3];
 		ModelUploader modelUploader;
 	}
 
@@ -190,7 +189,8 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 
 	static class SceneContext
 	{
-		final float[] projection = Mat4.identity();
+		final float[] entityProjection = Mat4.identity();
+		final float[] sortProjection = Mat4.identity();
 
 		final int sizeX, sizeZ;
 		Zone[][] zones;
@@ -861,6 +861,8 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 
 		if (scene.getWorldViewId() == WorldView.TOPLEVEL)
 		{
+			setSortProjection(ctx.sortProjection, cameraX, cameraY, cameraZ, cameraPitch, cameraYaw);
+
 			for (int i = 0; i < rts.length; ++i) // NOPMD: ForLoopCanBeForeach
 			{
 				rts[i].vaoO.map();
@@ -873,10 +875,42 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 		}
 		else
 		{
-			System.arraycopy(((FloatProjection) entityProjection).getProjection(), 0, ctx.projection, 0, 16);
-			glUniformMatrix4fv(uniEntityProj, false, ctx.projection);
+			float[] projection = ((FloatProjection) entityProjection).getProjection();
+			System.arraycopy(projection, 0, ctx.entityProjection, 0, 16);
+//			System.arraycopy(projection, 0, ctx.sortProjection, 0, 16);
+			glUniformMatrix4fv(uniEntityProj, false, ctx.entityProjection);
 			glUniform4i(uniEntityTint, scene.getOverrideHue(), scene.getOverrideSaturation(), scene.getOverrideLuminance(), scene.getOverrideAmount());
 		}
+	}
+
+	private static void setSortProjection(float[] projection,
+		float cameraX, float cameraY, float cameraZ, float cameraPitch, float cameraYaw)
+	{
+		float yawSin = (float) Math.sin(cameraYaw);
+		float yawCos = (float) Math.cos(cameraYaw);
+		float pitchSin = (float) Math.sin(cameraPitch);
+		float pitchCos = (float) Math.cos(cameraPitch);
+
+		projection[0] = yawCos;
+		projection[4] = 0;
+		projection[8] = yawSin;
+		projection[12] = -cameraX * yawCos - cameraZ * yawSin;
+
+		projection[1] = yawSin * pitchSin;
+		projection[5] = pitchCos;
+		projection[9] = -yawCos * pitchSin;
+		projection[13] = cameraZ * yawCos * pitchSin - cameraX * yawSin * pitchSin - cameraY * pitchCos;
+
+		projection[2] = -yawSin * pitchCos;
+		projection[6] = pitchSin;
+		projection[10] = yawCos * pitchCos;
+		projection[14] = cameraX * yawSin * pitchCos - cameraZ * yawCos * pitchCos - cameraY * pitchSin;
+	}
+
+	private static float[] getSortProjection(SceneContext ctx, Projection projection)
+	{
+		return projection instanceof FloatProjection ?
+			((FloatProjection) projection).getProjection() : ctx.sortProjection;
 	}
 
 	private void preSceneDrawToplevel(Scene scene,
@@ -1207,7 +1241,7 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 				rts[i].vaoA.unmap();
 			}
 
-			glUniformMatrix4fv(uniEntityProj, false, ctx.projection);
+			glUniformMatrix4fv(uniEntityProj, false, ctx.entityProjection);
 			glUniform4i(uniEntityTint, scene.getOverrideHue(), scene.getOverrideSaturation(), scene.getOverrideLuminance(), scene.getOverrideAmount());
 		}
 
@@ -1239,7 +1273,7 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 			}
 
 			rt.modelUploader.uploadTempModel(m, orient, x, y, z, o.vbo.vb);
-			o.addRange(ctx.projection, scene, 0);
+			o.addRange(ctx.entityProjection, scene, 0);
 		}
 		else
 		{
@@ -1258,7 +1292,8 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 			int start = a.vbo.vb.position();
 			try
 			{
-				sorter.uploadSortedModel(rt, worldProjection, m, orient, x, y, z, o.vbo.vb, a.vbo.vb, false);
+				float[] projection = getSortProjection(ctx, worldProjection);
+				sorter.uploadSortedModel(projection, m, orient, x, y, z, o.vbo.vb, a.vbo.vb, false);
 			}
 			catch (Exception ex)
 			{
@@ -1266,7 +1301,7 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 			}
 			int end = a.vbo.vb.position();
 
-			o.addRange(ctx.projection, scene, 0);
+			o.addRange(ctx.entityProjection, scene, 0);
 
 			if (end > start)
 			{
@@ -1312,7 +1347,9 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 			m.calculateBoundsCylinder();
 			try
 			{
-				uploader.uploadSortedModel(rt, worldProjection, m, orient, x, y, z, o.vbo.vb, a.vbo.vb, renderMode == Renderable.RENDERMODE_SORTED_NO_DEPTH);
+				float[] projection = getSortProjection(ctx, worldProjection);
+				uploader.uploadSortedModel(projection, m, orient, x, y, z, o.vbo.vb, a.vbo.vb,
+					renderMode == Renderable.RENDERMODE_SORTED_NO_DEPTH);
 			}
 			catch (Exception ex)
 			{
@@ -1320,7 +1357,7 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 			}
 			int end = a.vbo.vb.position();
 
-			o.addRange(ctx.projection, scene, renderMode == Renderable.RENDERMODE_SORTED_NO_DEPTH ? renderMode : 0);
+			o.addRange(ctx.entityProjection, scene, renderMode == Renderable.RENDERMODE_SORTED_NO_DEPTH ? renderMode : 0);
 
 			if (end > start)
 			{
@@ -1338,7 +1375,7 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 			VAO o = rt.vaoO.get(size);
 			ModelUploader uploader = rt.modelUploader;
 			uploader.uploadTempModel(m, orient, x, y, z, o.vbo.vb);
-			o.addRange(ctx.projection, scene, 0);
+			o.addRange(ctx.entityProjection, scene, 0);
 		}
 	}
 
