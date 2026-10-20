@@ -25,7 +25,6 @@
  */
 package net.runelite.client.plugins.party;
 
-import com.google.common.base.Strings;
 import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Provides;
@@ -39,7 +38,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -50,18 +48,13 @@ import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
 import net.runelite.api.MenuEntry;
-import net.runelite.api.Player;
-import net.runelite.api.Skill;
 import net.runelite.api.SoundEffectID;
 import net.runelite.api.Tile;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.CommandExecuted;
 import net.runelite.api.events.FocusChanged;
 import net.runelite.api.events.GameStateChanged;
-import net.runelite.api.events.GameTick;
 import net.runelite.api.events.MenuOptionClicked;
-import net.runelite.api.gameval.VarPlayerID;
-import net.runelite.api.gameval.VarbitID;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.chat.ChatMessageManager;
 import net.runelite.client.chat.QueuedMessage;
@@ -71,18 +64,21 @@ import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.events.PartyChanged;
 import net.runelite.client.events.PartyMemberAvatar;
 import net.runelite.client.input.KeyManager;
+import net.runelite.client.party.PartyDataService;
+import net.runelite.client.party.PartyDataType;
 import net.runelite.client.party.PartyMember;
 import net.runelite.client.party.PartyService;
 import net.runelite.client.party.WSClient;
 import net.runelite.client.party.events.UserJoin;
 import net.runelite.client.party.events.UserPart;
+import net.runelite.client.party.messages.PartyDataMessage;
 import net.runelite.client.party.messages.UserSync;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.plugins.party.data.PartyData;
 import net.runelite.client.plugins.party.data.PartyTilePingData;
 import net.runelite.client.plugins.party.messages.LocationUpdate;
-import net.runelite.client.plugins.party.messages.StatusUpdate;
+import net.runelite.client.plugins.party.messages.MemberColorUpdate;
 import net.runelite.client.plugins.party.messages.TilePing;
 import net.runelite.client.task.Schedule;
 import net.runelite.client.ui.ClientToolbar;
@@ -109,6 +105,9 @@ public class PartyPlugin extends Plugin
 
 	@Inject
 	private PartyService party;
+
+	@Inject
+	private PartyDataService partyDataService;
 
 	@Inject
 	private OverlayManager overlayManager;
@@ -159,7 +158,6 @@ public class PartyPlugin extends Plugin
 	private NavigationButton navButton;
 
 	private WorldPoint lastLocation;
-	private StatusUpdate lastStatus;
 
 	private final HotkeyListener hotkeyListener = new HotkeyListener(() -> config.pingHotkey())
 	{
@@ -212,7 +210,7 @@ public class PartyPlugin extends Plugin
 		keyManager.registerKeyListener(hotkeyListener);
 		wsClient.registerMessage(TilePing.class);
 		wsClient.registerMessage(LocationUpdate.class);
-		wsClient.registerMessage(StatusUpdate.class);
+		partyDataService.subscribe(this, PartyDataType.HEALTH, PartyDataType.PRAYER, PartyDataType.ENERGY, PartyDataType.SPEC, PartyDataType.VENGEANCE);
 		// Delay sync so the eventbus can register prior to the sync response
 		SwingUtilities.invokeLater(this::requestSync);
 	}
@@ -231,11 +229,10 @@ public class PartyPlugin extends Plugin
 		overlayManager.remove(partyPingOverlay);
 		overlayManager.remove(partyStatusOverlay);
 		keyManager.unregisterKeyListener(hotkeyListener);
+		partyDataService.unsubscribe(this, PartyDataType.values());
 		wsClient.unregisterMessage(TilePing.class);
 		wsClient.unregisterMessage(LocationUpdate.class);
-		wsClient.unregisterMessage(StatusUpdate.class);
 		lastLocation = null;
-		lastStatus = null;
 	}
 
 	@Provides
@@ -266,6 +263,10 @@ public class PartyPlugin extends Plugin
 			partyStatusOverlay.updateConfig();
 			// rebuild the panel in the event the "Recolor names" option changes
 			SwingUtilities.invokeLater(panel::updateAll);
+			if ("memberColor".equals(event.getKey()) && event.getOldValue() != null)
+			{
+				requestSync();
+			}
 		}
 	}
 
@@ -315,8 +316,6 @@ public class PartyPlugin extends Plugin
 		{
 			lastLogout = Instant.now();
 		}
-
-		checkStateChanged(false);
 	}
 
 	@Subscribe
@@ -387,12 +386,6 @@ public class PartyPlugin extends Plugin
 		}
 	}
 
-	@Subscribe
-	public void onGameTick(final GameTick event)
-	{
-		checkStateChanged(false);
-	}
-
 	void requestSync()
 	{
 		if (party.isInParty())
@@ -404,7 +397,21 @@ public class PartyPlugin extends Plugin
 	}
 
 	@Subscribe
-	public void onStatusUpdate(final StatusUpdate event)
+	private void onMemberColorUpdate(MemberColorUpdate event)
+	{
+		final PartyData partyData = getPartyData(event.getMemberId());
+		if (partyData == null)
+		{
+			return;
+		}
+
+		partyData.setColor(event.getColor());
+
+		SwingUtilities.invokeLater(() -> panel.updateMember(event.getMemberId()));
+	}
+
+	@Subscribe
+	public void onStatusUpdate(final PartyDataMessage event)
 	{
 		final PartyData partyData = getPartyData(event.getMemberId());
 		if (partyData == null)
@@ -439,10 +446,6 @@ public class PartyPlugin extends Plugin
 		if (event.getVengeanceActive() != null)
 		{
 			partyData.setVengeanceActive(event.getVengeanceActive());
-		}
-		if (event.getMemberColor() != null)
-		{
-			partyData.setColor(event.getMemberColor());
 		}
 
 		final PartyMember member = party.getMemberById(event.getMemberId());
@@ -486,105 +489,12 @@ public class PartyPlugin extends Plugin
 	@Subscribe
 	public void onUserSync(final UserSync event)
 	{
-		clientThread.invokeLater(() -> checkStateChanged(true));
+		Color c = getLocalMemberColor();
+		if (c != null)
+		{
+			party.send(new MemberColorUpdate(c));
+		}
 		lastLocation = null;
-	}
-
-	private void checkStateChanged(boolean forceSend)
-	{
-		if (lastStatus == null)
-		{
-			forceSend = true;
-		}
-
-		if (!party.isInParty())
-		{
-			return;
-		}
-
-		final int healthCurrent = client.getBoostedSkillLevel(Skill.HITPOINTS);
-		final int prayerCurrent = client.getBoostedSkillLevel(Skill.PRAYER);
-		final int healthMax = client.getRealSkillLevel(Skill.HITPOINTS);
-		final int prayerMax = client.getRealSkillLevel(Skill.PRAYER);
-		final int runEnergy = (int) Math.ceil(client.getEnergy() / 1000.0) * 10; // flatten to reduce network load
-		final int specEnergy = client.getVarpValue(VarPlayerID.SA_ENERGY) / 10;
-		final boolean vengActive = client.getVarbitValue(VarbitID.VENGEANCE_REBOUND) == 1;
-		final Color memberColor = getLocalMemberColor();
-
-		final Player localPlayer = client.getLocalPlayer();
-		final String characterName = Strings.nullToEmpty(localPlayer != null && client.getGameState().getState() >= GameState.LOADING.getState() ? localPlayer.getName() : null);
-
-		boolean hasChange = false;
-		boolean canDelay = !forceSend;
-		final StatusUpdate update = new StatusUpdate();
-		if (forceSend || !characterName.equals(lastStatus.getCharacterName()))
-		{
-			hasChange = true;
-			update.setCharacterName(characterName);
-		}
-		if (forceSend || healthCurrent != lastStatus.getHealthCurrent())
-		{
-			hasChange = true;
-			update.setHealthCurrent(healthCurrent);
-		}
-		if (forceSend || healthMax != lastStatus.getHealthMax())
-		{
-			hasChange = true;
-			update.setHealthMax(healthMax);
-		}
-		if (forceSend || prayerCurrent != lastStatus.getPrayerCurrent())
-		{
-			hasChange = true;
-			update.setPrayerCurrent(prayerCurrent);
-		}
-		if (forceSend || prayerMax != lastStatus.getPrayerMax())
-		{
-			hasChange = true;
-			update.setPrayerMax(prayerMax);
-		}
-		if (forceSend || runEnergy != lastStatus.getRunEnergy())
-		{
-			hasChange = true;
-			update.setRunEnergy(runEnergy);
-		}
-		if (forceSend || specEnergy != lastStatus.getSpecEnergy())
-		{
-			hasChange = true;
-			canDelay = !forceSend && specEnergy - lastStatus.getSpecEnergy() == 10; // delay regen
-			update.setSpecEnergy(specEnergy);
-		}
-		if (forceSend || vengActive != lastStatus.getVengeanceActive())
-		{
-			hasChange = true;
-			update.setVengeanceActive(vengActive);
-		}
-		if (forceSend || !Objects.equals(memberColor, lastStatus.getMemberColor()))
-		{
-			hasChange = true;
-			update.setMemberColor(memberColor);
-		}
-
-		if (canDelay && client.getTickCount() % messageFreq(party.getMembers().size()) != 0)
-		{
-			return;
-		}
-
-		if (hasChange)
-		{
-			party.send(update);
-			// non-null values for next-tick comparison
-			lastStatus = new StatusUpdate(
-				characterName,
-				healthCurrent,
-				healthMax,
-				prayerCurrent,
-				prayerMax,
-				runEnergy,
-				specEnergy,
-				vengActive,
-				memberColor
-			);
-		}
 	}
 
 	@Subscribe
@@ -690,11 +600,5 @@ public class PartyPlugin extends Plugin
 		}
 
 		return memberColor;
-	}
-
-	private static int messageFreq(int partySize)
-	{
-		// introduce a tick delay for each member >6
-		return Math.max(1, partySize - 6);
 	}
 }
