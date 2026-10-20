@@ -22,7 +22,6 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 package net.runelite.client.plugins.party;
 
 import java.awt.BorderLayout;
@@ -154,13 +153,13 @@ class PartyMemberBox extends JPanel
 		}
 
 		// Update progress bars
-		hpBar.setValue(memberPartyData.getHitpoints());
-		hpBar.setMaximumValue(memberPartyData.getMaxHitpoints());
-		hpBar.setCenterLabel(progressBarLabel(memberPartyData.getHitpoints(), memberPartyData.getMaxHitpoints()));
+		hpBar.setValue(member.getHitpoints());
+		hpBar.setMaximumValue(member.getMaxHitpoints());
+		hpBar.setCenterLabel(progressBarLabel(member.getHitpoints(), member.getMaxHitpoints()));
 
-		prayerBar.setValue(memberPartyData.getPrayer());
-		prayerBar.setMaximumValue(memberPartyData.getMaxPrayer());
-		prayerBar.setCenterLabel(progressBarLabel(memberPartyData.getPrayer(), memberPartyData.getMaxPrayer()));
+		prayerBar.setValue(member.getPrayer());
+		prayerBar.setMaximumValue(member.getMaxPrayer());
+		prayerBar.setCenterLabel(progressBarLabel(member.getPrayer(), member.getMaxPrayer()));
 
 		// Update name label
 		Color playerColor = config.recolorNames() ? memberPartyData.getColor() : Color.WHITE;

@@ -40,7 +40,6 @@ import net.runelite.api.gameval.SpriteID;
 import net.runelite.client.game.SpriteManager;
 import net.runelite.client.party.PartyMember;
 import net.runelite.client.party.PartyService;
-import net.runelite.client.plugins.party.data.PartyData;
 import net.runelite.client.ui.FontManager;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
@@ -63,7 +62,6 @@ class PartyStatusOverlay extends Overlay
 	private final SpriteManager spriteManager;
 	private final PartyConfig config;
 	private final PartyService partyService;
-	private final PartyPluginService partyPluginService;
 
 	private boolean renderHealth = false;
 	private boolean renderPrayer = false;
@@ -75,13 +73,12 @@ class PartyStatusOverlay extends Overlay
 	@Inject
 	private PartyStatusOverlay(
 		Client client, SpriteManager spriteManager,
-		PartyConfig config, PartyService partyService, PartyPluginService partyPluginService
+		PartyConfig config, PartyService partyService
 	)
 	{
 		this.client = client;
 		this.spriteManager = spriteManager;
 		this.partyService = partyService;
-		this.partyPluginService = partyPluginService;
 		this.config = config;
 
 		updateConfig();
@@ -112,33 +109,27 @@ class PartyStatusOverlay extends Overlay
 				continue;
 			}
 
-			PartyData partyData = partyPluginService.getPartyData(partyMember.getMemberId());
-			if (partyData == null)
-			{
-				continue;
-			}
-
 			int renderIx = 0;
 			graphics.setFont(OVERLAY_FONT);
 			if (renderHealth)
 			{
-				double healthRatio = Math.min(1.0, (double) partyData.getHitpoints() / partyData.getMaxHitpoints());
+				double healthRatio = Math.min(1.0, (double) partyMember.getHitpoints() / partyMember.getMaxHitpoints());
 				Color healthColor = ColorUtil.colorLerp(COLOR_HEALTH_MIN, COLOR_HEALTH_MAX, healthRatio);
-				renderPlayerOverlay(graphics, player, String.valueOf(partyData.getHitpoints()), healthColor, renderIx++);
+				renderPlayerOverlay(graphics, player, String.valueOf(partyMember.getHitpoints()), healthColor, renderIx++);
 			}
 			if (renderPrayer)
 			{
-				renderPlayerOverlay(graphics, player, String.valueOf(partyData.getPrayer()), COLOR_PRAYER, renderIx++);
+				renderPlayerOverlay(graphics, player, String.valueOf(partyMember.getPrayer()), COLOR_PRAYER, renderIx++);
 			}
 			if (renderStamina)
 			{
-				renderPlayerOverlay(graphics, player, String.valueOf(partyData.getRunEnergy()), COLOR_STAMINA, renderIx++);
+				renderPlayerOverlay(graphics, player, String.valueOf(partyMember.getRunEnergy()), COLOR_STAMINA, renderIx++);
 			}
 			if (renderSpec)
 			{
-				renderPlayerOverlay(graphics, player, String.valueOf(partyData.getSpecEnergy()), COLOR_SPEC, renderIx);
+				renderPlayerOverlay(graphics, player, String.valueOf(partyMember.getSpecEnergy()), COLOR_SPEC, renderIx);
 			}
-			if (renderVeng && partyData.isVengeanceActive())
+			if (renderVeng && partyMember.isVengeanceActive())
 			{
 				BufferedImage vengIcon = spriteManager.getSprite(SpriteID.LunarMagicOn.VENGEANCE_OTHER, 0);
 				if (vengIcon != null)
