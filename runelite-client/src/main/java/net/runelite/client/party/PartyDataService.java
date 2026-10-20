@@ -48,6 +48,7 @@ import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.party.messages.PartyDataMessage;
 import net.runelite.client.party.messages.UserSync;
 import net.runelite.client.plugins.Plugin;
+import net.runelite.client.util.Text;
 
 @Singleton
 public class PartyDataService
@@ -244,7 +245,7 @@ public class PartyDataService
 			hasChange = true;
 			update.setInv(serializeInv(client.getItemContainer(InventoryID.INV)));
 		}
-		if (isSubscribed(PartyDataType.INV) && (forceSend || wornDirty))
+		if (isSubscribed(PartyDataType.WORN) && (forceSend || wornDirty))
 		{
 			hasChange = true;
 			update.setWorn(serializeInv(client.getItemContainer(InventoryID.WORN)));
@@ -279,6 +280,59 @@ public class PartyDataService
 				0L
 			);
 		}
+	}
+
+	@Subscribe(priority = 1)
+	private void onPartyDataMessage(PartyDataMessage event)
+	{
+		PartyMember member = party.getMemberById(event.getMemberId());
+		if (member == null)
+		{
+			return;
+		}
+
+		if (event.getCharacterName() != null)
+		{
+			final String name = Text.removeTags(Text.toJagexName(event.getCharacterName()));
+			if (!name.isEmpty())
+			{
+				member.setDisplayName(name);
+				member.setLoggedIn(true);
+			}
+			else
+			{
+				member.setLoggedIn(false);
+			}
+		}
+		if (event.getHealthCurrent() != null)
+		{
+			member.setHitpoints(event.getHealthCurrent());
+		}
+		if (event.getHealthMax() != null)
+		{
+			member.setMaxHitpoints(event.getHealthMax());
+		}
+		if (event.getPrayerCurrent() != null)
+		{
+			member.setPrayer(event.getPrayerCurrent());
+		}
+		if (event.getPrayerMax() != null)
+		{
+			member.setMaxPrayer(event.getPrayerMax());
+		}
+		if (event.getRunEnergy() != null)
+		{
+			member.setRunEnergy(event.getRunEnergy());
+		}
+		if (event.getSpecEnergy() != null)
+		{
+			member.setSpecEnergy(event.getSpecEnergy());
+		}
+		if (event.getVengeanceActive() != null)
+		{
+			member.setVengeanceActive(event.getVengeanceActive());
+		}
+		// inv worn prayer etc TODO
 	}
 
 	private static int[] serializeInv(ItemContainer inv)

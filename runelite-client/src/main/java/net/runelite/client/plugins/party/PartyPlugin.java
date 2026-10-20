@@ -411,58 +411,8 @@ public class PartyPlugin extends Plugin
 	}
 
 	@Subscribe
-	public void onStatusUpdate(final PartyDataMessage event)
+	public void onPartyDataMessage(final PartyDataMessage event)
 	{
-		final PartyData partyData = getPartyData(event.getMemberId());
-		if (partyData == null)
-		{
-			return;
-		}
-
-		if (event.getHealthCurrent() != null)
-		{
-			partyData.setHitpoints(event.getHealthCurrent());
-		}
-		if (event.getHealthMax() != null)
-		{
-			partyData.setMaxHitpoints(event.getHealthMax());
-		}
-		if (event.getPrayerCurrent() != null)
-		{
-			partyData.setPrayer(event.getPrayerCurrent());
-		}
-		if (event.getPrayerMax() != null)
-		{
-			partyData.setMaxPrayer(event.getPrayerMax());
-		}
-		if (event.getRunEnergy() != null)
-		{
-			partyData.setRunEnergy(event.getRunEnergy());
-		}
-		if (event.getSpecEnergy() != null)
-		{
-			partyData.setSpecEnergy(event.getSpecEnergy());
-		}
-		if (event.getVengeanceActive() != null)
-		{
-			partyData.setVengeanceActive(event.getVengeanceActive());
-		}
-
-		final PartyMember member = party.getMemberById(event.getMemberId());
-		if (event.getCharacterName() != null)
-		{
-			final String name = Text.removeTags(Text.toJagexName(event.getCharacterName()));
-			if (!name.isEmpty())
-			{
-				member.setDisplayName(name);
-				member.setLoggedIn(true);
-			}
-			else
-			{
-				member.setLoggedIn(false);
-			}
-		}
-
 		SwingUtilities.invokeLater(() -> panel.updateMember(event.getMemberId()));
 	}
 

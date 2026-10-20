@@ -26,6 +26,7 @@ package net.runelite.client.party;
 
 import java.awt.image.BufferedImage;
 import lombok.Data;
+import net.runelite.api.Item;
 
 @Data
 public class PartyMember
@@ -34,4 +35,13 @@ public class PartyMember
 	private String displayName = "<unknown>";
 	private boolean loggedIn;
 	private BufferedImage avatar;
+
+	private int hitpoints;
+	private int maxHitpoints;
+	private int prayer;
+	private int maxPrayer;
+	private int runEnergy;
+	private int specEnergy;
+	private boolean vengeanceActive;
+//	private Item[] inv;
 }
