@@ -68,10 +68,17 @@ public class PartyDataService
 	private final List<Subscription> subscriptions = new ArrayList<>(2);
 	private int subscriptionMask;
 
+	private String lastCharacterName;
+	private int lastHealthCurrent;
+	private int lastHealthMax;
+	private int lastPrayerCurrent;
+	private int lastPrayerMax;
+	private int lastRunEnergy;
+	private int lastSpecEnergy;
+	private boolean lastVengeActive;
+
 	private boolean invDirty, wornDirty;
 	private boolean prayerDirty;
-
-	private PartyDataMessage lastStatus;
 
 	@Inject
 	public PartyDataService(Client client, ClientThread clientThread, PartyService partyService, EventBus eventBus)
@@ -194,50 +201,46 @@ public class PartyDataService
 		final String characterName = Strings.nullToEmpty(localPlayer != null && client.getGameState().getState() >= GameState.LOADING.getState() ? localPlayer.getName() : null);
 
 		final PartyDataMessage update = new PartyDataMessage();
-		if (lastStatus == null)
-		{
-			forceSend = true;
-		}
 		boolean hasChange = false;
 		boolean canDelay = !forceSend;
 
-		if (isSubscribed(PartyDataType.CHARACTER_NAME) && (forceSend || !characterName.equals(lastStatus.getCharacterName())))
+		if (isSubscribed(PartyDataType.CHARACTER_NAME) && (forceSend || !characterName.equals(lastCharacterName)))
 		{
 			hasChange = true;
 			update.setCharacterName(characterName);
 		}
-		if (isSubscribed(PartyDataType.HEALTH) && (forceSend || healthCurrent != lastStatus.getHealthCurrent()))
+		if (isSubscribed(PartyDataType.HEALTH) && (forceSend || healthCurrent != lastHealthCurrent))
 		{
 			hasChange = true;
 			update.setHealthCurrent(healthCurrent);
 		}
-		if (isSubscribed(PartyDataType.HEALTH) && (forceSend || healthMax != lastStatus.getHealthMax()))
+		if (isSubscribed(PartyDataType.HEALTH) && (forceSend || healthMax != lastHealthMax))
 		{
 			hasChange = true;
 			update.setHealthMax(healthMax);
 		}
-		if (isSubscribed(PartyDataType.PRAYER) && (forceSend || prayerCurrent != lastStatus.getPrayerCurrent()))
+		if (isSubscribed(PartyDataType.PRAYER) && (forceSend || prayerCurrent != lastPrayerCurrent))
 		{
 			hasChange = true;
 			update.setPrayerCurrent(prayerCurrent);
 		}
-		if (isSubscribed(PartyDataType.PRAYER) && (forceSend || prayerMax != lastStatus.getPrayerMax()))
+		if (isSubscribed(PartyDataType.PRAYER) && (forceSend || prayerMax != lastPrayerMax))
 		{
 			hasChange = true;
 			update.setPrayerMax(prayerMax);
 		}
-		if (isSubscribed(PartyDataType.ENERGY) && (forceSend || runEnergy != lastStatus.getRunEnergy()))
+		if (isSubscribed(PartyDataType.ENERGY) && (forceSend || runEnergy != lastRunEnergy))
 		{
 			hasChange = true;
 			update.setRunEnergy(runEnergy);
 		}
-		if (isSubscribed(PartyDataType.SPEC) && (forceSend || specEnergy != lastStatus.getSpecEnergy()))
+		if (isSubscribed(PartyDataType.SPEC) && (forceSend || specEnergy != lastSpecEnergy))
 		{
 			hasChange = true;
-			canDelay = !forceSend && specEnergy - lastStatus.getSpecEnergy() == 10; // delay regen
+			canDelay = !forceSend && specEnergy - lastSpecEnergy == 10; // delay regen
 			update.setSpecEnergy(specEnergy);
 		}
-		if (isSubscribed(PartyDataType.VENGEANCE) && (forceSend || vengActive != lastStatus.getVengeanceActive()))
+		if (isSubscribed(PartyDataType.VENGEANCE) && (forceSend || vengActive != lastVengeActive))
 		{
 			hasChange = true;
 			update.setVengeanceActive(vengActive);
@@ -265,22 +268,17 @@ public class PartyDataService
 
 		if (hasChange)
 		{
+			lastCharacterName = characterName;
+			lastHealthCurrent =  healthCurrent;
+			lastHealthMax = healthMax;
+			lastPrayerCurrent = prayerCurrent;
+			lastPrayerMax = prayerMax;
+			lastRunEnergy = runEnergy;
+			lastSpecEnergy = specEnergy;
+			lastVengeActive = vengActive;
 			invDirty = wornDirty = prayerDirty = false;
+
 			party.send(update);
-			// non-null values for next-tick comparison
-			lastStatus = new PartyDataMessage(
-				characterName,
-				healthCurrent,
-				healthMax,
-				prayerCurrent,
-				prayerMax,
-				runEnergy,
-				specEnergy,
-				vengActive,
-				null,
-				null,
-				0L
-			);
 		}
 	}
 
