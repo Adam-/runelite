@@ -25,8 +25,10 @@
 package net.runelite.client.party;
 
 import java.awt.image.BufferedImage;
+import java.util.Set;
 import lombok.Data;
 import net.runelite.api.Item;
+import net.runelite.api.Prayer;
 
 @Data
 public class PartyMember
@@ -43,5 +45,7 @@ public class PartyMember
 	private int runEnergy;
 	private int specEnergy;
 	private boolean vengeanceActive;
-//	private Item[] inv;
+	private Item[] inv;
+	private Item[] worn;
+	private Set<Prayer> prayers;
 }

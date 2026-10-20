@@ -28,7 +28,9 @@ import com.google.common.base.Strings;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
 import net.runelite.api.Item;
@@ -332,7 +334,18 @@ public class PartyDataService
 		{
 			member.setVengeanceActive(event.getVengeanceActive());
 		}
-		// inv worn prayer etc TODO
+		if (event.getInv() != null)
+		{
+			member.setInv(deserializeInv(event.getInv()));
+		}
+		if (event.getWorn() != null)
+		{
+			member.setWorn(deserializeInv(event.getWorn()));
+		}
+		if (event.getPrayers() != null)
+		{
+			member.setPrayers(deserializePrayers(event.getPrayers()));
+		}
 	}
 
 	private static int[] serializeInv(ItemContainer inv)
@@ -360,6 +373,26 @@ public class PartyDataService
 		return s;
 	}
 
+	private static Item[] deserializeInv(int[] s)
+	{
+		if (s == null)
+		{
+			return null;
+		}
+
+		Item[] items = new Item[s.length >> 1];
+		for (int i = 0; i < items.length; ++i)
+		{
+			int itemId = s[i << 1];
+			int quantity = s[(i << 1) | 1];
+			if (itemId > -1)
+			{
+				items[i] = new Item(itemId, quantity);
+			}
+		}
+		return items;
+	}
+
 	private long serializePrayers()
 	{
 		long s = 0;
@@ -371,6 +404,19 @@ public class PartyDataService
 			}
 		}
 		return s;
+	}
+
+	private static Set<Prayer> deserializePrayers(long s)
+	{
+		EnumSet<Prayer> prayers = EnumSet.noneOf(Prayer.class);
+		for (Prayer p : Prayer.values())
+		{
+			if ((s & (1L << p.ordinal())) != 0)
+			{
+				prayers.add(p);
+			}
+		}
+		return prayers;
 	}
 
 	private static int messageFreq(int partySize)
