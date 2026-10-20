@@ -68,4 +68,7 @@ public class PartyDataMessage extends PartyMemberMessage
 
 	@SerializedName("w")
 	private int[] worn;
+
+	@SerializedName("p")
+	private Long prayers;
 }

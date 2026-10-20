@@ -34,4 +34,5 @@ public enum PartyDataType
 	VENGEANCE,
 	INV,
 	WORN,
+	ACTIVE_PRAYERS,
 }

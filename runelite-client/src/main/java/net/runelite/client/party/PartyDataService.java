@@ -34,9 +34,11 @@ import net.runelite.api.GameState;
 import net.runelite.api.Item;
 import net.runelite.api.ItemContainer;
 import net.runelite.api.Player;
+import net.runelite.api.Prayer;
 import net.runelite.api.Skill;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.ItemContainerChanged;
+import net.runelite.api.events.VarbitChanged;
 import net.runelite.api.gameval.InventoryID;
 import net.runelite.api.gameval.VarPlayerID;
 import net.runelite.api.gameval.VarbitID;
@@ -64,6 +66,7 @@ public class PartyDataService
 	private int subscriptionMask;
 
 	private boolean invDirty, wornDirty;
+	private boolean prayerDirty;
 
 	private PartyDataMessage lastStatus;
 
@@ -158,6 +161,17 @@ public class PartyDataService
 		}
 	}
 
+	@Subscribe
+	private void onVarbitChanged(VarbitChanged event)
+	{
+		switch (event.getVarpId())
+		{
+			case VarPlayerID.PRAYER0:
+			case VarPlayerID.PRAYER_RUINOUS_0:
+				prayerDirty = true;
+		}
+	}
+
 	private void checkStateChanged(boolean forceSend)
 	{
 		if (!party.isInParty())
@@ -176,13 +190,13 @@ public class PartyDataService
 		final Player localPlayer = client.getLocalPlayer();
 		final String characterName = Strings.nullToEmpty(localPlayer != null && client.getGameState().getState() >= GameState.LOADING.getState() ? localPlayer.getName() : null);
 
-		boolean hasChange = false;
-		boolean canDelay = !forceSend;
 		final PartyDataMessage update = new PartyDataMessage();
 		if (lastStatus == null)
 		{
 			forceSend = true;
 		}
+		boolean hasChange = false;
+		boolean canDelay = !forceSend;
 
 		if (isSubscribed(PartyDataType.CHARACTER_NAME) && (forceSend || !characterName.equals(lastStatus.getCharacterName())))
 		{
@@ -229,13 +243,16 @@ public class PartyDataService
 		{
 			hasChange = true;
 			update.setInv(serializeInv(client.getItemContainer(InventoryID.INV)));
-			invDirty = false;
 		}
 		if (isSubscribed(PartyDataType.INV) && (forceSend || wornDirty))
 		{
 			hasChange = true;
-			update.setWorn(serializeInv(client.getItemContainer(InventoryID.WORN));
-			wornDirty = false;
+			update.setWorn(serializeInv(client.getItemContainer(InventoryID.WORN)));
+		}
+		if (isSubscribed(PartyDataType.PRAYER) && (forceSend || prayerDirty))
+		{
+			hasChange = true;
+			update.setPrayers(serializePrayers());
 		}
 
 		if (canDelay && client.getTickCount() % messageFreq(party.getMembers().size()) != 0)
@@ -245,6 +262,7 @@ public class PartyDataService
 
 		if (hasChange)
 		{
+			invDirty = wornDirty = prayerDirty = false;
 			party.send(update);
 			// non-null values for next-tick comparison
 			lastStatus = new PartyDataMessage(
@@ -257,7 +275,8 @@ public class PartyDataService
 				specEnergy,
 				vengActive,
 				null,
-				null
+				null,
+				0L
 			);
 		}
 	}
@@ -282,6 +301,19 @@ public class PartyDataService
 			{
 				s[i << 1] = item.getId();
 				s[(1 << 1) | 1] = item.getQuantity();
+			}
+		}
+		return s;
+	}
+
+	private long serializePrayers()
+	{
+		long s = 0;
+		for (Prayer p : Prayer.values())
+		{
+			if (client.getVarbitValue(p.getVarbit()) == 1)
+			{
+				s |= 1L << p.ordinal();
 			}
 		}
 		return s;
