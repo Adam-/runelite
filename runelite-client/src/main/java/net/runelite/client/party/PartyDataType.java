@@ -32,4 +32,6 @@ public enum PartyDataType
 	ENERGY,
 	SPEC,
 	VENGEANCE,
+	INV,
+	WORN,
 }

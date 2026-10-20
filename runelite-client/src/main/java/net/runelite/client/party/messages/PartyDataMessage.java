@@ -40,26 +40,32 @@ public class PartyDataMessage extends PartyMemberMessage
 {
 	// we use boxed fields to null out properties that haven't changed
 	@SerializedName("n")
-	private String characterName = null;
+	private String characterName;
 
 	@SerializedName("hc")
-	private Integer healthCurrent = null;
+	private Integer healthCurrent;
 
 	@SerializedName("hm")
-	private Integer healthMax = null;
+	private Integer healthMax;
 
 	@SerializedName("pc")
-	private Integer prayerCurrent = null;
+	private Integer prayerCurrent;
 
 	@SerializedName("pm")
-	private Integer prayerMax = null;
+	private Integer prayerMax;
 
 	@SerializedName("r")
-	private Integer runEnergy = null;
+	private Integer runEnergy;
 
 	@SerializedName("s")
-	private Integer specEnergy = null;
+	private Integer specEnergy;
 
 	@SerializedName("v")
-	private Boolean vengeanceActive = null;
+	private Boolean vengeanceActive;
+
+	@SerializedName("i")
+	private int[] inv;
+
+	@SerializedName("w")
+	private int[] worn;
 }

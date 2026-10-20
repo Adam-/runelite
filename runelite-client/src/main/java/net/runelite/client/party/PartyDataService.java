@@ -31,9 +31,13 @@ import java.util.ArrayList;
 import java.util.List;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
+import net.runelite.api.Item;
+import net.runelite.api.ItemContainer;
 import net.runelite.api.Player;
 import net.runelite.api.Skill;
 import net.runelite.api.events.GameTick;
+import net.runelite.api.events.ItemContainerChanged;
+import net.runelite.api.gameval.InventoryID;
 import net.runelite.api.gameval.VarPlayerID;
 import net.runelite.api.gameval.VarbitID;
 import net.runelite.client.callback.ClientThread;
@@ -58,6 +62,8 @@ public class PartyDataService
 
 	private final List<Subscription> subscriptions = new ArrayList<>(2);
 	private int subscriptionMask;
+
+	private boolean invDirty, wornDirty;
 
 	private PartyDataMessage lastStatus;
 
@@ -138,6 +144,20 @@ public class PartyDataService
 		clientThread.invokeLater(() -> checkStateChanged(true));
 	}
 
+	@Subscribe
+	private void onItemContainerChanged(ItemContainerChanged event)
+	{
+		switch (event.getContainerId())
+		{
+			case InventoryID.INV:
+				invDirty = true;
+				break;
+			case InventoryID.WORN:
+				wornDirty = true;
+				break;
+		}
+	}
+
 	private void checkStateChanged(boolean forceSend)
 	{
 		if (!party.isInParty())
@@ -205,6 +225,18 @@ public class PartyDataService
 			hasChange = true;
 			update.setVengeanceActive(vengActive);
 		}
+		if (isSubscribed(PartyDataType.INV) && (forceSend || invDirty))
+		{
+			hasChange = true;
+			update.setInv(serializeInv(client.getItemContainer(InventoryID.INV)));
+			invDirty = false;
+		}
+		if (isSubscribed(PartyDataType.INV) && (forceSend || wornDirty))
+		{
+			hasChange = true;
+			update.setWorn(serializeInv(client.getItemContainer(InventoryID.WORN));
+			wornDirty = false;
+		}
 
 		if (canDelay && client.getTickCount() % messageFreq(party.getMembers().size()) != 0)
 		{
@@ -223,9 +255,36 @@ public class PartyDataService
 				prayerMax,
 				runEnergy,
 				specEnergy,
-				vengActive
+				vengActive,
+				null,
+				null
 			);
 		}
+	}
+
+	private static int[] serializeInv(ItemContainer inv)
+	{
+		if (inv == null)
+		{
+			return null;
+		}
+
+		int size = inv.size();
+		int[] s = new int[size << 1];
+		for (int i = 0; i < size; ++i)
+		{
+			Item item = inv.getItem(i);
+			if (item == null)
+			{
+				s[i << 1] = -1;
+			}
+			else
+			{
+				s[i << 1] = item.getId();
+				s[(1 << 1) | 1] = item.getQuantity();
+			}
+		}
+		return s;
 	}
 
 	private static int messageFreq(int partySize)
