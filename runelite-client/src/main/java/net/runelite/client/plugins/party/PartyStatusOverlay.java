@@ -36,6 +36,7 @@ import net.runelite.api.Client;
 import net.runelite.api.Perspective;
 import net.runelite.api.Player;
 import net.runelite.api.Point;
+import net.runelite.api.Skill;
 import net.runelite.api.gameval.SpriteID;
 import net.runelite.client.game.SpriteManager;
 import net.runelite.client.party.PartyMember;
@@ -113,13 +114,13 @@ class PartyStatusOverlay extends Overlay
 			graphics.setFont(OVERLAY_FONT);
 			if (renderHealth)
 			{
-				double healthRatio = Math.min(1.0, (double) partyMember.getHitpoints() / partyMember.getMaxHitpoints());
+				double healthRatio = Math.min(1.0, (double) partyMember.getStatBoost(Skill.HITPOINTS) / partyMember.getStatBase(Skill.HITPOINTS));
 				Color healthColor = ColorUtil.colorLerp(COLOR_HEALTH_MIN, COLOR_HEALTH_MAX, healthRatio);
-				renderPlayerOverlay(graphics, player, String.valueOf(partyMember.getHitpoints()), healthColor, renderIx++);
+				renderPlayerOverlay(graphics, player, String.valueOf(partyMember.getStatBoost(Skill.HITPOINTS)), healthColor, renderIx++);
 			}
 			if (renderPrayer)
 			{
-				renderPlayerOverlay(graphics, player, String.valueOf(partyMember.getPrayer()), COLOR_PRAYER, renderIx++);
+				renderPlayerOverlay(graphics, player, String.valueOf(partyMember.getStatBoost(Skill.PRAYER)), COLOR_PRAYER, renderIx++);
 			}
 			if (renderStamina)
 			{

@@ -26,7 +26,6 @@
 package net.runelite.client.party.messages;
 
 import com.google.gson.annotations.SerializedName;
-import java.awt.Color;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -42,22 +41,10 @@ public class PartyDataMessage extends PartyMemberMessage
 	@SerializedName("n")
 	private String characterName;
 
-	@SerializedName("hc")
-	private Integer healthCurrent;
-
-	@SerializedName("hm")
-	private Integer healthMax;
-
-	@SerializedName("pc")
-	private Integer prayerCurrent;
-
-	@SerializedName("pm")
-	private Integer prayerMax;
-
 	@SerializedName("r")
 	private Integer runEnergy;
 
-	@SerializedName("s")
+	@SerializedName("sp")
 	private Integer specEnergy;
 
 	@SerializedName("v")
@@ -71,4 +58,10 @@ public class PartyDataMessage extends PartyMemberMessage
 
 	@SerializedName("p")
 	private Long prayers;
+
+	@SerializedName("b")
+	private int[] statBase;
+
+	@SerializedName("s")
+	private int[] statBoost;
 }

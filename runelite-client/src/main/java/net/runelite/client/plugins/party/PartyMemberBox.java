@@ -37,6 +37,7 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import lombok.AccessLevel;
 import lombok.Getter;
+import net.runelite.api.Skill;
 import net.runelite.client.party.PartyMember;
 import net.runelite.client.party.PartyService;
 import net.runelite.client.plugins.party.data.PartyData;
@@ -153,13 +154,13 @@ class PartyMemberBox extends JPanel
 		}
 
 		// Update progress bars
-		hpBar.setValue(member.getHitpoints());
-		hpBar.setMaximumValue(member.getMaxHitpoints());
-		hpBar.setCenterLabel(progressBarLabel(member.getHitpoints(), member.getMaxHitpoints()));
+		hpBar.setValue(member.getStatBoost(Skill.HITPOINTS));
+		hpBar.setMaximumValue(member.getStatBase(Skill.HITPOINTS));
+		hpBar.setCenterLabel(progressBarLabel(member.getStatBoost(Skill.HITPOINTS), member.getStatBase(Skill.HITPOINTS)));
 
-		prayerBar.setValue(member.getPrayer());
-		prayerBar.setMaximumValue(member.getMaxPrayer());
-		prayerBar.setCenterLabel(progressBarLabel(member.getPrayer(), member.getMaxPrayer()));
+		prayerBar.setValue(member.getStatBoost(Skill.PRAYER));
+		prayerBar.setMaximumValue(member.getStatBase(Skill.PRAYER));
+		prayerBar.setCenterLabel(progressBarLabel(member.getStatBoost(Skill.PRAYER), member.getStatBase(Skill.PRAYER)));
 
 		// Update name label
 		Color playerColor = config.recolorNames() ? memberPartyData.getColor() : Color.WHITE;

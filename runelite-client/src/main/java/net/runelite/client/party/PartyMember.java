@@ -26,26 +26,47 @@ package net.runelite.client.party;
 
 import java.awt.image.BufferedImage;
 import java.util.Set;
-import lombok.Data;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import net.runelite.api.Item;
 import net.runelite.api.Prayer;
+import net.runelite.api.Skill;
 
-@Data
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public class PartyMember
 {
+	@Getter
 	private final long memberId;
-	private String displayName = "<unknown>";
-	private boolean loggedIn;
-	private BufferedImage avatar;
+	@Getter
+	String displayName = "<unknown>";
+	@Getter
+	boolean loggedIn;
+	@Getter
+	BufferedImage avatar;
 
-	private int hitpoints;
-	private int maxHitpoints;
-	private int prayer;
-	private int maxPrayer;
-	private int runEnergy;
-	private int specEnergy;
-	private boolean vengeanceActive;
-	private Item[] inv;
-	private Item[] worn;
-	private Set<Prayer> prayers;
+	@Getter
+	int runEnergy;
+	@Getter
+	int specEnergy;
+	@Getter
+	boolean vengeanceActive;
+	int[] statBase;
+	int[] statBoost;
+	@Getter
+	Item[] inv;
+	@Getter
+	Item[] worn;
+	@Getter
+	Set<Prayer> prayers;
+
+	public int getStatBase(Skill s)
+	{
+		return statBase[s.ordinal()];
+	}
+
+	public int getStatBoost(Skill s)
+	{
+		return statBoost[s.ordinal()];
+	}
 }

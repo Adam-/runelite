@@ -48,6 +48,7 @@ import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
 import net.runelite.api.MenuEntry;
+import net.runelite.api.Skill;
 import net.runelite.api.SoundEffectID;
 import net.runelite.api.Tile;
 import net.runelite.api.coords.WorldPoint;
@@ -210,7 +211,8 @@ public class PartyPlugin extends Plugin
 		keyManager.registerKeyListener(hotkeyListener);
 		wsClient.registerMessage(TilePing.class);
 		wsClient.registerMessage(LocationUpdate.class);
-		partyDataService.subscribe(this, PartyDataType.HEALTH, PartyDataType.PRAYER, PartyDataType.ENERGY, PartyDataType.SPEC, PartyDataType.VENGEANCE);
+		partyDataService.subscribe(this, PartyDataType.ENERGY, PartyDataType.SPEC, PartyDataType.VENGEANCE);
+		partyDataService.subscribe(this, Skill.HITPOINTS, Skill.PRAYER);
 		// Delay sync so the eventbus can register prior to the sync response
 		SwingUtilities.invokeLater(this::requestSync);
 	}
@@ -230,6 +232,7 @@ public class PartyPlugin extends Plugin
 		overlayManager.remove(partyStatusOverlay);
 		keyManager.unregisterKeyListener(hotkeyListener);
 		partyDataService.unsubscribe(this, PartyDataType.values());
+		partyDataService.unsubscribe(this, Skill.values());
 		wsClient.unregisterMessage(TilePing.class);
 		wsClient.unregisterMessage(LocationUpdate.class);
 		lastLocation = null;

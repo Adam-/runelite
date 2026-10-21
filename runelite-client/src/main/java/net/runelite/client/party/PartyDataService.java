@@ -31,6 +31,8 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.ToIntFunction;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
 import net.runelite.api.Item;
@@ -40,6 +42,7 @@ import net.runelite.api.Prayer;
 import net.runelite.api.Skill;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.ItemContainerChanged;
+import net.runelite.api.events.StatChanged;
 import net.runelite.api.events.VarbitChanged;
 import net.runelite.api.gameval.InventoryID;
 import net.runelite.api.gameval.VarPlayerID;
@@ -62,11 +65,13 @@ public class PartyDataService
 	private static class Subscription
 	{
 		Plugin p;
-		int mask;
+		int types;
+		int skills;
 	}
 
 	private final List<Subscription> subscriptions = new ArrayList<>(2);
 	private int subscriptionMask;
+	private int statMask;
 
 	private String lastCharacterName;
 	private int lastHealthCurrent;
@@ -76,9 +81,12 @@ public class PartyDataService
 	private int lastRunEnergy;
 	private int lastSpecEnergy;
 	private boolean lastVengeActive;
+	private final int[] lastStat = new int[Skill.values().length];
+	private final int[] lastStatBoost = new int[Skill.values().length];
 
 	private boolean invDirty, wornDirty;
 	private boolean prayerDirty;
+	private int statDirty, statBoostDirty;
 
 	@Inject
 	public PartyDataService(Client client, ClientThread clientThread, PartyService partyService, EventBus eventBus)
@@ -89,35 +97,55 @@ public class PartyDataService
 		eventBus.register(this);
 	}
 
-	public synchronized void subscribe(Plugin plugin, PartyDataType... types)
+	private Subscription getOrCreateSubscription(Plugin plugin)
 	{
 		var opt = subscriptions.stream().filter(s -> s.p == plugin).findFirst();
 		if (opt.isPresent())
 		{
-			opt.get().mask |= typeMask(types);
+			return opt.get();
 		}
-		else
-		{
-			Subscription sub = new Subscription();
-			sub.p = plugin;
-			sub.mask = typeMask(types);
-			subscriptions.add(sub);
-		}
-		recomputeMask();
+		Subscription sub = new Subscription();
+		sub.p = plugin;
+		subscriptions.add(sub);
+		return sub;
+	}
+
+	public synchronized void subscribe(Plugin plugin, PartyDataType... types)
+	{
+		Subscription sub = getOrCreateSubscription(plugin);
+		sub.types |= enumMask(types);
+		recomputeMasks();
+	}
+
+	public synchronized void subscribe(Plugin plugin, Skill... skills)
+	{
+		Subscription sub = getOrCreateSubscription(plugin);
+		sub.skills |= enumMask(skills);
+		recomputeMasks();
 	}
 
 	public synchronized void unsubscribe(Plugin plugin, PartyDataType... types)
+	{
+		unsubscribe(plugin, sub -> sub.types &= ~enumMask(types));
+	}
+
+	public synchronized void unsubscribe(Plugin plugin, Skill... skills)
+	{
+		unsubscribe(plugin, sub -> sub.skills &= ~enumMask(skills));
+	}
+
+	private void unsubscribe(Plugin plugin, Consumer<Subscription> c)
 	{
 		var opt = subscriptions.stream().filter(s -> s.p == plugin).findFirst();
 		if (opt.isPresent())
 		{
 			Subscription sub = opt.get();
-			sub.mask &= ~typeMask(types);
-			if (sub.mask == 0)
+			c.accept(sub);
+			if (sub.types == 0 && sub.skills == 0)
 			{
 				subscriptions.remove(sub);
 			}
-			recomputeMask();
+			recomputeMasks();
 		}
 	}
 
@@ -126,22 +154,29 @@ public class PartyDataService
 		return (subscriptionMask & (1 << type.ordinal())) != 0;
 	}
 
-	private int typeMask(PartyDataType... types)
+	private boolean isSubscribed(Skill skill)
+	{
+		return (statMask & (1 << skill.ordinal())) != 0;
+	}
+
+	private static <E extends Enum<E>> int enumMask(E[] types)
 	{
 		int mask = 0;
-		for (PartyDataType type : types)
+		for (var type : types)
 		{
 			mask |= 1 << type.ordinal();
 		}
 		return mask;
 	}
 
-	private void recomputeMask()
+	private void recomputeMasks()
 	{
 		subscriptionMask = 0;
+		statMask = 0;
 		for (Subscription sub : subscriptions)
 		{
-			subscriptionMask |= sub.mask;
+			subscriptionMask |= sub.types;
+			statMask |= sub.skills;
 		}
 	}
 
@@ -182,6 +217,21 @@ public class PartyDataService
 		}
 	}
 
+	@Subscribe
+	private void onStatChanged(StatChanged event)
+	{
+		Skill skill = event.getSkill();
+		int idx = skill.ordinal();
+		if (lastStat[idx] != event.getLevel())
+		{
+			statDirty |= 1 << skill.ordinal();
+		}
+		if (lastStatBoost[idx] != event.getBoostedLevel())
+		{
+			statBoostDirty  |= 1 << skill.ordinal();
+		}
+	}
+
 	private void checkStateChanged(boolean forceSend)
 	{
 		if (!party.isInParty())
@@ -209,26 +259,6 @@ public class PartyDataService
 			hasChange = true;
 			update.setCharacterName(characterName);
 		}
-		if (isSubscribed(PartyDataType.HEALTH) && (forceSend || healthCurrent != lastHealthCurrent))
-		{
-			hasChange = true;
-			update.setHealthCurrent(healthCurrent);
-		}
-		if (isSubscribed(PartyDataType.HEALTH) && (forceSend || healthMax != lastHealthMax))
-		{
-			hasChange = true;
-			update.setHealthMax(healthMax);
-		}
-		if (isSubscribed(PartyDataType.PRAYER) && (forceSend || prayerCurrent != lastPrayerCurrent))
-		{
-			hasChange = true;
-			update.setPrayerCurrent(prayerCurrent);
-		}
-		if (isSubscribed(PartyDataType.PRAYER) && (forceSend || prayerMax != lastPrayerMax))
-		{
-			hasChange = true;
-			update.setPrayerMax(prayerMax);
-		}
 		if (isSubscribed(PartyDataType.ENERGY) && (forceSend || runEnergy != lastRunEnergy))
 		{
 			hasChange = true;
@@ -255,10 +285,20 @@ public class PartyDataService
 			hasChange = true;
 			update.setWorn(serializeInv(client.getItemContainer(InventoryID.WORN)));
 		}
-		if (isSubscribed(PartyDataType.PRAYER) && (forceSend || prayerDirty))
+		if (isSubscribed(PartyDataType.ACTIVE_PRAYERS) && (forceSend || prayerDirty))
 		{
 			hasChange = true;
 			update.setPrayers(serializePrayers());
+		}
+		if (statMask != 0 && (forceSend || (statMask & statDirty) != 0))
+		{
+			hasChange = true;
+			update.setStatBase(serializeStats(client::getRealSkillLevel));
+		}
+		if (statMask != 0 && (forceSend || (statMask & statBoostDirty) != 0))
+		{
+			hasChange = true;
+			update.setStatBoost(serializeStats(client::getBoostedSkillLevel));
 		}
 
 		if (canDelay && client.getTickCount() % messageFreq(party.getMembers().size()) != 0)
@@ -277,6 +317,7 @@ public class PartyDataService
 			lastSpecEnergy = specEnergy;
 			lastVengeActive = vengActive;
 			invDirty = wornDirty = prayerDirty = false;
+			statDirty = statBoostDirty = 0;
 
 			party.send(update);
 		}
@@ -296,53 +337,45 @@ public class PartyDataService
 			final String name = Text.removeTags(Text.toJagexName(event.getCharacterName()));
 			if (!name.isEmpty())
 			{
-				member.setDisplayName(name);
-				member.setLoggedIn(true);
+				member.displayName = name;
+				member.loggedIn = true;
 			}
 			else
 			{
-				member.setLoggedIn(false);
+				member.loggedIn = false;
 			}
-		}
-		if (event.getHealthCurrent() != null)
-		{
-			member.setHitpoints(event.getHealthCurrent());
-		}
-		if (event.getHealthMax() != null)
-		{
-			member.setMaxHitpoints(event.getHealthMax());
-		}
-		if (event.getPrayerCurrent() != null)
-		{
-			member.setPrayer(event.getPrayerCurrent());
-		}
-		if (event.getPrayerMax() != null)
-		{
-			member.setMaxPrayer(event.getPrayerMax());
 		}
 		if (event.getRunEnergy() != null)
 		{
-			member.setRunEnergy(event.getRunEnergy());
+			member.runEnergy = event.getRunEnergy();
 		}
 		if (event.getSpecEnergy() != null)
 		{
-			member.setSpecEnergy(event.getSpecEnergy());
+			member.specEnergy = event.getSpecEnergy();
 		}
 		if (event.getVengeanceActive() != null)
 		{
-			member.setVengeanceActive(event.getVengeanceActive());
+			member.vengeanceActive = event.getVengeanceActive();
 		}
 		if (event.getInv() != null)
 		{
-			member.setInv(deserializeInv(event.getInv()));
+			member.inv =  deserializeInv(event.getInv());
 		}
 		if (event.getWorn() != null)
 		{
-			member.setWorn(deserializeInv(event.getWorn()));
+			member.worn = deserializeInv(event.getWorn());
 		}
 		if (event.getPrayers() != null)
 		{
-			member.setPrayers(deserializePrayers(event.getPrayers()));
+			member.prayers = deserializePrayers(event.getPrayers());
+		}
+		if (event.getStatBase() != null)
+		{
+			member.statBase = event.getStatBase();
+		}
+		if (event.getStatBoost() != null)
+		{
+			member.statBoost = event.getStatBoost();
 		}
 	}
 
@@ -415,6 +448,25 @@ public class PartyDataService
 			}
 		}
 		return prayers;
+	}
+
+	private int[] serializeStats(ToIntFunction<Skill> f)
+	{
+		int sz = 32 - Integer.numberOfTrailingZeros(statMask);
+		if (sz == 0)
+		{
+			return null;
+		}
+		int[] s = new int[sz];
+		for (int i = 0; i < sz; ++i)
+		{
+			if ((statMask & (1 << i)) != 0)
+			{
+				Skill skill = Skill.values()[i];
+				s[i] = f.applyAsInt(skill);
+			}
+		}
+		return s;
 	}
 
 	private static int messageFreq(int partySize)
