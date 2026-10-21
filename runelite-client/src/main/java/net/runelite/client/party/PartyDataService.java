@@ -60,7 +60,7 @@ public class PartyDataService
 {
 	private final Client client;
 	private final ClientThread clientThread;
-	private final PartyService party;
+	private final PartyService partyService;
 
 	private static class Subscription
 	{
@@ -85,12 +85,13 @@ public class PartyDataService
 	private int statDirty, statBoostDirty;
 
 	@Inject
-	public PartyDataService(Client client, ClientThread clientThread, PartyService partyService, EventBus eventBus)
+	private PartyDataService(Client client, ClientThread clientThread, PartyService partyService, WSClient wsClient, EventBus eventBus)
 	{
 		this.client = client;
 		this.clientThread = clientThread;
-		this.party = partyService;
+		this.partyService = partyService;
 		eventBus.register(this);
+		wsClient.registerMessage(PartyDataMessage.class);
 	}
 
 	private Subscription getOrCreateSubscription(Plugin plugin)
@@ -225,7 +226,7 @@ public class PartyDataService
 
 	private void checkStateChanged(boolean forceSend)
 	{
-		if (!party.isInParty())
+		if (!partyService.isInParty())
 		{
 			return;
 		}
@@ -288,7 +289,7 @@ public class PartyDataService
 			update.setStatBoost(serializeStats(client::getBoostedSkillLevel));
 		}
 
-		if (canDelay && client.getTickCount() % messageFreq(party.getMembers().size()) != 0)
+		if (canDelay && client.getTickCount() % messageFreq(partyService.getMembers().size()) != 0)
 		{
 			return;
 		}
@@ -302,14 +303,14 @@ public class PartyDataService
 			invDirty = wornDirty = prayerDirty = false;
 			statDirty = statBoostDirty = 0;
 
-			party.send(update);
+			partyService.send(update);
 		}
 	}
 
 	@Subscribe(priority = 1)
 	private void onPartyDataMessage(PartyDataMessage event)
 	{
-		PartyMember member = party.getMemberById(event.getMemberId());
+		PartyMember member = partyService.getMemberById(event.getMemberId());
 		if (member == null)
 		{
 			return;
