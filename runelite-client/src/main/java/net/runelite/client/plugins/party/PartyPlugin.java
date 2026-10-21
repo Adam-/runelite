@@ -90,7 +90,6 @@ import net.runelite.client.ui.overlay.worldmap.WorldMapPointManager;
 import net.runelite.client.util.ColorUtil;
 import net.runelite.client.util.HotkeyListener;
 import net.runelite.client.util.ImageUtil;
-import net.runelite.client.util.Text;
 
 @PluginDescriptor(
 	name = "Party",

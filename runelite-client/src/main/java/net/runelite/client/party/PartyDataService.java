@@ -74,10 +74,6 @@ public class PartyDataService
 	private int statMask;
 
 	private String lastCharacterName;
-	private int lastHealthCurrent;
-	private int lastHealthMax;
-	private int lastPrayerCurrent;
-	private int lastPrayerMax;
 	private int lastRunEnergy;
 	private int lastSpecEnergy;
 	private boolean lastVengeActive;
@@ -152,11 +148,6 @@ public class PartyDataService
 	private boolean isSubscribed(PartyDataType type)
 	{
 		return (subscriptionMask & (1 << type.ordinal())) != 0;
-	}
-
-	private boolean isSubscribed(Skill skill)
-	{
-		return (statMask & (1 << skill.ordinal())) != 0;
 	}
 
 	private static <E extends Enum<E>> int enumMask(E[] types)
@@ -239,10 +230,6 @@ public class PartyDataService
 			return;
 		}
 
-		final int healthCurrent = client.getBoostedSkillLevel(Skill.HITPOINTS);
-		final int prayerCurrent = client.getBoostedSkillLevel(Skill.PRAYER);
-		final int healthMax = client.getRealSkillLevel(Skill.HITPOINTS);
-		final int prayerMax = client.getRealSkillLevel(Skill.PRAYER);
 		final int runEnergy = (int) Math.ceil(client.getEnergy() / 1000.0) * 10; // flatten to reduce network load
 		final int specEnergy = client.getVarpValue(VarPlayerID.SA_ENERGY) / 10;
 		final boolean vengActive = client.getVarbitValue(VarbitID.VENGEANCE_REBOUND) == 1;
@@ -309,10 +296,6 @@ public class PartyDataService
 		if (hasChange)
 		{
 			lastCharacterName = characterName;
-			lastHealthCurrent =  healthCurrent;
-			lastHealthMax = healthMax;
-			lastPrayerCurrent = prayerCurrent;
-			lastPrayerMax = prayerMax;
 			lastRunEnergy = runEnergy;
 			lastSpecEnergy = specEnergy;
 			lastVengeActive = vengActive;
