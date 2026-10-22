@@ -228,7 +228,8 @@ public class WSClient extends WebSocketListener implements AutoCloseable
 				Class<? extends WebsocketMessage> messageType = messageTypes.get(data.getType());
 				if (messageType == null)
 				{
-					throw new RuntimeException("cannot deserialize " + data.getType() + "; did you forget to registerMessage()?");
+					log.debug("cannot deserialize message type {}; did you forget to registerMessage()?", data.getType());
+					return;
 				}
 
 				final WebsocketMessage message;
