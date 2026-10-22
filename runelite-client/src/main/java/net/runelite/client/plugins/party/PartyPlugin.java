@@ -210,6 +210,7 @@ public class PartyPlugin extends Plugin
 		keyManager.registerKeyListener(hotkeyListener);
 		wsClient.registerMessage(TilePing.class);
 		wsClient.registerMessage(LocationUpdate.class);
+		wsClient.registerMessage(MemberColorUpdate.class);
 		partyDataService.subscribe(this, PartyDataType.ENERGY, PartyDataType.SPEC, PartyDataType.VENGEANCE);
 		partyDataService.subscribe(this, Skill.HITPOINTS, Skill.PRAYER);
 		// Delay sync so the eventbus can register prior to the sync response
@@ -234,6 +235,7 @@ public class PartyPlugin extends Plugin
 		partyDataService.unsubscribe(this, Skill.values());
 		wsClient.unregisterMessage(TilePing.class);
 		wsClient.unregisterMessage(LocationUpdate.class);
+		wsClient.unregisterMessage(MemberColorUpdate.class);
 		lastLocation = null;
 	}
 

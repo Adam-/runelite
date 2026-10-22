@@ -355,11 +355,11 @@ public class PartyDataService
 		}
 		if (event.getStatBase() != null)
 		{
-			member.statBase = event.getStatBase();
+			System.arraycopy(event.getStatBase(), 0, member.statBase, 0, event.getStatBase().length);
 		}
 		if (event.getStatBoost() != null)
 		{
-			member.statBoost = event.getStatBoost();
+			System.arraycopy(event.getStatBoost(), 0, member.statBoost, 0, event.getStatBoost().length);
 		}
 	}
 

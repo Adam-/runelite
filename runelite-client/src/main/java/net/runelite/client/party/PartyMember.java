@@ -51,8 +51,8 @@ public class PartyMember
 	int specEnergy;
 	@Getter
 	boolean vengeanceActive;
-	int[] statBase;
-	int[] statBoost;
+	int[] statBase = new int[Skill.values().length];
+	int[] statBoost = new int[Skill.values().length];
 	@Getter
 	Item[] inv;
 	@Getter
