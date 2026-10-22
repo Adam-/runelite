@@ -27,6 +27,7 @@ package net.runelite.client.party;
 import com.google.common.base.Strings;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
@@ -42,6 +43,7 @@ import net.runelite.api.ItemContainer;
 import net.runelite.api.Player;
 import net.runelite.api.Prayer;
 import net.runelite.api.Skill;
+import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.ItemContainerChanged;
 import net.runelite.api.events.StatChanged;
@@ -55,6 +57,7 @@ import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.party.messages.PartyDataMessage;
 import net.runelite.client.party.messages.UserSync;
 import net.runelite.client.plugins.Plugin;
+import net.runelite.client.task.Schedule;
 import net.runelite.client.util.Text;
 
 @Singleton
@@ -81,7 +84,9 @@ public class PartyDataService
 	private boolean lastVengeActive;
 	private final int[] lastStat = new int[Skill.values().length];
 	private final int[] lastStatBoost = new int[Skill.values().length];
+	private WorldPoint lastLocation;
 
+	private boolean locationDirty;
 	private boolean invDirty, wornDirty;
 	private boolean prayerDirty;
 	private int statDirty, statBoostDirty;
@@ -250,6 +255,25 @@ public class PartyDataService
 		}
 	}
 
+	@Schedule(
+		period = 10,
+		unit = ChronoUnit.SECONDS
+	)
+	private void updateLocation()
+	{
+		if (client.getGameState() == GameState.LOGGED_IN)
+		{
+			WorldPoint location = client.getLocalPlayer().getWorldLocation();
+			if (location.equals(lastLocation))
+			{
+				return;
+			}
+
+			lastLocation = location;
+			locationDirty = true;
+		}
+	}
+
 	private void checkStateChanged(boolean forceSend)
 	{
 		if (!partyService.isInParty())
@@ -272,6 +296,11 @@ public class PartyDataService
 		{
 			hasChange = true;
 			update.setCharacterName(characterName);
+		}
+		if (isSubscribed(PartyDataType.COORD) && (forceSend || locationDirty))
+		{
+			hasChange = true;
+			update.setCoord(serializeCoord(lastLocation));
 		}
 		if (isSubscribed(PartyDataType.ENERGY) && (forceSend || runEnergy != lastRunEnergy))
 		{
@@ -333,6 +362,7 @@ public class PartyDataService
 		if (hasChange)
 		{
 			lastCharacterName = characterName;
+			locationDirty = false;
 			lastRunEnergy = runEnergy;
 			lastSpecEnergy = specEnergy;
 			lastVengeActive = vengActive;
@@ -366,6 +396,10 @@ public class PartyDataService
 			{
 				member.loggedIn = false;
 			}
+		}
+		if (event.getCoord() != null)
+		{
+			member.coord = deserializeCoord(event.getCoord());
 		}
 		if (event.getRunEnergy() != null)
 		{
@@ -533,5 +567,19 @@ public class PartyDataService
 		}
 
 		return new int[]{quiverAmmoId, quiverAmmoCount};
+	}
+
+	private static int serializeCoord(WorldPoint point)
+	{
+		return (point.getPlane() << 28) | (point.getX() << 14) | (point.getY());
+	}
+
+	private static WorldPoint deserializeCoord(int c)
+	{
+		return new WorldPoint(
+			(c >> 14) & 0x3fff,
+			c & 0x3fff,
+			(c >> 28) & 3
+		);
 	}
 }

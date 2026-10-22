@@ -27,6 +27,7 @@ package net.runelite.client.party;
 public enum PartyDataType
 {
 	CHARACTER_NAME,
+	COORD,
 	ENERGY,
 	SPEC,
 	VENGEANCE,

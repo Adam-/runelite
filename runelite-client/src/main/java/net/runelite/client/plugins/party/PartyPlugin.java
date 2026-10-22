@@ -78,7 +78,6 @@ import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.plugins.party.data.PartyData;
 import net.runelite.client.plugins.party.data.PartyTilePingData;
-import net.runelite.client.plugins.party.messages.LocationUpdate;
 import net.runelite.client.plugins.party.messages.MemberColorUpdate;
 import net.runelite.client.plugins.party.messages.TilePing;
 import net.runelite.client.task.Schedule;
@@ -157,8 +156,6 @@ public class PartyPlugin extends Plugin
 	private PartyPanel panel;
 	private NavigationButton navButton;
 
-	private WorldPoint lastLocation;
-
 	private final HotkeyListener hotkeyListener = new HotkeyListener(() -> config.pingHotkey())
 	{
 		@Override
@@ -209,9 +206,8 @@ public class PartyPlugin extends Plugin
 		overlayManager.add(partyStatusOverlay);
 		keyManager.registerKeyListener(hotkeyListener);
 		wsClient.registerMessage(TilePing.class);
-		wsClient.registerMessage(LocationUpdate.class);
 		wsClient.registerMessage(MemberColorUpdate.class);
-		partyDataService.subscribe(this, PartyDataType.ENERGY, PartyDataType.SPEC, PartyDataType.VENGEANCE);
+		partyDataService.subscribe(this, PartyDataType.COORD, PartyDataType.ENERGY, PartyDataType.SPEC, PartyDataType.VENGEANCE);
 		partyDataService.subscribe(this, Skill.HITPOINTS, Skill.PRAYER);
 		// Delay sync so the eventbus can register prior to the sync response
 		SwingUtilities.invokeLater(this::requestSync);
@@ -234,9 +230,7 @@ public class PartyPlugin extends Plugin
 		partyDataService.unsubscribe(this, PartyDataType.values());
 		partyDataService.unsubscribe(this, Skill.values());
 		wsClient.unregisterMessage(TilePing.class);
-		wsClient.unregisterMessage(LocationUpdate.class);
 		wsClient.unregisterMessage(MemberColorUpdate.class);
-		lastLocation = null;
 	}
 
 	@Provides
@@ -351,33 +345,10 @@ public class PartyPlugin extends Plugin
 	)
 	public void scheduledTick()
 	{
-		if (client.getGameState() == GameState.LOGGED_IN)
-		{
-			shareLocation();
-		}
-		else if (client.getGameState() == GameState.LOGIN_SCREEN)
+		if (client.getGameState() == GameState.LOGIN_SCREEN)
 		{
 			checkIdle();
 		}
-	}
-
-	private void shareLocation()
-	{
-		if (!party.isInParty())
-		{
-			return;
-		}
-
-		WorldPoint location = client.getLocalPlayer().getWorldLocation();
-		if (location.equals(lastLocation))
-		{
-			return;
-		}
-
-		lastLocation = location;
-
-		final LocationUpdate locationUpdate = new LocationUpdate(location);
-		party.send(locationUpdate);
 	}
 
 	private void checkIdle()
@@ -417,20 +388,14 @@ public class PartyPlugin extends Plugin
 	@Subscribe
 	public void onPartyDataMessage(final PartyDataMessage event)
 	{
-		SwingUtilities.invokeLater(() -> panel.updateMember(event.getMemberId()));
-	}
-
-	@Subscribe
-	public void onLocationUpdate(final LocationUpdate event)
-	{
+		final PartyMember member = party.getMemberById(event.getMemberId());
 		final PartyData partyData = getPartyData(event.getMemberId());
-
-		if (partyData == null)
+		if (member != null && partyData != null)
 		{
-			return;
+			partyData.getWorldMapPoint().setWorldPoint(member.getCoord());
 		}
 
-		partyData.getWorldMapPoint().setWorldPoint(event.getWorldPoint());
+		SwingUtilities.invokeLater(() -> panel.updateMember(event.getMemberId()));
 	}
 
 	@Subscribe
@@ -448,7 +413,6 @@ public class PartyPlugin extends Plugin
 		{
 			party.send(new MemberColorUpdate(c));
 		}
-		lastLocation = null;
 	}
 
 	@Subscribe

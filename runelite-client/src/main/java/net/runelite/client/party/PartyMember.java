@@ -32,6 +32,7 @@ import lombok.RequiredArgsConstructor;
 import net.runelite.api.Item;
 import net.runelite.api.Prayer;
 import net.runelite.api.Skill;
+import net.runelite.api.coords.WorldPoint;
 
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public class PartyMember
@@ -45,6 +46,8 @@ public class PartyMember
 	@Getter
 	BufferedImage avatar;
 
+	@Getter
+	WorldPoint coord;
 	@Getter
 	int runEnergy;
 	@Getter

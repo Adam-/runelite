@@ -70,4 +70,7 @@ public class PartyDataMessage extends PartyMemberMessage
 
 	@SerializedName("q")
 	private int[] quiver;
+
+	@SerializedName("c")
+	private Integer coord;
 }
