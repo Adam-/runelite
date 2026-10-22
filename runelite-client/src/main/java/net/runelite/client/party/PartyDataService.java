@@ -80,6 +80,7 @@ public class PartyDataService
 	private static final int DIRTY_PRAYER = 0x8;
 	private static final int DIRTY_RUNEPOUCH = 0x10;
 	private static final int DIRTY_QUIVER = 0x20;
+	private static final int DIRTY_VENGEANCE = 0x40;
 
 	private final List<Subscription> subscriptions = new ArrayList<>(2);
 	private int subscriptionMask;
@@ -88,7 +89,6 @@ public class PartyDataService
 	private String lastCharacterName;
 	private int lastRunEnergy;
 	private int lastSpecEnergy;
-	private boolean lastVengeActive;
 	private final int[] lastStat = new int[Skill.values().length];
 	private final int[] lastStatBoost = new int[Skill.values().length];
 	private WorldPoint lastLocation;
@@ -240,6 +240,9 @@ public class PartyDataService
 			case VarbitID.RUNE_POUCH_TYPE_6:
 				dirtyMask |= DIRTY_RUNEPOUCH;
 				break;
+			case VarbitID.VENGEANCE_REBOUND:
+				dirtyMask |= DIRTY_VENGEANCE;
+				break;
 		}
 	}
 
@@ -288,7 +291,6 @@ public class PartyDataService
 
 		final int runEnergy = (int) Math.ceil(client.getEnergy() / 1000.0) * 10; // flatten to reduce network load
 		final int specEnergy = client.getVarpValue(VarPlayerID.SA_ENERGY) / 10;
-		final boolean vengActive = client.getVarbitValue(VarbitID.VENGEANCE_REBOUND) == 1;
 
 		final Player localPlayer = client.getLocalPlayer();
 		final String characterName = Strings.nullToEmpty(localPlayer != null && client.getGameState().getState() >= GameState.LOADING.getState() ? localPlayer.getName() : null);
@@ -318,9 +320,10 @@ public class PartyDataService
 			canDelay = !forceSend && specEnergy - lastSpecEnergy == 10; // delay regen
 			update.setSpecEnergy(specEnergy);
 		}
-		if (isSubscribed(PartyDataType.VENGEANCE) && (forceSend || vengActive != lastVengeActive))
+		if (isSubscribed(PartyDataType.VENGEANCE) && (forceSend || (dirtyMask & DIRTY_VENGEANCE) != 0))
 		{
 			hasChange = true;
+			final boolean vengActive = client.getVarbitValue(VarbitID.VENGEANCE_REBOUND) == 1;
 			update.setVengeanceActive(vengActive);
 		}
 		if (isSubscribed(PartyDataType.INV) && (forceSend || (dirtyMask & DIRTY_INV) != 0))
