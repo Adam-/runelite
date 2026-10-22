@@ -63,9 +63,12 @@ import net.runelite.client.util.Text;
 @Singleton
 public class PartyDataService
 {
-	private final Client client;
-	private final ClientThread clientThread;
-	private final PartyService partyService;
+	private static final int DIRTY_LOCATION = 0x1;
+	private static final int DIRTY_INV = 0x2;
+	private static final int DIRTY_WORN = 0x4;
+	private static final int DIRTY_RUNEPOUCH = 0x08;
+	private static final int DIRTY_QUIVER = 0x10;
+	private static final int DIRTY_VENGEANCE = 0x20;
 
 	private static class Subscription
 	{
@@ -74,12 +77,9 @@ public class PartyDataService
 		int skills;
 	}
 
-	private static final int DIRTY_LOCATION = 0x1;
-	private static final int DIRTY_INV = 0x2;
-	private static final int DIRTY_WORN = 0x4;
-	private static final int DIRTY_RUNEPOUCH = 0x08;
-	private static final int DIRTY_QUIVER = 0x10;
-	private static final int DIRTY_VENGEANCE = 0x20;
+	private final Client client;
+	private final ClientThread clientThread;
+	private final PartyService partyService;
 
 	private final List<Subscription> subscriptions = new ArrayList<>(2);
 	private int subscriptionMask;
@@ -88,7 +88,7 @@ public class PartyDataService
 	private String lastCharacterName;
 	private int lastRunEnergy;
 	private int lastSpecEnergy;
-	private int lastPrayers, lastPrayersRuinoius;
+	private int lastPrayers, lastPrayerRuinous;
 	private final int[] lastStat = new int[Skill.values().length];
 	private final int[] lastStatBoost = new int[Skill.values().length];
 	private WorldPoint lastLocation;
@@ -215,12 +215,6 @@ public class PartyDataService
 	{
 		switch (event.getVarpId())
 		{
-//			case VarPlayerID.PRAYER0:
-//				lastPrayers = client.getVarpValue(VarPlayerID.PRAYER0);
-//				break;
-//			case VarPlayerID.PRAYER_RUINOUS_0:
-//				lastPrayersRuinoius = client.getVarpValue(VarPlayerID.PRAYER_RUINOUS_0);
-//				break;
 			case VarPlayerID.DIZANAS_QUIVER_TEMP_AMMO:
 			case VarPlayerID.DIZANAS_QUIVER_TEMP_AMMO_AMOUNT:
 				dirtyMask |= DIRTY_QUIVER;
@@ -339,7 +333,7 @@ public class PartyDataService
 			hasChange = true;
 			update.setWorn(serializeInv(client.getItemContainer(InventoryID.WORN)));
 		}
-		if (isSubscribed(PartyDataType.ACTIVE_PRAYERS) && (forceSend || prayers != lastPrayers || prayerRuinous != lastPrayersRuinoius))
+		if (isSubscribed(PartyDataType.ACTIVE_PRAYERS) && (forceSend || prayers != lastPrayers || prayerRuinous != lastPrayerRuinous))
 		{
 			hasChange = true;
 			update.setPrayers(serializePrayers());
@@ -376,7 +370,7 @@ public class PartyDataService
 			lastRunEnergy = runEnergy;
 			lastSpecEnergy = specEnergy;
 			lastPrayers = prayers;
-			lastPrayersRuinoius = prayerRuinous;
+			lastPrayerRuinous = prayerRuinous;
 			dirtyMask = 0;
 			statDirty = statBoostDirty = 0;
 
