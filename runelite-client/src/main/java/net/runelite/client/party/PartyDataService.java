@@ -248,10 +248,12 @@ public class PartyDataService
 		if (lastStat[idx] != event.getLevel())
 		{
 			statDirty |= 1 << skill.ordinal();
+			lastStat[idx] = event.getLevel();
 		}
 		if (lastStatBoost[idx] != event.getBoostedLevel())
 		{
-			statBoostDirty  |= 1 << skill.ordinal();
+			statBoostDirty |= 1 << skill.ordinal();
+			lastStatBoost[idx] = event.getBoostedLevel();
 		}
 	}
 
