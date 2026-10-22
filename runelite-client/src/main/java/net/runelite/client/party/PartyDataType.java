@@ -34,4 +34,5 @@ public enum PartyDataType
 	WORN,
 	ACTIVE_PRAYERS,
 	RUNE_POUCH,
+	QUIVER,
 }

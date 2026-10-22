@@ -67,4 +67,7 @@ public class PartyDataMessage extends PartyMemberMessage
 
 	@SerializedName("r")
 	private int[] runePouch;
+
+	@SerializedName("q")
+	private int[] quiver;
 }

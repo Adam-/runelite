@@ -86,6 +86,7 @@ public class PartyDataService
 	private boolean prayerDirty;
 	private int statDirty, statBoostDirty;
 	private boolean runepouchDirty;
+	private boolean quiverDirty;
 
 	@Inject
 	private PartyDataService(Client client, ClientThread clientThread, PartyService partyService, WSClient wsClient, EventBus eventBus)
@@ -209,6 +210,11 @@ public class PartyDataService
 			case VarPlayerID.PRAYER0:
 			case VarPlayerID.PRAYER_RUINOUS_0:
 				prayerDirty = true;
+				break;
+			case VarPlayerID.DIZANAS_QUIVER_TEMP_AMMO:
+			case VarPlayerID.DIZANAS_QUIVER_TEMP_AMMO_AMOUNT:
+				quiverDirty = true;
+				break;
 		}
 		switch (event.getVarbitId())
 		{
@@ -225,6 +231,7 @@ public class PartyDataService
 			case VarbitID.RUNE_POUCH_TYPE_5:
 			case VarbitID.RUNE_POUCH_TYPE_6:
 				runepouchDirty = true;
+				break;
 		}
 	}
 
@@ -312,6 +319,11 @@ public class PartyDataService
 			hasChange = true;
 			update.setRunePouch(serializeRunepouch());
 		}
+		if (isSubscribed(PartyDataType.QUIVER) && quiverDirty)
+		{
+			hasChange = true;
+			update.setQuiver(serializeQuiver());
+		}
 
 		if (canDelay && client.getTickCount() % messageFreq(partyService.getMembers().size()) != 0)
 		{
@@ -326,6 +338,8 @@ public class PartyDataService
 			lastVengeActive = vengActive;
 			invDirty = wornDirty = prayerDirty = false;
 			statDirty = statBoostDirty = 0;
+			runepouchDirty = false;
+			quiverDirty = false;
 
 			partyService.send(update);
 		}
@@ -388,6 +402,11 @@ public class PartyDataService
 		if (event.getRunePouch() != null)
 		{
 			member.runepouch = deserializeInv(event.getRunePouch());
+		}
+		if (event.getQuiver() != null)
+		{
+			var items = deserializeInv(event.getQuiver());
+			member.quiver = items == null ? null : items[0];
 		}
 	}
 
@@ -502,5 +521,17 @@ public class PartyDataService
 			s[(i << 1) + 1] = quantity;
 		}
 		return s;
+	}
+
+	private int[] serializeQuiver()
+	{
+		final int quiverAmmoId = client.getVarpValue(VarPlayerID.DIZANAS_QUIVER_TEMP_AMMO);
+		final int quiverAmmoCount = client.getVarpValue(VarPlayerID.DIZANAS_QUIVER_TEMP_AMMO_AMOUNT);
+		if (quiverAmmoId == -1 || quiverAmmoCount == 0)
+		{
+			return null;
+		}
+
+		return new int[]{quiverAmmoId, quiverAmmoCount};
 	}
 }

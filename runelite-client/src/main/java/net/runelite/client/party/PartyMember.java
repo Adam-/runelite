@@ -61,6 +61,8 @@ public class PartyMember
 	Set<Prayer> prayers;
 	@Getter
 	Item[] runepouch;
+	@Getter
+	Item quiver;
 
 	public int getStatBase(Skill s)
 	{
