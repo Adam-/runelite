@@ -35,12 +35,11 @@ import lombok.ToString;
 @RequiredArgsConstructor
 @ToString
 @Getter
-public class ScheduledMethod
+class ScheduledMethod
 {
 	private final Schedule schedule;
 	private final Method method;
 	private final Object object;
-	@EqualsAndHashCode.Exclude
 	private final Runnable lambda;
 	@Setter
 	private Instant last = Instant.now();
