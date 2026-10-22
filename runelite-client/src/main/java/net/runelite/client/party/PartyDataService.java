@@ -215,12 +215,12 @@ public class PartyDataService
 	{
 		switch (event.getVarpId())
 		{
-			case VarPlayerID.PRAYER0:
-				lastPrayers = client.getVarpValue(VarPlayerID.PRAYER0);
-				break;
-			case VarPlayerID.PRAYER_RUINOUS_0:
-				lastPrayersRuinoius = client.getVarpValue(VarPlayerID.PRAYER_RUINOUS_0);
-				break;
+//			case VarPlayerID.PRAYER0:
+//				lastPrayers = client.getVarpValue(VarPlayerID.PRAYER0);
+//				break;
+//			case VarPlayerID.PRAYER_RUINOUS_0:
+//				lastPrayersRuinoius = client.getVarpValue(VarPlayerID.PRAYER_RUINOUS_0);
+//				break;
 			case VarPlayerID.DIZANAS_QUIVER_TEMP_AMMO:
 			case VarPlayerID.DIZANAS_QUIVER_TEMP_AMMO_AMOUNT:
 				dirtyMask |= DIRTY_QUIVER;
