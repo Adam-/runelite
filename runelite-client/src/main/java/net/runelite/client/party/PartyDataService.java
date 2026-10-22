@@ -442,7 +442,7 @@ public class PartyDataService
 		if (event.getQuiver() != null)
 		{
 			var items = deserializeInv(event.getQuiver());
-			member.quiver = items != null && items.length > 0 ? items[0] : null;
+			member.quiver = items.length > 0 ? items[0] : null;
 		}
 	}
 
@@ -479,11 +479,6 @@ public class PartyDataService
 
 	private static Item[] deserializeInv(int[] s)
 	{
-		if (s == null)
-		{
-			return null;
-		}
-
 		Item[] items = new Item[s.length >> 1];
 		for (int i = 0; i < items.length; ++i)
 		{
@@ -565,7 +560,7 @@ public class PartyDataService
 		final int quiverAmmoCount = client.getVarpValue(VarPlayerID.DIZANAS_QUIVER_TEMP_AMMO_AMOUNT);
 		if (quiverAmmoId == -1 || quiverAmmoCount == 0)
 		{
-			return null;
+			return new int[0];
 		}
 
 		return new int[]{quiverAmmoId, quiverAmmoCount};
