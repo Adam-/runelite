@@ -33,8 +33,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ScheduledExecutorService;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -45,7 +45,7 @@ import net.runelite.client.util.ReflectUtil;
 @Slf4j
 public class Scheduler
 {
-	private final List<ScheduledMethod> scheduledMethods = new ArrayList<>();
+	private final List<ScheduledMethod> scheduledMethods = new CopyOnWriteArrayList<>();
 
 	private final ScheduledExecutorService executor;
 
@@ -55,7 +55,7 @@ public class Scheduler
 		this.executor = executor;
 	}
 
-	public synchronized <T> void register(T object)
+	public <T> void register(T object)
 	{
 		for (Method method : object.getClass().getDeclaredMethods())
 		{
@@ -95,7 +95,7 @@ public class Scheduler
 		}
 	}
 
-	public synchronized <T> void unregister(T object)
+	public <T> void unregister(T object)
 	{
 		scheduledMethods.removeIf(scheduledMethod -> scheduledMethod.getObject() == object);
 	}
