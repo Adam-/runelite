@@ -27,10 +27,10 @@ package net.runelite.client.party;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 import com.google.protobuf.InvalidProtocolBufferException;
-import java.util.Collection;
-import java.util.HashSet;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -57,20 +57,21 @@ public class WSClient extends WebSocketListener implements AutoCloseable
 	private final EventBus eventBus;
 	private final OkHttpClient okHttpClient;
 	private final HttpUrl runeliteWs;
-	private final Collection<Class<? extends WebsocketMessage>> messages = new HashSet<>();
+	private final Gson gson;
 
-	private volatile Gson gson;
+	private final Map<String, Class<? extends WebsocketMessage>> messageTypes = new ConcurrentHashMap<>();
+
 	@Getter
 	private UUID sessionId;
 	private WebSocket webSocket;
 
 	@Inject
-	private WSClient(EventBus eventBus, OkHttpClient okHttpClient, @Named("runelite.ws") HttpUrl runeliteWs)
+	private WSClient(EventBus eventBus, OkHttpClient okHttpClient, @Named("runelite.ws") HttpUrl runeliteWs, Gson gson)
 	{
 		this.eventBus = eventBus;
 		this.okHttpClient = okHttpClient;
 		this.runeliteWs = runeliteWs;
-		this.gson = WebsocketGsonFactory.build(WebsocketGsonFactory.factory(messages));
+		this.gson = gson;
 	}
 
 	public boolean sessionExists()
@@ -123,18 +124,12 @@ public class WSClient extends WebSocketListener implements AutoCloseable
 
 	public void registerMessage(final Class<? extends WebsocketMessage> message)
 	{
-		if (messages.add(message))
-		{
-			gson = WebsocketGsonFactory.build(WebsocketGsonFactory.factory(messages));
-		}
+		messageTypes.put(message.getSimpleName(), message);
 	}
 
 	public void unregisterMessage(final Class<? extends WebsocketMessage> message)
 	{
-		if (messages.remove(message))
-		{
-			gson = WebsocketGsonFactory.build(WebsocketGsonFactory.factory(messages));
-		}
+		messageTypes.remove(message.getSimpleName());
 	}
 
 	void join(long partyId, long memberId)
@@ -229,11 +224,18 @@ public class WSClient extends WebSocketListener implements AutoCloseable
 				break;
 			case DATA:
 				Party.PartyData data = s2c.getData();
+
+				Class<? extends WebsocketMessage> messageType = messageTypes.get(data.getType());
+				if (messageType == null)
+				{
+					throw new RuntimeException("cannot deserialize " + data.getType() + "; did you forget to registerMessage()?");
+				}
+
 				final WebsocketMessage message;
 
 				try
 				{
-					message = gson.fromJson(data.getData().toStringUtf8(), WebsocketMessage.class);
+					message = gson.fromJson(data.getData().toStringUtf8(), messageType);
 				}
 				catch (JsonParseException e)
 				{
