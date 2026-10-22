@@ -58,6 +58,7 @@ import net.runelite.client.party.messages.PartyDataMessage;
 import net.runelite.client.party.messages.UserSync;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.task.Schedule;
+import net.runelite.client.task.Scheduler;
 import net.runelite.client.util.Text;
 
 @Singleton
@@ -97,12 +98,13 @@ public class PartyDataService
 	private int statDirty, statBoostDirty;
 
 	@Inject
-	private PartyDataService(Client client, ClientThread clientThread, PartyService partyService, WSClient wsClient, EventBus eventBus)
+	private PartyDataService(Client client, ClientThread clientThread, PartyService partyService, WSClient wsClient, EventBus eventBus, Scheduler scheduler)
 	{
 		this.client = client;
 		this.clientThread = clientThread;
 		this.partyService = partyService;
 		eventBus.register(this);
+		scheduler.register(this);
 		wsClient.registerMessage(PartyDataMessage.class);
 	}
 
