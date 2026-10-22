@@ -77,10 +77,9 @@ public class PartyDataService
 	private static final int DIRTY_LOCATION = 0x1;
 	private static final int DIRTY_INV = 0x2;
 	private static final int DIRTY_WORN = 0x4;
-	private static final int DIRTY_PRAYER = 0x8;
-	private static final int DIRTY_RUNEPOUCH = 0x10;
-	private static final int DIRTY_QUIVER = 0x20;
-	private static final int DIRTY_VENGEANCE = 0x40;
+	private static final int DIRTY_RUNEPOUCH = 0x08;
+	private static final int DIRTY_QUIVER = 0x10;
+	private static final int DIRTY_VENGEANCE = 0x20;
 
 	private final List<Subscription> subscriptions = new ArrayList<>(2);
 	private int subscriptionMask;
@@ -89,6 +88,7 @@ public class PartyDataService
 	private String lastCharacterName;
 	private int lastRunEnergy;
 	private int lastSpecEnergy;
+	private int lastPrayers, lastPrayersRuinoius;
 	private final int[] lastStat = new int[Skill.values().length];
 	private final int[] lastStatBoost = new int[Skill.values().length];
 	private WorldPoint lastLocation;
@@ -216,8 +216,10 @@ public class PartyDataService
 		switch (event.getVarpId())
 		{
 			case VarPlayerID.PRAYER0:
+				lastPrayers = client.getVarpValue(VarPlayerID.PRAYER0);
+				break;
 			case VarPlayerID.PRAYER_RUINOUS_0:
-				dirtyMask |= DIRTY_PRAYER;
+				lastPrayersRuinoius = client.getVarpValue(VarPlayerID.PRAYER_RUINOUS_0);
 				break;
 			case VarPlayerID.DIZANAS_QUIVER_TEMP_AMMO:
 			case VarPlayerID.DIZANAS_QUIVER_TEMP_AMMO_AMOUNT:
@@ -291,6 +293,7 @@ public class PartyDataService
 
 		final int runEnergy = (int) Math.ceil(client.getEnergy() / 1000.0) * 10; // flatten to reduce network load
 		final int specEnergy = client.getVarpValue(VarPlayerID.SA_ENERGY) / 10;
+		final int prayers = client.getVarpValue(VarPlayerID.PRAYER0), prayerRuinous = client.getVarpValue(VarPlayerID.PRAYER_RUINOUS_0);
 
 		final Player localPlayer = client.getLocalPlayer();
 		final String characterName = Strings.nullToEmpty(localPlayer != null && client.getGameState().getState() >= GameState.LOADING.getState() ? localPlayer.getName() : null);
@@ -336,7 +339,7 @@ public class PartyDataService
 			hasChange = true;
 			update.setWorn(serializeInv(client.getItemContainer(InventoryID.WORN)));
 		}
-		if (isSubscribed(PartyDataType.ACTIVE_PRAYERS) && (forceSend || (dirtyMask & DIRTY_PRAYER) != 0))
+		if (isSubscribed(PartyDataType.ACTIVE_PRAYERS) && (forceSend || prayers != lastPrayers || prayerRuinous != lastPrayersRuinoius))
 		{
 			hasChange = true;
 			update.setPrayers(serializePrayers());
@@ -372,7 +375,8 @@ public class PartyDataService
 			lastCharacterName = characterName;
 			lastRunEnergy = runEnergy;
 			lastSpecEnergy = specEnergy;
-			lastVengeActive = vengActive;
+			lastPrayers = prayers;
+			lastPrayersRuinoius = prayerRuinous;
 			dirtyMask = 0;
 			statDirty = statBoostDirty = 0;
 
