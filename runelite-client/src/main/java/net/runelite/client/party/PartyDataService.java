@@ -406,7 +406,7 @@ public class PartyDataService
 		if (event.getQuiver() != null)
 		{
 			var items = deserializeInv(event.getQuiver());
-			member.quiver = items == null ? null : items[0];
+			member.quiver = items != null && items.length > 0 ? items[0] : null;
 		}
 	}
 
