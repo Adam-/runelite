@@ -59,6 +59,8 @@ public class PartyMember
 	Item[] worn;
 	@Getter
 	Set<Prayer> prayers;
+	@Getter
+	Item[] runepouch;
 
 	public int getStatBase(Skill s)
 	{

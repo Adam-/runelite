@@ -41,7 +41,7 @@ public class PartyDataMessage extends PartyMemberMessage
 	@SerializedName("n")
 	private String characterName;
 
-	@SerializedName("r")
+	@SerializedName("e")
 	private Integer runEnergy;
 
 	@SerializedName("sp")
@@ -64,4 +64,7 @@ public class PartyDataMessage extends PartyMemberMessage
 
 	@SerializedName("s")
 	private int[] statBoost;
+
+	@SerializedName("r")
+	private int[] runePouch;
 }

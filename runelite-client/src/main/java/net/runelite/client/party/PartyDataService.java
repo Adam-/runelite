@@ -34,6 +34,8 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.ToIntFunction;
 import net.runelite.api.Client;
+import net.runelite.api.EnumComposition;
+import net.runelite.api.EnumID;
 import net.runelite.api.GameState;
 import net.runelite.api.Item;
 import net.runelite.api.ItemContainer;
@@ -83,6 +85,7 @@ public class PartyDataService
 	private boolean invDirty, wornDirty;
 	private boolean prayerDirty;
 	private int statDirty, statBoostDirty;
+	private boolean runepouchDirty;
 
 	@Inject
 	private PartyDataService(Client client, ClientThread clientThread, PartyService partyService, WSClient wsClient, EventBus eventBus)
@@ -207,6 +210,22 @@ public class PartyDataService
 			case VarPlayerID.PRAYER_RUINOUS_0:
 				prayerDirty = true;
 		}
+		switch (event.getVarbitId())
+		{
+			case VarbitID.RUNE_POUCH_QUANTITY_1:
+			case VarbitID.RUNE_POUCH_QUANTITY_2:
+			case VarbitID.RUNE_POUCH_QUANTITY_3:
+			case VarbitID.RUNE_POUCH_QUANTITY_4:
+			case VarbitID.RUNE_POUCH_QUANTITY_5:
+			case VarbitID.RUNE_POUCH_QUANTITY_6:
+			case VarbitID.RUNE_POUCH_TYPE_1:
+			case VarbitID.RUNE_POUCH_TYPE_2:
+			case VarbitID.RUNE_POUCH_TYPE_3:
+			case VarbitID.RUNE_POUCH_TYPE_4:
+			case VarbitID.RUNE_POUCH_TYPE_5:
+			case VarbitID.RUNE_POUCH_TYPE_6:
+				runepouchDirty = true;
+		}
 	}
 
 	@Subscribe
@@ -288,6 +307,11 @@ public class PartyDataService
 			hasChange = true;
 			update.setStatBoost(serializeStats(client::getBoostedSkillLevel));
 		}
+		if (isSubscribed(PartyDataType.RUNE_POUCH) && runepouchDirty)
+		{
+			hasChange = true;
+			update.setRunePouch(serializeRunepouch());
+		}
 
 		if (canDelay && client.getTickCount() % messageFreq(partyService.getMembers().size()) != 0)
 		{
@@ -343,7 +367,7 @@ public class PartyDataService
 		}
 		if (event.getInv() != null)
 		{
-			member.inv =  deserializeInv(event.getInv());
+			member.inv = deserializeInv(event.getInv());
 		}
 		if (event.getWorn() != null)
 		{
@@ -361,6 +385,16 @@ public class PartyDataService
 		{
 			System.arraycopy(event.getStatBoost(), 0, member.statBoost, 0, event.getStatBoost().length);
 		}
+		if (event.getRunePouch() != null)
+		{
+			member.runepouch = deserializeInv(event.getRunePouch());
+		}
+	}
+
+	private static int messageFreq(int partySize)
+	{
+		// introduce a tick delay for each member >6
+		return Math.max(1, partySize - 6);
 	}
 
 	private static int[] serializeInv(ItemContainer inv)
@@ -400,7 +434,7 @@ public class PartyDataService
 		{
 			int itemId = s[i << 1];
 			int quantity = s[(i << 1) | 1];
-			if (itemId > -1)
+			if (itemId > -1 && quantity > 0)
 			{
 				items[i] = new Item(itemId, quantity);
 			}
@@ -453,9 +487,20 @@ public class PartyDataService
 		return s;
 	}
 
-	private static int messageFreq(int partySize)
+	private int[] serializeRunepouch()
 	{
-		// introduce a tick delay for each member >6
-		return Math.max(1, partySize - 6);
+		int[] s = new int[12];
+		final EnumComposition runepouchEnum = client.getEnum(EnumID.RUNEPOUCH_RUNE);
+		int[] runepouchTypes = {VarbitID.RUNE_POUCH_TYPE_1, VarbitID.RUNE_POUCH_TYPE_2, VarbitID.RUNE_POUCH_TYPE_3, VarbitID.RUNE_POUCH_TYPE_4, VarbitID.RUNE_POUCH_TYPE_5, VarbitID.RUNE_POUCH_TYPE_6};
+		int[] runepouchQuantity = {VarbitID.RUNE_POUCH_QUANTITY_1, VarbitID.RUNE_POUCH_QUANTITY_2, VarbitID.RUNE_POUCH_QUANTITY_3, VarbitID.RUNE_POUCH_QUANTITY_4, VarbitID.RUNE_POUCH_QUANTITY_5, VarbitID.RUNE_POUCH_QUANTITY_6};
+		for (int i = 0; i < runepouchTypes.length; ++i)
+		{
+			int type = client.getVarbitValue(runepouchTypes[i]);
+			int quantity = client.getVarbitValue(runepouchQuantity[i]);
+			int itemId = runepouchEnum.getIntValue(type);
+			s[i << 1] = itemId;
+			s[(i << 1) + 1] = quantity;
+		}
+		return s;
 	}
 }
