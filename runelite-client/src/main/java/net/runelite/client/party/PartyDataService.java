@@ -74,6 +74,13 @@ public class PartyDataService
 		int skills;
 	}
 
+	private static final int DIRTY_LOCATION = 0x1;
+	private static final int DIRTY_INV = 0x2;
+	private static final int DIRTY_WORN = 0x4;
+	private static final int DIRTY_PRAYER = 0x8;
+	private static final int DIRTY_RUNEPOUCH = 0x10;
+	private static final int DIRTY_QUIVER = 0x20;
+
 	private final List<Subscription> subscriptions = new ArrayList<>(2);
 	private int subscriptionMask;
 	private int statMask;
@@ -86,12 +93,8 @@ public class PartyDataService
 	private final int[] lastStatBoost = new int[Skill.values().length];
 	private WorldPoint lastLocation;
 
-	private boolean locationDirty;
-	private boolean invDirty, wornDirty;
-	private boolean prayerDirty;
+	private int dirtyMask;
 	private int statDirty, statBoostDirty;
-	private boolean runepouchDirty;
-	private boolean quiverDirty;
 
 	@Inject
 	private PartyDataService(Client client, ClientThread clientThread, PartyService partyService, WSClient wsClient, EventBus eventBus)
@@ -199,10 +202,10 @@ public class PartyDataService
 		switch (event.getContainerId())
 		{
 			case InventoryID.INV:
-				invDirty = true;
+				dirtyMask |= DIRTY_INV;
 				break;
 			case InventoryID.WORN:
-				wornDirty = true;
+				dirtyMask |= DIRTY_WORN;
 				break;
 		}
 	}
@@ -214,11 +217,11 @@ public class PartyDataService
 		{
 			case VarPlayerID.PRAYER0:
 			case VarPlayerID.PRAYER_RUINOUS_0:
-				prayerDirty = true;
+				dirtyMask |= DIRTY_PRAYER;
 				break;
 			case VarPlayerID.DIZANAS_QUIVER_TEMP_AMMO:
 			case VarPlayerID.DIZANAS_QUIVER_TEMP_AMMO_AMOUNT:
-				quiverDirty = true;
+				dirtyMask |= DIRTY_QUIVER;
 				break;
 		}
 		switch (event.getVarbitId())
@@ -235,7 +238,7 @@ public class PartyDataService
 			case VarbitID.RUNE_POUCH_TYPE_4:
 			case VarbitID.RUNE_POUCH_TYPE_5:
 			case VarbitID.RUNE_POUCH_TYPE_6:
-				runepouchDirty = true;
+				dirtyMask |= DIRTY_RUNEPOUCH;
 				break;
 		}
 	}
@@ -272,7 +275,7 @@ public class PartyDataService
 			}
 
 			lastLocation = location;
-			locationDirty = true;
+			dirtyMask |= DIRTY_LOCATION;
 		}
 	}
 
@@ -299,7 +302,7 @@ public class PartyDataService
 			hasChange = true;
 			update.setCharacterName(characterName);
 		}
-		if (isSubscribed(PartyDataType.COORD) && (forceSend || locationDirty))
+		if (isSubscribed(PartyDataType.COORD) && (forceSend || (dirtyMask & DIRTY_LOCATION) != 0))
 		{
 			hasChange = true;
 			update.setCoord(serializeCoord(lastLocation));
@@ -320,17 +323,17 @@ public class PartyDataService
 			hasChange = true;
 			update.setVengeanceActive(vengActive);
 		}
-		if (isSubscribed(PartyDataType.INV) && (forceSend || invDirty))
+		if (isSubscribed(PartyDataType.INV) && (forceSend || (dirtyMask & DIRTY_INV) != 0))
 		{
 			hasChange = true;
 			update.setInv(serializeInv(client.getItemContainer(InventoryID.INV)));
 		}
-		if (isSubscribed(PartyDataType.WORN) && (forceSend || wornDirty))
+		if (isSubscribed(PartyDataType.WORN) && (forceSend || (dirtyMask & DIRTY_WORN) != 0))
 		{
 			hasChange = true;
 			update.setWorn(serializeInv(client.getItemContainer(InventoryID.WORN)));
 		}
-		if (isSubscribed(PartyDataType.ACTIVE_PRAYERS) && (forceSend || prayerDirty))
+		if (isSubscribed(PartyDataType.ACTIVE_PRAYERS) && (forceSend || (dirtyMask & DIRTY_PRAYER) != 0))
 		{
 			hasChange = true;
 			update.setPrayers(serializePrayers());
@@ -345,12 +348,12 @@ public class PartyDataService
 			hasChange = true;
 			update.setStatBoost(serializeStats(client::getBoostedSkillLevel));
 		}
-		if (isSubscribed(PartyDataType.RUNE_POUCH) && runepouchDirty)
+		if (isSubscribed(PartyDataType.RUNE_POUCH) && (dirtyMask & DIRTY_RUNEPOUCH) != 0)
 		{
 			hasChange = true;
 			update.setRunePouch(serializeRunepouch());
 		}
-		if (isSubscribed(PartyDataType.QUIVER) && quiverDirty)
+		if (isSubscribed(PartyDataType.QUIVER) && (dirtyMask & DIRTY_QUIVER) != 0)
 		{
 			hasChange = true;
 			update.setQuiver(serializeQuiver());
@@ -364,14 +367,11 @@ public class PartyDataService
 		if (hasChange)
 		{
 			lastCharacterName = characterName;
-			locationDirty = false;
 			lastRunEnergy = runEnergy;
 			lastSpecEnergy = specEnergy;
 			lastVengeActive = vengActive;
-			invDirty = wornDirty = prayerDirty = false;
+			dirtyMask = 0;
 			statDirty = statBoostDirty = 0;
-			runepouchDirty = false;
-			quiverDirty = false;
 
 			partyService.send(update);
 		}
