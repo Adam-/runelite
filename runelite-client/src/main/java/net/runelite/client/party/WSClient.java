@@ -157,7 +157,7 @@ public class WSClient extends WebSocketListener implements AutoCloseable
 	void send(WebsocketMessage message)
 	{
 		log.debug("Sending: {}", message);
-		final String json = gson.toJson(message, WebsocketMessage.class);
+		final String json = gson.toJson(message);
 		final Party.Data data = Party.Data.newBuilder()
 			.setType(message.getClass().getSimpleName())
 			.setData(com.google.protobuf.ByteString.copyFromUtf8(json))

@@ -207,7 +207,7 @@ public class PartyPlugin extends Plugin
 		keyManager.registerKeyListener(hotkeyListener);
 		wsClient.registerMessage(TilePing.class);
 		wsClient.registerMessage(MemberColorUpdate.class);
-		partyDataService.subscribe(this, PartyDataType.COORD, PartyDataType.ENERGY, PartyDataType.SPEC, PartyDataType.VENGEANCE);
+		partyDataService.subscribe(this, PartyDataType.CHARACTER_NAME, PartyDataType.COORD, PartyDataType.ENERGY, PartyDataType.SPEC, PartyDataType.VENGEANCE);
 		partyDataService.subscribe(this, Skill.HITPOINTS, Skill.PRAYER);
 		// Delay sync so the eventbus can register prior to the sync response
 		SwingUtilities.invokeLater(this::requestSync);

@@ -523,7 +523,7 @@ public class PartyDataService
 
 	private int[] serializeStats(ToIntFunction<Skill> f)
 	{
-		int sz = 32 - Integer.numberOfTrailingZeros(statMask);
+		int sz = 32 - Integer.numberOfLeadingZeros(statMask);
 		if (sz == 0)
 		{
 			return null;
