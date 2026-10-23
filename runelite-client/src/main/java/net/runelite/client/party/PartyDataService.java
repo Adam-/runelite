@@ -89,7 +89,7 @@ public class PartyDataService
 	private String lastCharacterName;
 	private int lastRunEnergy;
 	private int lastSpecEnergy;
-	private int lastPrayers, lastPrayerRuinous;
+	private int lastPrayer0, lastPrayerAllActiveAlternate0, lastPrayerRuinous0;
 	private final int[] lastStat = new int[Skill.values().length];
 	private final int[] lastStatBoost = new int[Skill.values().length];
 	private WorldPoint lastLocation;
@@ -289,7 +289,9 @@ public class PartyDataService
 
 		final int runEnergy = (int) Math.ceil(client.getEnergy() / 1000.0) * 10; // flatten to reduce network load
 		final int specEnergy = client.getVarpValue(VarPlayerID.SA_ENERGY) / 10;
-		final int prayers = client.getVarpValue(VarPlayerID.PRAYER0), prayerRuinous = client.getVarpValue(VarPlayerID.PRAYER_RUINOUS_0);
+		final int prayer0 = client.getVarpValue(VarPlayerID.PRAYER0),
+			prayerAllActiveAlternate0 = client.getVarpValue(VarPlayerID.PRAYER_ALLACTIVE_ALTERNATE_0),
+			prayerRuinous0 = client.getVarpValue(VarPlayerID.PRAYER_RUINOUS_0);
 
 		final Player localPlayer = client.getLocalPlayer();
 		final String characterName = Strings.nullToEmpty(localPlayer != null && client.getGameState().getState() >= GameState.LOADING.getState() ? localPlayer.getName() : null);
@@ -335,7 +337,7 @@ public class PartyDataService
 			hasChange = true;
 			update.setWorn(serializeInv(client.getItemContainer(InventoryID.WORN)));
 		}
-		if (isSubscribed(PartyDataType.ACTIVE_PRAYERS) && (forceSend || prayers != lastPrayers || prayerRuinous != lastPrayerRuinous))
+		if (isSubscribed(PartyDataType.ACTIVE_PRAYERS) && (forceSend || prayer0 != lastPrayer0 || prayerAllActiveAlternate0 != lastPrayerAllActiveAlternate0 || prayerRuinous0 != lastPrayerRuinous0))
 		{
 			hasChange = true;
 			update.setPrayers(serializePrayers());
@@ -371,8 +373,9 @@ public class PartyDataService
 			lastCharacterName = characterName;
 			lastRunEnergy = runEnergy;
 			lastSpecEnergy = specEnergy;
-			lastPrayers = prayers;
-			lastPrayerRuinous = prayerRuinous;
+			lastPrayer0 = prayer0;
+			lastPrayerAllActiveAlternate0 = prayerAllActiveAlternate0;
+			lastPrayerRuinous0 = prayerRuinous0;
 			dirtyMask = 0;
 			statDirty = statBoostDirty = 0;
 
