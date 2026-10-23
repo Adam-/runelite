@@ -34,7 +34,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
-import java.util.UUID;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -166,7 +165,7 @@ public class PartyService
 
 		if (passphrase == null)
 		{
-			eventBus.post(new PartyChanged(partyPassphrase, null));
+			eventBus.post(new PartyChanged(null, null));
 			return;
 		}
 
