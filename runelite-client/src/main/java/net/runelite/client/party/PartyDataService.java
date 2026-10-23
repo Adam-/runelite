@@ -474,7 +474,7 @@ public class PartyDataService
 			else
 			{
 				s[i << 1] = item.getId();
-				s[(1 << 1) | 1] = item.getQuantity();
+				s[(i << 1) | 1] = item.getQuantity();
 			}
 		}
 		return s;
