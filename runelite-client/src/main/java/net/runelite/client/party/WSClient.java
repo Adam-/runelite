@@ -70,7 +70,7 @@ public class WSClient extends WebSocketListener implements AutoCloseable
 		this.gson = gson;
 	}
 
-	void connect(long partyId, long memberId)
+	synchronized void connect(long partyId, long memberId)
 	{
 		if (webSocket != null)
 		{
@@ -147,6 +147,7 @@ public class WSClient extends WebSocketListener implements AutoCloseable
 		if (webSocket != null)
 		{
 			webSocket.close(1000, null);
+			webSocket = null;
 		}
 	}
 
@@ -217,16 +218,22 @@ public class WSClient extends WebSocketListener implements AutoCloseable
 	}
 
 	@Override
-	public void onClosed(WebSocket webSocket, int code, String reason)
+	public synchronized void onClosed(WebSocket webSocket, int code, String reason)
 	{
 		log.info("Websocket {} closed: {}/{}", webSocket, code, reason);
-		this.webSocket = null;
+		if (webSocket == this.webSocket)
+		{
+			this.webSocket = null;
+		}
 	}
 
 	@Override
-	public void onFailure(WebSocket webSocket, Throwable t, Response response)
+	public synchronized void onFailure(WebSocket webSocket, Throwable t, Response response)
 	{
 		log.warn("Error in websocket: {}", response, t);
-		this.webSocket = null;
+		if (webSocket == this.webSocket)
+		{
+			this.webSocket = null;
+		}
 	}
 }
