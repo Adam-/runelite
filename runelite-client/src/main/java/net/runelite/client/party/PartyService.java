@@ -151,9 +151,9 @@ public class PartyService
 
 	public void changeParty(@Nullable String passphrase)
 	{
-		if (wsClient.sessionExists())
+		if (wsClient.isOpen())
 		{
-			wsClient.part();
+			wsClient.close();
 			memberId = randomMemberId(); // use a different member id between parties
 		}
 
@@ -166,18 +166,11 @@ public class PartyService
 
 		if (passphrase == null)
 		{
-			wsClient.changeSession(null);
 			eventBus.post(new PartyChanged(partyPassphrase, null));
 			return;
 		}
 
-		// If there isn't already a session open, open one
-		if (!wsClient.sessionExists())
-		{
-			wsClient.changeSession(UUID.randomUUID());
-		}
-
-		wsClient.join(partyId, memberId);
+		wsClient.connect(partyId, memberId);
 		eventBus.post(new PartyChanged(partyPassphrase, partyId));
 	}
 
@@ -189,8 +182,7 @@ public class PartyService
 
 			members.clear();
 
-			wsClient.connect();
-			wsClient.join(partyId, memberId);
+			wsClient.connect(partyId, memberId);
 		}
 
 		wsClient.send(message);
