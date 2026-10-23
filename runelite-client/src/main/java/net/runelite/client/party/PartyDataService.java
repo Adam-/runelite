@@ -303,7 +303,7 @@ public class PartyDataService
 			hasChange = true;
 			update.setCharacterName(characterName);
 		}
-		if (isSubscribed(PartyDataType.COORD) && (forceSend || (dirtyMask & DIRTY_LOCATION) != 0))
+		if (isSubscribed(PartyDataType.COORD) && lastLocation != null && (forceSend || (dirtyMask & DIRTY_LOCATION) != 0))
 		{
 			hasChange = true;
 			update.setCoord(serializeCoord(lastLocation));
